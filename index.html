@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cổng Khảo Thí & Học Tập Toán THPT - Cô Trúc</title>
-    <!-- MathJax Sắc Nét -->
+    <!-- MathJax Cấu Hình Tự Động Render Sắc Nét -->
     <script>
         window.MathJax = {
             tex: { 
@@ -26,7 +26,7 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         body { background-color: var(--bg); color: var(--text-dark); min-height: 100vh; padding-bottom: 50px; }
-        .wrapper { max-width: 1350px; margin: 0 auto; padding: 20px; }
+        .wrapper { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
         .navbar { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 14px 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .brand { font-size: 1.35rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 10px; }
@@ -89,7 +89,7 @@
         .stat-card .stat-val { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
 
         .filter-controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; align-items: center; justify-content: space-between; }
-        .filter-group { display: flex; gap: 10px; align-items: center; }
+        .filter-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .select-filter, .search-input { padding: 9px 14px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; font-weight: 600; outline: none; }
         .btn-export { background: #16a34a; color: #fff; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
@@ -102,19 +102,29 @@
         .badge-pass { background: #dcfce7; color: #166534; }
         .badge-fail { background: #fee2e2; color: #991b1b; }
 
-        /* SOẠN ĐỀ & RÚT CÂU TỪ NGÂN HÀNG */
-        .creator-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; }
-        @media (max-width: 900px) { .creator-container { grid-template-columns: 1fr; } }
+        /* GIAO DIỆN SOẠN ĐỀ THOẢI MÁI & RÚT CÂU TỰ DO */
+        .creator-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; margin-top: 15px; }
+        @media (max-width: 950px) { .creator-container { grid-template-columns: 1fr; } }
         .creator-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; }
-        .form-row { margin-bottom: 14px; }
-        .form-row label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.92rem; color: #334155; }
-        .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; }
-        .bank-q-item { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: start; }
-        .badge-level { font-size: 0.75rem; font-weight: 800; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+        .form-row { margin-bottom: 12px; }
+        .form-row label { display: block; font-weight: 700; margin-bottom: 5px; font-size: 0.92rem; color: #334155; }
+        .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; }
+        
+        .random-matrix-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; }
+        .random-inputs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+        .random-inputs input { width: 100%; padding: 6px; border: 1px solid #93c5fd; border-radius: 6px; text-align: center; font-weight: 700; }
+
+        .bank-q-item { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: start; transition: 0.15s; }
+        .bank-q-item:hover { border-color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .badge-level { font-size: 0.72rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         .lvl-nb { background: #dbeafe; color: #1e40af; }
         .lvl-th { background: #dcfce7; color: #166534; }
         .lvl-vd { background: #fef9c3; color: #854d0e; }
         .lvl-vdc { background: #fee2e2; color: #991b1b; }
+
+        .selected-list-box { margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 15px; }
+        .selected-item { background: #fff; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-remove-q { color: #dc2626; background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px; }
 
         /* GIAO DIỆN LÀM BÀI */
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
@@ -199,7 +209,7 @@
         <div id="teacher-view">
             <div class="teacher-nav">
                 <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
-                <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Đề Từ Ngân Hàng</button>
+                <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Đề Thoải Mái Từ Ngân Hàng</button>
             </div>
 
             <div id="sec-t-scores">
@@ -259,27 +269,36 @@
                 </div>
             </div>
 
+            <!-- GIAO DIỆN TẠO ĐỀ THI THOẢI MÁI -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
+                    
+                    <!-- CỘT TRÁI: THÔNG TIN ĐỀ & CÂU HỎI ĐÃ CHỌN -->
                     <div class="creator-card">
-                        <h3 style="margin-bottom: 16px; color: var(--primary);"><i class="fa-solid fa-sliders"></i> Thông Tin Đề Thi Mới</h3>
+                        <h3 style="margin-bottom: 14px; color: var(--primary);"><i class="fa-solid fa-file-signature"></i> 1. Thiết Lập Đề Thi Mới</h3>
+                        
                         <div class="form-row">
-                            <label>Khối Lớp:</label>
-                            <select class="form-input" id="new-exam-grade" onchange="filterQuestionBankList()">
+                            <label>Khối Lớp Chính:</label>
+                            <select class="form-input" id="new-exam-grade">
                                 <option value="12">Toán 12</option>
                                 <option value="11">Toán 11</option>
                                 <option value="10">Toán 10</option>
                             </select>
                         </div>
                         <div class="form-row">
-                            <label>Chuyên Đề:</label>
-                            <select class="form-input" id="new-exam-topic" onchange="filterQuestionBankList()">
-                                <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm</option>
-                                <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian</option>
-                                <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm</option>
-                                <option value="12-nguyen-ham-tich-phan">Chương 4: Nguyên hàm & Tích phân</option>
-                                <option value="12-oxyz">Chương 5: Phương pháp tọa độ Oxyz</option>
-                                <option value="12-xac-suat">Chương 6: Xác suất có điều kiện</option>
+                            <label>Chuyên Mục Hiển Thị:</label>
+                            <select class="form-input" id="new-exam-topic">
+                                <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
+                                <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian (K12)</option>
+                                <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm (K12)</option>
+                                <option value="12-nguyen-ham-tich-phan">Chương 4: Nguyên hàm & Tích phân (K12)</option>
+                                <option value="12-oxyz">Chương 5: Phương pháp tọa độ Oxyz (K12)</option>
+                                <option value="12-xac-suat">Chương 6: Xác suất có điều kiện (K12)</option>
+                                <option value="giua-ki-1">Kiểm tra Giữa Kì 1</option>
+                                <option value="hoc-ki-1">Kiểm tra Học Kì 1</option>
+                                <option value="giua-ki-2">Kiểm tra Giữa Kì 2</option>
+                                <option value="hoc-ki-2">Kiểm tra Học Kì 2</option>
+                                <option value="thpt-qg">Luyện Đề Tốt Nghiệp THPT</option>
                                 <option value="11-luong-giac">Chương 1: Hàm số & PT Lượng giác (K11)</option>
                                 <option value="11-day-so-cap-so">Chương 2: Cấp số cộng & Cấp số nhân (K11)</option>
                                 <option value="10-menh-de-tap-hop">Chương 1: Mệnh đề & Tập hợp (K10)</option>
@@ -287,19 +306,20 @@
                             </select>
                         </div>
                         <div class="form-row">
-                            <label>Mã Đề Thi (Viết liền, ví dụ: LT12-01-b):</label>
+                            <label>Mã Đề (Viết liền, ví dụ: LT12-01-b, KT12-05-b):</label>
                             <input type="text" class="form-input" id="new-exam-id" placeholder="LT12-01-b">
                         </div>
                         <div class="form-row">
-                            <label>Tên Đề Hiển Thị:</label>
-                            <input type="text" class="form-input" id="new-exam-title" placeholder="Luyện Tập 01-b: Cực Trị Của Hàm Số">
+                            <label>Tên Đề Bài Thi:</label>
+                            <input type="text" class="form-input" id="new-exam-title" placeholder="Luyện Tập 01-b: Cực Trị & Tính Đơn Điệu">
                         </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="form-row">
                                 <label>Chế Độ:</label>
                                 <select class="form-input" id="new-exam-mode">
-                                    <option value="LUYENTAP">🟢 Luyện Tập (Thoải mái, xem lời giải)</option>
-                                    <option value="KIEMTRA">🔴 Kiểm Tra (Bảo mật, chống copy/F12)</option>
+                                    <option value="LUYENTAP">🟢 Luyện Tập (Xem lời giải)</option>
+                                    <option value="KIEMTRA">🔴 Kiểm Tra (Bảo mật máy chủ)</option>
                                 </select>
                             </div>
                             <div class="form-row">
@@ -308,16 +328,47 @@
                             </div>
                         </div>
 
-                        <button class="btn-start" style="width: 100%; margin-top: 15px; padding: 12px;" onclick="saveSelectedExam()"><i class="fa-solid fa-cloud-arrow-up"></i> Lưu Đề Mới Vào Google Sheets</button>
+                        <div class="selected-list-box">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <strong style="color: #334155;"><i class="fa-solid fa-list-check"></i> Danh Sách Câu Đã Chọn (<span id="selected-q-count" style="color: var(--primary);">0</span> câu)</strong>
+                                <button onclick="clearSelectedQuestions()" style="background: none; border: none; color: #dc2626; font-size: 0.85rem; cursor: pointer; font-weight: 700;"><i class="fa-solid fa-trash-can"></i> Xóa hết</button>
+                            </div>
+                            <div id="selected-items-container" style="max-height: 250px; overflow-y: auto;">
+                                <p style="text-align: center; color: #94a3b8; padding: 15px; font-size: 0.9rem;">Chưa có câu hỏi nào được chọn từ ngân hàng.</p>
+                            </div>
+                        </div>
+
+                        <button class="btn-start" style="width: 100%; margin-top: 18px; padding: 13px; font-size: 1.05rem;" onclick="saveSelectedExam()"><i class="fa-solid fa-cloud-arrow-up"></i> Lưu Đề Mới Lên Google Sheets</button>
                     </div>
 
+                    <!-- CỘT PHẢI: BỘ LỌC NGÂN HÀNG & RÚT CÂU THOẢI MÁI -->
                     <div class="creator-card">
-                        <h3 style="margin-bottom: 16px; color: #059669; display: flex; justify-content: space-between; align-items: center;">
-                            <span><i class="fa-solid fa-database"></i> Rút Câu Từ Ngân Hàng</span>
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Đã chọn: <strong id="selected-q-count" style="color: var(--primary);">0</strong> câu</span>
-                        </h3>
-                        <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-                            <select class="form-input" id="filter-bank-level" onchange="filterQuestionBankList()">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="color: #059669;"><i class="fa-solid fa-database"></i> 2. Rút Câu Từ Ngân Hàng</h3>
+                            <button class="btn-t-tab" onclick="toggleRandomBox()" style="padding: 5px 12px; font-size: 0.85rem; background: #dbeafe; color: #1e40af;"><i class="fa-solid fa-dice"></i> Trộn Ma Trận Tự Động</button>
+                        </div>
+
+                        <!-- KHUNG TRỘN CÂU HỎI THEO MA TRẬN SỐ LƯỢNG -->
+                        <div class="random-matrix-box" id="random-matrix-box" style="display: none;">
+                            <div style="font-size: 0.88rem; font-weight: 700; color: #1e40af;">Nhập số lượng câu muốn bốc ngẫu nhiên:</div>
+                            <div class="random-inputs">
+                                <div><small>Nhận biết (NB)</small><input type="number" id="rnd-nb" value="2" min="0"></div>
+                                <div><small>Thông hiểu (TH)</small><input type="number" id="rnd-th" value="1" min="0"></div>
+                                <div><small>Vận dụng (VD)</small><input type="number" id="rnd-vd" value="1" min="0"></div>
+                                <div><small>Vận dụng cao</small><input type="number" id="rnd-vdc" value="0" min="0"></div>
+                            </div>
+                            <button onclick="autoPickRandomQuestions()" style="width: 100%; margin-top: 10px; padding: 8px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-bolt"></i> Bốc Ngẫu Nhiên Vào Đề</button>
+                        </div>
+
+                        <!-- BỘ LỌC THÔNG MINH ĐA NĂNG -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                            <select class="form-input" id="bank-filter-grade" onchange="filterQuestionBankList()">
+                                <option value="all">-- Tất cả Khối (10, 11, 12) --</option>
+                                <option value="12">Khối 12</option>
+                                <option value="11">Khối 11</option>
+                                <option value="10">Khối 10</option>
+                            </select>
+                            <select class="form-input" id="bank-filter-level" onchange="filterQuestionBankList()">
                                 <option value="all">-- Tất cả Mức Độ --</option>
                                 <option value="NB">Nhận biết (NB)</option>
                                 <option value="TH">Thông hiểu (TH)</option>
@@ -325,10 +376,22 @@
                                 <option value="VDC">Vận dụng cao (VDC)</option>
                             </select>
                         </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+                            <select class="form-input" id="bank-filter-type" onchange="filterQuestionBankList()">
+                                <option value="all">-- Tất cả Dạng Câu --</option>
+                                <option value="MCQ">Phần I: Trắc nghiệm 4 lựa chọn (MCQ)</option>
+                                <option value="TF">Phần II: Đúng / Sai (TF)</option>
+                                <option value="SA">Phần III: Trả lời ngắn (SA)</option>
+                            </select>
+                            <input type="text" class="form-input" id="bank-search-text" placeholder="Tìm từ khóa trong câu hỏi..." oninput="filterQuestionBankList()">
+                        </div>
+
                         <div id="bank-q-list" style="max-height: 480px; overflow-y: auto; padding-right: 4px;">
                             <p style="text-align: center; color: #94a3b8; padding: 20px;">Đang tải ngân hàng câu hỏi...</p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -634,22 +697,29 @@
             }
         }
 
+        function toggleRandomBox() {
+            const box = document.getElementById('random-matrix-box');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
         function filterQuestionBankList() {
-            const gr = document.getElementById('new-exam-grade').value;
-            const tp = document.getElementById('new-exam-topic').value;
-            const lvl = document.getElementById('filter-bank-level').value;
+            const gr = document.getElementById('bank-filter-grade').value;
+            const lvl = document.getElementById('bank-filter-level').value;
+            const type = document.getElementById('bank-filter-type').value;
+            const kw = document.getElementById('bank-search-text').value.trim().toLowerCase();
             const container = document.getElementById('bank-q-list');
 
             const filtered = questionBank.filter(q => {
-                const matchG = (q.grade === gr);
-                const matchT = (q.topic === tp);
+                const matchG = (gr === 'all' || q.grade === gr);
                 const matchL = (lvl === 'all' || q.level === lvl);
-                return matchG && matchT && matchL;
+                const matchT = (type === 'all' || q.type === type);
+                const matchK = (!kw || q.q.toLowerCase().includes(kw));
+                return matchG && matchL && matchT && matchK;
             });
 
             container.innerHTML = '';
             if (filtered.length === 0) {
-                container.innerHTML = `<p style="text-align: center; color: #94a3b8; padding: 20px;">Không có câu hỏi nào trong mục này trên tab NganHangCauHoi.</p>`;
+                container.innerHTML = `<p style="text-align: center; color: #94a3b8; padding: 20px;">Không tìm thấy câu hỏi phù hợp với bộ lọc.</p>`;
                 return;
             }
 
@@ -662,6 +732,7 @@
                     <div style="flex-grow: 1;">
                         <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
                             <span class="badge-level lvl-${q.level.toLowerCase()}">${q.level}</span>
+                            <small style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 700; color: #475569;">K${q.grade}</small>
                             <small style="font-weight: 700; color: #64748b;">${q.type}</small>
                             <small style="color: #94a3b8;">#${q.id}</small>
                         </div>
@@ -682,7 +753,75 @@
             } else {
                 selectedQuestions = selectedQuestions.filter(sq => sq.id !== id);
             }
+            renderSelectedQuestionsUI();
+        }
+
+        function removeSelectedQ(id) {
+            selectedQuestions = selectedQuestions.filter(sq => sq.id !== id);
+            renderSelectedQuestionsUI();
+            filterQuestionBankList();
+        }
+
+        function clearSelectedQuestions() {
+            selectedQuestions = [];
+            renderSelectedQuestionsUI();
+            filterQuestionBankList();
+        }
+
+        function renderSelectedQuestionsUI() {
             document.getElementById('selected-q-count').innerText = selectedQuestions.length;
+            const container = document.getElementById('selected-items-container');
+            container.innerHTML = '';
+            
+            if (selectedQuestions.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: #94a3b8; padding: 15px; font-size: 0.9rem;">Chưa có câu hỏi nào được chọn từ ngân hàng.</p>`;
+                return;
+            }
+
+            selectedQuestions.forEach((q, idx) => {
+                const item = document.createElement('div');
+                item.className = 'selected-item';
+                item.innerHTML = `
+                    <div style="flex-grow: 1; padding-right: 8px;">
+                        <strong style="color: var(--primary);">Câu ${idx + 1}:</strong> [${q.level} - ${q.type}] ${q.q.substring(0, 60)}...
+                    </div>
+                    <button class="btn-remove-q" onclick="removeSelectedQ('${q.id}')" title="Xóa câu này"><i class="fa-solid fa-xmark"></i></button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function autoPickRandomQuestions() {
+            const nbCount = parseInt(document.getElementById('rnd-nb').value) || 0;
+            const thCount = parseInt(document.getElementById('rnd-th').value) || 0;
+            const vdCount = parseInt(document.getElementById('rnd-vd').value) || 0;
+            const vdcCount = parseInt(document.getElementById('rnd-vdc').value) || 0;
+
+            const gr = document.getElementById('bank-filter-grade').value;
+            let pool = questionBank.filter(q => (gr === 'all' || q.grade === gr));
+
+            function pickFromPool(level, count) {
+                const subset = pool.filter(q => q.level === level);
+                const shuffled = subset.sort(() => 0.5 - Math.random());
+                return shuffled.slice(0, count);
+            }
+
+            const picked = [
+                ...pickFromPool('NB', nbCount),
+                ...pickFromPool('TH', thCount),
+                ...pickFromPool('VD', vdCount),
+                ...pickFromPool('VDC', vdcCount)
+            ];
+
+            if (picked.length === 0) {
+                alert("Không tìm thấy đủ câu hỏi trong ngân hàng để bốc ngẫu nhiên!");
+                return;
+            }
+
+            selectedQuestions = picked;
+            renderSelectedQuestionsUI();
+            filterQuestionBankList();
+            alert(`🎉 Đã tự động bốc ngẫu nhiên ${selectedQuestions.length} câu vào đề thi!`);
         }
 
         async function saveSelectedExam() {
@@ -698,7 +837,7 @@
                 return;
             }
             if (selectedQuestions.length === 0) {
-                alert("Vui lòng tích chọn ít nhất 1 câu hỏi từ Ngân Hàng!");
+                alert("Vui lòng chọn ít nhất 1 câu hỏi từ Ngân Hàng!");
                 return;
             }
 
@@ -720,15 +859,14 @@
                 const data = await res.json();
                 if (data.status === "success") {
                     alert("🎉 Đã tạo đề thi mới và lưu lên Google Sheets thành công!");
-                    selectedQuestions = [];
-                    document.getElementById('selected-q-count').innerText = "0";
+                    clearSelectedQuestions();
                     fetchData();
                     showPortalView();
                 } else {
                     alert("Lỗi: " + data.message);
                 }
             } catch (err) {
-                alert("Lỗi khi kết nối gửi đề!");
+                alert("Lỗi kết nối khi gửi đề!");
             }
         }
 

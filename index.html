@@ -77,7 +77,7 @@
         .btn-start:hover { background: #1e40af; }
         .btn-share { padding: 10px 14px; background: #f1f5f9; color: #475569; border: 1px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; font-weight: 600; }
 
-        /* KHU VỰC QUẢN LÝ CỦA GIÁO VIÊN */
+        /* KHU VỰC GIÁO VIÊN */
         #teacher-view { display: none; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         .teacher-nav { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
         .btn-t-tab { padding: 9px 18px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; background: #f1f5f9; color: #475569; }
@@ -102,14 +102,17 @@
         .badge-pass { background: #dcfce7; color: #166534; }
         .badge-fail { background: #fee2e2; color: #991b1b; }
 
-        /* GIAO DIỆN SOẠN ĐỀ THOẢI MÁI & RÚT CÂU TỰ DO */
+        /* FORM NẠP CÂU HỎI VÀO NGÂN HÀNG */
         .creator-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; margin-top: 15px; }
         @media (max-width: 950px) { .creator-container { grid-template-columns: 1fr; } }
         .creator-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; }
         .form-row { margin-bottom: 12px; }
         .form-row label { display: block; font-weight: 700; margin-bottom: 5px; font-size: 0.92rem; color: #334155; }
         .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; }
-        
+        .form-textarea { width: 100%; height: 80px; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; resize: vertical; }
+
+        .preview-box { background: #fff; border: 1.5px dashed #cbd5e1; border-radius: 8px; padding: 15px; margin-top: 12px; min-height: 90px; font-size: 0.95rem; line-height: 1.7; color: #1e293b; }
+
         .random-matrix-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; }
         .random-inputs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
         .random-inputs input { width: 100%; padding: 6px; border: 1px solid #93c5fd; border-radius: 6px; text-align: center; font-weight: 700; }
@@ -209,9 +212,11 @@
         <div id="teacher-view">
             <div class="teacher-nav">
                 <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
-                <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Đề Thoải Mái Từ Ngân Hàng</button>
+                <button class="btn-t-tab" id="btn-t-add-q" onclick="switchTeacherTab('add_q')"><i class="fa-solid fa-circle-plus"></i> Nạp Câu Hỏi Mới</button>
+                <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Soạn Đề Từ Ngân Hàng</button>
             </div>
 
+            <!-- 1. SỔ ĐIỂM -->
             <div id="sec-t-scores">
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -269,11 +274,99 @@
                 </div>
             </div>
 
-            <!-- GIAO DIỆN TẠO ĐỀ THI THOẢI MÁI -->
+            <!-- 2. NẠP CÂU HỎI MỚI VÀO NGÂN HÀNG -->
+            <div id="sec-t-add-q" style="display: none;">
+                <div class="creator-container">
+                    <div class="creator-card">
+                        <h3 style="margin-bottom: 14px; color: #059669;"><i class="fa-solid fa-pen-to-square"></i> Nhập Thông Tin Câu Hỏi</h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="form-row">
+                                <label>Khối Lớp:</label>
+                                <select class="form-input" id="add-q-grade">
+                                    <option value="12">Toán 12</option>
+                                    <option value="11">Toán 11</option>
+                                    <option value="10">Toán 10</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label>Mức Độ Nhận Thức:</label>
+                                <select class="form-input" id="add-q-level">
+                                    <option value="NB">Nhận biết (NB)</option>
+                                    <option value="TH">Thông hiểu (TH)</option>
+                                    <option value="VD">Vận dụng (VD)</option>
+                                    <option value="VDC">Vận dụng cao (VDC)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Chuyên Đề:</label>
+                            <select class="form-input" id="add-q-topic">
+                                <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
+                                <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian (K12)</option>
+                                <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm (K12)</option>
+                                <option value="12-nguyen-ham-tich-phan">Chương 4: Nguyên hàm & Tích phân (K12)</option>
+                                <option value="12-oxyz">Chương 5: Phương pháp tọa độ Oxyz (K12)</option>
+                                <option value="12-xac-suat">Chương 6: Xác suất có điều kiện (K12)</option>
+                                <option value="11-luong-giac">Chương 1: Hàm số & PT Lượng giác (K11)</option>
+                                <option value="11-day-so-cap-so">Chương 2: Cấp số cộng & Cấp số nhân (K11)</option>
+                                <option value="10-menh-de-tap-hop">Chương 1: Mệnh đề & Tập hợp (K10)</option>
+                                <option value="10-he-thuc-luong">Chương 3: Hệ thức lượng trong tam giác (K10)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Dạng Câu Hỏi:</label>
+                            <select class="form-input" id="add-q-type" onchange="adjustAddQTypeFields()">
+                                <option value="MCQ">Phần I: Trắc nghiệm 4 lựa chọn (MCQ)</option>
+                                <option value="TF">Phần II: Đúng / Sai (TF)</option>
+                                <option value="SA">Phần III: Trả lời ngắn (SA)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Mã Câu Hỏi (Tự động hoặc tùy chỉnh):</label>
+                            <input type="text" class="form-input" id="add-q-id" placeholder="CH12_HS_001">
+                        </div>
+
+                        <div class="form-row">
+                            <label>Nội Dung Đề Bài (Hỗ trợ LaTeX $...$ & HTML ảnh):</label>
+                            <textarea class="form-textarea" id="add-q-content" placeholder="Cho hàm số $y = f(x)$..." oninput="updateAddQPreview()"></textarea>
+                        </div>
+
+                        <div id="add-q-options-container">
+                            <div class="form-row"><label>Phương án A / Ý a:</label><input type="text" class="form-input" id="add-q-oa" placeholder="Phương án A" oninput="updateAddQPreview()"></div>
+                            <div class="form-row"><label>Phương án B / Ý b:</label><input type="text" class="form-input" id="add-q-ob" placeholder="Phương án B" oninput="updateAddQPreview()"></div>
+                            <div class="form-row"><label>Phương án C / Ý c:</label><input type="text" class="form-input" id="add-q-oc" placeholder="Phương án C" oninput="updateAddQPreview()"></div>
+                            <div class="form-row"><label>Phương án D / Ý d:</label><input type="text" class="form-input" id="add-q-od" placeholder="Phương án D" oninput="updateAddQPreview()"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Đáp Án Đúng:</label>
+                            <input type="text" class="form-input" id="add-q-ans" placeholder="A (nếu MCQ) hoặc D-D-S-D (nếu TF) hoặc 10 (nếu SA)">
+                        </div>
+
+                        <div class="form-row">
+                            <label>Lời Giải Chi Tiết (Không bắt buộc):</label>
+                            <textarea class="form-textarea" id="add-q-exp" placeholder="Hướng dẫn từng bước giải..."></textarea>
+                        </div>
+
+                        <button class="btn-start" style="width: 100%; margin-top: 12px; background: #059669;" onclick="saveSingleQuestionToBank()"><i class="fa-solid fa-plus"></i> Lưu Câu Hỏi Vào Ngân Hàng (Tab NganHangCauHoi)</button>
+                    </div>
+
+                    <div class="creator-card">
+                        <h3 style="margin-bottom: 14px; color: #1e40af;"><i class="fa-regular fa-eye"></i> Xem Trước Hiển Thị (Live LaTeX Preview)</h3>
+                        <div class="preview-box" id="add-q-preview">
+                            <em>Nội dung câu hỏi và công thức toán sẽ hiển thị thử tại đây khi thầy gõ...</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. SOẠN ĐỀ TỪ NGÂN HÀNG -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
-                    
-                    <!-- CỘT TRÁI: THÔNG TIN ĐỀ & CÂU HỎI ĐÃ CHỌN -->
                     <div class="creator-card">
                         <h3 style="margin-bottom: 14px; color: var(--primary);"><i class="fa-solid fa-file-signature"></i> 1. Thiết Lập Đề Thi Mới</h3>
                         
@@ -306,7 +399,7 @@
                             </select>
                         </div>
                         <div class="form-row">
-                            <label>Mã Đề (Viết liền, ví dụ: LT12-01-b, KT12-05-b):</label>
+                            <label>Mã Đề (Ví dụ: LT12-01-b, KT12-05-b):</label>
                             <input type="text" class="form-input" id="new-exam-id" placeholder="LT12-01-b">
                         </div>
                         <div class="form-row">
@@ -341,14 +434,12 @@
                         <button class="btn-start" style="width: 100%; margin-top: 18px; padding: 13px; font-size: 1.05rem;" onclick="saveSelectedExam()"><i class="fa-solid fa-cloud-arrow-up"></i> Lưu Đề Mới Lên Google Sheets</button>
                     </div>
 
-                    <!-- CỘT PHẢI: BỘ LỌC NGÂN HÀNG & RÚT CÂU THOẢI MÁI -->
                     <div class="creator-card">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <h3 style="color: #059669;"><i class="fa-solid fa-database"></i> 2. Rút Câu Từ Ngân Hàng</h3>
                             <button class="btn-t-tab" onclick="toggleRandomBox()" style="padding: 5px 12px; font-size: 0.85rem; background: #dbeafe; color: #1e40af;"><i class="fa-solid fa-dice"></i> Trộn Ma Trận Tự Động</button>
                         </div>
 
-                        <!-- KHUNG TRỘN CÂU HỎI THEO MA TRẬN SỐ LƯỢNG -->
                         <div class="random-matrix-box" id="random-matrix-box" style="display: none;">
                             <div style="font-size: 0.88rem; font-weight: 700; color: #1e40af;">Nhập số lượng câu muốn bốc ngẫu nhiên:</div>
                             <div class="random-inputs">
@@ -360,7 +451,6 @@
                             <button onclick="autoPickRandomQuestions()" style="width: 100%; margin-top: 10px; padding: 8px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-bolt"></i> Bốc Ngẫu Nhiên Vào Đề</button>
                         </div>
 
-                        <!-- BỘ LỌC THÔNG MINH ĐA NĂNG -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
                             <select class="form-input" id="bank-filter-grade" onchange="filterQuestionBankList()">
                                 <option value="all">-- Tất cả Khối (10, 11, 12) --</option>
@@ -391,7 +481,6 @@
                             <p style="text-align: center; color: #94a3b8; padding: 20px;">Đang tải ngân hàng câu hỏi...</p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -480,10 +569,7 @@
                 { id: '12-thong-ke', name: 'Chương 3: Thống kê số liệu ghép nhóm', icon: 'fa-chart-simple' },
                 { id: '12-nguyen-ham-tich-phan', name: 'Chương 4: Nguyên hàm & Tích phân', icon: 'fa-infinity' },
                 { id: '12-oxyz', name: 'Chương 5: Phương pháp tọa độ Oxyz', icon: 'fa-cube' },
-                { id: '12-xac-suat', name: 'Chương 6: Xác suất có điều kiện', icon: 'fa-dice' },
-                { type: 'header', title: 'Chuyên Đề Học Tập 12' },
-                { id: '12-cd-bien-ngau-nhien', name: 'CĐ 1: Biến ngẫu nhiên rời rạc', icon: 'fa-arrow-trend-up' },
-                { id: '12-cd-toan-toi-uu', name: 'CĐ 2: Bài toán tối ưu & Quy hoạch', icon: 'fa-bullseye' }
+                { id: '12-xac-suat', name: 'Chương 6: Xác suất có điều kiện', icon: 'fa-dice' }
             ],
             g11: [
                 { type: 'header', title: 'SGK Toán 11 (KNTT)' },
@@ -492,30 +578,14 @@
                 { id: '11-thong-ke', name: 'Chương 3: Số đặc trưng mẫu số liệu', icon: 'fa-chart-pie' },
                 { id: '11-song-song', name: 'Chương 4: Quan hệ song song không gian', icon: 'fa-bars' },
                 { id: '11-gioi-han', name: 'Chương 5: Giới hạn & Hàm liên tục', icon: 'fa-arrows-split-up-and-left' },
-                { id: '11-mu-logarit', name: 'Chương 6: Hàm số Mũ & Logarit', icon: 'fa-square-root-variable' },
-                { id: '11-dao-ham', name: 'Chương 7: Đạo hàm', icon: 'fa-chart-area' },
-                { id: '11-vuong-goc', name: 'Chương 8: Quan hệ vuông góc không gian', icon: 'fa-shapes' },
-                { id: '11-xac-suat', name: 'Chương 9: Xác suất giao & Độc lập', icon: 'fa-dice-five' },
-                { type: 'header', title: 'Chuyên Đề Học Tập 11' },
-                { id: '11-cd-phep-bien-hinh', name: 'CĐ 1: Phép biến hình mặt phẳng', icon: 'fa-clone' },
-                { id: '11-cd-ly-thuyet-do-thi', name: 'CĐ 2: Lý thuyết đồ thị', icon: 'fa-diagram-project' },
-                { id: '11-cd-ve-ky-thuat', name: 'CĐ 3: Một số yếu tố vẽ kĩ thuật', icon: 'fa-compass-drafting' }
+                { id: '11-mu-logarit', name: 'Chương 6: Hàm số Mũ & Logarit', icon: 'fa-square-root-variable' }
             ],
             g10: [
                 { type: 'header', title: 'SGK Toán 10 (KNTT)' },
                 { id: '10-menh-de-tap-hop', name: 'Chương 1: Mệnh đề & Tập hợp', icon: 'fa-cubes' },
                 { id: '10-bpt-he-bpt', name: 'Chương 2: BPT & Hệ BPT bậc nhất hai ẩn', icon: 'fa-table-cells-large' },
                 { id: '10-he-thuc-luong', name: 'Chương 3: Hệ thức lượng trong tam giác', icon: 'fa-draw-polygon' },
-                { id: '10-vecto', name: 'Chương 4: Vectơ', icon: 'fa-arrow-right' },
-                { id: '10-thong-ke', name: 'Chương 5: Thống kê số liệu không ghép nhóm', icon: 'fa-chart-column' },
-                { id: '10-ham-so-bac-hai', name: 'Chương 6: Hàm số bậc hai & Đồ thị', icon: 'fa-bezier-curve' },
-                { id: '10-oxy', name: 'Chương 7: Phương pháp tọa độ Oxy', icon: 'fa-map-pin' },
-                { id: '10-to-hop', name: 'Chương 8: Đại số tổ hợp & Nhị thức Newton', icon: 'fa-shuffle' },
-                { id: '10-xac-suat', name: 'Chương 9: Tính xác suất cổ điển', icon: 'fa-dice-d6' },
-                { type: 'header', title: 'Chuyên Đề Học Tập 10' },
-                { id: '10-cd-he-phuong-trinh', name: 'CĐ 1: Hệ PT bậc nhất ba ẩn', icon: 'fa-table-list' },
-                { id: '10-cd-quy-nap', name: 'CĐ 2: Quy nạp toán học & Newton', icon: 'fa-superscript' },
-                { id: '10-cd-ba-duong-conic', name: 'CĐ 3: Ba đường Conic & Ứng dụng', icon: 'fa-circle-notch' }
+                { id: '10-vecto', name: 'Chương 4: Vectơ', icon: 'fa-arrow-right' }
             ]
         };
 
@@ -670,17 +740,129 @@
         }
 
         function switchTeacherTab(tab) {
+            document.getElementById('sec-t-scores').style.display = 'none';
+            document.getElementById('sec-t-add-q').style.display = 'none';
+            document.getElementById('sec-t-creator').style.display = 'none';
+            document.getElementById('btn-t-scores').classList.remove('active');
+            document.getElementById('btn-t-add-q').classList.remove('active');
+            document.getElementById('btn-t-creator').classList.remove('active');
+
             if (tab === 'scores') {
                 document.getElementById('sec-t-scores').style.display = 'block';
-                document.getElementById('sec-t-creator').style.display = 'none';
                 document.getElementById('btn-t-scores').classList.add('active');
-                document.getElementById('btn-t-creator').classList.remove('active');
-            } else {
-                document.getElementById('sec-t-scores').style.display = 'none';
+            } else if (tab === 'add_q') {
+                document.getElementById('sec-t-add-q').style.display = 'block';
+                document.getElementById('btn-t-add-q').classList.add('active');
+                generateNewQId();
+            } else if (tab === 'creator') {
                 document.getElementById('sec-t-creator').style.display = 'block';
                 document.getElementById('btn-t-creator').classList.add('active');
-                document.getElementById('btn-t-scores').classList.remove('active');
                 filterQuestionBankList();
+            }
+        }
+
+        function generateNewQId() {
+            const gr = document.getElementById('add-q-grade').value;
+            const r = Math.floor(100 + Math.random() * 900);
+            document.getElementById('add-q-id').value = `CH${gr}_AUTO_${r}`;
+        }
+
+        function adjustAddQTypeFields() {
+            const type = document.getElementById('add-q-type').value;
+            const optContainer = document.getElementById('add-q-options-container');
+            const ansInput = document.getElementById('add-q-ans');
+            
+            if (type === 'MCQ') {
+                optContainer.style.display = 'block';
+                ansInput.placeholder = "A hoặc B hoặc C hoặc D";
+            } else if (type === 'TF') {
+                optContainer.style.display = 'block';
+                ansInput.placeholder = "D-D-S-D (Đúng/Sai cho 4 ý a,b,c,d)";
+            } else if (type === 'SA') {
+                optContainer.style.display = 'none';
+                ansInput.placeholder = "10 hoặc 3.5 hoặc -2 (Kết quả số)";
+            }
+            updateAddQPreview();
+        }
+
+        function updateAddQPreview() {
+            const q = document.getElementById('add-q-content').value || "[Chưa nhập nội dung đề bài...]";
+            const oa = document.getElementById('add-q-oa').value || "...";
+            const ob = document.getElementById('add-q-ob').value || "...";
+            const oc = document.getElementById('add-q-oc').value || "...";
+            const od = document.getElementById('add-q-od').value || "...";
+            const type = document.getElementById('add-q-type').value;
+
+            let html = `<strong>Đề bài:</strong> ${q}<br><br>`;
+            if (type === 'MCQ') {
+                html += `A. ${oa}<br>B. ${ob}<br>C. ${oc}<br>D. ${od}`;
+            } else if (type === 'TF') {
+                html += `a) ${oa}<br>b) ${ob}<br>c) ${oc}<br>d) ${od}`;
+            } else {
+                html += `<em>[Học sinh tự điền số]</em>`;
+            }
+            document.getElementById('add-q-preview').innerHTML = html;
+            if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        }
+
+        async function saveSingleQuestionToBank() {
+            const id = document.getElementById('add-q-id').value.trim();
+            const grade = document.getElementById('add-q-grade').value;
+            const topic = document.getElementById('add-q-topic').value;
+            const level = document.getElementById('add-q-level').value;
+            const type = document.getElementById('add-q-type').value;
+            const q = document.getElementById('add-q-content').value.trim();
+            const oa = document.getElementById('add-q-oa').value.trim();
+            const ob = document.getElementById('add-q-ob').value.trim();
+            const oc = document.getElementById('add-q-oc').value.trim();
+            const od = document.getElementById('add-q-od').value.trim();
+            const ans = document.getElementById('add-q-ans').value.trim();
+            const exp = document.getElementById('add-q-exp').value.trim();
+
+            if (!id || !q || !ans) {
+                alert("Vui lòng điền đủ Mã câu, Đề bài và Đáp án đúng!");
+                return;
+            }
+
+            const qObj = {
+                id: id,
+                grade: grade,
+                topic: topic,
+                level: level,
+                type: type,
+                q: q,
+                options: [oa, ob, oc, od],
+                ans: ans,
+                explanation: exp
+            };
+
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'add_question',
+                        password: teacherPassAuth,
+                        question: qObj
+                    })
+                });
+                const data = await res.json();
+                if (data.status === "success") {
+                    alert("🎉 Đã lưu câu hỏi mới vào Ngân Hàng (Tab NganHangCauHoi) thành công!");
+                    questionBank.push(qObj);
+                    document.getElementById('add-q-content').value = "";
+                    document.getElementById('add-q-oa').value = "";
+                    document.getElementById('add-q-ob').value = "";
+                    document.getElementById('add-q-oc').value = "";
+                    document.getElementById('add-q-od').value = "";
+                    document.getElementById('add-q-ans').value = "";
+                    document.getElementById('add-q-exp').value = "";
+                    generateNewQId();
+                    updateAddQPreview();
+                } else {
+                    alert("Lỗi: " + data.message);
+                }
+            } catch (err) {
+                alert("Lỗi kết nối khi lưu câu hỏi!");
             }
         }
 

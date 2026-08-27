@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Luyện Thi & Ngân Hàng Đề Toán THPT - Cô Trúc</title>
+    <title>Cổng Luyện Thi & Đề Toán THPT KNTT - Cô Trúc</title>
     <!-- MathJax -->
     <script>
         window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
@@ -18,7 +18,7 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         body { background-color: var(--bg); color: var(--text-dark); min-height: 100vh; padding-bottom: 40px; }
-        .wrapper { max-width: 1300px; margin: 0 auto; padding: 25px 20px; }
+        .wrapper { max-width: 1350px; margin: 0 auto; padding: 25px 20px; }
         
         .header { margin-bottom: 25px; }
         .header h1 { font-size: 2.1rem; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
@@ -27,36 +27,37 @@
         .grade-bar { display: flex; gap: 10px; overflow-x: auto; padding: 5px 0 20px; scrollbar-width: none; }
         .grade-bar::-webkit-scrollbar { display: none; }
         .grade-pill {
-            background: #fff; border: 1px solid var(--border-color); padding: 8px 22px;
-            border-radius: var(--radius-pill); font-weight: 600; font-size: 0.95rem;
+            background: #fff; border: 1px solid var(--border-color); padding: 9px 22px;
+            border-radius: var(--radius-pill); font-weight: 700; font-size: 0.95rem;
             color: #475569; cursor: pointer; white-space: nowrap; transition: 0.2s;
         }
         .grade-pill:hover { background: #f8fafc; }
         .grade-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 12px rgba(224, 109, 83, 0.3); }
 
-        .portal-layout { display: grid; grid-template-columns: 250px 1fr; gap: 25px; align-items: start; }
-        @media (max-width: 850px) { .portal-layout { grid-template-columns: 1fr; } }
+        .portal-layout { display: grid; grid-template-columns: 290px 1fr; gap: 25px; align-items: start; }
+        @media (max-width: 900px) { .portal-layout { grid-template-columns: 1fr; } }
 
-        .sidebar { background: var(--card-bg); border-radius: var(--radius-lg); padding: 20px 16px; border: 1px solid #ede7dc; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .sidebar-title { font-size: 1.05rem; font-weight: 700; color: #334155; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-        .topic-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-        .topic-item { padding: 10px 14px; border-radius: var(--radius-md); font-size: 0.95rem; font-weight: 600; color: #475569; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+        .sidebar { background: var(--card-bg); border-radius: var(--radius-lg); padding: 18px 14px; border: 1px solid #ede7dc; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .sidebar-title { font-size: 1.05rem; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .topic-list { list-style: none; display: flex; flex-direction: column; gap: 4px; max-height: 70vh; overflow-y: auto; padding-right: 4px; }
+        .topic-group-title { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #94a3b8; margin: 10px 0 4px 8px; letter-spacing: 0.5px; }
+        .topic-item { padding: 8px 12px; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; color: #475569; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
         .topic-item:hover { background: #f1f5f9; color: var(--primary); }
         .topic-item.active { background: #e0f2fe; color: #0369a1; }
 
         .exam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .exam-card { background: #fff; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid #f1ece1; box-shadow: 0 4px 15px rgba(0,0,0,0.04); display: flex; flex-direction: column; transition: 0.25s; }
         .exam-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
-        .card-banner { height: 140px; position: relative; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0d9488 0%, #0284c7 60%, #e11d48 100%); color: #fff; }
+        .card-banner { height: 130px; position: relative; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0d9488 0%, #0284c7 60%, #e11d48 100%); color: #fff; }
         .card-banner.exam-mode { background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%); }
-        .card-icon { width: 56px; height: 56px; background: rgba(255,255,255,0.95); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #0f172a; font-size: 1.5rem; }
-        .card-badge { position: absolute; bottom: 10px; left: 12px; font-size: 0.75rem; font-weight: 700; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); padding: 3px 8px; border-radius: 4px; }
-        .card-mode-badge { position: absolute; top: 10px; right: 12px; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; background: #fff; }
+        .card-icon { width: 50px; height: 50px; background: rgba(255,255,255,0.95); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #0f172a; font-size: 1.4rem; }
+        .card-badge { position: absolute; bottom: 8px; left: 10px; font-size: 0.72rem; font-weight: 700; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); padding: 3px 8px; border-radius: 4px; }
+        .card-mode-badge { position: absolute; top: 10px; right: 10px; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; background: #fff; }
         .mode-luyen-tap { color: #16a34a; }
         .mode-kiem-tra { color: #dc2626; }
-        .card-body { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .card-title { font-size: 1.08rem; font-weight: 700; color: #1e293b; margin-bottom: 10px; line-height: 1.4; }
-        .card-meta { display: flex; gap: 12px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+        .card-body { padding: 16px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-title { font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 8px; line-height: 1.4; }
+        .card-meta { display: flex; gap: 12px; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; }
         .btn-start { width: 100%; padding: 10px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
         .btn-start:hover { background: #1d4ed8; }
 
@@ -87,27 +88,23 @@
 
     <div id="portal-view" class="wrapper">
         <div class="header">
-            <h1>Cổng Luyện Thi & Ngân Hàng Đề Toán THPT</h1>
-            <p>Hệ thống tự động đồng bộ từ Google Sheets — Cô Trúc</p>
+            <h1>Cổng Luyện Thi & Đề Toán THPT KNTT</h1>
+            <p>Hệ thống học tập chuẩn SGK Kết Nối Tri Thức — Cô Trúc</p>
         </div>
 
         <div class="grade-bar">
             <button class="grade-pill active" onclick="filterGrade('all', this)">Tất cả</button>
-            <button class="grade-pill" onclick="filterGrade('12', this)">Khối 12</button>
-            <button class="grade-pill" onclick="filterGrade('11', this)">Khối 11</button>
-            <button class="grade-pill" onclick="filterGrade('10', this)">Khối 10</button>
+            <button class="grade-pill" onclick="filterGrade('12', this)">Toán 12</button>
+            <button class="grade-pill" onclick="filterGrade('11', this)">Toán 11</button>
+            <button class="grade-pill" onclick="filterGrade('10', this)">Toán 10</button>
             <button class="grade-pill" onclick="filterGrade('thpt', this)">Luyện Thi THPT QG</button>
         </div>
 
         <div class="portal-layout">
             <aside class="sidebar">
-                <div class="sidebar-title"><i class="fa-solid fa-shapes"></i> Phân Loại Chuyên Đề</div>
-                <ul class="topic-list">
-                    <li class="topic-item active" onclick="filterTopic('all', this)"><i class="fa-solid fa-layer-group"></i> Tất cả chuyên đề</li>
-                    <li class="topic-item" onclick="filterTopic('ham-so', this)"><i class="fa-solid fa-chart-line"></i> Khảo sát hàm số</li>
-                    <li class="topic-item" onclick="filterTopic('oxyz', this)"><i class="fa-solid fa-cube"></i> Hình Oxyz</li>
-                    <li class="topic-item" onclick="filterTopic('tich-phan', this)"><i class="fa-solid fa-infinity"></i> Tích phân</li>
-                    <li class="topic-item" onclick="filterTopic('xac-suat', this)"><i class="fa-solid fa-dice"></i> Xác suất - Thống kê</li>
+                <div class="sidebar-title"><i class="fa-solid fa-shapes"></i> Danh Mục Chuyên Đề</div>
+                <ul class="topic-list" id="topic-container">
+                    <!-- Được render tự động theo Khối -->
                 </ul>
             </aside>
 
@@ -154,13 +151,101 @@
         let secondsRemaining = 0;
         let cheatWarnings = 0;
 
+        // Cấu trúc chuyên đề chi tiết bám sách Kết Nối Tri Thức
+        const topicsConfig = {
+            general: [
+                { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
+                { id: 'kttx-1', name: 'Kiểm tra thường xuyên 1', icon: 'fa-file-pen' },
+                { id: 'kttx-2', name: 'Kiểm tra thường xuyên 2', icon: 'fa-file-pen' },
+                { id: 'kttx-3', name: 'Kiểm tra thường xuyên 3', icon: 'fa-file-pen' },
+                { id: 'giua-ki-1', name: 'Kiểm tra Giữa Kì 1', icon: 'fa-calendar-check' },
+                { id: 'cuoi-ki-1', name: 'Kiểm tra Cuối Kì 1', icon: 'fa-graduation-cap' },
+                { id: 'giua-ki-2', name: 'Kiểm tra Giữa Kì 2', icon: 'fa-calendar-check' },
+                { id: 'cuoi-ki-2', name: 'Kiểm tra Cuối Kì 2', icon: 'fa-graduation-cap' },
+                { id: 'thpt-qg', name: 'Luyện đề Tốt Nghiệp THPT', icon: 'fa-award' }
+            ],
+            g12: [
+                { type: 'header', title: 'SGK Toán 12 (KNTT)' },
+                { id: '12-ham-so', name: 'Chương 1: Ứng dụng đạo hàm & Khảo sát hàm số', icon: 'fa-chart-line' },
+                { id: '12-vecto-khong-gian', name: 'Chương 2: Vectơ & Tọa độ trong không gian', icon: 'fa-location-arrow' },
+                { id: '12-thong-ke', name: 'Chương 3: Thống kê số liệu ghép nhóm', icon: 'fa-chart-simple' },
+                { id: '12-nguyen-ham-tich-phan', name: 'Chương 4: Nguyên hàm & Tích phân', icon: 'fa-infinity' },
+                { id: '12-oxyz', name: 'Chương 5: Phương pháp tọa độ Oxyz', icon: 'fa-cube' },
+                { id: '12-xac-suat', name: 'Chương 6: Xác suất có điều kiện', icon: 'fa-dice' },
+                { type: 'header', title: 'Chuyên Đề Học Tập 12 (Nâng Cao)' },
+                { id: '12-cd-bien-ngau-nhien', name: 'CĐ 1: Biến ngẫu nhiên rời rạc', icon: 'fa-arrow-trend-up' },
+                { id: '12-cd-toan-toi-uu', name: 'CĐ 2: Bài toán tối ưu & Quy hoạch tuyến tính', icon: 'fa-bullseye' },
+                { id: '12-cd-toan-tai-chinh', name: 'CĐ 3: Toán tài chính & Thực tế', icon: 'fa-coins' }
+            ],
+            g11: [
+                { type: 'header', title: 'SGK Toán 11 (KNTT)' },
+                { id: '11-luong-giac', name: 'Chương 1: Hàm số & PT Lượng giác', icon: 'fa-wave-square' },
+                { id: '11-day-so-cap-so', name: 'Chương 2: Dãy số, Cấp số cộng & Nhân', icon: 'fa-arrow-up-right-dots' },
+                { id: '11-thong-ke', name: 'Chương 3: Số đặc trưng mẫu số liệu', icon: 'fa-chart-pie' },
+                { id: '11-song-song', name: 'Chương 4: Quan hệ song song không gian', icon: 'fa-bars' },
+                { id: '11-gioi-han', name: 'Chương 5: Giới hạn & Hàm số liên tục', icon: 'fa-arrows-split-up-and-left' },
+                { id: '11-mu-logarit', name: 'Chương 6: Hàm số Mũ & Logarit', icon: 'fa-square-root-variable' },
+                { id: '11-dao-ham', name: 'Chương 7: Đạo hàm', icon: 'fa-chart-area' },
+                { id: '11-vuong-goc', name: 'Chương 8: Quan hệ vuông góc không gian', icon: 'fa-shapes' },
+                { id: '11-xac-suat', name: 'Chương 9: Xác suất biến cố giao, độc lập', icon: 'fa-dice-five' },
+                { type: 'header', title: 'Chuyên Đề Học Tập 11 (Nâng Cao)' },
+                { id: '11-cd-phep-bien-hinh', name: 'CĐ 1: Phép biến hình trong mặt phẳng', icon: 'fa-clone' },
+                { id: '11-cd-ly-thuyet-do-thi', name: 'CĐ 2: Làm quen Lý thuyết đồ thị', icon: 'fa-diagram-project' },
+                { id: '11-cd-ve-ky-thuat', name: 'CĐ 3: Một số yếu tố vẽ kĩ thuật', icon: 'fa-compass-drafting' }
+            ],
+            g10: [
+                { type: 'header', title: 'SGK Toán 10 (KNTT)' },
+                { id: '10-menh-de-tap-hop', name: 'Chương 1: Mệnh đề & Tập hợp', icon: 'fa-cubes' },
+                { id: '10-bpt-he-bpt', name: 'Chương 2: BPT & Hệ BPT bậc nhất hai ẩn', icon: 'fa-table-cells-large' },
+                { id: '10-he-thuc-luong', name: 'Chương 3: Hệ thức lượng trong tam giác', icon: 'fa-draw-polygon' },
+                { id: '10-vecto', name: 'Chương 4: Vectơ', icon: 'fa-arrow-right' },
+                { id: '10-thong-ke', name: 'Chương 5: Thống kê số liệu không ghép nhóm', icon: 'fa-chart-column' },
+                { id: '10-ham-so-bac-hai', name: 'Chương 6: Hàm số bậc hai & Đồ thị', icon: 'fa-bezier-curve' },
+                { id: '10-oxy', name: 'Chương 7: Phương pháp tọa độ Oxy', icon: 'fa-map-pin' },
+                { id: '10-to-hop', name: 'Chương 8: Đại số tổ hợp & Nhị thức Newton', icon: 'fa-shuffle' },
+                { id: '10-xac-suat', name: 'Chương 9: Tính xác suất cổ điển', icon: 'fa-dice-d6' },
+                { type: 'header', title: 'Chuyên Đề Học Tập 10 (Nâng Cao)' },
+                { id: '10-cd-he-phuong-trinh', name: 'CĐ 1: Hệ phương trình bậc nhất ba ẩn', icon: 'fa-table-list' },
+                { id: '10-cd-quy-nap', name: 'CĐ 2: Quy nạp toán học & Nhị thức Newton', icon: 'fa-superscript' },
+                { id: '10-cd-ba-duong-conic', name: 'CĐ 3: Ba đường Conic & Ứng dụng', icon: 'fa-circle-notch' }
+            ]
+        };
+
+        function renderSidebarTopics() {
+            const container = document.getElementById('topic-container');
+            container.innerHTML = '';
+
+            let list = [...topicsConfig.general];
+            if (currentGrade === '12') list = [...topicsConfig.general, ...topicsConfig.g12];
+            else if (currentGrade === '11') list = [...topicsConfig.general, ...topicsConfig.g11];
+            else if (currentGrade === '10') list = [...topicsConfig.general, ...topicsConfig.g10];
+            else if (currentGrade === 'thpt') list = [...topicsConfig.general, ...topicsConfig.g12];
+            else list = [...topicsConfig.general, ...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10];
+
+            list.forEach(item => {
+                if (item.type === 'header') {
+                    const h = document.createElement('div');
+                    h.className = 'topic-group-title';
+                    h.innerText = item.title;
+                    container.appendChild(h);
+                } else {
+                    const li = document.createElement('li');
+                    li.className = `topic-item ${currentTopic === item.id ? 'active' : ''}`;
+                    li.innerHTML = `<i class="fa-solid ${item.icon}"></i> <span>${item.name}</span>`;
+                    li.onclick = () => filterTopic(item.id, li);
+                    container.appendChild(li);
+                }
+            });
+        }
+
         async function fetchExams() {
             try {
                 const res = await fetch(SCRIPT_URL);
                 examBank = await res.json();
+                renderSidebarTopics();
                 renderExams();
             } catch (err) {
-                document.getElementById('exam-grid').innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #dc2626;">Không thể tải dữ liệu đề thi. Vui lòng kiểm tra lại quyền chia sẻ trên Google Sheets!</p>`;
+                document.getElementById('exam-grid').innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #dc2626;">Đang tải hoặc chưa có dữ liệu. Vui lòng kiểm tra quyền chia sẻ bảng tính!</p>`;
             }
         }
 
@@ -185,7 +270,7 @@
                 card.className = 'exam-card';
                 card.innerHTML = `
                     <div class="card-banner ${isExamMode ? 'exam-mode' : ''}">
-                        <div class="card-icon"><i class="fa-solid fa-calculator"></i></div>
+                        <div class="card-icon"><i class="fa-solid fa-book-open"></i></div>
                         <div class="card-badge">KHỐI ${ex.grade.toUpperCase()}</div>
                         <div class="card-mode-badge ${isExamMode ? 'mode-kiem-tra' : 'mode-luyen-tap'}">
                             ${isExamMode ? '🔴 KIỂM TRA' : '🟢 LUYỆN TẬP'}
@@ -208,15 +293,17 @@
 
         function filterGrade(g, btn) {
             currentGrade = g;
+            currentTopic = 'all';
             document.querySelectorAll('.grade-pill').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            renderSidebarTopics();
             renderExams();
         }
 
         function filterTopic(t, item) {
             currentTopic = t;
             document.querySelectorAll('.topic-item').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
+            if (item) item.classList.add('active');
             renderExams();
         }
 
@@ -403,6 +490,7 @@
             });
         }
 
+        renderSidebarTopics();
         fetchExams();
     </script>
 </body>

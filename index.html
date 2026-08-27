@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Luyện Thi & Đề Toán THPT KNTT - Cô Trúc</title>
+    <title>Cổng Luyện Thi & Sổ Tay Toán THPT KNTT - Cô Trúc</title>
     <!-- MathJax -->
     <script>
         window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
@@ -45,6 +45,22 @@
         .topic-item:hover { background: #f1f5f9; color: var(--primary); }
         .topic-item.active { background: #e0f2fe; color: #0369a1; }
 
+        /* Banner Lý thuyết & Sơ đồ tư duy */
+        .theory-banner-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid #bfdbfe; border-radius: var(--radius-lg);
+            padding: 18px 22px; margin-bottom: 22px; display: flex;
+            align-items: center; justify-content: space-between; gap: 15px;
+        }
+        .theory-info h3 { font-size: 1.15rem; color: #1e40af; margin-bottom: 4px; }
+        .theory-info p { font-size: 0.9rem; color: #3b82f6; }
+        .btn-view-theory {
+            background: #2563eb; color: #fff; border: none; padding: 10px 18px;
+            border-radius: var(--radius-md); font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; white-space: nowrap; transition: 0.2s;
+        }
+        .btn-view-theory:hover { background: #1d4ed8; }
+
         .exam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .exam-card { background: #fff; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid #f1ece1; box-shadow: 0 4px 15px rgba(0,0,0,0.04); display: flex; flex-direction: column; transition: 0.25s; }
         .exam-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
@@ -61,6 +77,30 @@
         .btn-start { width: 100%; padding: 10px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
         .btn-start:hover { background: #1d4ed8; }
 
+        /* Popup Modal Lý thuyết & Mindmap */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px);
+            z-index: 999; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background: #fff; border-radius: var(--radius-lg); max-width: 900px; width: 100%;
+            max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: popIn 0.25s ease-out;
+        }
+        @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-header {
+            padding: 16px 24px; background: #f8fafc; border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-header h2 { font-size: 1.25rem; color: #0f172a; display: flex; align-items: center; gap: 10px; }
+        .btn-close-modal { background: none; border: none; font-size: 1.3rem; color: #64748b; cursor: pointer; }
+        .modal-body { padding: 24px; overflow-y: auto; }
+        .mindmap-img-box { text-align: center; margin-bottom: 24px; }
+        .mindmap-img-box img { max-width: 100%; border-radius: 10px; border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .formula-box { background: #f8fafc; border-left: 4px solid var(--primary); padding: 18px; border-radius: 8px; line-height: 1.8; font-size: 1rem; color: #1e293b; }
+
+        /* Quiz View */
         #quiz-view { display: none; max-width: 900px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: 0 6px 25px rgba(0,0,0,0.05); }
         .quiz-topbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
         .btn-back { background: #f1f5f9; border: none; padding: 7px 14px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; }
@@ -88,7 +128,7 @@
 
     <div id="portal-view" class="wrapper">
         <div class="header">
-            <h1>Cổng Luyện Thi & Đề Toán THPT KNTT</h1>
+            <h1>Cổng Luyện Thi & Sổ Tay Toán THPT KNTT</h1>
             <p>Hệ thống học tập chuẩn SGK Kết Nối Tri Thức — Cô Trúc</p>
         </div>
 
@@ -103,12 +143,19 @@
         <div class="portal-layout">
             <aside class="sidebar">
                 <div class="sidebar-title"><i class="fa-solid fa-shapes"></i> Danh Mục Chuyên Đề</div>
-                <ul class="topic-list" id="topic-container">
-                    <!-- Được render tự động theo Khối -->
-                </ul>
+                <ul class="topic-list" id="topic-container"></ul>
             </aside>
 
             <main>
+                <!-- Banner xem Lý thuyết & Sơ đồ tư duy -->
+                <div class="theory-banner-box" id="theory-banner" style="display: none;">
+                    <div class="theory-info">
+                        <h3 id="theory-banner-title">Sổ tay lý thuyết & Sơ đồ tư duy</h3>
+                        <p>Xem tóm tắt kiến thức trọng tâm & công thức giải nhanh trước khi luyện đề</p>
+                    </div>
+                    <button class="btn-view-theory" onclick="openTheoryModal()"><i class="fa-solid fa-book-open-reader"></i> Xem Lý Thuyết</button>
+                </div>
+
                 <div class="exam-grid" id="exam-grid">
                     <p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Đang tải danh sách đề từ Google Sheets...</p>
                 </div>
@@ -116,6 +163,21 @@
         </div>
     </div>
 
+    <!-- Cửa sổ Popup Sơ đồ tư duy & Lý thuyết -->
+    <div class="modal-overlay" id="theory-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-theory-title"><i class="fa-solid fa-brain" style="color: #e06d53;"></i> Tóm tắt kiến thức</h2>
+                <button class="btn-close-modal" onclick="closeTheoryModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="mindmap-img-box" id="modal-mindmap-box"></div>
+                <div class="formula-box" id="modal-formula-box"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Giao diện làm bài -->
     <div id="quiz-view">
         <div class="quiz-topbar">
             <button class="btn-back" onclick="backToPortal()"><i class="fa-solid fa-arrow-left"></i> Trở về</button>
@@ -144,6 +206,7 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwdJByu3MKLejVJOUV-rX5mf6UKUst1J55IZbXT5bAG6QTgedWgF54yyJcgmk6hkcaIg/exec";
 
         let examBank = [];
+        let theoryBank = {};
         let currentGrade = 'all';
         let currentTopic = 'all';
         let activeExam = null;
@@ -151,7 +214,6 @@
         let secondsRemaining = 0;
         let cheatWarnings = 0;
 
-        // Cấu trúc chuyên đề chi tiết bám sách Kết Nối Tri Thức
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
@@ -166,15 +228,15 @@
             ],
             g12: [
                 { type: 'header', title: 'SGK Toán 12 (KNTT)' },
-                { id: '12-ham-so', name: 'Chương 1: Ứng dụng đạo hàm & Khảo sát hàm số', icon: 'fa-chart-line' },
-                { id: '12-vecto-khong-gian', name: 'Chương 2: Vectơ & Tọa độ trong không gian', icon: 'fa-location-arrow' },
+                { id: '12-ham-so', name: 'Chương 1: Khảo sát hàm số & Đạo hàm', icon: 'fa-chart-line' },
+                { id: '12-vecto-khong-gian', name: 'Chương 2: Vectơ & Tọa độ không gian', icon: 'fa-location-arrow' },
                 { id: '12-thong-ke', name: 'Chương 3: Thống kê số liệu ghép nhóm', icon: 'fa-chart-simple' },
                 { id: '12-nguyen-ham-tich-phan', name: 'Chương 4: Nguyên hàm & Tích phân', icon: 'fa-infinity' },
                 { id: '12-oxyz', name: 'Chương 5: Phương pháp tọa độ Oxyz', icon: 'fa-cube' },
                 { id: '12-xac-suat', name: 'Chương 6: Xác suất có điều kiện', icon: 'fa-dice' },
                 { type: 'header', title: 'Chuyên Đề Học Tập 12 (Nâng Cao)' },
                 { id: '12-cd-bien-ngau-nhien', name: 'CĐ 1: Biến ngẫu nhiên rời rạc', icon: 'fa-arrow-trend-up' },
-                { id: '12-cd-toan-toi-uu', name: 'CĐ 2: Bài toán tối ưu & Quy hoạch tuyến tính', icon: 'fa-bullseye' },
+                { id: '12-cd-toan-toi-uu', name: 'CĐ 2: Bài toán tối ưu & Quy hoạch', icon: 'fa-bullseye' },
                 { id: '12-cd-toan-tai-chinh', name: 'CĐ 3: Toán tài chính & Thực tế', icon: 'fa-coins' }
             ],
             g11: [
@@ -183,14 +245,14 @@
                 { id: '11-day-so-cap-so', name: 'Chương 2: Dãy số, Cấp số cộng & Nhân', icon: 'fa-arrow-up-right-dots' },
                 { id: '11-thong-ke', name: 'Chương 3: Số đặc trưng mẫu số liệu', icon: 'fa-chart-pie' },
                 { id: '11-song-song', name: 'Chương 4: Quan hệ song song không gian', icon: 'fa-bars' },
-                { id: '11-gioi-han', name: 'Chương 5: Giới hạn & Hàm số liên tục', icon: 'fa-arrows-split-up-and-left' },
+                { id: '11-gioi-han', name: 'Chương 5: Giới hạn & Hàm liên tục', icon: 'fa-arrows-split-up-and-left' },
                 { id: '11-mu-logarit', name: 'Chương 6: Hàm số Mũ & Logarit', icon: 'fa-square-root-variable' },
                 { id: '11-dao-ham', name: 'Chương 7: Đạo hàm', icon: 'fa-chart-area' },
                 { id: '11-vuong-goc', name: 'Chương 8: Quan hệ vuông góc không gian', icon: 'fa-shapes' },
-                { id: '11-xac-suat', name: 'Chương 9: Xác suất biến cố giao, độc lập', icon: 'fa-dice-five' },
+                { id: '11-xac-suat', name: 'Chương 9: Xác suất giao & Độc lập', icon: 'fa-dice-five' },
                 { type: 'header', title: 'Chuyên Đề Học Tập 11 (Nâng Cao)' },
-                { id: '11-cd-phep-bien-hinh', name: 'CĐ 1: Phép biến hình trong mặt phẳng', icon: 'fa-clone' },
-                { id: '11-cd-ly-thuyet-do-thi', name: 'CĐ 2: Làm quen Lý thuyết đồ thị', icon: 'fa-diagram-project' },
+                { id: '11-cd-phep-bien-hinh', name: 'CĐ 1: Phép biến hình mặt phẳng', icon: 'fa-clone' },
+                { id: '11-cd-ly-thuyet-do-thi', name: 'CĐ 2: Lý thuyết đồ thị', icon: 'fa-diagram-project' },
                 { id: '11-cd-ve-ky-thuat', name: 'CĐ 3: Một số yếu tố vẽ kĩ thuật', icon: 'fa-compass-drafting' }
             ],
             g10: [
@@ -205,8 +267,8 @@
                 { id: '10-to-hop', name: 'Chương 8: Đại số tổ hợp & Nhị thức Newton', icon: 'fa-shuffle' },
                 { id: '10-xac-suat', name: 'Chương 9: Tính xác suất cổ điển', icon: 'fa-dice-d6' },
                 { type: 'header', title: 'Chuyên Đề Học Tập 10 (Nâng Cao)' },
-                { id: '10-cd-he-phuong-trinh', name: 'CĐ 1: Hệ phương trình bậc nhất ba ẩn', icon: 'fa-table-list' },
-                { id: '10-cd-quy-nap', name: 'CĐ 2: Quy nạp toán học & Nhị thức Newton', icon: 'fa-superscript' },
+                { id: '10-cd-he-phuong-trinh', name: 'CĐ 1: Hệ PT bậc nhất ba ẩn', icon: 'fa-table-list' },
+                { id: '10-cd-quy-nap', name: 'CĐ 2: Quy nạp toán học & Newton', icon: 'fa-superscript' },
                 { id: '10-cd-ba-duong-conic', name: 'CĐ 3: Ba đường Conic & Ứng dụng', icon: 'fa-circle-notch' }
             ]
         };
@@ -241,7 +303,9 @@
         async function fetchExams() {
             try {
                 const res = await fetch(SCRIPT_URL);
-                examBank = await res.json();
+                const data = await res.json();
+                examBank = data.exams || [];
+                theoryBank = data.theories || {};
                 renderSidebarTopics();
                 renderExams();
             } catch (err) {
@@ -251,7 +315,16 @@
 
         function renderExams() {
             const grid = document.getElementById('exam-grid');
+            const theoryBanner = document.getElementById('theory-banner');
             grid.innerHTML = '';
+
+            // Hiển thị banner lý thuyết nếu chuyên đề đó có nội dung
+            if (currentTopic !== 'all' && theoryBank[currentTopic]) {
+                theoryBanner.style.display = 'flex';
+                document.getElementById('theory-banner-title').innerText = theoryBank[currentTopic].title || 'Sổ tay Lý thuyết & Sơ đồ tư duy';
+            } else {
+                theoryBanner.style.display = 'none';
+            }
 
             const list = examBank.filter(e => {
                 const gMatch = (currentGrade === 'all' || e.grade === currentGrade);
@@ -305,6 +378,32 @@
             document.querySelectorAll('.topic-item').forEach(i => i.classList.remove('active'));
             if (item) item.classList.add('active');
             renderExams();
+        }
+
+        // Popup Lý Thuyết
+        function openTheoryModal() {
+            const data = theoryBank[currentTopic];
+            if (!data) return;
+
+            document.getElementById('modal-theory-title').innerHTML = `<i class="fa-solid fa-brain" style="color: #e06d53;"></i> ${data.title}`;
+            
+            const imgBox = document.getElementById('modal-mindmap-box');
+            if (data.image) {
+                imgBox.innerHTML = `<img src="${data.image}" alt="Sơ đồ tư duy">`;
+                imgBox.style.display = 'block';
+            } else {
+                imgBox.innerHTML = '';
+                imgBox.style.display = 'none';
+            }
+
+            document.getElementById('modal-formula-box').innerHTML = data.content || 'Nội dung đang được cập nhật...';
+            document.getElementById('theory-modal').style.display = 'flex';
+
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function closeTheoryModal() {
+            document.getElementById('theory-modal').style.display = 'none';
         }
 
         function startExam(id) {

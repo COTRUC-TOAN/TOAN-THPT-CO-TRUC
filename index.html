@@ -885,17 +885,22 @@
         }
 
         function filterQuestionBankList() {
-            const gr = document.getElementById('bank-filter-grade').value;
-            const lvl = document.getElementById('bank-filter-level').value;
-            const type = document.getElementById('bank-filter-type').value;
-            const kw = document.getElementById('bank-search-text').value.trim().toLowerCase();
+            const gr = (document.getElementById('bank-filter-grade').value || "").toString().trim();
+            const lvl = (document.getElementById('bank-filter-level').value || "").toString().trim().toUpperCase();
+            const type = (document.getElementById('bank-filter-type').value || "").toString().trim().toUpperCase();
+            const kw = (document.getElementById('bank-search-text').value || "").trim().toLowerCase();
             const container = document.getElementById('bank-q-list');
 
             const filtered = questionBank.filter(q => {
-                const matchG = (gr === 'all' || q.grade === gr);
-                const matchL = (lvl === 'all' || q.level === lvl);
-                const matchT = (type === 'all' || q.type === type);
-                const matchK = (!kw || q.q.toLowerCase().includes(kw));
+                const qGrade = (q.grade || "").toString().trim();
+                const qLevel = (q.level || "").toString().trim().toUpperCase();
+                const qType = (q.type || "").toString().trim().toUpperCase();
+                const qText = (q.q || "").toString().toLowerCase();
+
+                const matchG = (gr === 'all' || qGrade === gr);
+                const matchL = (lvl === 'ALL' || qLevel === lvl);
+                const matchT = (type === 'ALL' || qType === type);
+                const matchK = (!kw || qText.includes(kw));
                 return matchG && matchL && matchT && matchK;
             });
 
@@ -913,7 +918,7 @@
                     <input type="checkbox" onchange="toggleSelectQ('${q.id}', this)" ${isChecked ? 'checked' : ''} style="margin-top: 5px; transform: scale(1.2);">
                     <div style="flex-grow: 1;">
                         <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
-                            <span class="badge-level lvl-${q.level.toLowerCase()}">${q.level}</span>
+                            <span class="badge-level lvl-${(q.level || 'nb').toLowerCase()}">${q.level}</span>
                             <small style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 700; color: #475569;">K${q.grade}</small>
                             <small style="font-weight: 700; color: #64748b;">${q.type}</small>
                             <small style="color: #94a3b8;">#${q.id}</small>
@@ -926,7 +931,6 @@
 
             if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         }
-
         function toggleSelectQ(id, cb) {
             const q = questionBank.find(item => item.id === id);
             if (!q) return;

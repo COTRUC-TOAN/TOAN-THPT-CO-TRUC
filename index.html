@@ -10,13 +10,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- MathJax 2.7.7 Chuẩn Quốc Tế Cho Toán Học THPT -->
+    <!-- MathJax 2.7.7 Cấu Hình Đầy Đủ Gói Toán Học -->
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             tex2jax: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
                 processEscapes: true
+            },
+            TeX: { 
+                extensions: ["AMSmath.js", "AMSsymbols.js", "noUndefined.js"] 
             },
             "HTML-CSS": { 
                 scale: 105,
@@ -28,7 +31,7 @@
             messageStyle: "none"
         });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML-full"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <style>
@@ -136,9 +139,11 @@
         .form-row label { display: block; font-weight: 700; margin-bottom: 5px; font-size: 0.92rem; color: #334155; }
         .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; font-family: inherit; }
         
-        /* KHUNG SOẠN THẢO RICHTEXT CHO PHÉP DÁN ẢNH TRỰC TIẾP */
-        .rich-textarea { width: 100%; height: 200px; padding: 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; overflow-y: auto; font-family: inherit; line-height: 1.6; }
+        /* KHUNG SOẠN THẢO HỖ TRỢ CHÈN ẢNH VÀ DÁN TRỰC TIẾP */
+        .rich-textarea { width: 100%; height: 160px; padding: 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; overflow-y: auto; font-family: inherit; line-height: 1.6; }
         .rich-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1); }
+        
+        .form-textarea { width: 100%; height: 90px; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; resize: vertical; font-family: inherit; }
 
         .preview-box { background: #fff; border: 1.5px dashed #cbd5e1; border-radius: 8px; padding: 15px; margin-top: 12px; min-height: 90px; font-size: 1rem; line-height: 1.8; color: #1e293b; }
 
@@ -157,6 +162,9 @@
         .selected-list-box { margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 15px; }
         .selected-item { background: #fff; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .btn-remove-q { color: #dc2626; background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px; }
+
+        /* KHUNG ĐÍNH KÈM ẢNH BẢNG BIẾN THIÊN */
+        .image-attach-box { border: 1.5px dashed #93c5fd; background: #eff6ff; padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 
         /* GIAO DIỆN LÀM BÀI */
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
@@ -316,7 +324,7 @@
                 </div>
             </div>
 
-            <!-- 2. NẠP CÂU HỎI THỦ CÔNG (HỖ TRỢ DÁN ẢNH TRỰC TIẾP CTRL+V) -->
+            <!-- 2. NẠP CÂU HỎI THỦ CÔNG (HỖ TRỢ CHÈN ẢNH & DÁN CTRL+V TRỰC TIẾP) -->
             <div id="sec-t-add-single" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -372,8 +380,16 @@
                             <input type="text" class="form-input" id="add-q-id" placeholder="CH12_HS_001">
                         </div>
 
+                        <!-- KHUNG TẢI HOẶC DÁN ẢNH TRỰC TIẾP -->
+                        <div class="image-attach-box">
+                            <div style="font-size: 0.88rem; font-weight: 700; color: #1e40af;">
+                                <i class="fa-solid fa-image"></i> Chèn ảnh / Bảng biến thiên:
+                            </div>
+                            <input type="file" id="q-image-file" accept="image/*" style="font-size: 0.85rem;" onchange="handleQuestionImageUpload(event)">
+                        </div>
+
                         <div class="form-row">
-                            <label>Nội Dung Đề Bài (Hỗ trợ LaTeX & Dán ảnh trực tiếp Ctrl+V):</label>
+                            <label>Nội Dung Đề Bài (Hỗ trợ LaTeX & Dán ảnh Ctrl+V trực tiếp):</label>
                             <div class="rich-textarea" id="add-q-content" contenteditable="true" oninput="updateAddQPreview()" onpaste="handleRichPaste(event)" placeholder="Gõ đề bài hoặc nhấn Ctrl+V để dán bảng biến thiên/đồ thị vào đây..."></div>
                         </div>
 
@@ -543,7 +559,7 @@
                 </div>
             </div>
 
-            <!-- 4. NẠP ĐỀ NHANH (BỘ BÓC TÁCH ĐÃ FIX CHUẨN XÁC MCQ VÀ TF) -->
+            <!-- 4. NẠP ĐỀ NHANH (DÁN LATEX) -->
             <div id="sec-t-bulk" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -903,6 +919,21 @@
             document.getElementById('add-q-id').value = `CH${gr}_AUTO_${r}`;
         }
 
+        function handleQuestionImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Img = e.target.result;
+                const contentDiv = document.getElementById('add-q-content');
+                const imgTag = `<br><img src="${base64Img}"><br>`;
+                contentDiv.innerHTML += imgTag;
+                updateAddQPreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
         function handleRichPaste(e) {
             const items = (e.clipboardData || e.originalEvent.clipboardData).items;
             for (let i = 0; i < items.length; i++) {
@@ -912,7 +943,7 @@
                     const reader = new FileReader();
                     reader.onload = function(event) {
                         const base64Img = event.target.result;
-                        const imgTag = `<img src="${base64Img}">`;
+                        const imgTag = `<br><img src="${base64Img}"><br>`;
                         document.execCommand('insertHTML', false, imgTag);
                         updateAddQPreview();
                     };
@@ -1011,6 +1042,7 @@
                     document.getElementById('add-q-od').value = "";
                     document.getElementById('add-q-ans').value = "";
                     document.getElementById('add-q-exp').value = "";
+                    document.getElementById('q-image-file').value = "";
                     generateNewQId();
                     updateAddQPreview();
                 } else {
@@ -1022,7 +1054,7 @@
         }
 
         /* -------------------------------------------------------------------------
-           BỘ BÓC TÁCH ĐỀ ĐÃ FIX CHUẨN XÁC MCQ (A,B,C,D) VÀ TF (a,b,c,d)
+           BỘ BÓC TÁCH ĐỀ NHANH (DÁN LATEX)
         ------------------------------------------------------------------------- */
         function parseBulkRawExam() {
             const rawText = document.getElementById('bulk-raw-text').value.trim();

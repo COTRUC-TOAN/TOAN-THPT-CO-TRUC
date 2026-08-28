@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cổng Khảo Thí & Học Tập Toán THPT - Cô Trúc</title>
     
-    <!-- Phông chữ chuẩn tiếng Việt hiện đại -->
+    <!-- Phông chữ Giao diện Tiếng Việt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- MathJax Cấu Hình Tinh Chỉnh Công Thức Sắc Nét & Đều Nét -->
+    <!-- MathJax Cấu Hình Chuẩn Sách Giáo Khoa (Giữ nguyên phông TeX Math) -->
     <script>
         window.MathJax = {
             tex: { 
@@ -19,9 +19,8 @@
                 processEscapes: true 
             },
             chtml: { 
-                scale: 1.05, 
-                displayAlign: 'center',
-                matchFontHeight: true
+                scale: 1.02,
+                displayAlign: 'center'
             },
             options: { 
                 enableMenu: false 
@@ -44,8 +43,16 @@
             --radius-md: 10px; 
             --radius-pill: 50px;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
-        body { background-color: var(--bg); color: var(--text-dark); min-height: 100vh; padding-bottom: 50px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, button, input, select, textarea { 
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; 
+        }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-dark); 
+            min-height: 100vh; 
+            padding-bottom: 50px; 
+        }
         .wrapper { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
         .navbar { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 14px 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
@@ -137,7 +144,7 @@
         .random-inputs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
         .random-inputs input { width: 100%; padding: 6px; border: 1px solid #93c5fd; border-radius: 6px; text-align: center; font-weight: 700; }
 
-        .bank-q-item { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: start; transition: 0.15s; }
+        .bank-q-item { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; display: flex; gap: 12px; align-items: start; transition: 0.15s; }
         .bank-q-item:hover { border-color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .badge-level { font-size: 0.72rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         .lvl-nb { background: #dbeafe; color: #1e40af; }
@@ -194,10 +201,14 @@
             border: 1px solid #e2e8f0;
         }
 
-        /* Tinh chỉnh công thức Toán học đều nét, không bị lệch dòng */
+        /* Tinh chỉnh công thức Toán học đều nét, đúng tỷ lệ TeX */
+        mjx-container {
+            font-family: inherit !important;
+            color: #0f172a !important;
+        }
         mjx-container[jax="CHTML"][display="false"] {
-            margin: 0 0.15em !important;
-            vertical-align: -0.1em !important;
+            margin: 0 0.12em !important;
+            vertical-align: -0.08em !important;
         }
     </style>
 </head>
@@ -239,7 +250,7 @@
                     </div>
 
                     <div class="exam-grid" id="exam-grid">
-                        <p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Đang tải dữ liệu từ Google Sheets...</p>
+                        <p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu từ máy chủ...</p>
                     </div>
                 </main>
             </div>
@@ -651,16 +662,17 @@
         }
 
         async function fetchData() {
+            renderSidebarTopics();
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
                 examBank = data.exams || [];
                 theoryBank = data.theories || {};
-                renderSidebarTopics();
                 renderExams();
                 checkUrlParams();
             } catch (err) {
                 console.error(err);
+                document.getElementById('exam-grid').innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px;"><i class="fa-solid fa-triangle-exclamation"></i> Không thể kết nối với máy chủ Google Sheets. Vui lòng tải lại trang.</p>`;
             }
         }
 
@@ -959,7 +971,7 @@
                             <small style="font-weight: 700; color: #64748b;">${q.type}</small>
                             <small style="color: #94a3b8;">#${q.id}</small>
                         </div>
-                        <div style="font-size: 0.95rem; font-weight: 600; color: #1e293b;">${q.q}</div>
+                        <div style="font-size: 0.98rem; font-weight: 600; color: #1e293b; line-height: 1.7;">${q.q}</div>
                     </div>
                 `;
                 container.appendChild(item);
@@ -1017,7 +1029,7 @@
         function autoPickRandomQuestions() {
             const nbCount = parseInt(document.getElementById('rnd-nb').value) || 0;
             const thCount = parseInt(document.getElementById('rnd-th').value) || 0;
-            const vdCount = parseInt(document.getElementById('rnd-vdc').value) || 0;
+            const vdCount = parseInt(document.getElementById('rnd-vd').value) || 0;
             const vdcCount = parseInt(document.getElementById('rnd-vdc').value) || 0;
 
             const gr = document.getElementById('bank-filter-grade').value;

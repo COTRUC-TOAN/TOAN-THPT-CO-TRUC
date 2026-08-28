@@ -10,9 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Thư viện đọc file Word (.docx) trực tiếp trên Web -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-
     <!-- MathJax 2.7.7 Chuẩn Quốc Tế Cho Toán Học THPT -->
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
@@ -108,7 +105,7 @@
 
         /* KHU VỰC GIÁO VIÊN */
         #teacher-view { display: none; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        .teacher-nav { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; }
+        .teacher-nav { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; flex-wrap: wrap; }
         .btn-t-tab { padding: 9px 18px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; background: #f1f5f9; color: #475569; font-family: inherit; }
         .btn-t-tab.active { background: var(--primary); color: #fff; }
 
@@ -138,7 +135,7 @@
         .form-row { margin-bottom: 12px; }
         .form-row label { display: block; font-weight: 700; margin-bottom: 5px; font-size: 0.92rem; color: #334155; }
         .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; font-family: inherit; }
-        .form-textarea { width: 100%; height: 180px; padding: 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; resize: vertical; font-family: inherit; line-height: 1.6; }
+        .form-textarea { width: 100%; height: 90px; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; resize: vertical; font-family: inherit; }
 
         .preview-box { background: #fff; border: 1.5px dashed #cbd5e1; border-radius: 8px; padding: 15px; margin-top: 12px; min-height: 90px; font-size: 1rem; line-height: 1.8; color: #1e293b; }
 
@@ -157,10 +154,6 @@
         .selected-list-box { margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 15px; }
         .selected-item { background: #fff; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .btn-remove-q { color: #dc2626; background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px; }
-
-        /* UPLOAD FILE BOX */
-        .upload-dropzone { border: 2px dashed #93c5fd; background: #eff6ff; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; margin-bottom: 14px; transition: 0.2s; }
-        .upload-dropzone:hover { background: #dbeafe; border-color: var(--primary); }
 
         /* GIAO DIỆN LÀM BÀI */
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
@@ -257,8 +250,9 @@
         <div id="teacher-view">
             <div class="teacher-nav">
                 <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
-                <button class="btn-t-tab" id="btn-t-add-q" onclick="switchTeacherTab('add_q')"><i class="fa-solid fa-file-import"></i> Nạp Đề Tự Động (Word/Copy)</button>
+                <button class="btn-t-tab" id="btn-t-add-single" onclick="switchTeacherTab('add_single')"><i class="fa-solid fa-circle-plus"></i> Nạp Câu Hỏi Thủ Công</button>
                 <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Soạn Đề Từ Ngân Hàng</button>
+                <button class="btn-t-tab" id="btn-t-bulk" onclick="switchTeacherTab('bulk')"><i class="fa-solid fa-file-import"></i> Nạp Đề Hàng Loạt (LaTeX)</button>
             </div>
 
             <!-- 1. SỔ ĐIỂM -->
@@ -319,32 +313,24 @@
                 </div>
             </div>
 
-            <!-- 2. NẠP ĐỀ TỰ ĐỘNG (WORD / DÁN VĂN BẢN THÔ) -->
-            <div id="sec-t-add-q" style="display: none;">
+            <!-- 2. NẠP CÂU HỎI THỦ CÔNG (ĐẦY ĐỦ SOẠN TỪNG CÂU) -->
+            <div id="sec-t-add-single" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
-                        <h3 style="margin-bottom: 14px; color: #059669;"><i class="fa-solid fa-bolt"></i> 1. Nhập Dữ Liệu Đề Thi</h3>
+                        <h3 style="margin-bottom: 14px; color: #059669;"><i class="fa-solid fa-pen-to-square"></i> Nhập Thông Tin Câu Hỏi</h3>
                         
-                        <!-- Upload File Word -->
-                        <div class="upload-dropzone" onclick="document.getElementById('word-file-input').click()">
-                            <i class="fa-solid fa-file-word" style="font-size: 2rem; color: #2563eb; margin-bottom: 8px;"></i>
-                            <div style="font-weight: 700; color: #1e40af;">Bấm để chọn File Word (.docx) từ máy tính</div>
-                            <small style="color: #64748b;">Hệ thống tự động đọc đề bài và công thức toán</small>
-                            <input type="file" id="word-file-input" accept=".docx" style="display: none;" onchange="handleWordFileUpload(event)">
-                        </div>
-
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="form-row">
-                                <label>Áp dụng Khối:</label>
-                                <select class="form-input" id="bulk-q-grade">
+                                <label>Khối Lớp:</label>
+                                <select class="form-input" id="add-q-grade">
                                     <option value="12">Toán 12</option>
                                     <option value="11">Toán 11</option>
                                     <option value="10">Toán 10</option>
                                 </select>
                             </div>
                             <div class="form-row">
-                                <label>Mức độ mặc định:</label>
-                                <select class="form-input" id="bulk-q-level">
+                                <label>Mức Độ Nhận Thức:</label>
+                                <select class="form-input" id="add-q-level">
                                     <option value="NB">Nhận biết (NB)</option>
                                     <option value="TH">Thông hiểu (TH)</option>
                                     <option value="VD">Vận dụng (VD)</option>
@@ -355,7 +341,7 @@
 
                         <div class="form-row">
                             <label>Chuyên Đề:</label>
-                            <select class="form-input" id="bulk-q-topic">
+                            <select class="form-input" id="add-q-topic">
                                 <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
                                 <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian (K12)</option>
                                 <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm (K12)</option>
@@ -370,26 +356,54 @@
                         </div>
 
                         <div class="form-row">
-                            <label>Hoặc Dán Văn Bản Đề Thi (Từ Word/PDF):</label>
-                            <textarea class="form-textarea" id="bulk-raw-text" placeholder="Dán văn bản đề thi vào đây...&#10;&#10;Ví dụ:&#10;Câu 1: Cho hàm số $y = f(x)$...&#10;A. 1   B. 2   C. 3   D. 4&#10;Chọn A"></textarea>
+                            <label>Dạng Câu Hỏi:</label>
+                            <select class="form-input" id="add-q-type" onchange="adjustAddQTypeFields()">
+                                <option value="MCQ">Phần I: Trắc nghiệm 4 lựa chọn (MCQ)</option>
+                                <option value="TF">Phần II: Đúng / Sai (TF)</option>
+                                <option value="SA">Phần III: Trả lời ngắn (SA)</option>
+                            </select>
                         </div>
 
-                        <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 6px;" onclick="parseBulkRawExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Bóc Tách Đề Thi Tự Động</button>
+                        <div class="form-row">
+                            <label>Mã Câu Hỏi:</label>
+                            <input type="text" class="form-input" id="add-q-id" placeholder="CH12_HS_001">
+                        </div>
+
+                        <div class="form-row">
+                            <label>Nội Dung Đề Bài (Hỗ trợ LaTeX $...$ & HTML ảnh):</label>
+                            <textarea class="form-textarea" id="add-q-content" placeholder="Cho hàm số $y = f(x)$..." oninput="updateAddQPreview()"></textarea>
+                        </div>
+
+                        <div id="add-q-options-container">
+                            <div class="form-row"><label>Phương án A / Ý a:</label><input type="text" class="form-input" id="add-q-oa" placeholder="Phương án A" oninput="updateAddQPreview()"></div>
+                            <div class="form-row"><label>Phương án B / Ý b:</label><input type="text" class="form-input" id="add-q-ob" placeholder="Phương án B" oninput="updateAddQPreview()"></div>
+                            <div class="form-row"><label>Phương án C / Ý c:</label><input type="text" class="form-input" id="add-q-oc" placeholder="Phương án C" oninput="updateAddQPreview()"></div>
+                            <div class="form-row"><label>Phương án D / Ý d:</label><input type="text" class="form-input" id="add-q-od" placeholder="Phương án D" oninput="updateAddQPreview()"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Đáp Án Đúng:</label>
+                            <input type="text" class="form-input" id="add-q-ans" placeholder="A (nếu MCQ) hoặc D-D-S-D (nếu TF) hoặc 10 (nếu SA)">
+                        </div>
+
+                        <div class="form-row">
+                            <label>Lời Giải Chi Tiết (Không bắt buộc):</label>
+                            <textarea class="form-textarea" id="add-q-exp" placeholder="Hướng dẫn từng bước giải..."></textarea>
+                        </div>
+
+                        <button class="btn-start" style="width: 100%; margin-top: 12px; background: #059669;" onclick="saveSingleQuestionToBank()"><i class="fa-solid fa-plus"></i> Lưu Câu Hỏi Vào Ngân Hàng (Tab NganHangCauHoi)</button>
                     </div>
 
                     <div class="creator-card">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <h3 style="color: #1e40af;"><i class="fa-regular fa-eye"></i> 2. Kết Quả Bóc Tách (<span id="parsed-count">0</span> câu)</h3>
-                            <button class="btn-start" id="btn-save-bulk" style="background: #059669; padding: 6px 14px; font-size: 0.9rem; display: none;" onclick="saveBulkQuestionsToBank()"><i class="fa-solid fa-cloud-arrow-up"></i> Lưu Tất Cả Lên Sheets</button>
-                        </div>
-                        <div class="preview-box" id="bulk-preview-box" style="max-height: 520px; overflow-y: auto;">
-                            <em>Chưa có dữ liệu phân tích. Hãy tải file Word hoặc dán nội dung đề rồi bấm "Phân Tích Đề Thi Tự Động".</em>
+                        <h3 style="margin-bottom: 14px; color: #1e40af;"><i class="fa-regular fa-eye"></i> Xem Trước Hiển Thị (Live LaTeX Preview)</h3>
+                        <div class="preview-box" id="add-q-preview">
+                            <em>Nội dung câu hỏi và công thức toán sẽ hiển thị thử tại đây khi thầy gõ...</em>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. SOẠN ĐỀ TỪ NGÂN HÀNG -->
+            <!-- 3. SOẠN ĐỀ TỪ NGÂN HÀNG (LỌC ĐẦY ĐỦ KHỐI + CHUYÊN ĐỀ) -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -476,7 +490,7 @@
                             <button onclick="autoPickRandomQuestions()" style="width: 100%; margin-top: 10px; padding: 8px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-bolt"></i> Bốc Ngẫu Nhiên Vào Đề</button>
                         </div>
 
-                        <!-- BỘ LỌC ĐA NĂNG -->
+                        <!-- BỘ LỌC ĐA NĂNG: KHỐI + CHUYÊN ĐỀ + MỨC ĐỘ + DẠNG CÂU -->
                         <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px;">
                             <select class="form-input" id="bank-filter-grade" onchange="filterQuestionBankList()">
                                 <option value="all">-- Tất cả Khối --</option>
@@ -521,6 +535,68 @@
 
                         <div id="bank-q-list" style="max-height: 520px; overflow-y: auto; padding-right: 4px;">
                             <p style="text-align: center; color: #94a3b8; padding: 20px;">Đang tải ngân hàng câu hỏi...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. NẠP ĐỀ HÀNG LOẠT (DÀNH CHO ĐỀ GÕ SẴN CÓ LATEX HOẶC ẢNH) -->
+            <div id="sec-t-bulk" style="display: none;">
+                <div class="creator-container">
+                    <div class="creator-card">
+                        <h3 style="margin-bottom: 14px; color: #2563eb;"><i class="fa-solid fa-paste"></i> Dán Nội Dung Đề Thi Có LaTeX</h3>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="form-row">
+                                <label>Khối Lớp:</label>
+                                <select class="form-input" id="bulk-q-grade">
+                                    <option value="12">Toán 12</option>
+                                    <option value="11">Toán 11</option>
+                                    <option value="10">Toán 10</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label>Mức độ mặc định:</label>
+                                <select class="form-input" id="bulk-q-level">
+                                    <option value="NB">Nhận biết (NB)</option>
+                                    <option value="TH">Thông hiểu (TH)</option>
+                                    <option value="VD">Vận dụng (VD)</option>
+                                    <option value="VDC">Vận dụng cao (VDC)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Chuyên Đề:</label>
+                            <select class="form-input" id="bulk-q-topic">
+                                <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
+                                <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian (K12)</option>
+                                <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm (K12)</option>
+                                <option value="12-nguyen-ham-tich-phan">Chương 4: Nguyên hàm & Tích phân (K12)</option>
+                                <option value="12-oxyz">Chương 5: Phương pháp tọa độ Oxyz (K12)</option>
+                                <option value="12-xac-suat">Chương 6: Xác suất có điều kiện (K12)</option>
+                                <option value="11-luong-giac">Chương 1: Hàm số & PT Lượng giác (K11)</option>
+                                <option value="11-day-so-cap-so">Chương 2: Cấp số cộng & Cấp số nhân (K11)</option>
+                                <option value="10-menh-de-tap-hop">Chương 1: Mệnh đề & Tập hợp (K10)</option>
+                                <option value="10-he-thuc-luong">Chương 3: Hệ thức lượng trong tam giác (K10)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Nội Dung Đề Bài:</label>
+                            <textarea class="form-textarea" style="height: 180px;" id="bulk-raw-text" placeholder="Câu 1: Cho hàm số $y = x^3 - 3x$...&#10;A. (0; 2)&#10;B. (1; 3)&#10;C. (-1; 1)&#10;D. (2; 4)&#10;Chọn A"></textarea>
+                        </div>
+
+                        <button class="btn-start" style="width: 100%; background: #2563eb;" onclick="parseBulkRawExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Bóc Tách Đề Thi</button>
+                    </div>
+
+                    <div class="creator-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="color: #1e40af;"><i class="fa-regular fa-eye"></i> Xem Trước (<span id="parsed-count">0</span> câu)</h3>
+                            <button class="btn-start" id="btn-save-bulk" style="background: #059669; padding: 6px 14px; font-size: 0.9rem; display: none;" onclick="saveBulkQuestionsToBank()"><i class="fa-solid fa-cloud-arrow-up"></i> Lưu Vào Sheets</button>
+                        </div>
+                        <div class="preview-box" id="bulk-preview-box" style="max-height: 480px; overflow-y: auto;">
+                            <em>Dán nội dung đề rồi bấm "Phân Tích & Bóc Tách Đề Thi".</em>
                         </div>
                     </div>
                 </div>
@@ -792,49 +868,136 @@
 
         function switchTeacherTab(tab) {
             document.getElementById('sec-t-scores').style.display = 'none';
-            document.getElementById('sec-t-add-q').style.display = 'none';
+            document.getElementById('sec-t-add-single').style.display = 'none';
             document.getElementById('sec-t-creator').style.display = 'none';
+            document.getElementById('sec-t-bulk').style.display = 'none';
+            
             document.getElementById('btn-t-scores').classList.remove('active');
-            document.getElementById('btn-t-add-q').classList.remove('active');
+            document.getElementById('btn-t-add-single').classList.remove('active');
             document.getElementById('btn-t-creator').classList.remove('active');
+            document.getElementById('btn-t-bulk').classList.remove('active');
 
             if (tab === 'scores') {
                 document.getElementById('sec-t-scores').style.display = 'block';
                 document.getElementById('btn-t-scores').classList.add('active');
-            } else if (tab === 'add_q') {
-                document.getElementById('sec-t-add-q').style.display = 'block';
-                document.getElementById('btn-t-add-q').classList.add('active');
+            } else if (tab === 'add_single') {
+                document.getElementById('sec-t-add-single').style.display = 'block';
+                document.getElementById('btn-t-add-single').classList.add('active');
+                generateNewQId();
             } else if (tab === 'creator') {
                 document.getElementById('sec-t-creator').style.display = 'block';
                 document.getElementById('btn-t-creator').classList.add('active');
                 filterQuestionBankList();
+            } else if (tab === 'bulk') {
+                document.getElementById('sec-t-bulk').style.display = 'block';
+                document.getElementById('btn-t-bulk').classList.add('active');
             }
         }
 
-        /* -------------------------------------------------------------------------
-           BỘ XỬ LÝ FILE WORD VÀ BÓC TÁCH TỰ ĐỘNG THEO CHUẨN AZOTA
-        ------------------------------------------------------------------------- */
-        function handleWordFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        function generateNewQId() {
+            const gr = document.getElementById('add-q-grade').value;
+            const r = Math.floor(100 + Math.random() * 900);
+            document.getElementById('add-q-id').value = `CH${gr}_AUTO_${r}`;
+        }
 
-            const reader = new FileReader();
-            reader.onload = function(loadEvent) {
-                const arrayBuffer = loadEvent.target.result;
-                mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
-                    .then(function(result) {
-                        let text = result.value
-                            .replace(/<\/p>/gi, '\n')
-                            .replace(/<br\s*[\/]?>/gi, '\n')
-                            .replace(/<[^>]+>/gi, '');
-                        document.getElementById('bulk-raw-text').value = text;
-                        parseBulkRawExam();
-                    })
-                    .catch(function(err) {
-                        alert("Không thể đọc file Word: " + err.message);
-                    });
+        function adjustAddQTypeFields() {
+            const type = document.getElementById('add-q-type').value;
+            const optContainer = document.getElementById('add-q-options-container');
+            const ansInput = document.getElementById('add-q-ans');
+            
+            if (type === 'MCQ') {
+                optContainer.style.display = 'block';
+                ansInput.placeholder = "A hoặc B hoặc C hoặc D";
+            } else if (type === 'TF') {
+                optContainer.style.display = 'block';
+                ansInput.placeholder = "D-D-S-D (Đúng/Sai cho 4 ý a,b,c,d)";
+            } else if (type === 'SA') {
+                optContainer.style.display = 'none';
+                ansInput.placeholder = "10 hoặc 3.5 hoặc -2 (Kết quả số)";
+            }
+            updateAddQPreview();
+        }
+
+        function updateAddQPreview() {
+            const q = document.getElementById('add-q-content').value || "[Chưa nhập nội dung đề bài...]";
+            const oa = document.getElementById('add-q-oa').value || "...";
+            const ob = document.getElementById('add-q-ob').value || "...";
+            const oc = document.getElementById('add-q-oc').value || "...";
+            const od = document.getElementById('add-q-od').value || "...";
+            const type = document.getElementById('add-q-type').value;
+
+            let html = `<strong>Đề bài:</strong> ${q}<br><br>`;
+            if (type === 'MCQ') {
+                html += `A. ${oa}<br>B. ${ob}<br>C. ${oc}<br>D. ${od}`;
+            } else if (type === 'TF') {
+                html += `a) ${oa}<br>b) ${ob}<br>c) ${oc}<br>d) ${od}`;
+            } else {
+                html += `<em>[Học sinh tự điền số]</em>`;
+            }
+            const prev = document.getElementById('add-q-preview');
+            prev.innerHTML = html;
+            renderMath(prev);
+        }
+
+        async function saveSingleQuestionToBank() {
+            const id = document.getElementById('add-q-id').value.trim();
+            const grade = document.getElementById('add-q-grade').value;
+            const topic = document.getElementById('add-q-topic').value;
+            const level = document.getElementById('add-q-level').value;
+            const type = document.getElementById('add-q-type').value;
+            const q = document.getElementById('add-q-content').value.trim();
+            const oa = document.getElementById('add-q-oa').value.trim();
+            const ob = document.getElementById('add-q-ob').value.trim();
+            const oc = document.getElementById('add-q-oc').value.trim();
+            const od = document.getElementById('add-q-od').value.trim();
+            const ans = document.getElementById('add-q-ans').value.trim();
+            const exp = document.getElementById('add-q-exp').value.trim();
+
+            if (!id || !q || !ans) {
+                alert("Vui lòng điền đủ Mã câu, Đề bài và Đáp án đúng!");
+                return;
+            }
+
+            const qObj = {
+                id: id,
+                grade: grade,
+                topic: topic,
+                level: level,
+                type: type,
+                q: q,
+                options: [oa, ob, oc, od],
+                ans: ans,
+                explanation: exp
             };
-            reader.readAsArrayBuffer(file);
+
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'add_question',
+                        password: teacherPassAuth,
+                        question: qObj
+                    })
+                });
+                const data = await res.json();
+                if (data.status === "success") {
+                    alert("🎉 Đã lưu câu hỏi mới vào Ngân Hàng (Tab NganHangCauHoi) thành công!");
+                    questionBank.push(qObj);
+                    document.getElementById('add-q-content').value = "";
+                    document.getElementById('add-q-oa').value = "";
+                    document.getElementById('add-q-ob').value = "";
+                    document.getElementById('add-q-oc').value = "";
+                    document.getElementById('add-q-od').value = "";
+                    document.getElementById('add-q-ans').value = "";
+                    document.getElementById('add-q-exp').value = "";
+                    generateNewQId();
+                    updateAddQPreview();
+                } else {
+                    alert("Lỗi: " + data.message);
+                }
+            } catch (err) {
+                alert("Lỗi kết nối khi lưu câu hỏi!");
+            }
         }
 
         function parseBulkRawExam() {
@@ -844,13 +1007,11 @@
             const defaultLevel = document.getElementById('bulk-q-level').value;
 
             if (!rawText) {
-                alert("Vui lòng dán văn bản đề thi hoặc chọn file Word!");
+                alert("Vui lòng dán nội dung đề bài!");
                 return;
             }
 
             parsedQuestions = [];
-            
-            // Chia nhỏ thành các khối câu hỏi dựa trên từ khóa: Câu 1, Câu 2, Bài 1...
             const rawBlocks = rawText.split(/(?=(?:Câu|Bài)\s*\d+[\s:.\-_])/i);
 
             rawBlocks.forEach((block, index) => {
@@ -864,7 +1025,6 @@
                 let ans = '';
                 let explanation = '';
 
-                // 1. Nhận diện dạng Đúng / Sai (Phần II)
                 if (/a\s*[\).]\s*.*b\s*[\).]\s*.*c\s*[\).]\s*.*d\s*[\).]/is.test(trimmed)) {
                     qType = 'TF';
                     const parts = trimmed.split(/(?=[a-d]\s*[\).])/i);
@@ -879,7 +1039,6 @@
                     if (ansMatch) ans = ansMatch[1].trim().replace(/\s+/g, '-').toUpperCase();
                     else ans = 'D-D-D-D';
                 }
-                // 2. Nhận diện dạng MCQ (Phần I)
                 else if (/A\s*[\).]\s*.*B\s*[\).]\s*.*C\s*[\).]\s*.*D\s*[\).]/is.test(trimmed)) {
                     qType = 'MCQ';
                     const parts = trimmed.split(/(?=[A-D]\s*[\).])/);
@@ -894,7 +1053,6 @@
                     if (ansMatch) ans = ansMatch[1].toUpperCase();
                     else ans = 'A';
                 }
-                // 3. Nhận diện dạng Trả lời ngắn (Phần III)
                 else {
                     qType = 'SA';
                     qContent = trimmed.replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '')
@@ -904,7 +1062,6 @@
                     if (ansMatch) ans = ansMatch[1].trim();
                 }
 
-                // Lời giải chi tiết nếu có
                 const expMatch = trimmed.match(/(?:Lời giải|Hướng dẫn giải)\s*[:\-]?\s*(.*$)/is);
                 if (expMatch) explanation = expMatch[1].trim();
 
@@ -931,7 +1088,7 @@
             document.getElementById('parsed-count').innerText = parsedQuestions.length;
 
             if (parsedQuestions.length === 0) {
-                container.innerHTML = `<em>Không nhận diện được câu hỏi nào. Vui lòng kiểm tra định dạng cấu trúc đề bài (Câu 1: ... A. ... B. ...).</em>`;
+                container.innerHTML = `<em>Không nhận diện được câu hỏi. Vui lòng kiểm tra định dạng cấu trúc đề (Câu 1: ... A. ... B. ...).</em>`;
                 document.getElementById('btn-save-bulk').style.display = 'none';
                 return;
             }
@@ -994,18 +1151,15 @@
                 }
             }
 
-            alert(`🎉 Đã nạp thành công ${successCount}/${parsedQuestions.length} câu hỏi vào Ngân Hàng (Tab NganHangCauHoi)!`);
+            alert(`🎉 Đã nạp thành công ${successCount}/${parsedQuestions.length} câu hỏi vào Ngân Hàng!`);
             btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Lưu Tất Cả Lên Sheets';
+            btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Lưu Vào Sheets';
             parsedQuestions = [];
             document.getElementById('bulk-raw-text').value = '';
             renderParsedPreview();
             filterQuestionBankList();
         }
 
-        /* -------------------------------------------------------------------------
-           CÁC HÀM QUẢN LÝ VÀ SOẠN ĐỀ
-        ------------------------------------------------------------------------- */
         async function loadQuestionBank() {
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=get_question_bank&password=${encodeURIComponent(teacherPassAuth)}`);

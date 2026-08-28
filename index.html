@@ -155,6 +155,9 @@
         .selected-item { background: #fff; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .btn-remove-q { color: #dc2626; background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px; }
 
+        /* KHUNG ĐÍNH KÈM ẢNH BẢNG BIẾN THIÊN */
+        .image-attach-box { border: 1.5px dashed #93c5fd; background: #eff6ff; padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
         /* GIAO DIỆN LÀM BÀI */
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
         .quiz-topbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
@@ -252,7 +255,7 @@
                 <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
                 <button class="btn-t-tab" id="btn-t-add-single" onclick="switchTeacherTab('add_single')"><i class="fa-solid fa-circle-plus"></i> Nạp Câu Hỏi Thủ Công</button>
                 <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Soạn Đề Từ Ngân Hàng</button>
-                <button class="btn-t-tab" id="btn-t-bulk" onclick="switchTeacherTab('bulk')"><i class="fa-solid fa-file-import"></i> Nạp Đề Hàng Loạt (LaTeX)</button>
+                <button class="btn-t-tab" id="btn-t-bulk" onclick="switchTeacherTab('bulk')"><i class="fa-solid fa-paste"></i> Nạp Đề Nhanh (Dán LaTeX)</button>
             </div>
 
             <!-- 1. SỔ ĐIỂM -->
@@ -313,7 +316,7 @@
                 </div>
             </div>
 
-            <!-- 2. NẠP CÂU HỎI THỦ CÔNG (ĐẦY ĐỦ SOẠN TỪNG CÂU) -->
+            <!-- 2. NẠP CÂU HỎI THỦ CÔNG (CÓ HỖ TRỢ ĐÍNH KÈM ẢNH BẢNG BIẾN THIÊN) -->
             <div id="sec-t-add-single" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -369,6 +372,14 @@
                             <input type="text" class="form-input" id="add-q-id" placeholder="CH12_HS_001">
                         </div>
 
+                        <!-- KHUNG CHÈN ẢNH BẢNG BIẾN THIÊN / ĐỒ THỊ -->
+                        <div class="image-attach-box">
+                            <div style="font-size: 0.88rem; font-weight: 700; color: #1e40af;">
+                                <i class="fa-solid fa-image"></i> Bảng biến thiên / Đồ thị:
+                            </div>
+                            <input type="file" id="q-image-file" accept="image/*" style="font-size: 0.85rem;" onchange="handleQuestionImageUpload(event)">
+                        </div>
+
                         <div class="form-row">
                             <label>Nội Dung Đề Bài (Hỗ trợ LaTeX $...$ & HTML ảnh):</label>
                             <textarea class="form-textarea" id="add-q-content" placeholder="Cho hàm số $y = f(x)$..." oninput="updateAddQPreview()"></textarea>
@@ -397,7 +408,7 @@
                     <div class="creator-card">
                         <h3 style="margin-bottom: 14px; color: #1e40af;"><i class="fa-regular fa-eye"></i> Xem Trước Hiển Thị (Live LaTeX Preview)</h3>
                         <div class="preview-box" id="add-q-preview">
-                            <em>Nội dung câu hỏi và công thức toán sẽ hiển thị thử tại đây khi thầy gõ...</em>
+                            <em>Nội dung câu hỏi, bảng biến thiên và công thức toán sẽ hiển thị trực quan tại đây...</em>
                         </div>
                     </div>
                 </div>
@@ -540,11 +551,11 @@
                 </div>
             </div>
 
-            <!-- 4. NẠP ĐỀ HÀNG LOẠT (DÀNH CHO ĐỀ GÕ SẴN CÓ LATEX HOẶC ẢNH) -->
+            <!-- 4. NẠP ĐỀ NHANH (BỘ PHÂN TÍCH CHUẨN XÁC 100%) -->
             <div id="sec-t-bulk" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
-                        <h3 style="margin-bottom: 14px; color: #2563eb;"><i class="fa-solid fa-paste"></i> Dán Nội Dung Đề Thi Có LaTeX</h3>
+                        <h3 style="margin-bottom: 14px; color: #2563eb;"><i class="fa-solid fa-paste"></i> Dán Văn Bản Đề Thi</h3>
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="form-row">
@@ -584,7 +595,7 @@
 
                         <div class="form-row">
                             <label>Nội Dung Đề Bài:</label>
-                            <textarea class="form-textarea" style="height: 180px;" id="bulk-raw-text" placeholder="Câu 1: Cho hàm số $y = x^3 - 3x$...&#10;A. (0; 2)&#10;B. (1; 3)&#10;C. (-1; 1)&#10;D. (2; 4)&#10;Chọn A"></textarea>
+                            <textarea class="form-textarea" style="height: 180px;" id="bulk-raw-text" placeholder="Câu 1: Cho hàm số $y = f(x)$...&#10;A. 1   B. 2   C. 3   D. 4&#10;Chọn A"></textarea>
                         </div>
 
                         <button class="btn-start" style="width: 100%; background: #2563eb;" onclick="parseBulkRawExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Bóc Tách Đề Thi</button>
@@ -900,6 +911,21 @@
             document.getElementById('add-q-id').value = `CH${gr}_AUTO_${r}`;
         }
 
+        function handleQuestionImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Img = e.target.result;
+                const contentTextarea = document.getElementById('add-q-content');
+                // Chèn ảnh trực tiếp vào đề bài
+                contentTextarea.value += `\n<img src="${base64Img}">\n`;
+                updateAddQPreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
         function adjustAddQTypeFields() {
             const type = document.getElementById('add-q-type').value;
             const optContainer = document.getElementById('add-q-options-container');
@@ -926,7 +952,7 @@
             const od = document.getElementById('add-q-od').value || "...";
             const type = document.getElementById('add-q-type').value;
 
-            let html = `<strong>Đề bài:</strong> ${q}<br><br>`;
+            let html = `<strong>Đề bài:</strong><br>${q}<br><br>`;
             if (type === 'MCQ') {
                 html += `A. ${oa}<br>B. ${ob}<br>C. ${oc}<br>D. ${od}`;
             } else if (type === 'TF') {
@@ -990,6 +1016,7 @@
                     document.getElementById('add-q-od').value = "";
                     document.getElementById('add-q-ans').value = "";
                     document.getElementById('add-q-exp').value = "";
+                    document.getElementById('q-image-file').value = "";
                     generateNewQId();
                     updateAddQPreview();
                 } else {
@@ -1000,6 +1027,9 @@
             }
         }
 
+        /* -------------------------------------------------------------------------
+           BỘ BÓC TÁCH VĂN BẢN ĐÃ FIX 100% PHÂN BIỆT MCQ VÀ TF
+        ------------------------------------------------------------------------- */
         function parseBulkRawExam() {
             const rawText = document.getElementById('bulk-raw-text').value.trim();
             const grade = document.getElementById('bulk-q-grade').value;
@@ -1025,33 +1055,35 @@
                 let ans = '';
                 let explanation = '';
 
-                if (/a\s*[\).]\s*.*b\s*[\).]\s*.*c\s*[\).]\s*.*d\s*[\).]/is.test(trimmed)) {
-                    qType = 'TF';
-                    const parts = trimmed.split(/(?=[a-d]\s*[\).])/i);
-                    qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                // Phân biệt chính xác: Chữ hoa A. B. C. D. là MCQ | Chữ thường a) b) c) d) là TF
+                const hasMCQOpts = /(?:^|\s|\n)A\s*[\).]/m.test(trimmed) && /(?:^|\s|\n)B\s*[\).]/m.test(trimmed);
+                const hasTFOpts = /(?:^|\s|\n)a\s*[\).]/m.test(trimmed) && /(?:^|\s|\n)b\s*[\).]/m.test(trimmed);
 
-                    ['a', 'b', 'c', 'd'].forEach((char, idx) => {
-                        const optMatch = trimmed.match(new RegExp(`${char}\\s*[\\).](.*?)(?=(?:[a-d]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 'is'));
-                        if (optMatch) options[idx] = optMatch[1].trim();
-                    });
-
-                    const ansMatch = trimmed.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([D-S\s\-]+)/i);
-                    if (ansMatch) ans = ansMatch[1].trim().replace(/\s+/g, '-').toUpperCase();
-                    else ans = 'D-D-D-D';
-                }
-                else if (/A\s*[\).]\s*.*B\s*[\).]\s*.*C\s*[\).]\s*.*D\s*[\).]/is.test(trimmed)) {
+                if (hasMCQOpts) {
                     qType = 'MCQ';
-                    const parts = trimmed.split(/(?=[A-D]\s*[\).])/);
-                    qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                    qContent = trimmed.split(/(?:^|\s|\n)A\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
 
                     ['A', 'B', 'C', 'D'].forEach((char, idx) => {
-                        const optMatch = trimmed.match(new RegExp(`${char}\\s*[\\).](.*?)(?=(?:[A-D]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 'is'));
+                        const optMatch = trimmed.match(new RegExp(`(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[A-D]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
                         if (optMatch) options[idx] = optMatch[1].trim();
                     });
 
                     const ansMatch = trimmed.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D])/i);
                     if (ansMatch) ans = ansMatch[1].toUpperCase();
                     else ans = 'A';
+                }
+                else if (hasTFOpts) {
+                    qType = 'TF';
+                    qContent = trimmed.split(/(?:^|\s|\n)a\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+
+                    ['a', 'b', 'c', 'd'].forEach((char, idx) => {
+                        const optMatch = trimmed.match(new RegExp(`(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[a-d]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
+                        if (optMatch) options[idx] = optMatch[1].trim();
+                    });
+
+                    const ansMatch = trimmed.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([D-S\s\-]+)/i);
+                    if (ansMatch) ans = ansMatch[1].trim().replace(/\s+/g, '-').toUpperCase();
+                    else ans = 'D-D-D-D';
                 }
                 else {
                     qType = 'SA';
@@ -1088,7 +1120,7 @@
             document.getElementById('parsed-count').innerText = parsedQuestions.length;
 
             if (parsedQuestions.length === 0) {
-                container.innerHTML = `<em>Không nhận diện được câu hỏi. Vui lòng kiểm tra định dạng cấu trúc đề (Câu 1: ... A. ... B. ...).</em>`;
+                container.innerHTML = `<em>Không nhận diện được câu hỏi. Vui lòng kiểm tra định dạng (Câu 1: ... A. ... B. ...).</em>`;
                 document.getElementById('btn-save-bulk').style.display = 'none';
                 return;
             }

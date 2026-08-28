@@ -489,13 +489,30 @@
                             <button onclick="autoPickRandomQuestions()" style="width: 100%; margin-top: 10px; padding: 8px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-bolt"></i> Bốc Ngẫu Nhiên Vào Đề</button>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                        <!-- BỘ LỌC ĐA NĂNG MỚI: KHỐI + CHUYÊN ĐỀ + MỨC ĐỘ + DẠNG CÂU -->
+                        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px;">
                             <select class="form-input" id="bank-filter-grade" onchange="filterQuestionBankList()">
-                                <option value="all">-- Tất cả Khối (10, 11, 12) --</option>
+                                <option value="all">-- Tất cả Khối --</option>
                                 <option value="12">Khối 12</option>
                                 <option value="11">Khối 11</option>
                                 <option value="10">Khối 10</option>
                             </select>
+                            <select class="form-input" id="bank-filter-topic" onchange="filterQuestionBankList()">
+                                <option value="all">-- Tất cả Chuyên Đề --</option>
+                                <option value="12-ham-so">K12: Khảo sát hàm số & Đạo hàm</option>
+                                <option value="12-vecto-khong-gian">K12: Vectơ & Tọa độ không gian</option>
+                                <option value="12-thong-ke">K12: Thống kê số liệu ghép nhóm</option>
+                                <option value="12-nguyen-ham-tich-phan">K12: Nguyên hàm & Tích phân</option>
+                                <option value="12-oxyz">K12: Tọa độ Oxyz</option>
+                                <option value="12-xac-suat">K12: Xác suất có điều kiện</option>
+                                <option value="11-luong-giac">K11: Hàm số & PT Lượng giác</option>
+                                <option value="11-day-so-cap-so">K11: Cấp số cộng & Cấp số nhân</option>
+                                <option value="10-menh-de-tap-hop">K10: Mệnh đề & Tập hợp</option>
+                                <option value="10-he-thuc-luong">K10: Hệ thức lượng trong tam giác</option>
+                            </select>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
                             <select class="form-input" id="bank-filter-level" onchange="filterQuestionBankList()">
                                 <option value="all">-- Tất cả Mức Độ --</option>
                                 <option value="NB">Nhận biết (NB)</option>
@@ -503,16 +520,16 @@
                                 <option value="VD">Vận dụng (VD)</option>
                                 <option value="VDC">Vận dụng cao (VDC)</option>
                             </select>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
                             <select class="form-input" id="bank-filter-type" onchange="filterQuestionBankList()">
                                 <option value="all">-- Tất cả Dạng Câu --</option>
-                                <option value="MCQ">Phần I: Trắc nghiệm 4 lựa chọn (MCQ)</option>
+                                <option value="MCQ">Phần I: Trắc nghiệm (MCQ)</option>
                                 <option value="TF">Phần II: Đúng / Sai (TF)</option>
                                 <option value="SA">Phần III: Trả lời ngắn (SA)</option>
                             </select>
-                            <input type="text" class="form-input" id="bank-search-text" placeholder="Tìm từ khóa trong câu hỏi..." oninput="filterQuestionBankList()">
+                        </div>
+
+                        <div style="margin-bottom: 12px;">
+                            <input type="text" class="form-input" id="bank-search-text" placeholder="🔍 Tìm từ khóa trong câu hỏi..." oninput="filterQuestionBankList()">
                         </div>
 
                         <div id="bank-q-list" style="max-height: 520px; overflow-y: auto; padding-right: 4px;">
@@ -932,23 +949,26 @@
         }
 
         function filterQuestionBankList() {
-            const gr = (document.getElementById('bank-filter-grade').value || "").toString().trim();
-            const lvl = (document.getElementById('bank-filter-level').value || "").toString().trim().toUpperCase();
-            const type = (document.getElementById('bank-filter-type').value || "").toString().trim().toUpperCase();
-            const kw = (document.getElementById('bank-search-text').value || "").trim().toLowerCase();
+            const gr = (document.getElementById('bank-filter-grade')?.value || "all").toString().trim();
+            const top = (document.getElementById('bank-filter-topic')?.value || "all").toString().trim();
+            const lvl = (document.getElementById('bank-filter-level')?.value || "all").toString().trim().toUpperCase();
+            const type = (document.getElementById('bank-filter-type')?.value || "all").toString().trim().toUpperCase();
+            const kw = (document.getElementById('bank-search-text')?.value || "").trim().toLowerCase();
             const container = document.getElementById('bank-q-list');
 
             const filtered = questionBank.filter(q => {
                 const qGrade = (q.grade || "").toString().trim();
+                const qTopic = (q.topic || "").toString().trim();
                 const qLevel = (q.level || "").toString().trim().toUpperCase();
                 const qType = (q.type || "").toString().trim().toUpperCase();
                 const qText = (q.q || "").toString().toLowerCase();
 
                 const matchG = (gr === 'all' || qGrade === gr);
+                const matchTop = (top === 'all' || qTopic === top);
                 const matchL = (lvl === 'ALL' || qLevel === lvl);
                 const matchT = (type === 'ALL' || qType === type);
                 const matchK = (!kw || qText.includes(kw));
-                return matchG && matchL && matchT && matchK;
+                return matchG && matchTop && matchL && matchT && matchK;
             });
 
             container.innerHTML = '';
@@ -1059,7 +1079,13 @@
             const vdcCount = parseInt(document.getElementById('rnd-vdc').value) || 0;
 
             const gr = document.getElementById('bank-filter-grade').value;
-            let pool = questionBank.filter(q => (gr === 'all' || q.grade.toString() === gr));
+            const top = document.getElementById('bank-filter-topic')?.value || "all";
+
+            let pool = questionBank.filter(q => {
+                const matchG = (gr === 'all' || q.grade.toString() === gr);
+                const matchTop = (top === 'all' || (q.topic || "").toString().trim() === top);
+                return matchG && matchTop;
+            });
 
             function pickFromPool(level, count) {
                 const subset = pool.filter(q => q.level === level);
@@ -1075,7 +1101,7 @@
             ];
 
             if (picked.length === 0) {
-                alert("Không tìm thấy đủ câu hỏi trong ngân hàng để bốc ngẫu nhiên!");
+                alert("Không tìm thấy đủ câu hỏi trong ngân hàng phù hợp với bộ lọc để bốc ngẫu nhiên!");
                 return;
             }
 

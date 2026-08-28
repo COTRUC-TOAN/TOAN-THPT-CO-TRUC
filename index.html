@@ -135,7 +135,10 @@
         .form-row { margin-bottom: 12px; }
         .form-row label { display: block; font-weight: 700; margin-bottom: 5px; font-size: 0.92rem; color: #334155; }
         .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; font-family: inherit; }
-        .form-textarea { width: 100%; height: 90px; padding: 10px 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; resize: vertical; font-family: inherit; }
+        
+        /* KHUNG SOẠN THẢO RICHTEXT CHO PHÉP DÁN ẢNH TRỰC TIẾP */
+        .rich-textarea { width: 100%; height: 200px; padding: 12px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; background: #fff; overflow-y: auto; font-family: inherit; line-height: 1.6; }
+        .rich-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1); }
 
         .preview-box { background: #fff; border: 1.5px dashed #cbd5e1; border-radius: 8px; padding: 15px; margin-top: 12px; min-height: 90px; font-size: 1rem; line-height: 1.8; color: #1e293b; }
 
@@ -154,9 +157,6 @@
         .selected-list-box { margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 15px; }
         .selected-item { background: #fff; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .btn-remove-q { color: #dc2626; background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px; }
-
-        /* KHUNG ĐÍNH KÈM ẢNH BẢNG BIẾN THIÊN */
-        .image-attach-box { border: 1.5px dashed #93c5fd; background: #eff6ff; padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 
         /* GIAO DIỆN LÀM BÀI */
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
@@ -316,7 +316,7 @@
                 </div>
             </div>
 
-            <!-- 2. NẠP CÂU HỎI THỦ CÔNG (CÓ HỖ TRỢ ĐÍNH KÈM ẢNH BẢNG BIẾN THIÊN) -->
+            <!-- 2. NẠP CÂU HỎI THỦ CÔNG (HỖ TRỢ DÁN ẢNH TRỰC TIẾP CTRL+V) -->
             <div id="sec-t-add-single" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -372,17 +372,9 @@
                             <input type="text" class="form-input" id="add-q-id" placeholder="CH12_HS_001">
                         </div>
 
-                        <!-- KHUNG CHÈN ẢNH BẢNG BIẾN THIÊN / ĐỒ THỊ -->
-                        <div class="image-attach-box">
-                            <div style="font-size: 0.88rem; font-weight: 700; color: #1e40af;">
-                                <i class="fa-solid fa-image"></i> Bảng biến thiên / Đồ thị:
-                            </div>
-                            <input type="file" id="q-image-file" accept="image/*" style="font-size: 0.85rem;" onchange="handleQuestionImageUpload(event)">
-                        </div>
-
                         <div class="form-row">
-                            <label>Nội Dung Đề Bài (Hỗ trợ LaTeX $...$ & HTML ảnh):</label>
-                            <textarea class="form-textarea" id="add-q-content" placeholder="Cho hàm số $y = f(x)$..." oninput="updateAddQPreview()"></textarea>
+                            <label>Nội Dung Đề Bài (Hỗ trợ LaTeX & Dán ảnh trực tiếp Ctrl+V):</label>
+                            <div class="rich-textarea" id="add-q-content" contenteditable="true" oninput="updateAddQPreview()" onpaste="handleRichPaste(event)" placeholder="Gõ đề bài hoặc nhấn Ctrl+V để dán bảng biến thiên/đồ thị vào đây..."></div>
                         </div>
 
                         <div id="add-q-options-container">
@@ -414,7 +406,7 @@
                 </div>
             </div>
 
-            <!-- 3. SOẠN ĐỀ TỪ NGÂN HÀNG (LỌC ĐẦY ĐỦ KHỐI + CHUYÊN ĐỀ) -->
+            <!-- 3. SOẠN ĐỀ TỪ NGÂN HÀNG -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -501,7 +493,7 @@
                             <button onclick="autoPickRandomQuestions()" style="width: 100%; margin-top: 10px; padding: 8px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-bolt"></i> Bốc Ngẫu Nhiên Vào Đề</button>
                         </div>
 
-                        <!-- BỘ LỌC ĐA NĂNG: KHỐI + CHUYÊN ĐỀ + MỨC ĐỘ + DẠNG CÂU -->
+                        <!-- BỘ LỌC ĐA NĂNG -->
                         <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px;">
                             <select class="form-input" id="bank-filter-grade" onchange="filterQuestionBankList()">
                                 <option value="all">-- Tất cả Khối --</option>
@@ -551,7 +543,7 @@
                 </div>
             </div>
 
-            <!-- 4. NẠP ĐỀ NHANH (BỘ PHÂN TÍCH CHUẨN XÁC 100%) -->
+            <!-- 4. NẠP ĐỀ NHANH (BỘ BÓC TÁCH ĐÃ FIX CHUẨN XÁC MCQ VÀ TF) -->
             <div id="sec-t-bulk" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -911,19 +903,22 @@
             document.getElementById('add-q-id').value = `CH${gr}_AUTO_${r}`;
         }
 
-        function handleQuestionImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64Img = e.target.result;
-                const contentTextarea = document.getElementById('add-q-content');
-                // Chèn ảnh trực tiếp vào đề bài
-                contentTextarea.value += `\n<img src="${base64Img}">\n`;
-                updateAddQPreview();
-            };
-            reader.readAsDataURL(file);
+        function handleRichPaste(e) {
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf("image") !== -1) {
+                    e.preventDefault();
+                    const blob = items[i].getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const base64Img = event.target.result;
+                        const imgTag = `<img src="${base64Img}">`;
+                        document.execCommand('insertHTML', false, imgTag);
+                        updateAddQPreview();
+                    };
+                    reader.readAsDataURL(blob);
+                }
+            }
         }
 
         function adjustAddQTypeFields() {
@@ -945,7 +940,7 @@
         }
 
         function updateAddQPreview() {
-            const q = document.getElementById('add-q-content').value || "[Chưa nhập nội dung đề bài...]";
+            const q = document.getElementById('add-q-content').innerHTML || "[Chưa nhập nội dung đề bài...]";
             const oa = document.getElementById('add-q-oa').value || "...";
             const ob = document.getElementById('add-q-ob').value || "...";
             const oc = document.getElementById('add-q-oc').value || "...";
@@ -971,7 +966,7 @@
             const topic = document.getElementById('add-q-topic').value;
             const level = document.getElementById('add-q-level').value;
             const type = document.getElementById('add-q-type').value;
-            const q = document.getElementById('add-q-content').value.trim();
+            const q = document.getElementById('add-q-content').innerHTML.trim();
             const oa = document.getElementById('add-q-oa').value.trim();
             const ob = document.getElementById('add-q-ob').value.trim();
             const oc = document.getElementById('add-q-oc').value.trim();
@@ -1007,16 +1002,15 @@
                 });
                 const data = await res.json();
                 if (data.status === "success") {
-                    alert("🎉 Đã lưu câu hỏi mới vào Ngân Hàng (Tab NganHangCauHoi) thành công!");
+                    alert("🎉 Đã lưu câu hỏi mới vào Ngân Hàng thành công!");
                     questionBank.push(qObj);
-                    document.getElementById('add-q-content').value = "";
+                    document.getElementById('add-q-content').innerHTML = "";
                     document.getElementById('add-q-oa').value = "";
                     document.getElementById('add-q-ob').value = "";
                     document.getElementById('add-q-oc').value = "";
                     document.getElementById('add-q-od').value = "";
                     document.getElementById('add-q-ans').value = "";
                     document.getElementById('add-q-exp').value = "";
-                    document.getElementById('q-image-file').value = "";
                     generateNewQId();
                     updateAddQPreview();
                 } else {
@@ -1028,7 +1022,7 @@
         }
 
         /* -------------------------------------------------------------------------
-           BỘ BÓC TÁCH VĂN BẢN ĐÃ FIX 100% PHÂN BIỆT MCQ VÀ TF
+           BỘ BÓC TÁCH ĐỀ ĐÃ FIX CHUẨN XÁC MCQ (A,B,C,D) VÀ TF (a,b,c,d)
         ------------------------------------------------------------------------- */
         function parseBulkRawExam() {
             const rawText = document.getElementById('bulk-raw-text').value.trim();
@@ -1055,7 +1049,6 @@
                 let ans = '';
                 let explanation = '';
 
-                // Phân biệt chính xác: Chữ hoa A. B. C. D. là MCQ | Chữ thường a) b) c) d) là TF
                 const hasMCQOpts = /(?:^|\s|\n)A\s*[\).]/m.test(trimmed) && /(?:^|\s|\n)B\s*[\).]/m.test(trimmed);
                 const hasTFOpts = /(?:^|\s|\n)a\s*[\).]/m.test(trimmed) && /(?:^|\s|\n)b\s*[\).]/m.test(trimmed);
 

@@ -953,11 +953,18 @@
         }
 
         // ==========================================
-        // CƠ CHẾ BÓC TÁCH "MẮT THẦN": KHÔNG NHẦM CHỮ TRONG TOÁN HỌC
+        // CƠ CHẾ BÓC TÁCH MỚI HOÀN TOÀN: BÓC TÁCH NGƯỢC (TỪ DƯỚI LÊN)
+        // Đảm bảo không mất ảnh, không bị cắt sai vì chữ trùng
+        // CHUẨN HÓA BẢNG MÃ TIẾNG VIỆT ĐỂ BẮT TRÚNG CHỮ "Đáp án"
         // ==========================================
         function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             
+            // CHUẨN HÓA UNICODE: Khắc phục lỗi gõ tiếng Việt NFD (Ví dụ: "Đáp án" gõ từ Word bị vỡ nét)
+            if (rawHtml.normalize) {
+                rawHtml = rawHtml.normalize('NFC');
+            }
+
             // 1. Dọn dẹp thẻ rác từ Word nhưng giữ lại các khối đoạn văn
             let tempDiv = document.createElement('div');
             tempDiv.innerHTML = rawHtml;
@@ -1017,20 +1024,39 @@
                 // BÓC TÁCH NGƯỢC (TỪ DƯỚI LÊN TRÊN)
                 
                 // 1. Lời giải
-                let expMatch = blockStr.match(/(?:<br>|\n|\s)*(?:<[^>]+>\s*)*(?:Lời giải|Hướng dẫn giải|Giải)\s*[:\-]?\s*(.*)$/is);
-                if (expMatch) {
-                    explanation = expMatch[1].trim();
-                    blockStr = blockStr.substring(0, expMatch.index).trim();
+                let expSplit = blockStr.split(/(?:<br>|\n|\s)*(?:<[^>]+>\s*)*(?:Lời giải|Hướng dẫn giải|Giải)\s*[:\-]?\s*/i);
+                if (expSplit.length > 1) {
+                    explanation = expSplit.pop().trim();
+                    blockStr = expSplit.join(' ').trim();
                 }
 
                 // 2. Đáp án
-                let ansMatch = blockStr.match(/(?:<br>|\n|\s)*(?:<[^>]+>\s*)*(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D]|(?:[ĐDS\s\-]+)|[^\n<]+)$/i);
+                let ansRegex = /(?:<br>|\n|\s)*(?:<[^>]+>\s*)*(?:Đáp án|Chọn)\s*[:\-]?\s*(?:<[^>]+>\s*)*([A-D]|[ĐDS\s\-]+)[.\s]*(?:<br>|\n|\s|<[^>]+>)*$/i;
+                if (qType === 'SA') {
+                    // SA lấy toàn bộ text đằng sau trừ HTML tags
+                    ansRegex = /(?:<br>|\n|\s)*(?:<[^>]+>\s*)*(?:Đáp án|Chọn)\s*[:\-]?\s*(?:<[^>]+>\s*)*([^<]+?)[.\s]*(?:<br>|\n|\s|<[^>]+>)*$/i;
+                }
+                
+                let ansMatch = blockStr.match(ansRegex);
                 if (ansMatch) {
                     ans = ansMatch[1].trim().toUpperCase();
+                    if (qType === 'SA') ans = ansMatch[1].trim(); // Giữ nguyên phân số/chữ thường cho SA
                     blockStr = blockStr.substring(0, ansMatch.index).trim();
+                } else {
+                    // Xử lý dự phòng nếu Đáp án bị dính trên cùng 1 dòng với HTML tags hỗn loạn
+                    let ansFallbackRegex = /(?:Đáp án|Chọn)\s*[:\-]?\s*(?:<[^>]+>\s*)*([A-D]|[ĐDS\s\-]+)/gi;
+                    if (qType === 'SA') ansFallbackRegex = /(?:Đáp án|Chọn)\s*[:\-]?\s*(?:<[^>]+>\s*)*([^\n<]+)/gi;
+                    
+                    let ansFallback = [...blockStr.matchAll(ansFallbackRegex)];
+                    if (ansFallback.length > 0) {
+                        let lastMatch = ansFallback[ansFallback.length - 1];
+                        ans = lastMatch[1].trim().toUpperCase();
+                        if (qType === 'SA') ans = lastMatch[1].trim();
+                        blockStr = blockStr.substring(0, lastMatch.index).trim();
+                    }
                 }
 
-                // 3. Các lựa chọn ABCD / abcd
+                // 3. Các lựa chọn ABCD / abcd (Cắt dần từ dưới lên)
                 if (qType === 'MCQ') {
                     let mD = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*D\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (mD) { options[3] = mD[1].trim(); blockStr = blockStr.substring(0, mD.index).trim(); }
@@ -1060,7 +1086,7 @@
                     if (ans) ans = ans.replace(/\s+/g, '-').replace(/Đ/g, 'D'); // Chuẩn hóa
                 }
 
-                // 4. Khúc còn lại chính là Đề Bài
+                // 4. Khúc còn lại sau khi cắt ngược chính là Đề Bài
                 let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
                 qContent = qContent.replace(/(?:<br>\s*)+$/i, ''); // Xóa dòng trống cuối cùng
 
@@ -1127,7 +1153,7 @@
                 } else if (q.type === 'TF') {
                     optHtml = `<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; font-size: 1.15rem; color: #475569;"><div>a) ${q.options[0]}</div><div>b) ${q.options[1]}</div><div>c) ${q.options[2]}</div><div>d) ${q.options[3]}</div></div>`;
                 }
-                container.innerHTML += `<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 12px;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #1d4ed8; font-size: 1.1rem;">Câu ${idx + 1} (${q.type})</strong><span style="color: #16a34a; font-weight: bold; font-size: 1.05rem;">Đáp án: ${q.ans}</span></div><div style="font-size: 1.15rem; line-height: 1.6;">${q.q}</div>${optHtml}</div>`;
+                container.innerHTML += `<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;"><strong style="color: #1d4ed8;">Câu ${idx + 1} (${q.type})</strong><span style="color: #16a34a; font-weight: bold; font-size: 1rem;">Đáp án: ${q.ans}</span></div><div style="font-size: 1.15rem; line-height: 1.6;">${q.q}</div>${optHtml}</div>`;
             });
             document.getElementById('btn-save-bank-bulk').style.display = 'inline-flex'; renderMath(container);
         }

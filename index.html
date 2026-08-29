@@ -831,7 +831,7 @@
         }
 
         async function openTeacherLogin() {
-            // KHÔNG điền sẵn mật khẩu để bảo mật tuyệt đối
+            // Không để sẵn mật khẩu
             const pass = prompt("🔐 Vui lòng nhập Mật khẩu Quản lý Giáo viên:");
             if (!pass) return;
             
@@ -907,7 +907,8 @@
                     hasImage = true; e.preventDefault(); 
                     const blob = items[i].getAsFile(); const reader = new FileReader();
                     reader.onload = function(event) { 
-                        document.execCommand('insertHTML', false, `<br><img src="${event.target.result}" style="max-width:100%; border-radius:8px;"><br>`); 
+                        // Chèn ảnh dạng base64 có mã nhúng để giữ lại an toàn
+                        document.execCommand('insertHTML', false, `<br><img class="img-math" src="${event.target.result}" style="max-width:100%; border-radius:8px;"><br>`); 
                         if(isPreviewUpdate) updateAddQPreview();
                     }; 
                     reader.readAsDataURL(blob);
@@ -952,12 +953,13 @@
         }
 
         // ==========================================
-        // CƠ CHẾ BÓC TÁCH MỚI (CHIA CẮT TRIỆT ĐỂ, KHÔNG BỊ GỘP CÂU)
+        // CƠ CHẾ BÓC TÁCH MỚI HOÀN TOÀN: BÓC TÁCH NGƯỢC (TỪ DƯỚI LÊN)
+        // Đảm bảo không mất ảnh, không bị cắt sai vì chữ trùng
         // ==========================================
-        function parseTextToQuestions(rawHtml, rawPlain, grade, topic, defaultLevel, selectedType) {
+        function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             
-            // Xóa thẻ style/class rác từ Word nhưng vẫn giữ lại cấu trúc
+            // Xóa thẻ rác Word nhưng bảo vệ tuyệt đối ảnh
             let tempDiv = document.createElement('div');
             tempDiv.innerHTML = rawHtml;
             let els = tempDiv.getElementsByTagName('*');
@@ -968,81 +970,103 @@
             }
             
             let safeHtml = tempDiv.innerHTML;
-            // Ép tất cả các khối block div/p thành br để không phá vỡ cấu trúc cắt
+            
+            // Ép thẻ đoạn văn thành <br>
             safeHtml = safeHtml.replace(/<\/?(div|p|h[1-6]|ul|ol|li|table|tr|td|th)[^>]*>/gi, '<br>');
             safeHtml = safeHtml.replace(/(<br>\s*)+/gi, '<br>');
 
-            // SỬ DỤNG LOOKAHEAD ĐỂ TÁCH CÂU CHUẨN XÁC:
-            // Cắt đúng tại vị trí trước chữ "Câu X" hoặc "Bài X"
-            let markerRegex = /(?=(?:^|<br>)(?:\s|<[^>]+>)*(?:Câu|Bài)\s*\d+[\s:.\-_])/i;
+            // LƯU TRỮ TẠM THỜI TẤT CẢ ẢNH BẰNG CHUỖI BÍ MẬT ĐỂ KHÔNG BỊ XÓA HOẶC CẮT NHẦM
+            let imageVault = {};
+            let imgCounter = 0;
+            safeHtml = safeHtml.replace(/<img[^>]+>/gi, function(match) {
+                let token = `[[IMG_VAULT_${imgCounter}]]`;
+                imageVault[token] = match;
+                imgCounter++;
+                return token;
+            });
+
+            // TÁCH TỪNG CÂU
+            let markerRegex = /(?=(?:^|<br>|\n|\s)(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_])/i;
             let htmlBlocks = safeHtml.split(markerRegex);
 
             htmlBlocks.forEach((blockHtml, index) => {
-                let blockTrimmed = blockHtml.trim();
-                blockTrimmed = blockTrimmed.replace(/^(?:<br>\s*)+/i, '').trim(); // Xóa <br> thừa đầu câu
-                if (!blockTrimmed) return;
+                let blockStr = blockHtml.trim();
+                blockStr = blockStr.replace(/^(?:<br>\s*)+/i, '').trim(); 
+                if (!blockStr) return;
 
-                // Kiểm tra chắc chắn block này bắt đầu bằng Câu/Bài
-                if (!/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+/i.test(blockTrimmed)) return;
+                // Test bằng text thuần
+                let tDiv = document.createElement('div');
+                tDiv.innerHTML = blockStr;
+                let bPlain = (tDiv.innerText || tDiv.textContent).replace(/^[\s\uFEFF\xA0]+/g, '');
 
-                // Tạo plain text thuần của RIÊNG câu này để dễ tìm đáp án
-                let blockDiv = document.createElement('div');
-                blockDiv.innerHTML = blockTrimmed;
-                let blockPlain = blockDiv.innerText || blockDiv.textContent;
-
-                if (!blockPlain.trim()) return;
+                if (!/^(?:Câu|Bài)\s*\d+/i.test(bPlain)) return; // Bỏ qua nếu không phải câu hỏi
 
                 const qId = `CH${grade}_${topic.substring(0, 4).toUpperCase()}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
                 let qType = selectedType;
-                let qContentHtml = ''; let options = ['', '', '', '']; let ans = ''; let explanation = '';
+                let options = ['', '', '', '']; let ans = ''; let explanation = '';
 
-                // BÓC TÁCH NGƯỢC (TỪ DƯỚI LÊN TRÊN) TRONG ĐÚNG CÂU NÀY
+                // BÓC TÁCH NGƯỢC (Bóc Lời Giải -> Bóc Đáp Án -> Bóc C, D, C, B, A)
                 
                 // 1. Lời giải
-                let expMatch = blockStr.match(/(?:^|\n)\s*(?:Lời giải|Hướng dẫn giải|Giải)\s*[:\-]?\s*(.*)$/is);
+                let expMatch = blockStr.match(/(?:<br>|\n|\s)*(?:<[^>]+>\s*)*(?:Lời giải|Hướng dẫn giải|Giải)\s*[:\-]?\s*(.*)$/is);
                 if (expMatch) {
                     explanation = expMatch[1].trim();
                     blockStr = blockStr.substring(0, expMatch.index).trim();
                 }
 
                 // 2. Đáp án
-                let ansMatch = blockStr.match(/(?:^|\n)\s*(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D]|(?:[ĐDS\s\-]+)|[^\n]+)$/i);
+                let ansMatch = blockStr.match(/(?:<br>|\n|\s)*(?:<[^>]+>\s*)*(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D]|(?:[ĐDS\s\-]+)|[^\n<]+)$/i);
                 if (ansMatch) {
                     ans = ansMatch[1].trim().toUpperCase();
                     blockStr = blockStr.substring(0, ansMatch.index).trim();
                 }
 
-                // 3. Các lựa chọn ABCD / abcd
+                // 3. Các lựa chọn ABCD / abcd (Cắt dần từ dưới lên)
                 if (qType === 'MCQ') {
-                    let mD = blockStr.match(/(?:^|\s|\n)D\s*[\.\)](.*?)$/s);
+                    let mD = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*D\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (mD) { options[3] = mD[1].trim(); blockStr = blockStr.substring(0, mD.index).trim(); }
                     
-                    let mC = blockStr.match(/(?:^|\s|\n)C\s*[\.\)](.*?)$/s);
+                    let mC = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*C\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (mC) { options[2] = mC[1].trim(); blockStr = blockStr.substring(0, mC.index).trim(); }
                     
-                    let mB = blockStr.match(/(?:^|\s|\n)B\s*[\.\)](.*?)$/s);
+                    let mB = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*B\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (mB) { options[1] = mB[1].trim(); blockStr = blockStr.substring(0, mB.index).trim(); }
                     
-                    let mA = blockStr.match(/(?:^|\s|\n)A\s*[\.\)](.*?)$/s);
+                    let mA = blockStr.match(/(?:^|<br>|\s|\n)(?:<[^>]+>\s*)*A\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (mA) { options[0] = mA[1].trim(); blockStr = blockStr.substring(0, mA.index).trim(); }
-                } else if (qType === 'TF') {
-                    let md = blockStr.match(/(?:^|\s|\n)[dD]\s*[\.\)](.*?)$/s);
+                } 
+                else if (qType === 'TF') {
+                    let md = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*[dD]\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (md) { options[3] = md[1].trim(); blockStr = blockStr.substring(0, md.index).trim(); }
                     
-                    let mc = blockStr.match(/(?:^|\s|\n)[cC]\s*[\.\)](.*?)$/s);
+                    let mc = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*[cC]\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (mc) { options[2] = mc[1].trim(); blockStr = blockStr.substring(0, mc.index).trim(); }
                     
-                    let mb = blockStr.match(/(?:^|\s|\n)[bB]\s*[\.\)](.*?)$/s);
+                    let mb = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*[bB]\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (mb) { options[1] = mb[1].trim(); blockStr = blockStr.substring(0, mb.index).trim(); }
                     
-                    let ma = blockStr.match(/(?:^|\s|\n)[aA]\s*[\.\)](.*?)$/s);
+                    let ma = blockStr.match(/(?:^|<br>|\s|\n)(?:<[^>]+>\s*)*[aA]\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (ma) { options[0] = ma[1].trim(); blockStr = blockStr.substring(0, ma.index).trim(); }
                     
-                    if (ans) ans = ans.replace(/\s+/g, '-').replace(/Đ/g, 'D'); // Chuẩn hóa D-S-D-S
+                    if (ans) ans = ans.replace(/\s+/g, '-').replace(/Đ/g, 'D'); // Chuẩn hóa
+                }
+                else {
+                    // SA không có đáp án nhiễu, nội dung phần còn lại là đề.
                 }
 
-                // 4. Khúc còn lại là Nội dung đề bài
+                // 4. Khúc còn lại sau khi cắt ngược chính là Đề Bài
                 let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
+                qContent = qContent.replace(/(?:<br>\s*)+$/i, ''); // Xóa dòng trống cuối cùng
+
+                // 5. TRẢ LẠI ẢNH VÀO VỊ TRÍ CŨ
+                for (const [token, imgTag] of Object.entries(imageVault)) {
+                    qContent = qContent.replace(token, imgTag);
+                    options[0] = options[0].replace(token, imgTag);
+                    options[1] = options[1].replace(token, imgTag);
+                    options[2] = options[2].replace(token, imgTag);
+                    options[3] = options[3].replace(token, imgTag);
+                    explanation = explanation.replace(token, imgTag);
+                }
 
                 parsedArr.push({ 
                     id: qId, grade: grade, topic: topic, level: defaultLevel, 
@@ -1054,16 +1078,16 @@
         }
 
         function parseBankBulkQuestions() {
-            const rawHtml = document.getElementById('bank-bulk-raw-text').innerHTML.trim(); const rawPlain = document.getElementById('bank-bulk-raw-text').innerText.trim();
-            if (!rawPlain) { alert("Vui lòng dán nội dung câu hỏi!"); return; }
-            bankParsedQuestions = parseTextToQuestions(rawHtml, rawPlain, document.getElementById('bank-bulk-grade').value, document.getElementById('bank-bulk-topic').value, document.getElementById('bank-bulk-level').value, document.getElementById('bank-bulk-type').value);
+            const rawHtml = document.getElementById('bank-bulk-raw-text').innerHTML.trim();
+            if (!rawHtml) { alert("Vui lòng dán nội dung câu hỏi!"); return; }
+            bankParsedQuestions = parseTextToQuestions(rawHtml, document.getElementById('bank-bulk-grade').value, document.getElementById('bank-bulk-topic').value, document.getElementById('bank-bulk-level').value, document.getElementById('bank-bulk-type').value);
             renderBankBulkPreview();
         }
 
         function parseDirectExam() {
-            const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim(); const rawPlain = document.getElementById('direct-raw-text').innerText.trim();
-            if (!rawPlain) { alert("Vui lòng dán nội dung đề bài!"); return; }
-            directParsedQuestions = parseTextToQuestions(rawHtml, rawPlain, document.getElementById('new-exam-grade').value, document.getElementById('new-exam-topic').value, 'TH', document.getElementById('direct-q-type').value);
+            const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
+            if (!rawHtml) { alert("Vui lòng dán nội dung đề bài!"); return; }
+            directParsedQuestions = parseTextToQuestions(rawHtml, document.getElementById('new-exam-grade').value, document.getElementById('new-exam-topic').value, 'TH', document.getElementById('direct-q-type').value);
             
             const container = document.getElementById('direct-preview-box'); document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
             if (directParsedQuestions.length === 0) { container.innerHTML = `<em>Không nhận diện được câu hỏi. Vui lòng kiểm tra định dạng.</em>`; return; }
@@ -1072,9 +1096,9 @@
             directParsedQuestions.forEach((q, idx) => {
                 let optHtml = '';
                 if (q.type === 'MCQ') {
-                    optHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 6px; font-size: 1.05rem; color: #475569;"><div>A. ${q.options[0]}</div><div>B. ${q.options[1]}</div><div>C. ${q.options[2]}</div><div>D. ${q.options[3]}</div></div>`;
+                    optHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 6px; font-size: 1.15rem; color: #475569;"><div>A. ${q.options[0]}</div><div>B. ${q.options[1]}</div><div>C. ${q.options[2]}</div><div>D. ${q.options[3]}</div></div>`;
                 } else if (q.type === 'TF') {
-                    optHtml = `<div style="display: flex; flex-direction: column; gap: 3px; margin-top: 6px; font-size: 1.05rem; color: #475569;"><div>a) ${q.options[0]}</div><div>b) ${q.options[1]}</div><div>c) ${q.options[2]}</div><div>d) ${q.options[3]}</div></div>`;
+                    optHtml = `<div style="display: flex; flex-direction: column; gap: 3px; margin-top: 6px; font-size: 1.15rem; color: #475569;"><div>a) ${q.options[0]}</div><div>b) ${q.options[1]}</div><div>c) ${q.options[2]}</div><div>d) ${q.options[3]}</div></div>`;
                 }
                 container.innerHTML += `<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;"><strong style="color: #1d4ed8;">Câu ${idx + 1} (${q.type})</strong><span style="color: #16a34a; font-weight: bold; font-size: 1rem;">Đáp án: ${q.ans}</span></div><div style="font-size: 1.15rem; line-height: 1.6;">${q.q}</div>${optHtml}</div>`;
             });
@@ -1088,9 +1112,9 @@
             bankParsedQuestions.forEach((q, idx) => {
                 let optHtml = '';
                 if (q.type === 'MCQ') {
-                    optHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 6px; font-size: 1.05rem; color: #475569;"><div>A. ${q.options[0]}</div><div>B. ${q.options[1]}</div><div>C. ${q.options[2]}</div><div>D. ${q.options[3]}</div></div>`;
+                    optHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 6px; font-size: 1.15rem; color: #475569;"><div>A. ${q.options[0]}</div><div>B. ${q.options[1]}</div><div>C. ${q.options[2]}</div><div>D. ${q.options[3]}</div></div>`;
                 } else if (q.type === 'TF') {
-                    optHtml = `<div style="display: flex; flex-direction: column; gap: 3px; margin-top: 6px; font-size: 1.05rem; color: #475569;"><div>a) ${q.options[0]}</div><div>b) ${q.options[1]}</div><div>c) ${q.options[2]}</div><div>d) ${q.options[3]}</div></div>`;
+                    optHtml = `<div style="display: flex; flex-direction: column; gap: 3px; margin-top: 6px; font-size: 1.15rem; color: #475569;"><div>a) ${q.options[0]}</div><div>b) ${q.options[1]}</div><div>c) ${q.options[2]}</div><div>d) ${q.options[3]}</div></div>`;
                 }
                 container.innerHTML += `<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;"><strong style="color: #1d4ed8;">Câu ${idx + 1} (${q.type})</strong><span style="color: #16a34a; font-weight: bold; font-size: 1rem;">Đáp án: ${q.ans}</span></div><div style="font-size: 1.15rem; line-height: 1.6;">${q.q}</div>${optHtml}</div>`;
             });
@@ -1137,8 +1161,8 @@
                 const isChecked = selectedQuestions.some(sq => sq.id === q.id);
                 const item = document.createElement('div'); item.className = 'bank-q-item';
                 let optionsHtml = '';
-                if (q.type === 'MCQ' && q.options) { optionsHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; font-size: 1.05rem; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0;"><div><strong>A.</strong> ${q.options[0] || ''}</div><div><strong>B.</strong> ${q.options[1] || ''}</div><div><strong>C.</strong> ${q.options[2] || ''}</div><div><strong>D.</strong> ${q.options[3] || ''}</div></div>`; } 
-                else if (q.type === 'TF' && q.options) { optionsHtml = `<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 1.05rem; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0;"><div><strong>a)</strong> ${q.options[0] || ''}</div><div><strong>b)</strong> ${q.options[1] || ''}</div><div><strong>c)</strong> ${q.options[2] || ''}</div><div><strong>d)</strong> ${q.options[3] || ''}</div></div>`; }
+                if (q.type === 'MCQ' && q.options) { optionsHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; font-size: 1.15rem; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0;"><div><strong>A.</strong> ${q.options[0] || ''}</div><div><strong>B.</strong> ${q.options[1] || ''}</div><div><strong>C.</strong> ${q.options[2] || ''}</div><div><strong>D.</strong> ${q.options[3] || ''}</div></div>`; } 
+                else if (q.type === 'TF' && q.options) { optionsHtml = `<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 1.15rem; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0;"><div><strong>a)</strong> ${q.options[0] || ''}</div><div><strong>b)</strong> ${q.options[1] || ''}</div><div><strong>c)</strong> ${q.options[2] || ''}</div><div><strong>d)</strong> ${q.options[3] || ''}</div></div>`; }
                 const ansHtml = q.ans ? `<div style="margin-top: 6px; font-size: 0.95rem; color: #16a34a; font-weight: bold;"><i class="fa-solid fa-circle-check"></i> Đáp án: ${q.ans}</div>` : '';
 
                 item.innerHTML = `

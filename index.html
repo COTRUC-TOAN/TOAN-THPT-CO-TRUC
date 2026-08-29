@@ -30,7 +30,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     
     <script>
-        // Cấu hình Firebase của thầy Trúc
         const firebaseConfig = {
             apiKey: "AIzaSyBSWR7tievzHl6KEItiwzdDpt-ZbK8mSHs",
             authDomain: "cotruckahoot.firebaseapp.com",
@@ -50,7 +49,7 @@
         body { font-family: 'Times New Roman', Times, serif; background-color: var(--bg); color: var(--text-dark); min-height: 100vh; padding-bottom: 50px; font-size: 1.15rem; line-height: 1.5; }
         .wrapper { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
-        /* Khóa học sinh tuyệt đối: Ẩn menu khi làm bài từ link (Áp dụng cho cả Kiểm tra và Kahoot) */
+        /* Khóa học sinh tuyệt đối: Ẩn menu khi làm bài từ link */
         body.locked-ui .navbar, 
         body.locked-ui .sidebar, 
         body.locked-ui .grade-bar, 
@@ -189,12 +188,13 @@
         .q-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; margin-bottom: 16px; }
         .q-title { font-weight: bold; margin-bottom: 14px; color: #0f172a; line-height: 1.8; font-size: 1.15rem; }
         
-        /* CHỐNG RỚT DÒNG CÔNG THỨC TOÁN Ở ĐÁP ÁN */
-        .mcq-option { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; cursor: pointer; font-size: 1.15rem; line-height: 1.6; white-space: nowrap !important; overflow-x: auto !important; }
+        /* KHÓA CỨNG CHỐNG RỚT DÒNG CÔNG THỨC TOÁN Ở ĐÁP ÁN */
+        .mcq-option { display: flex !important; align-items: center !important; gap: 10px !important; padding: 10px 14px !important; background: #fff !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; margin-bottom: 8px !important; cursor: pointer !important; font-size: 1.15rem !important; line-height: 1.6 !important; white-space: nowrap !important; overflow-x: auto !important; }
+        .mcq-option *, .tf-row, .tf-row * { white-space: nowrap !important; flex-wrap: nowrap !important; }
         .mcq-option:hover { background: #f0f7ff; border-color: var(--primary); }
         
-        .tf-row { border-bottom: 1px dashed #cbd5e1; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; font-size: 1.15rem; white-space: nowrap !important; overflow-x: auto !important; }
-        .tf-btns { display: flex; gap: 16px; white-space: nowrap !important; margin-left: 10px; }
+        .tf-row { border-bottom: 1px dashed #cbd5e1; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; font-size: 1.15rem; overflow-x: auto !important; }
+        .tf-btns { display: flex; gap: 16px; margin-left: 10px; }
         
         .sa-input { width: 240px; padding: 10px 14px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1.15rem; font-weight: bold; margin-top: 10px; font-family: 'Times New Roman', Times, serif; }
         .btn-submit { width: 100%; padding: 15px; background: #16a34a; color: #fff; border: none; border-radius: var(--radius-md); font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 25px; font-family: 'Times New Roman', Times, serif; }
@@ -211,7 +211,6 @@
         .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: bold; z-index: 1000; display: none; }
         .q-card img, .bank-q-item img, .preview-box img, .kahoot-question img { max-width: 100%; height: auto; border-radius: 8px; margin: 10px auto; display: block; border: 1px solid #e2e8f0; }
 
-        /* ĐỊNH DẠNG TRANG IN CHUẨN A4 */
         @media print {
             body { background: #fff; color: #000; padding: 0; font-family: 'Times New Roman', Times, serif; font-size: 12pt; }
             .navbar, .btn-back, .btn-submit, .anti-cheat-alert, .timer-box, .toast-msg, .student-box, .btn-export-group { display: none !important; }
@@ -431,7 +430,7 @@
 
                         <div class="form-row" id="exam-password-row" style="display: none; margin-top: 5px;">
                             <label style="color: #dc2626;">🔑 Mật Khẩu Bài Kiểm Tra (Để trống = Mở tự do):</label>
-                            <input type="text" class="form-input" id="new-exam-pass" placeholder="VD: 12a1 (Hoặc bỏ trống không đặt pass)">
+                            <input type="text" class="form-input" id="new-exam-pass" placeholder="VD: 12a1">
                         </div>
 
                         <div class="selected-list-box" id="bank-selected-box">
@@ -530,7 +529,7 @@
             <div id="quiz-result"></div>
         </div>
 
-        <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT (BẢN FIREBASE THỜI GIAN THỰC) -->
+        <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT -->
         <div id="kahoot-view">
             <div class="kahoot-header">
                 <div id="kahoot-progress" style="font-weight: bold; color: #7c3aed; font-size: 1.25rem;">⚡ ĐẤU TRƯỜNG KAHOOT</div>
@@ -995,7 +994,6 @@
             } catch (err) { alert("Lỗi kết nối khi lưu câu hỏi!"); }
         }
 
-        // BÓC TÁCH CHUẨN XÁC CHỐNG NUỐT ĐÁP ÁN & CHUẨN HÓA TIẾNG VIỆT
         function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             if (rawHtml.normalize) { rawHtml = rawHtml.normalize('NFC'); }
@@ -1396,7 +1394,6 @@
             const mcqQuestions = activeExam.questions.filter(q => q.type === 'MCQ');
             if (kahootCurrentIndex >= mcqQuestions.length) {
                 stopKahootBGM();
-                // Đẩy điểm lên Firebase realtime
                 try {
                     const cleanName = kahootStdName.replace(/[\.#$\/\[\]]/g, "_");
                     db.ref('kahoot_scores/' + activeExam.id + '/' + cleanName).set({
@@ -1450,7 +1447,7 @@
             loadKahootQuestion(); 
         }
 
-        // --- CHẤM ĐIỂM TRUYỀN THỐNG (QUY ĐỔI THANG 10 LƯU ĐỘNG) ---
+        // --- CHẤM ĐIỂM TRUYỀN THỐNG ---
         function startTraditionalExamMode() {
             document.getElementById('quiz-view').style.display = 'block'; document.getElementById('quiz-title').innerText = activeExam.title; document.getElementById('quiz-result').style.display = 'none'; document.getElementById('cheat-warning').style.display = 'none'; document.getElementById('quiz-form').reset(); document.getElementById('btn-submit-quiz').disabled = false; document.getElementById('btn-submit-quiz').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Nộp Bài & Xem Điểm'; cheatWarnings = 0;
             const timerDisplay = document.getElementById('timer-display');
@@ -1500,18 +1497,6 @@
             } catch (err) { alert("Đã hoàn thành nộp bài! (Dữ liệu đã được lưu an toàn)."); btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Đã hoàn thành'; }
         }
         fetchData();
-        <style>
-        .mcq-option, .mcq-option *, .tf-row, .tf-row * {
-            white-space: nowrap !important;
-            flex-wrap: nowrap !important;
-        }
-         </style>
-        .mcq-option {
-            overflow-x: auto !important;
-            display: flex !important;
-            align-items: center !important;
-        }
-   
     </script>
 </body>
 </html>

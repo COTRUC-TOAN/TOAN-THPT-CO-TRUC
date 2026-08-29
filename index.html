@@ -953,8 +953,7 @@
         }
 
         // ==========================================
-        // CƠ CHẾ BÓC TÁCH MỚI HOÀN TOÀN: BÓC TÁCH NGƯỢC (TỪ DƯỚI LÊN)
-        // Đảm bảo không mất ảnh, không bị cắt sai vì chữ trùng
+        // CƠ CHẾ BÓC TÁCH "MẮT THẦN": KHÔNG NHẦM CHỮ TRONG TOÁN HỌC
         // ==========================================
         function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
@@ -982,6 +981,17 @@
                 let token = `[[IMG_VAULT_${imgCounter}]]`;
                 imageVault[token] = match;
                 imgCounter++;
+                return token;
+            });
+
+            // LƯU TRỮ TẠM THỜI TOÀN BỘ CÔNG THỨC MATHJAX ĐỂ TRÁNH CẮT NHẦM CHỮ c) BÊN TRONG CÔNG THỨC
+            let mathVault = {};
+            let mathCounter = 0;
+            // Bảo vệ công thức $...$ và $$...$$
+            safeHtml = safeHtml.replace(/(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g, function(match) {
+                let token = `[[MATH_VAULT_${mathCounter}]]`;
+                mathVault[token] = match;
+                mathCounter++;
                 return token;
             });
 
@@ -1058,15 +1068,20 @@
                 let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
                 qContent = qContent.replace(/(?:<br>\s*)+$/i, ''); // Xóa dòng trống cuối cùng
 
-                // 5. TRẢ LẠI ẢNH VÀO VỊ TRÍ CŨ
-                for (const [token, imgTag] of Object.entries(imageVault)) {
-                    qContent = qContent.replace(token, imgTag);
-                    options[0] = options[0].replace(token, imgTag);
-                    options[1] = options[1].replace(token, imgTag);
-                    options[2] = options[2].replace(token, imgTag);
-                    options[3] = options[3].replace(token, imgTag);
-                    explanation = explanation.replace(token, imgTag);
-                }
+                // 5. TRẢ LẠI ẢNH VÀ CÔNG THỨC TOÁN HỌC VÀO VỊ TRÍ CŨ
+                const restoreVaults = (text) => {
+                    let restored = text;
+                    for (const [token, mathTag] of Object.entries(mathVault)) { restored = restored.replace(token, mathTag); }
+                    for (const [token, imgTag] of Object.entries(imageVault)) { restored = restored.replace(token, imgTag); }
+                    return restored;
+                };
+
+                qContent = restoreVaults(qContent);
+                options[0] = restoreVaults(options[0]);
+                options[1] = restoreVaults(options[1]);
+                options[2] = restoreVaults(options[2]);
+                options[3] = restoreVaults(options[3]);
+                explanation = restoreVaults(explanation);
 
                 parsedArr.push({ 
                     id: qId, grade: grade, topic: topic, level: defaultLevel, 
@@ -1096,11 +1111,11 @@
             directParsedQuestions.forEach((q, idx) => {
                 let optHtml = '';
                 if (q.type === 'MCQ') {
-                    optHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 6px; font-size: 1.15rem; color: #475569;"><div>A. ${q.options[0]}</div><div>B. ${q.options[1]}</div><div>C. ${q.options[2]}</div><div>D. ${q.options[3]}</div></div>`;
+                    optHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 10px; font-size: 1.15rem; color: #475569;"><div>A. ${q.options[0]}</div><div>B. ${q.options[1]}</div><div>C. ${q.options[2]}</div><div>D. ${q.options[3]}</div></div>`;
                 } else if (q.type === 'TF') {
-                    optHtml = `<div style="display: flex; flex-direction: column; gap: 3px; margin-top: 6px; font-size: 1.15rem; color: #475569;"><div>a) ${q.options[0]}</div><div>b) ${q.options[1]}</div><div>c) ${q.options[2]}</div><div>d) ${q.options[3]}</div></div>`;
+                    optHtml = `<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; font-size: 1.15rem; color: #475569;"><div>a) ${q.options[0]}</div><div>b) ${q.options[1]}</div><div>c) ${q.options[2]}</div><div>d) ${q.options[3]}</div></div>`;
                 }
-                container.innerHTML += `<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;"><strong style="color: #1d4ed8;">Câu ${idx + 1} (${q.type})</strong><span style="color: #16a34a; font-weight: bold; font-size: 1rem;">Đáp án: ${q.ans}</span></div><div style="font-size: 1.15rem; line-height: 1.6;">${q.q}</div>${optHtml}</div>`;
+                container.innerHTML += `<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 12px;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #1d4ed8; font-size: 1.1rem;">Câu ${idx + 1} (${q.type})</strong><span style="color: #16a34a; font-weight: bold; font-size: 1.05rem;">Đáp án: ${q.ans}</span></div><div style="font-size: 1.15rem; line-height: 1.6;">${q.q}</div>${optHtml}</div>`;
             });
             renderMath(container);
         }
@@ -1112,11 +1127,11 @@
             bankParsedQuestions.forEach((q, idx) => {
                 let optHtml = '';
                 if (q.type === 'MCQ') {
-                    optHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 6px; font-size: 1.15rem; color: #475569;"><div>A. ${q.options[0]}</div><div>B. ${q.options[1]}</div><div>C. ${q.options[2]}</div><div>D. ${q.options[3]}</div></div>`;
+                    optHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 10px; font-size: 1.15rem; color: #475569;"><div>A. ${q.options[0]}</div><div>B. ${q.options[1]}</div><div>C. ${q.options[2]}</div><div>D. ${q.options[3]}</div></div>`;
                 } else if (q.type === 'TF') {
-                    optHtml = `<div style="display: flex; flex-direction: column; gap: 3px; margin-top: 6px; font-size: 1.15rem; color: #475569;"><div>a) ${q.options[0]}</div><div>b) ${q.options[1]}</div><div>c) ${q.options[2]}</div><div>d) ${q.options[3]}</div></div>`;
+                    optHtml = `<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; font-size: 1.15rem; color: #475569;"><div>a) ${q.options[0]}</div><div>b) ${q.options[1]}</div><div>c) ${q.options[2]}</div><div>d) ${q.options[3]}</div></div>`;
                 }
-                container.innerHTML += `<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;"><strong style="color: #1d4ed8;">Câu ${idx + 1} (${q.type})</strong><span style="color: #16a34a; font-weight: bold; font-size: 1rem;">Đáp án: ${q.ans}</span></div><div style="font-size: 1.15rem; line-height: 1.6;">${q.q}</div>${optHtml}</div>`;
+                container.innerHTML += `<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 12px;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><strong style="color: #1d4ed8; font-size: 1.1rem;">Câu ${idx + 1} (${q.type})</strong><span style="color: #16a34a; font-weight: bold; font-size: 1.05rem;">Đáp án: ${q.ans}</span></div><div style="font-size: 1.15rem; line-height: 1.6;">${q.q}</div>${optHtml}</div>`;
             });
             document.getElementById('btn-save-bank-bulk').style.display = 'inline-flex'; renderMath(container);
         }
@@ -1161,8 +1176,8 @@
                 const isChecked = selectedQuestions.some(sq => sq.id === q.id);
                 const item = document.createElement('div'); item.className = 'bank-q-item';
                 let optionsHtml = '';
-                if (q.type === 'MCQ' && q.options) { optionsHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; font-size: 1.15rem; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0;"><div><strong>A.</strong> ${q.options[0] || ''}</div><div><strong>B.</strong> ${q.options[1] || ''}</div><div><strong>C.</strong> ${q.options[2] || ''}</div><div><strong>D.</strong> ${q.options[3] || ''}</div></div>`; } 
-                else if (q.type === 'TF' && q.options) { optionsHtml = `<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 1.15rem; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0;"><div><strong>a)</strong> ${q.options[0] || ''}</div><div><strong>b)</strong> ${q.options[1] || ''}</div><div><strong>c)</strong> ${q.options[2] || ''}</div><div><strong>d)</strong> ${q.options[3] || ''}</div></div>`; }
+                if (q.type === 'MCQ' && q.options) { optionsHtml = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; font-size: 1.05rem; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0;"><div><strong>A.</strong> ${q.options[0] || ''}</div><div><strong>B.</strong> ${q.options[1] || ''}</div><div><strong>C.</strong> ${q.options[2] || ''}</div><div><strong>D.</strong> ${q.options[3] || ''}</div></div>`; } 
+                else if (q.type === 'TF' && q.options) { optionsHtml = `<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-size: 1.05rem; color: #334155; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0;"><div><strong>a)</strong> ${q.options[0] || ''}</div><div><strong>b)</strong> ${q.options[1] || ''}</div><div><strong>c)</strong> ${q.options[2] || ''}</div><div><strong>d)</strong> ${q.options[3] || ''}</div></div>`; }
                 const ansHtml = q.ans ? `<div style="margin-top: 6px; font-size: 0.95rem; color: #16a34a; font-weight: bold;"><i class="fa-solid fa-circle-check"></i> Đáp án: ${q.ans}</div>` : '';
 
                 item.innerHTML = `

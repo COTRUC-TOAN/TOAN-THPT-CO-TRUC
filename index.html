@@ -333,7 +333,7 @@
                 </div>
             </div>
 
-            <!-- 2. NẠP ĐỀ NHANH (ĐÃ LỌC BỎ HOÀN TOÀN CHỮ A,B,C,D TRONG NỘI DUNG) -->
+            <!-- 2. NẠP ĐỀ NHANH (TỰ ĐỘNG CẬP NHẬT BÀI THEO KHỐI & LỌC SẠCH ĐÁP ÁN LẶP) -->
             <div id="sec-t-bulk" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -342,10 +342,11 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="form-row">
                                 <label>Khối Lớp:</label>
-                                <select class="form-input" id="bulk-q-grade">
+                                <select class="form-input" id="bulk-q-grade" onchange="updateTeacherTopicDropdowns()">
                                     <option value="12">Toán 12</option>
                                     <option value="11">Toán 11</option>
                                     <option value="10">Toán 10</option>
+                                    <option value="thpt">Trung học phổ thông Quốc gia</option>
                                 </select>
                             </div>
                             <div class="form-row">
@@ -371,15 +372,7 @@
                             <div class="form-row">
                                 <label>Chuyên Đề / Bài học:</label>
                                 <select class="form-input" id="bulk-q-topic">
-                                    <option value="12-chuong-1">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
-                                    <option value="12-bai-1">-- Bài 1. Tính đơn điệu và cực trị</option>
-                                    <option value="12-bai-2">-- Bài 2. GTLN và GTNN của hàm số</option>
-                                    <option value="12-bai-3">-- Bài 3. Đường tiệm cận</option>
-                                    <option value="12-bai-4">-- Bài 4. Khảo sát & vẽ đồ thị hàm số</option>
-                                    <option value="12-bai-5">-- Bài 5. Ứng dụng đạo hàm thực tiễn</option>
-                                    <option value="12-chuong-2">Chương 2: Vectơ không gian (K12)</option>
-                                    <option value="11-chuong-1">K11: Hàm số & PT Lượng giác</option>
-                                    <option value="10-chuong-1">K10: Mệnh đề & Tập hợp</option>
+                                    <!-- Sẽ tự động đổ danh sách theo khối lớp -->
                                 </select>
                             </div>
                         </div>
@@ -413,7 +406,7 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="form-row">
                                 <label>Khối Lớp:</label>
-                                <select class="form-input" id="add-q-grade">
+                                <select class="form-input" id="add-q-grade" onchange="updateAddQTopicDropdown()">
                                     <option value="12">Toán 12</option>
                                     <option value="11">Toán 11</option>
                                     <option value="10">Toán 10</option>
@@ -433,15 +426,7 @@
                         <div class="form-row">
                             <label>Bài học thuộc KNTT:</label>
                             <select class="form-input" id="add-q-topic">
-                                <option value="12-chuong-1">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
-                                <option value="12-bai-1">-- Bài 1. Tính đơn điệu và cực trị</option>
-                                <option value="12-bai-2">-- Bài 2. GTLN và GTNN của hàm số</option>
-                                <option value="12-bai-3">-- Bài 3. Đường tiệm cận</option>
-                                <option value="12-bai-4">-- Bài 4. Khảo sát & vẽ đồ thị hàm số</option>
-                                <option value="12-bai-5">-- Bài 5. Ứng dụng đạo hàm thực tiễn</option>
-                                <option value="12-chuong-2">Chương 2: Vectơ không gian (K12)</option>
-                                <option value="11-chuong-1">K11: Hàm số & PT Lượng giác</option>
-                                <option value="10-chuong-1">K10: Mệnh đề & Tập hợp</option>
+                                <!-- Đổ dữ liệu động theo khối -->
                             </select>
                         </div>
 
@@ -501,24 +486,17 @@
                         
                         <div class="form-row">
                             <label>Khối Lớp Chính:</label>
-                            <select class="form-input" id="new-exam-grade">
+                            <select class="form-input" id="new-exam-grade" onchange="updateNewExamTopicDropdown()">
                                 <option value="12">Toán 12</option>
                                 <option value="11">Toán 11</option>
                                 <option value="10">Toán 10</option>
+                                <option value="thpt">Trung học phổ thông Quốc gia</option>
                             </select>
                         </div>
                         <div class="form-row">
                             <label>Chuyên Mục Hiển Thị:</label>
                             <select class="form-input" id="new-exam-topic">
-                                <option value="12-chuong-1">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
-                                <option value="12-bai-1">-- Bài 1. Tính đơn điệu và cực trị</option>
-                                <option value="12-bai-2">-- Bài 2. GTLN và GTNN của hàm số</option>
-                                <option value="12-bai-3">-- Bài 3. Đường tiệm cận</option>
-                                <option value="12-bai-4">-- Bài 4. Khảo sát & vẽ đồ thị hàm số</option>
-                                <option value="12-bai-5">-- Bài 5. Ứng dụng đạo hàm thực tiễn</option>
-                                <option value="12-chuong-2">Chương 2: Vectơ không gian (K12)</option>
-                                <option value="11-chuong-1">K11: Hàm số & PT Lượng giác</option>
-                                <option value="10-chuong-1">K10: Mệnh đề & Tập hợp</option>
+                                <!-- Đổ dữ liệu động -->
                             </select>
                         </div>
                         <div class="form-row">
@@ -577,7 +555,7 @@
 
                         <!-- BỘ LỌC ĐA NĂNG -->
                         <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px;">
-                            <select class="form-input" id="bank-filter-grade" onchange="filterQuestionBankList()">
+                            <select class="form-input" id="bank-filter-grade" onchange="updateBankFilterTopics(); filterQuestionBankList();">
                                 <option value="all">-- Tất cả Khối --</option>
                                 <option value="12">Khối 12</option>
                                 <option value="11">Khối 11</option>
@@ -585,10 +563,6 @@
                             </select>
                             <select class="form-input" id="bank-filter-topic" onchange="filterQuestionBankList()">
                                 <option value="all">-- Tất cả Bài / Chương --</option>
-                                <option value="12-chuong-1">Chương 1: Khảo sát hàm số & Đạo hàm</option>
-                                <option value="12-bai-1">-- Bài 1. Đơn điệu & Cực trị</option>
-                                <option value="12-bai-2">-- Bài 2. GTLN & GTNN</option>
-                                <option value="12-bai-3">-- Bài 3. Tiệm cận</option>
                             </select>
                         </div>
 
@@ -707,7 +681,6 @@
             if (activeExam && activeExam.mode === 'KIEMTRA') e.preventDefault();
         });
 
-        /* MỤC LỤC CHI TIẾT TỪNG CHƯƠNG & TỪNG BÀI KNTT CHO CẢ 3 KHỐI */
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
@@ -718,16 +691,16 @@
                 { id: 'thpt-qg', name: 'Luyện đề Tốt Nghiệp THPT', icon: 'fa-award' }
             ],
             g12: [
-                { type: 'header', title: 'CHƯƠNG I. ỨNG DỤNG ĐẠO HÀM KHẢO SÁT HÀM SỐ' },
+                { type: 'header', title: 'CHƯƠNG I. ỨNG DỤNG ĐẠO HÀM' },
                 { id: '12-chuong-1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
                 { id: '12-bai-1', name: 'Bài 1. Tính đơn điệu và cực trị', icon: 'fa-chart-line' },
-                { id: '12-bai-2', name: 'Bài 2. GTLN và GTNN của hàm số', icon: 'fa-arrow-trend-up' },
-                { id: '12-bai-3', name: 'Bài 3. Đường tiệm cận của đồ thị', icon: 'fa-arrows-split-up-and-left' },
-                { id: '12-bai-4', name: 'Bài 4. Khảo sát biến thiên & vẽ đồ thị', icon: 'fa-pen-ruler' },
-                { id: '12-bai-5', name: 'Bài 5. Ứng dụng đạo hàm giải quyết thực tiễn', icon: 'fa-lightbulb' },
+                { id: '12-bai-2', name: 'Bài 2. GTLN và GTNN', icon: 'fa-arrow-trend-up' },
+                { id: '12-bai-3', name: 'Bài 3. Đường tiệm cận', icon: 'fa-arrows-split-up-and-left' },
+                { id: '12-bai-4', name: 'Bài 4. Khảo sát & vẽ đồ thị', icon: 'fa-pen-ruler' },
+                { id: '12-bai-5', name: 'Bài 5. Ứng dụng đạo hàm thực tiễn', icon: 'fa-lightbulb' },
                 { type: 'header', title: 'CHƯƠNG II. VECTƠ TRONG KHÔNG GIAN' },
                 { id: '12-chuong-2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
-                { id: '12-bai-6', name: 'Bài 6. Vectơ trong không gian', icon: 'fa-location-arrow' },
+                { id: '12-bai-6', name: 'Bài 6. Vectơ không gian', icon: 'fa-location-arrow' },
                 { id: '12-bai-7', name: 'Bài 7. Hệ trục tọa độ không gian', icon: 'fa-cube' },
                 { id: '12-bai-8', name: 'Bài 8. Biểu thức tọa độ vectơ', icon: 'fa-calculator' },
                 { type: 'header', title: 'CHƯƠNG III. THỐNG KÊ (GHÉP NHÓM)' },
@@ -748,12 +721,12 @@
                 { type: 'header', title: 'CHƯƠNG VI. XÁC SUẤT CÓ ĐIỀU KIỆN' },
                 { id: '12-chuong-6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
                 { id: '12-bai-18', name: 'Bài 18. Xác suất có điều kiện', icon: 'fa-dice' },
-                { id: '12-bai-19', name: 'Bài 19. Công thức xác suất toàn phần & Bayes', icon: 'fa-network-wired' }
+                { id: '12-bai-19', name: 'Bài 19. Xác suất toàn phần & Bayes', icon: 'fa-network-wired' }
             ],
             g11: [
                 { type: 'header', title: 'CHƯƠNG I. HÀM SỐ LƯỢNG GIÁC' },
                 { id: '11-chuong-1', name: 'Tổng hợp Chương 1 (K11)', icon: 'fa-folder-open' },
-                { id: '11-bai-1', name: 'Bài 1. Giá trị lượng giác góc lượng giác', icon: 'fa-wave-square' },
+                { id: '11-bai-1', name: 'Bài 1. Giá trị lượng giác', icon: 'fa-wave-square' },
                 { id: '11-bai-2', name: 'Bài 2. Công thức lượng giác', icon: 'fa-square-root-variable' },
                 { id: '11-bai-3', name: 'Bài 3. Hàm số lượng giác', icon: 'fa-chart-line' },
                 { id: '11-bai-4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' },
@@ -768,10 +741,10 @@
                 { id: '10-chuong-1', name: 'Tổng hợp Chương 1 (K10)', icon: 'fa-folder-open' },
                 { id: '10-bai-1', name: 'Bài 1. Mệnh đề', icon: 'fa-check' },
                 { id: '10-bai-2', name: 'Bài 2. Tập hợp và các phép toán', icon: 'fa-object-group' },
-                { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH BẬC NHẤT' },
+                { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH' },
                 { id: '10-chuong-2', name: 'Tổng hợp Chương 2 (K10)', icon: 'fa-folder-open' },
                 { id: '10-bai-3', name: 'Bài 3. Bất phương trình bậc nhất hai ẩn', icon: 'fa-table-cells' },
-                { id: '10-bai-4', name: 'Bài 4. Hệ bất phương trình bậc nhất hai ẩn', icon: 'fa-table' }
+                { id: '10-bai-4', name: 'Bài 4. Hệ bất phương trình hai ẩn', icon: 'fa-table' }
             ]
         };
 
@@ -797,6 +770,64 @@
                     li.innerHTML = `<i class="fa-solid ${item.icon}"></i> <span>${item.name}</span>`;
                     li.onclick = () => filterTopic(item.id, li);
                     container.appendChild(li);
+                }
+            });
+        }
+
+        // Cập nhật danh sách bài học động theo khối lớp cho giáo viên
+        function getTopicsForGrade(grade) {
+            let res = [...topicsConfig.general];
+            if (grade === '12') res = res.concat(topicsConfig.g12);
+            else if (grade === '11') res = res.concat(topicsConfig.g11);
+            else if (grade === '10') res = res.concat(topicsConfig.g10);
+            else res = res.concat(topicsConfig.g12, topicsConfig.g11, topicsConfig.g10);
+            return res;
+        }
+
+        function updateTeacherTopicDropdowns() {
+            const grade = document.getElementById('bulk-q-grade').value;
+            const select = document.getElementById('bulk-q-topic');
+            select.innerHTML = '';
+            const items = getTopicsForGrade(grade);
+            items.forEach(item => {
+                if (item.type !== 'header') {
+                    select.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+                }
+            });
+        }
+
+        function updateAddQTopicDropdown() {
+            const grade = document.getElementById('add-q-grade').value;
+            const select = document.getElementById('add-q-topic');
+            select.innerHTML = '';
+            const items = getTopicsForGrade(grade);
+            items.forEach(item => {
+                if (item.type !== 'header') {
+                    select.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+                }
+            });
+        }
+
+        function updateNewExamTopicDropdown() {
+            const grade = document.getElementById('new-exam-grade').value;
+            const select = document.getElementById('new-exam-topic');
+            select.innerHTML = '';
+            const items = getTopicsForGrade(grade);
+            items.forEach(item => {
+                if (item.type !== 'header') {
+                    select.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+                }
+            });
+        }
+
+        function updateBankFilterTopics() {
+            const grade = document.getElementById('bank-filter-grade').value;
+            const select = document.getElementById('bank-filter-topic');
+            select.innerHTML = `<option value="all">-- Tất cả Bài / Chương --</option>`;
+            const items = getTopicsForGrade(grade);
+            items.forEach(item => {
+                if (item.type !== 'header') {
+                    select.innerHTML += `<option value="${item.id}">${item.name}</option>`;
                 }
             });
         }
@@ -921,6 +952,10 @@
                     populateClassAndExamFilters();
                     applyScoreFilters();
                     loadQuestionBank();
+                    updateTeacherTopicDropdowns();
+                    updateAddQTopicDropdown();
+                    updateNewExamTopicDropdown();
+                    updateBankFilterTopics();
                 } else {
                     alert("❌ Sai mật khẩu quản lý!");
                 }
@@ -1130,8 +1165,8 @@
                 let explanation = '';
 
                 if (qType === 'MCQ') {
-                    // Cắt bỏ hoàn toàn phần chữ A., B., C., D. phía dưới ra khỏi câu hỏi chính để không bị lặp
-                    qContent = trimmed.split(/(?:^|\s|\n)[A-D]\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                    // Cắt bỏ hoàn toàn từ chữ A. hoặc A) trở đi khỏi nội dung chính để loại bỏ triệt để việc lặp
+                    qContent = trimmed.split(/(?:^|\s|\n)A\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
 
                     ['A', 'B', 'C', 'D'].forEach((char, idx) => {
                         const optMatch = trimmed.match(new RegExp(`(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[A-D]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
@@ -1143,7 +1178,7 @@
                     else ans = 'A';
                 }
                 else if (qType === 'TF') {
-                    qContent = trimmed.split(/(?:^|\s|\n)[a-d]\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                    qContent = trimmed.split(/(?:^|\s|\n)a\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
 
                     ['a', 'b', 'c', 'd'].forEach((char, idx) => {
                         const optMatch = trimmed.match(new RegExp(`(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[a-d]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
@@ -1163,11 +1198,11 @@
                     if (ansMatch) ans = ansMatch[1].trim();
                 }
 
-                // Nếu có chứa ảnh bảng biến thiên, ưu tiên lấy định dạng chứa ảnh
+                // Xử lý sạch phần HTML/ảnh để không bị dính cụm đáp án thô
                 if (rawHtml.includes('<img')) {
-                    // Tách phần text trước chữ A, đồng thời giữ lại thẻ img nếu có trong block
-                    const parts = rawHtml.split(/(?:^|<br>|\s)[A-D]\s*[\).]/);
-                    qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                    // Lấy phần trước chữ A viết hoa đầu tiên
+                    const cleanHtmlParts = rawHtml.split(/(?:^|<br>|\s)[A]\s*[\).]/);
+                    qContent = cleanHtmlParts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
                 }
 
                 const expMatch = trimmed.match(/(?:Lời giải|Hướng dẫn giải)\s*[:\-]?\s*(.*$)/is);
@@ -1878,7 +1913,7 @@
                 if (data.status === "success") {
                     const resDiv = document.getElementById('quiz-result');
                     resDiv.style.display = 'block';
-                    resDiv.innerHTML = `🎉 Điểm số của bạn: <strong>${data.totalScore} / 10</strong><br><small>(P.I: ${data.p1Score}đ | P.II: ${data.p2Score}đ | P.III: ${data.p3Score}đ)</small><br><span style="color: #15803d; font-size: 0.95rem;">Đã ghi nhận kết quả vào sổ điểm giáo viên!</span>`;
+                    resDiv.innerHTML = `🎉 Điểm số của bạn: <strong>${data.totalScore} / 10</strong><br><small>(P.I: ${data.p1Score}đ | P.II: ${data.p2Score}đ | P.III: ${data.p3Score}đ)</small><br><span style="color: #15803d; font-size: 0.95rem;">Graded & saved!</span>`;
                     btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Đã hoàn thành nộp bài';
 
                     if (activeExam.mode === 'LUYENTAP' && data.details) {

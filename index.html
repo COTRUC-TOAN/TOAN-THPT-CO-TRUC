@@ -72,14 +72,14 @@
         .grade-pill:hover { background: #f1f5f9; }
         .grade-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3); }
 
-        .portal-layout { display: grid; grid-template-columns: 290px 1fr; gap: 25px; align-items: start; }
+        .portal-layout { display: grid; grid-template-columns: 330px 1fr; gap: 25px; align-items: start; }
         @media (max-width: 900px) { .portal-layout { grid-template-columns: 1fr; } }
 
         .sidebar { background: var(--card-bg); border-radius: var(--radius-lg); padding: 18px 14px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .sidebar-title { font-size: 1.05rem; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .topic-list { list-style: none; display: flex; flex-direction: column; gap: 4px; max-height: 70vh; overflow-y: auto; padding-right: 4px; }
-        .topic-group-title { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #94a3b8; margin: 10px 0 4px 8px; letter-spacing: 0.5px; }
-        .topic-item { padding: 9px 12px; border-radius: var(--radius-md); font-size: 0.92rem; font-weight: 600; color: #475569; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+        .topic-group-title { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #1e40af; background: #eff6ff; padding: 6px 10px; border-radius: 6px; margin: 12px 0 6px 0; letter-spacing: 0.5px; }
+        .topic-item { padding: 8px 12px; border-radius: var(--radius-md); font-size: 0.88rem; font-weight: 600; color: #475569; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
         .topic-item:hover { background: #f1f5f9; color: var(--primary); }
         .topic-item.active { background: #eff6ff; color: var(--primary); font-weight: 700; border-left: 3px solid var(--primary); }
 
@@ -247,7 +247,7 @@
 
             <div class="portal-layout">
                 <aside class="sidebar">
-                    <div class="sidebar-title"><i class="fa-solid fa-shapes"></i> Danh Mục Chuyên Đề</div>
+                    <div class="sidebar-title"><i class="fa-solid fa-shapes"></i> Mục Lục KNTT</div>
                     <ul class="topic-list" id="topic-container"></ul>
                 </aside>
 
@@ -333,7 +333,7 @@
                 </div>
             </div>
 
-            <!-- 2. NẠP ĐỀ NHANH (DÁN LATEX & ẢNH, KHÔNG LẶP ĐÁP ÁN) -->
+            <!-- 2. NẠP ĐỀ NHANH (ĐÃ LỌC BỎ HOÀN TOÀN CHỮ A,B,C,D TRONG NỘI DUNG) -->
             <div id="sec-t-bulk" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -349,7 +349,7 @@
                                 </select>
                             </div>
                             <div class="form-row">
-                                <label>Dạng Câu HỏI (Mặc định khi bóc tách):</label>
+                                <label>Dạng Câu Hỏi:</label>
                                 <select class="form-input" id="bulk-q-type-default">
                                     <option value="MCQ">Trắc nghiệm 4 lựa chọn (MCQ)</option>
                                     <option value="TF">Đúng / Sai (TF)</option>
@@ -369,23 +369,17 @@
                                 </select>
                             </div>
                             <div class="form-row">
-                                <label>Chuyên Đề:</label>
+                                <label>Chuyên Đề / Bài học:</label>
                                 <select class="form-input" id="bulk-q-topic">
-                                    <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
-                                    <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian (K12)</option>
-                                    <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm (K12)</option>
-                                    <option value="12-nguyen-ham-tich-phan">Chương 4: Nguyên hàm & Tích phân (K12)</option>
-                                    <option value="12-oxyz">Chương 5: Phương pháp tọa độ Oxyz (K12)</option>
-                                    <option value="12-xac-suat">Chương 6: Xác suất có điều kiện (K12)</option>
-                                    <option value="giua-ki-1">Kiểm tra Giữa Kì 1</option>
-                                    <option value="hoc-ki-1">Kiểm tra Học Kì 1</option>
-                                    <option value="giua-ki-2">Kiểm tra Giữa Kì 2</option>
-                                    <option value="hoc-ki-2">Kiểm tra Học Kì 2</option>
-                                    <option value="thpt-qg">Luyện đề Tốt Nghiệp THPT</option>
-                                    <option value="11-luong-giac">K11: Hàm số & PT Lượng giác</option>
-                                    <option value="11-day-so-cap-so">K11: Dãy số, Cấp số cộng & Nhân</option>
-                                    <option value="10-menh-de-tap-hop">K10: Mệnh đề & Tập hợp</option>
-                                    <option value="10-he-thuc-luong">K10: Hệ thức lượng trong tam giác</option>
+                                    <option value="12-chuong-1">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
+                                    <option value="12-bai-1">-- Bài 1. Tính đơn điệu và cực trị</option>
+                                    <option value="12-bai-2">-- Bài 2. GTLN và GTNN của hàm số</option>
+                                    <option value="12-bai-3">-- Bài 3. Đường tiệm cận</option>
+                                    <option value="12-bai-4">-- Bài 4. Khảo sát & vẽ đồ thị hàm số</option>
+                                    <option value="12-bai-5">-- Bài 5. Ứng dụng đạo hàm thực tiễn</option>
+                                    <option value="12-chuong-2">Chương 2: Vectơ không gian (K12)</option>
+                                    <option value="11-chuong-1">K11: Hàm số & PT Lượng giác</option>
+                                    <option value="10-chuong-1">K10: Mệnh đề & Tập hợp</option>
                                 </select>
                             </div>
                         </div>
@@ -437,18 +431,17 @@
                         </div>
 
                         <div class="form-row">
-                            <label>Chuyên Đề:</label>
+                            <label>Bài học thuộc KNTT:</label>
                             <select class="form-input" id="add-q-topic">
-                                <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
-                                <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian (K12)</option>
-                                <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm (K12)</option>
-                                <option value="12-nguyen-ham-tich-phan">Chương 4: Nguyên hàm & Tích phân (K12)</option>
-                                <option value="12-oxyz">Chương 5: Phương pháp tọa độ Oxyz (K12)</option>
-                                <option value="12-xac-suat">Chương 6: Xác suất có điều kiện (K12)</option>
-                                <option value="11-luong-giac">K11: Hàm số & PT Lượng giác</option>
-                                <option value="11-day-so-cap-so">K11: Dãy số, Cấp số cộng & Nhân</option>
-                                <option value="10-menh-de-tap-hop">K10: Mệnh đề & Tập hợp</option>
-                                <option value="10-he-thuc-luong">K10: Hệ thức lượng trong tam giác</option>
+                                <option value="12-chuong-1">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
+                                <option value="12-bai-1">-- Bài 1. Tính đơn điệu và cực trị</option>
+                                <option value="12-bai-2">-- Bài 2. GTLN và GTNN của hàm số</option>
+                                <option value="12-bai-3">-- Bài 3. Đường tiệm cận</option>
+                                <option value="12-bai-4">-- Bài 4. Khảo sát & vẽ đồ thị hàm số</option>
+                                <option value="12-bai-5">-- Bài 5. Ứng dụng đạo hàm thực tiễn</option>
+                                <option value="12-chuong-2">Chương 2: Vectơ không gian (K12)</option>
+                                <option value="11-chuong-1">K11: Hàm số & PT Lượng giác</option>
+                                <option value="10-chuong-1">K10: Mệnh đề & Tập hợp</option>
                             </select>
                         </div>
 
@@ -517,21 +510,15 @@
                         <div class="form-row">
                             <label>Chuyên Mục Hiển Thị:</label>
                             <select class="form-input" id="new-exam-topic">
-                                <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
-                                <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian (K12)</option>
-                                <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm (K12)</option>
-                                <option value="12-nguyen-ham-tich-phan">Chương 4: Nguyên hàm & Tích phân (K12)</option>
-                                <option value="12-oxyz">Chương 5: Phương pháp tọa độ Oxyz (K12)</option>
-                                <option value="12-xac-suat">Chương 6: Xác suất có điều kiện (K12)</option>
-                                <option value="giua-ki-1">Kiểm tra Giữa Kì 1</option>
-                                <option value="hoc-ki-1">Kiểm tra Học Kì 1</option>
-                                <option value="giua-ki-2">Kiểm tra Giữa Kì 2</option>
-                                <option value="hoc-ki-2">Kiểm tra Học Kì 2</option>
-                                <option value="thpt-qg">Luyện Đề Tốt Nghiệp THPT</option>
-                                <option value="11-luong-giac">K11: Hàm số & PT Lượng giác</option>
-                                <option value="11-day-so-cap-so">K11: Dãy số, Cấp số cộng & Nhân</option>
-                                <option value="10-menh-de-tap-hop">K10: Mệnh đề & Tập hợp</option>
-                                <option value="10-he-thuc-luong">K10: Hệ thức lượng trong tam giác</option>
+                                <option value="12-chuong-1">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
+                                <option value="12-bai-1">-- Bài 1. Tính đơn điệu và cực trị</option>
+                                <option value="12-bai-2">-- Bài 2. GTLN và GTNN của hàm số</option>
+                                <option value="12-bai-3">-- Bài 3. Đường tiệm cận</option>
+                                <option value="12-bai-4">-- Bài 4. Khảo sát & vẽ đồ thị hàm số</option>
+                                <option value="12-bai-5">-- Bài 5. Ứng dụng đạo hàm thực tiễn</option>
+                                <option value="12-chuong-2">Chương 2: Vectơ không gian (K12)</option>
+                                <option value="11-chuong-1">K11: Hàm số & PT Lượng giác</option>
+                                <option value="10-chuong-1">K10: Mệnh đề & Tập hợp</option>
                             </select>
                         </div>
                         <div class="form-row">
@@ -597,17 +584,11 @@
                                 <option value="10">Khối 10</option>
                             </select>
                             <select class="form-input" id="bank-filter-topic" onchange="filterQuestionBankList()">
-                                <option value="all">-- Tất cả Chuyên Đề --</option>
-                                <option value="12-ham-so">K12: Khảo sát hàm số & Đạo hàm</option>
-                                <option value="12-vecto-khong-gian">K12: Vectơ & Tọa độ không gian</option>
-                                <option value="12-thong-ke">K12: Thống kê số liệu ghép nhóm</option>
-                                <option value="12-nguyen-ham-tich-phan">K12: Nguyên hàm & Tích phân</option>
-                                <option value="12-oxyz">K12: Tọa độ Oxyz</option>
-                                <option value="12-xac-suat">K12: Xác suất có điều kiện</option>
-                                <option value="11-luong-giac">K11: Hàm số & PT Lượng giác</option>
-                                <option value="11-day-so-cap-so">K11: Cấp số cộng & Cấp số nhân</option>
-                                <option value="10-menh-de-tap-hop">K10: Mệnh đề & Tập hợp</option>
-                                <option value="10-he-thuc-luong">K10: Hệ thức lượng trong tam giác</option>
+                                <option value="all">-- Tất cả Bài / Chương --</option>
+                                <option value="12-chuong-1">Chương 1: Khảo sát hàm số & Đạo hàm</option>
+                                <option value="12-bai-1">-- Bài 1. Đơn điệu & Cực trị</option>
+                                <option value="12-bai-2">-- Bài 2. GTLN & GTNN</option>
+                                <option value="12-bai-3">-- Bài 3. Tiệm cận</option>
                             </select>
                         </div>
 
@@ -674,9 +655,7 @@
             
             <div class="kahoot-question" id="kahoot-q-text">Đang tải câu hỏi...</div>
             
-            <div class="kahoot-options-grid" id="kahoot-options-grid">
-                <!-- Các nút đáp án Kahoot -->
-            </div>
+            <div class="kahoot-options-grid" id="kahoot-options-grid"></div>
         </div>
     </div>
 
@@ -713,7 +692,6 @@
         let secondsRemaining = 0;
         let cheatWarnings = 0;
 
-        // Biến cho chế độ Kahoot
         let kahootCurrentIndex = 0;
         let kahootScore = 0;
         let kahootTimer = null;
@@ -729,6 +707,7 @@
             if (activeExam && activeExam.mode === 'KIEMTRA') e.preventDefault();
         });
 
+        /* MỤC LỤC CHI TIẾT TỪNG CHƯƠNG & TỪNG BÀI KNTT CHO CẢ 3 KHỐI */
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
@@ -739,29 +718,60 @@
                 { id: 'thpt-qg', name: 'Luyện đề Tốt Nghiệp THPT', icon: 'fa-award' }
             ],
             g12: [
-                { type: 'header', title: 'SGK Toán 12 (KNTT)' },
-                { id: '12-ham-so', name: 'Chương 1: Khảo sát hàm số & Đạo hàm', icon: 'fa-chart-line' },
-                { id: '12-vecto-khong-gian', name: 'Chương 2: Vectơ & Tọa độ không gian', icon: 'fa-location-arrow' },
-                { id: '12-thong-ke', name: 'Chương 3: Thống kê số liệu ghép nhóm', icon: 'fa-chart-simple' },
-                { id: '12-nguyen-ham-tich-phan', name: 'Chương 4: Nguyên hàm & Tích phân', icon: 'fa-infinity' },
-                { id: '12-oxyz', name: 'Chương 5: Phương pháp tọa độ Oxyz', icon: 'fa-cube' },
-                { id: '12-xac-suat', name: 'Chương 6: Xác suất có điều kiện', icon: 'fa-dice' }
+                { type: 'header', title: 'CHƯƠNG I. ỨNG DỤNG ĐẠO HÀM KHẢO SÁT HÀM SỐ' },
+                { id: '12-chuong-1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
+                { id: '12-bai-1', name: 'Bài 1. Tính đơn điệu và cực trị', icon: 'fa-chart-line' },
+                { id: '12-bai-2', name: 'Bài 2. GTLN và GTNN của hàm số', icon: 'fa-arrow-trend-up' },
+                { id: '12-bai-3', name: 'Bài 3. Đường tiệm cận của đồ thị', icon: 'fa-arrows-split-up-and-left' },
+                { id: '12-bai-4', name: 'Bài 4. Khảo sát biến thiên & vẽ đồ thị', icon: 'fa-pen-ruler' },
+                { id: '12-bai-5', name: 'Bài 5. Ứng dụng đạo hàm giải quyết thực tiễn', icon: 'fa-lightbulb' },
+                { type: 'header', title: 'CHƯƠNG II. VECTƠ TRONG KHÔNG GIAN' },
+                { id: '12-chuong-2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
+                { id: '12-bai-6', name: 'Bài 6. Vectơ trong không gian', icon: 'fa-location-arrow' },
+                { id: '12-bai-7', name: 'Bài 7. Hệ trục tọa độ không gian', icon: 'fa-cube' },
+                { id: '12-bai-8', name: 'Bài 8. Biểu thức tọa độ vectơ', icon: 'fa-calculator' },
+                { type: 'header', title: 'CHƯƠNG III. THỐNG KÊ (GHÉP NHÓM)' },
+                { id: '12-chuong-3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
+                { id: '12-bai-9', name: 'Bài 9. Khoảng biến thiên & tứ phân vị', icon: 'fa-chart-simple' },
+                { id: '12-bai-10', name: 'Bài 10. Phương sai & độ lệch chuẩn', icon: 'fa-chart-pie' },
+                { type: 'header', title: 'CHƯƠNG IV. NGUYÊN HÀM & TÍCH PHÂN' },
+                { id: '12-chuong-4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
+                { id: '12-bai-11', name: 'Bài 11. Nguyên hàm', icon: 'fa-infinity' },
+                { id: '12-bai-12', name: 'Bài 12. Tích phân', icon: 'fa-square-root-variable' },
+                { id: '12-bai-13', name: 'Bài 13. Ứng dụng hình học tích phân', icon: 'fa-shapes' },
+                { type: 'header', title: 'CHƯƠNG V. TOẠ ĐỘ KHÔNG GIAN OXYZ' },
+                { id: '12-chuong-5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
+                { id: '12-bai-14', name: 'Bài 14. Phương trình mặt phẳng', icon: 'fa-square' },
+                { id: '12-bai-15', name: 'Bài 15. Phương trình đường thẳng', icon: 'fa-bars' },
+                { id: '12-bai-16', name: 'Bài 16. Góc trong không gian', icon: 'fa-draw-polygon' },
+                { id: '12-bai-17', name: 'Bài 17. Phương trình mặt cầu', icon: 'fa-circle' },
+                { type: 'header', title: 'CHƯƠNG VI. XÁC SUẤT CÓ ĐIỀU KIỆN' },
+                { id: '12-chuong-6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
+                { id: '12-bai-18', name: 'Bài 18. Xác suất có điều kiện', icon: 'fa-dice' },
+                { id: '12-bai-19', name: 'Bài 19. Công thức xác suất toàn phần & Bayes', icon: 'fa-network-wired' }
             ],
             g11: [
-                { type: 'header', title: 'SGK Toán 11 (KNTT)' },
-                { id: '11-luong-giac', name: 'Chương 1: Hàm số & PT Lượng giác', icon: 'fa-wave-square' },
-                { id: '11-day-so-cap-so', name: 'Chương 2: Dãy số, Cấp số cộng & Nhân', icon: 'fa-arrow-up-right-dots' },
-                { id: '11-thong-ke', name: 'Chương 3: Số đặc trưng mẫu số liệu', icon: 'fa-chart-pie' },
-                { id: '11-song-song', name: 'Chương 4: Quan hệ song song không gian', icon: 'fa-bars' },
-                { id: '11-gioi-han', name: 'Chương 5: Giới hạn & Hàm liên tục', icon: 'fa-arrows-split-up-and-left' },
-                { id: '11-mu-logarit', name: 'Chương 6: Hàm số Mũ & Logarit', icon: 'fa-square-root-variable' }
+                { type: 'header', title: 'CHƯƠNG I. HÀM SỐ LƯỢNG GIÁC' },
+                { id: '11-chuong-1', name: 'Tổng hợp Chương 1 (K11)', icon: 'fa-folder-open' },
+                { id: '11-bai-1', name: 'Bài 1. Giá trị lượng giác góc lượng giác', icon: 'fa-wave-square' },
+                { id: '11-bai-2', name: 'Bài 2. Công thức lượng giác', icon: 'fa-square-root-variable' },
+                { id: '11-bai-3', name: 'Bài 3. Hàm số lượng giác', icon: 'fa-chart-line' },
+                { id: '11-bai-4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' },
+                { type: 'header', title: 'CHƯƠNG II. DÃY SỐ - CẤP SỐ' },
+                { id: '11-chuong-2', name: 'Tổng hợp Chương 2 (K11)', icon: 'fa-folder-open' },
+                { id: '11-bai-5', name: 'Bài 5. Dãy số', icon: 'fa-list-ol' },
+                { id: '11-bai-6', name: 'Bài 6. Cấp số cộng', icon: 'fa-plus' },
+                { id: '11-bai-7', name: 'Bài 7. Cấp số nhân', icon: 'fa-xmark' }
             ],
             g10: [
-                { type: 'header', title: 'SGK Toán 10 (KNTT)' },
-                { id: '10-menh-de-tap-hop', name: 'Chương 1: Mệnh đề & Tập hợp', icon: 'fa-cubes' },
-                { id: '10-bpt-he-bpt', name: 'Chương 2: BPT & Hệ BPT bậc nhất hai ẩn', icon: 'fa-table-cells-large' },
-                { id: '10-he-thuc-luong', name: 'Chương 3: Hệ thức lượng trong tam giác', icon: 'fa-draw-polygon' },
-                { id: '10-vecto', name: 'Chương 4: Vectơ', icon: 'fa-arrow-right' }
+                { type: 'header', title: 'CHƯƠNG I. MỆNH ĐỀ & TẬP HỢP' },
+                { id: '10-chuong-1', name: 'Tổng hợp Chương 1 (K10)', icon: 'fa-folder-open' },
+                { id: '10-bai-1', name: 'Bài 1. Mệnh đề', icon: 'fa-check' },
+                { id: '10-bai-2', name: 'Bài 2. Tập hợp và các phép toán', icon: 'fa-object-group' },
+                { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH BẬC NHẤT' },
+                { id: '10-chuong-2', name: 'Tổng hợp Chương 2 (K10)', icon: 'fa-folder-open' },
+                { id: '10-bai-3', name: 'Bài 3. Bất phương trình bậc nhất hai ẩn', icon: 'fa-table-cells' },
+                { id: '10-bai-4', name: 'Bài 4. Hệ bất phương trình bậc nhất hai ẩn', icon: 'fa-table' }
             ]
         };
 
@@ -1089,7 +1099,7 @@
         }
 
         /* -------------------------------------------------------------------------
-           BỘ BÓC TÁCH ĐỀ NHANH (ĐÃ KHẮC PHỤC LỖI LẶP ĐÁP ÁN & CÓ CHỌN DẠNG)
+           BỘ BÓC TÁCH ĐỀ NHANH (LOẠI BỎ TRIỆT ĐỂ CHỮ A, B, C, D TRONG NỘI DUNG)
         ------------------------------------------------------------------------- */
         function parseBulkRawExam() {
             const rawContainer = document.getElementById('bulk-raw-text');
@@ -1120,7 +1130,7 @@
                 let explanation = '';
 
                 if (qType === 'MCQ') {
-                    // Tự động cắt bỏ phần đáp án A, B, C, D ra khỏi nội dung đề bài chính để không bị lặp
+                    // Cắt bỏ hoàn toàn phần chữ A., B., C., D. phía dưới ra khỏi câu hỏi chính để không bị lặp
                     qContent = trimmed.split(/(?:^|\s|\n)[A-D]\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
 
                     ['A', 'B', 'C', 'D'].forEach((char, idx) => {
@@ -1153,9 +1163,11 @@
                     if (ansMatch) ans = ansMatch[1].trim();
                 }
 
-                // Nếu có ảnh dán vào, giữ nguyên hình ảnh trong qContent
+                // Nếu có chứa ảnh bảng biến thiên, ưu tiên lấy định dạng chứa ảnh
                 if (rawHtml.includes('<img')) {
-                    qContent = rawHtml;
+                    // Tách phần text trước chữ A, đồng thời giữ lại thẻ img nếu có trong block
+                    const parts = rawHtml.split(/(?:^|<br>|\s)[A-D]\s*[\).]/);
+                    qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
                 }
 
                 const expMatch = trimmed.match(/(?:Lời giải|Hướng dẫn giải)\s*[:\-]?\s*(.*$)/is);
@@ -1605,7 +1617,6 @@
 
         function closeTheoryModal() { document.getElementById('theory-modal').style.display = 'none'; }
 
-        /* BẮT ĐẦU LÀM BÀI (PHÂN LOẠI THEO CHẾ ĐỘ TRUYỀN THỐNG HOẶC KAHOOT) */
         function startExam(id) {
             activeExam = examBank.find(e => e.id === id);
             if (!activeExam) return;
@@ -1620,7 +1631,6 @@
             }
         }
 
-        /* KHỞI ĐỘNG CHẾ ĐỘ KAHOOT */
         function startKahootMode() {
             document.getElementById('kahoot-view').style.display = 'block';
             kahootCurrentIndex = 0;
@@ -1631,7 +1641,6 @@
         function loadKahootQuestion() {
             const mcqQuestions = activeExam.questions.filter(q => q.type === 'MCQ');
             if (kahootCurrentIndex >= mcqQuestions.length) {
-                // Hoàn thành Kahoot
                 document.getElementById('kahoot-view').innerHTML = `
                     <div style="padding: 40px; text-align: center;">
                         <i class="fa-solid fa-trophy" style="font-size: 4rem; color: #fbbf24; margin-bottom: 20px;"></i>
@@ -1660,7 +1669,6 @@
 
             renderMath(document.getElementById('kahoot-view'));
 
-            // Đếm ngược Kahoot (20 giây/câu)
             kahootSeconds = 20;
             document.getElementById('kahoot-timer-val').innerText = kahootSeconds;
             clearInterval(kahootTimer);
@@ -1669,7 +1677,6 @@
                 document.getElementById('kahoot-timer-val').innerText = kahootSeconds;
                 if (kahootSeconds <= 0) {
                     clearInterval(kahootTimer);
-                    // Hết giờ tính là sai, chuyển câu tiếp
                     kahootCurrentIndex++;
                     loadKahootQuestion();
                 }
@@ -1679,7 +1686,7 @@
         function answerKahoot(selected, correct) {
             clearInterval(kahootTimer);
             if (selected === correct.trim().toUpperCase()) {
-                kahootScore += 10 + kahootSeconds; // Thưởng điểm theo tốc độ thời gian còn lại
+                kahootScore += 10 + kahootSeconds;
                 alert("✨ Chính xác! Tuyệt vời.");
             } else {
                 alert(`❌ Sai rồi! Đáp án đúng là: ${correct}`);
@@ -1688,7 +1695,6 @@
             loadKahootQuestion();
         }
 
-        /* CHẾ ĐỘ LÀM BÀI TRUYỀN THỐNG (LUYỆN TẬP / KIỂM TRA) */
         function startTraditionalExamMode() {
             document.getElementById('quiz-view').style.display = 'block';
             document.getElementById('quiz-title').innerText = activeExam.title;

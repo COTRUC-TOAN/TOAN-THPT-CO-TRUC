@@ -375,7 +375,7 @@
                 </div>
             </div>
 
-            <!-- TẠO & SOẠN ĐỀ TỪ NGÂN HÀNG HOẶC DÁN NHANH -->
+            <!-- 4. TẠO & SOẠN ĐỀ TỪ NGÂN HÀNG HOẶC DÁN NHANH -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -829,7 +829,7 @@
         }
 
         async function openTeacherLogin() {
-            // Không để sẵn mật khẩu nữa, ô nhập trắng tinh
+            // XÓA SẠCH mật khẩu để trống hoàn toàn
             const pass = prompt("🔐 Vui lòng nhập Mật khẩu Quản lý Giáo viên:");
             if (!pass) return;
             
@@ -949,11 +949,13 @@
             } catch (err) { alert("Lỗi kết nối khi lưu câu hỏi!"); }
         }
 
-        // BỘ LỌC BÓC TÁCH MỚI: CHIA CẮT TRIỆT ĐỂ, KHÔNG BỊ GỘP CÂU
+        // ==========================================
+        // CƠ CHẾ BÓC TÁCH MỚI (CHIA CẮT TRIỆT ĐỂ, KHÔNG BỊ GỘP CÂU)
+        // ==========================================
         function parseTextToQuestions(rawHtml, rawPlain, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             
-            // Xóa style rác từ Word
+            // Xóa thẻ style/class rác từ Word nhưng vẫn giữ lại cấu trúc
             let tempDiv = document.createElement('div');
             tempDiv.innerHTML = rawHtml;
             let els = tempDiv.getElementsByTagName('*');
@@ -964,44 +966,55 @@
             }
             
             let safeHtml = tempDiv.innerHTML;
-            // Ép tất cả các khối block div/p thành br để không phá vỡ cấu trúc cắt
-            safeHtml = safeHtml.replace(/<div[^>]*>/gi, '<br>').replace(/<\/div>/gi, '').replace(/<p[^>]*>/gi, '<br>').replace(/<\/p>/gi, '<br>');
+            // Đưa tất cả các block (div, p, h1..) về dạng <br> để dễ đếm
+            safeHtml = safeHtml.replace(/<\/?(div|p|h[1-6]|ul|ol|li|table|tr|td|th)[^>]*>/gi, '<br>');
+            safeHtml = safeHtml.replace(/(<br>\s*)+/gi, '<br>');
 
-            // Đánh dấu rõ điểm nối giữa các câu để cắt 1 lần duy nhất cho đúng
-            let markedHtml = safeHtml.replace(/(^|<br>|\s)(Câu|Bài)\s*(\d+)[\s:.\-_]/gi, '$1|||SPLIT|||$2 $3: ');
-            let htmlBlocks = markedHtml.split('|||SPLIT|||');
+            // SỬ DỤNG LOOKAHEAD ĐỂ TÁCH CÂU CHUẨN XÁC:
+            // Cắt đúng tại vị trí trước chữ "Câu X" hoặc "Bài X" (cho phép thẻ HTML chen giữa)
+            let markerRegex = /(?=(?:^|<br>)(?:\s|<[^>]+>)*(?:Câu|Bài)\s*\d+[\s:.\-_])/i;
+            let htmlBlocks = safeHtml.split(markerRegex);
 
             htmlBlocks.forEach((blockHtml, index) => {
-                const trimmedHtml = blockHtml.trim();
-                if (!trimmedHtml) return;
+                let blockTrimmed = blockHtml.trim();
+                blockTrimmed = blockTrimmed.replace(/^(?:<br>\s*)+/i, '').trim(); // Xóa <br> thừa đầu câu
+                if (!blockTrimmed) return;
 
-                // Lấy nội dung text sạch của riêng đoạn block (câu hỏi) này
-                let tempBlockDiv = document.createElement('div');
-                tempBlockDiv.innerHTML = trimmedHtml;
-                let blockPlain = tempBlockDiv.innerText || tempBlockDiv.textContent;
+                // Kiểm tra chắc chắn block này bắt đầu bằng Câu/Bài (loại trừ rác đầu văn bản)
+                if (!/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+/i.test(blockTrimmed)) return;
 
-                if (!blockPlain.trim()) return;
+                // Tạo plain text thuần của RIÊNG câu này để dễ lấy A,B,C,D
+                let blockDiv = document.createElement('div');
+                blockDiv.innerHTML = blockTrimmed;
+                let blockPlain = blockDiv.innerText || blockDiv.textContent;
 
-                const qId = `CH${grade}_${topic.substring(0, 4).toUpperCase()}_${Date.now().toString().slice(-4)}_${index}`;
+                const qId = `CH${grade}_${topic.substring(0, 4).toUpperCase()}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
                 let qType = selectedType;
-                let qContent = ''; let options = ['', '', '', '']; let ans = ''; let explanation = '';
+                let qContentHtml = ''; let options = ['', '', '', '']; let ans = ''; let explanation = '';
 
-                // Bóc tách hoàn toàn dựa trên dữ liệu CỦA RIÊNG KHÚC NÀY
+                // Bóc tách nội dung của đúng hộp này
                 if (qType === 'MCQ') {
-                    let parts = trimmedHtml.split(/(?:^|<br>|\s)A\s*[\).]/);
-                    qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                    // Dừng ngay trước chữ "A." hoặc "A)"
+                    let matchA = blockTrimmed.match(/(?:^|<br>|\n|\s)(?:<[^>]+>\s*)*A\s*[\).]/i);
+                    if (matchA) { qContentHtml = blockTrimmed.substring(0, matchA.index); } 
+                    else { qContentHtml = blockTrimmed; }
+                    
                     ['A', 'B', 'C', 'D'].forEach((char, idx) => {
-                        const optMatch = blockPlain.match(new RegExp(`(?:^|\\s|\\n|<br>)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n|<br>)[A-D]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
+                        let regexStr = `(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[A-D]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`;
+                        let optMatch = blockPlain.match(new RegExp(regexStr, 'si'));
                         if (optMatch) options[idx] = optMatch[1].trim();
                     });
                     const ansMatch = blockPlain.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D])/i);
                     ans = ansMatch ? ansMatch[1].toUpperCase() : 'A';
                 }
                 else if (qType === 'TF') {
-                    let parts = trimmedHtml.split(/(?:^|<br>|\s)a\s*[\).]/);
-                    qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                    let match_a = blockTrimmed.match(/(?:^|<br>|\n|\s)(?:<[^>]+>\s*)*a\s*[\).]/i);
+                    if (match_a) { qContentHtml = blockTrimmed.substring(0, match_a.index); } 
+                    else { qContentHtml = blockTrimmed; }
+                    
                     ['a', 'b', 'c', 'd'].forEach((char, idx) => {
-                        const optMatch = blockPlain.match(new RegExp(`(?:^|\\s|\\n|<br>)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n|<br>)[a-d]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
+                        let regexStr = `(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[a-d]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`;
+                        let optMatch = blockPlain.match(new RegExp(regexStr, 'si'));
                         if (optMatch) options[idx] = optMatch[1].trim();
                     });
                     const ansMatch = blockPlain.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([D-S\s\-]+)/i);
@@ -1009,15 +1022,22 @@
                 }
                 else {
                     qType = 'SA';
-                    qContent = trimmedHtml.replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').replace(/(?:<br>|\s)*(?:Lời giải|Đáp án|Chọn).*$/is, '').trim();
+                    let matchAns = blockTrimmed.match(/(?:<br>|\n|\s)*(?:<[^>]+>\s*)*(?:Đáp án|Chọn|Lời giải)/i);
+                    if (matchAns) { qContentHtml = blockTrimmed.substring(0, matchAns.index); } 
+                    else { qContentHtml = blockTrimmed; }
+                    
                     const ansMatch = blockPlain.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([^\n\r]+)/i);
                     if (ansMatch) ans = ansMatch[1].trim();
                 }
 
+                // Cắt bỏ chữ "Câu X: " ra khỏi đề cho đẹp
+                qContentHtml = qContentHtml.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
+                qContentHtml = qContentHtml.replace(/(?:<br>\s*)+$/i, ''); // Cắt đuôi <br> dư
+
                 const expMatch = blockPlain.match(/(?:Lời giải|Hướng dẫn giải)\s*[:\-]?\s*(.*$)/is);
                 if (expMatch) explanation = expMatch[1].trim();
 
-                parsedArr.push({ id: qId, grade: grade, topic: topic, level: defaultLevel, type: qType, q: qContent, options: options, ans: ans, explanation: explanation });
+                parsedArr.push({ id: qId, grade: grade, topic: topic, level: defaultLevel, type: qType, q: qContentHtml, options: options, ans: ans, explanation: explanation });
             });
             return parsedArr;
         }
@@ -1154,7 +1174,6 @@
             const method = document.getElementById('add-method-bank').style.display !== 'none' ? 'bank' : 'paste';
             const examId = document.getElementById('new-exam-id').value.trim(); const examTitle = document.getElementById('new-exam-title').value.trim(); const grade = document.getElementById('new-exam-grade').value; const topic = document.getElementById('new-exam-topic').value; const mode = document.getElementById('new-exam-mode').value; const timeLimit = parseInt(document.getElementById('new-exam-time').value) || 15;
             
-            // Lấy pass từ ô nhập (nếu có)
             const examPass = document.getElementById('new-exam-pass') ? document.getElementById('new-exam-pass').value.trim() : '';
 
             if (!examId || !examTitle) { alert("Vui lòng điền đủ Mã Đề và Tên Đề!"); return; }
@@ -1188,9 +1207,7 @@
             btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Lưu & Xuất Bản Đề Thi';
         }
 
-        function printQuizPDF() {
-            window.print();
-        }
+        function printQuizPDF() { window.print(); }
 
         function exportQuizToWord() {
             if (!activeExam) { alert("Vui lòng chọn một đề thi trước khi xuất Word!"); return; }
@@ -1215,10 +1232,7 @@
                         "<td style='width:50%;'><b>D.</b> " + (q.options[3]||'') + "</td>"+
                         "</tr></table><br>";
                 } else if (q.type === 'TF' && q.options) {
-                    content += "<div>a) " + (q.options[0]||'') + "</div>"+
-                        "<div>b) " + (q.options[1]||'') + "</div>"+
-                        "<div>c) " + (q.options[2]||'') + "</div>"+
-                        "<div>d) " + (q.options[3]||'') + "</div><br>";
+                    content += "<div>a) " + (q.options[0]||'') + "</div><div>b) " + (q.options[1]||'') + "</div><div>c) " + (q.options[2]||'') + "</div><div>d) " + (q.options[3]||'') + "</div><br>";
                 } else if (q.type === 'SA') {
                     content += "<div><i>Đáp số: ....................</i></div><br>";
                 }
@@ -1309,7 +1323,6 @@
         function updateTimerDisplay() { const m = Math.floor(secondsRemaining / 60); const s = secondsRemaining % 60; document.getElementById('time-left').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`; }
 
         function backToPortal() {
-            // Khóa chặt nút trở về nếu mở bài tập bằng link
             const params = new URLSearchParams(window.location.search);
             if (params.get('exam')) { return; }
             clearInterval(timerInterval); clearInterval(kahootTimer); window.onblur = null; document.body.classList.remove('secure-exam-mode');

@@ -1500,6 +1500,18 @@
             } catch (err) { alert("Đã hoàn thành nộp bài! (Dữ liệu đã được lưu an toàn)."); btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Đã hoàn thành'; }
         }
         fetchData();
+        <style>
+        .mcq-option, .mcq-option *, .tf-row, .tf-row * {
+            white-space: nowrap !important;
+            flex-wrap: nowrap !important;
+        }
+         </style>
+        .mcq-option {
+            overflow-x: auto !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+   
     </script>
 </body>
 </html>

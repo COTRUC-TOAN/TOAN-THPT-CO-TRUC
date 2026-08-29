@@ -958,7 +958,7 @@
         function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             
-            // Xóa thẻ rác Word nhưng bảo vệ tuyệt đối ảnh
+            // 1. Dọn dẹp thẻ rác từ Word nhưng giữ lại các khối đoạn văn
             let tempDiv = document.createElement('div');
             tempDiv.innerHTML = rawHtml;
             let els = tempDiv.getElementsByTagName('*');
@@ -970,11 +970,11 @@
             
             let safeHtml = tempDiv.innerHTML;
             
-            // Ép thẻ đoạn văn thành <br>
+            // Ép thẻ đoạn văn thành <br> để dễ đếm dòng
             safeHtml = safeHtml.replace(/<\/?(div|p|h[1-6]|ul|ol|li|table|tr|td|th)[^>]*>/gi, '<br>');
             safeHtml = safeHtml.replace(/(<br>\s*)+/gi, '<br>');
 
-            // LƯU TRỮ TẠM THỜI TẤT CẢ ẢNH BẰNG CHUỖI BÍ MẬT ĐỂ KHÔNG BỊ XÓA HOẶC CẮT NHẦM
+            // LƯU TRỮ TẠM THỜI TẤT CẢ ẢNH BẰNG CHUỖI BÍ MẬT ĐỂ BẢO VỆ
             let imageVault = {};
             let imgCounter = 0;
             safeHtml = safeHtml.replace(/<img[^>]+>/gi, function(match) {
@@ -984,7 +984,7 @@
                 return token;
             });
 
-            // LƯU TRỮ TẠM THỜI TOÀN BỘ CÔNG THỨC MATHJAX ĐỂ TRÁNH CẮT NHẦM CHỮ c) BÊN TRONG CÔNG THỨC
+            // LƯU TRỮ TẠM THỜI TOÀN BỘ CÔNG THỨC MATHJAX ĐỂ TRÁNH MÁY CẮT NHẦM CHỮ "c)" BÊN TRONG HỆ PHƯƠNG TRÌNH \cases
             let mathVault = {};
             let mathCounter = 0;
             // Bảo vệ công thức $...$ và $$...$$
@@ -995,7 +995,7 @@
                 return token;
             });
 
-            // TÁCH TỪNG CÂU
+            // TÁCH TỪNG CÂU BẰNG RADAR CỰC MẠNH
             let markerRegex = /(?=(?:^|<br>|\n|\s)(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_])/i;
             let htmlBlocks = safeHtml.split(markerRegex);
 
@@ -1004,18 +1004,17 @@
                 blockStr = blockStr.replace(/^(?:<br>\s*)+/i, '').trim(); 
                 if (!blockStr) return;
 
-                // Test bằng text thuần
+                // Xác minh có đúng là câu hỏi không
                 let tDiv = document.createElement('div');
                 tDiv.innerHTML = blockStr;
                 let bPlain = (tDiv.innerText || tDiv.textContent).replace(/^[\s\uFEFF\xA0]+/g, '');
-
-                if (!/^(?:Câu|Bài)\s*\d+/i.test(bPlain)) return; // Bỏ qua nếu không phải câu hỏi
+                if (!/^(?:Câu|Bài)\s*\d+/i.test(bPlain)) return;
 
                 const qId = `CH${grade}_${topic.substring(0, 4).toUpperCase()}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
                 let qType = selectedType;
                 let options = ['', '', '', '']; let ans = ''; let explanation = '';
 
-                // BÓC TÁCH NGƯỢC (Bóc Lời Giải -> Bóc Đáp Án -> Bóc C, D, C, B, A)
+                // BÓC TÁCH NGƯỢC (TỪ DƯỚI LÊN TRÊN)
                 
                 // 1. Lời giải
                 let expMatch = blockStr.match(/(?:<br>|\n|\s)*(?:<[^>]+>\s*)*(?:Lời giải|Hướng dẫn giải|Giải)\s*[:\-]?\s*(.*)$/is);
@@ -1031,7 +1030,7 @@
                     blockStr = blockStr.substring(0, ansMatch.index).trim();
                 }
 
-                // 3. Các lựa chọn ABCD / abcd (Cắt dần từ dưới lên)
+                // 3. Các lựa chọn ABCD / abcd
                 if (qType === 'MCQ') {
                     let mD = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*D\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
                     if (mD) { options[3] = mD[1].trim(); blockStr = blockStr.substring(0, mD.index).trim(); }
@@ -1060,15 +1059,12 @@
                     
                     if (ans) ans = ans.replace(/\s+/g, '-').replace(/Đ/g, 'D'); // Chuẩn hóa
                 }
-                else {
-                    // SA không có đáp án nhiễu, nội dung phần còn lại là đề.
-                }
 
-                // 4. Khúc còn lại sau khi cắt ngược chính là Đề Bài
+                // 4. Khúc còn lại chính là Đề Bài
                 let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
                 qContent = qContent.replace(/(?:<br>\s*)+$/i, ''); // Xóa dòng trống cuối cùng
 
-                // 5. TRẢ LẠI ẢNH VÀ CÔNG THỨC TOÁN HỌC VÀO VỊ TRÍ CŨ
+                // 5. MỞ KÉT SẮT TRẢ LẠI ẢNH VÀ CÔNG THỨC TOÁN HỌC VÀO ĐÚNG VỊ TRÍ
                 const restoreVaults = (text) => {
                     let restored = text;
                     for (const [token, mathTag] of Object.entries(mathVault)) { restored = restored.replace(token, mathTag); }

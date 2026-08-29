@@ -76,7 +76,7 @@
         .card-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
         .btn-start { padding: 10px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-family: inherit; }
         .btn-start:hover { background: #1e40af; }
-        .btn-share { padding: 10px 14px; background: #f1f5f9; color: #475569; border: 1px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-family: inherit; }
+        .btn-share { padding: 10px 14px; background: #f1f5f9; color: #475569; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-family: inherit; }
 
         /* KHU VỰC GIÁO VIÊN */
         #teacher-view { display: none; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
@@ -810,13 +810,17 @@
         }
 
         function switchTeacherTab(tab) {
-            ['scores', 'bulk', 'add_single', 'creator'].forEach(t => {
-                document.getElementById(`sec-t-${t}`).style.display = 'none';
-                document.getElementById(`btn-t-${t}`).classList.remove('active');
+            ['scores', 'bulk', 'add-single', 'creator'].forEach(t => {
+                const sec = document.getElementById(`sec-t-${t}`);
+                const btn = document.getElementById(`btn-t-${t}`);
+                if (sec) sec.style.display = 'none';
+                if (btn) btn.classList.remove('active');
             });
-            document.getElementById(`sec-t-${tab}`).style.display = 'block';
-            document.getElementById(`btn-t-${tab}`).classList.add('active');
-            if (tab === 'add_single') generateNewQId();
+            const activeSec = document.getElementById(`sec-t-${tab}`);
+            const activeBtn = document.getElementById(`btn-t-${tab}`);
+            if (activeSec) activeSec.style.display = 'block';
+            if (activeBtn) activeBtn.classList.add('active');
+            if (tab === 'add-single') generateNewQId();
             if (tab === 'creator') filterQuestionBankList();
         }
 
@@ -884,7 +888,6 @@
             } catch (err) { alert("Lỗi kết nối khi lưu câu hỏi!"); }
         }
 
-        /* KHÓA CHẶT THUẬT TOÁN CẮT BỎ CHỮ A,B,C,D (Dùng chung cho Nạp Ngân Hàng & Nạp Đề Trực Tiếp) */
         function parseTextToQuestions(rawHtml, rawPlain, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             const rawBlocks = rawPlain.split(/(?=(?:Câu|Bài)\s*\d+[\s:.\-_])/i);

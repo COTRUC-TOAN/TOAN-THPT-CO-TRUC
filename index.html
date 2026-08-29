@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cổng Khảo Thí & Học Tập Toán THPT - Cô Trúc</title>
     
-    <!-- Cấu hình MathJax cho công thức Toán -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             tex2jax: {
@@ -25,11 +28,14 @@
         :root { --primary: #1d4ed8; --accent: #ea580c; --bg: #f8fafc; --card-bg: #ffffff; --text-dark: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --radius-lg: 16px; --radius-md: 10px; --radius-pill: 50px; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* Đã đổi phông chữ toàn trang sang Times New Roman và tăng size lên một chút cho dễ đọc */
         body { font-family: 'Times New Roman', Times, serif; background-color: var(--bg); color: var(--text-dark); min-height: 100vh; padding-bottom: 50px; font-size: 1.15rem; line-height: 1.5; }
-        
         .wrapper { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
+        /* CÁC LỚP ẨN GIAO DIỆN BẢO MẬT (LOCKED UI) */
+        .locked-ui .navbar, .locked-ui .sidebar, .locked-ui .grade-bar { display: none !important; }
+        .locked-ui .portal-layout { display: block !important; grid-template-columns: 1fr !important; }
+        .locked-ui .btn-back { display: none !important; }
+
         .navbar { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 14px 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .brand { font-size: 1.4rem; font-weight: bold; color: #0f172a; display: flex; align-items: center; gap: 10px; font-family: 'Times New Roman', Times, serif; }
         .nav-btns { display: flex; gap: 10px; }
@@ -131,12 +137,11 @@
         /* GIAO DIỆN LÀM BÀI TRUYỀN THỐNG */
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
         .quiz-topbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
-        .btn-back { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: var(--radius-md); font-weight: bold; cursor: pointer; font-family: 'Times New Roman', Times, serif; font-size: 1.05rem; display: none; }
         .timer-box { font-size: 1.3rem; font-weight: bold; color: #dc2626; background: #fee2e2; padding: 6px 16px; border-radius: var(--radius-pill); display: flex; align-items: center; gap: 6px; }
         .timer-box.practice { color: #16a34a; background: #dcfce7; }
         .anti-cheat-alert { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px 14px; border-radius: 8px; margin-bottom: 15px; display: none; }
         .student-box { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
-        .student-box input { padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; font-weight: normal; font-family: 'Times New Roman', Times, serif; }
+        .student-box input { padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; font-family: 'Times New Roman', Times, serif; }
 
         .btn-export-group { display: flex; gap: 10px; margin-bottom: 20px; }
         .btn-export-action { padding: 8px 16px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 1.05rem; font-family: 'Times New Roman', Times, serif; }
@@ -277,7 +282,7 @@
                 <div class="creator-container">
                     <div class="creator-card">
                         <h3 style="margin-bottom: 14px; color: #2563eb;"><i class="fa-solid fa-paste"></i> Nạp Ngân Hàng Câu Hỏi Nhanh</h3>
-                        <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 14px;">Dán danh sách câu hỏi vào đây. Hệ thống sẽ bóc tách sạch sẽ và lưu thẳng vào Ngân Hàng Câu Hỏi.</p>
+                        <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 14px;">Dán danh sách câu hỏi vào đây. Hệ thống sẽ tự động bóc tách gọn gàng từng câu.</p>
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="form-row">
@@ -381,14 +386,23 @@
                         <div class="form-row"><label>Chuyên Mục Hiển Thị:</label><select class="form-input" id="new-exam-topic"></select></div>
                         <div class="form-row"><label>Mã Đề:</label><input type="text" class="form-input" id="new-exam-id" placeholder="LT12-01-b"></div>
                         <div class="form-row"><label>Tên Đề Bài Thi:</label><input type="text" class="form-input" id="new-exam-title" placeholder="Luyện Tập 01-b"></div>
+                        
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="form-row">
                                 <label>Chế Độ / Kiểu Thi:</label>
-                                <select class="form-input" id="new-exam-mode">
-                                    <option value="LUYENTAP">🟢 Luyện Tập</option><option value="KIEMTRA">🔴 Kiểm Tra (Bảo mật)</option><option value="KAHOOT">⚡ Đấu Trường Kahoot</option>
+                                <select class="form-input" id="new-exam-mode" onchange="toggleExamPasswordField()">
+                                    <option value="LUYENTAP">🟢 Luyện Tập</option>
+                                    <option value="KIEMTRA">🔴 Kiểm Tra (Bảo mật)</option>
+                                    <option value="KAHOOT">⚡ Đấu Trường Kahoot</option>
                                 </select>
                             </div>
                             <div class="form-row"><label>Thời Gian (Phút):</label><input type="number" class="form-input" id="new-exam-time" value="15"></div>
+                        </div>
+
+                        <!-- Ô Nhập Mật Khẩu (Chỉ hiện khi chọn chế độ Kiểm tra) -->
+                        <div class="form-row" id="exam-password-row" style="display: none; margin-top: 5px;">
+                            <label style="color: #dc2626;">🔑 Mật Khẩu Bài Kiểm Tra (Tùy chọn):</label>
+                            <input type="text" class="form-input" id="new-exam-pass" placeholder="VD: 12a1 (Để trống mặc định là truc2712)">
                         </div>
 
                         <div class="selected-list-box" id="bank-selected-box">
@@ -441,7 +455,7 @@
                         </div>
 
                         <div id="add-method-paste" style="display: none;">
-                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán thẳng văn bản đề thi vào đây. Khi lưu, hệ thống sẽ đưa các câu này vào Ngân Hàng, đồng thời tạo thành đề thi này ngay lập tức.</p>
+                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán thẳng văn bản đề thi vào đây. Hệ thống sẽ bóc tách và tạo thành đề thi này ngay lập tức.</p>
                             <div class="form-row">
                                 <label>Dạng Câu Hỏi Mặc Định:</label>
                                 <select class="form-input" id="direct-q-type"><option value="MCQ">Trắc nghiệm (MCQ)</option><option value="TF">Đúng/Sai (TF)</option><option value="SA">Trả lời ngắn (SA)</option></select>
@@ -727,17 +741,18 @@
             }
         }
 
+        // KHÓA CHẶT GIAO DIỆN NẾU VÀO TỪ LINK
         function checkUrlParams() {
             const params = new URLSearchParams(window.location.search);
             const examId = params.get('exam');
             if (examId) {
+                document.body.classList.add('locked-ui'); // Kích hoạt CSS ẩn menu/thanh công cụ
                 const checkExist = setInterval(() => {
                     if (examBank.length > 0) {
                         clearInterval(checkExist);
                         activeExam = examBank.find(e => e.id === examId);
                         if (activeExam) {
                             document.getElementById('portal-view').style.display = 'none';
-                            document.querySelector('.navbar').style.display = 'none';
                             if (activeExam.mode === 'KIEMTRA') { document.getElementById('password-lock-screen').style.display = 'block'; } 
                             else { if (activeExam.mode === 'KAHOOT') startKahootMode(); else startTraditionalExamMode(); }
                         } else { alert("Không tìm thấy đề thi này trên hệ thống!"); }
@@ -748,7 +763,9 @@
 
         function verifyExamPassword() {
             const enteredPass = document.getElementById('exam-secure-pass').value.trim();
-            if (enteredPass === "truc2712" || enteredPass === "cotruc123") {
+            // Lấy pass riêng của đề, nếu thầy ko đặt thì pass mặc định là truc2712
+            const correctPass = activeExam.examPass ? activeExam.examPass : "truc2712"; 
+            if (enteredPass === correctPass) {
                 document.getElementById('password-lock-screen').style.display = 'none';
                 startTraditionalExamMode();
             } else { alert("❌ Mật khẩu kiểm tra không chính xác!"); }
@@ -814,20 +831,22 @@
         }
 
         async function openTeacherLogin() {
-            // Đặt sẵn mật khẩu truc2712 để thầy không phải gõ lại
+            // Gõ sẵn truc2712, thầy chỉ việc nhấn OK
             const pass = prompt("🔐 Vui lòng nhập Mật khẩu Quản lý Giáo viên:", "truc2712");
             if (!pass) return;
-            try {
-                const res = await fetch(`${SCRIPT_URL}?action=get_results&password=${encodeURIComponent(pass)}`);
-                const data = await res.json();
-                if (data.status === "success") {
-                    teacherPassAuth = pass; resultsBank = data.results || [];
-                    document.getElementById('portal-view').style.display = 'none'; document.getElementById('quiz-view').style.display = 'none'; document.getElementById('kahoot-view').style.display = 'none';
-                    document.getElementById('teacher-view').style.display = 'block';
-                    populateClassAndExamFilters(); applyScoreFilters(); loadQuestionBank();
-                    updateBankBulkTopicDropdown(); updateAddQTopicDropdown(); updateNewExamTopicDropdown(); updateBankFilterTopics();
-                } else { alert("❌ Sai mật khẩu quản lý!"); }
-            } catch (err) { alert("Lỗi kết nối máy chủ!"); }
+            if (pass === "truc2712") {
+                try {
+                    const res = await fetch(`${SCRIPT_URL}?action=get_results&password=${encodeURIComponent(pass)}`);
+                    const data = await res.json();
+                    if (data.status === "success") {
+                        teacherPassAuth = pass; resultsBank = data.results || [];
+                        document.getElementById('portal-view').style.display = 'none'; document.getElementById('quiz-view').style.display = 'none'; document.getElementById('kahoot-view').style.display = 'none';
+                        document.getElementById('teacher-view').style.display = 'block';
+                        populateClassAndExamFilters(); applyScoreFilters(); loadQuestionBank();
+                        updateBankBulkTopicDropdown(); updateAddQTopicDropdown(); updateNewExamTopicDropdown(); updateBankFilterTopics();
+                    } else { alert("❌ Lấy dữ liệu thất bại, vui lòng tải lại trang!"); }
+                } catch (err) { alert("Lỗi kết nối máy chủ!"); }
+            } else { alert("❌ Sai mật khẩu quản lý!"); }
         }
 
         function switchTeacherTab(tab) {
@@ -853,22 +872,21 @@
             else if (method === 'paste') { document.getElementById('tab-add-paste').classList.add('active'); document.getElementById('add-method-paste').style.display = 'block'; }
         }
 
+        function toggleExamPasswordField() {
+            const mode = document.getElementById('new-exam-mode').value;
+            document.getElementById('exam-password-row').style.display = (mode === 'KIEMTRA') ? 'block' : 'none';
+        }
+
         function generateNewQId() { document.getElementById('add-q-id').value = `CH${document.getElementById('add-q-grade').value}_AUTO_${Math.floor(100 + Math.random() * 900)}`; }
 
-        // Hàm xử lý dán thông minh (Loại bỏ các định dạng rác của Word khi dán hình)
         function handlePasteData(e, isPreviewUpdate) {
             const clipboardData = e.clipboardData || window.clipboardData || (e.originalEvent && e.originalEvent.clipboardData);
             if (!clipboardData) return;
-            
-            const items = clipboardData.items;
-            let hasImage = false;
-
+            const items = clipboardData.items; let hasImage = false;
             for (let i = 0; i < items.length; i++) {
                 if (items[i].type.indexOf("image") !== -1) {
-                    hasImage = true;
-                    e.preventDefault(); 
-                    const blob = items[i].getAsFile(); 
-                    const reader = new FileReader();
+                    hasImage = true; e.preventDefault(); 
+                    const blob = items[i].getAsFile(); const reader = new FileReader();
                     reader.onload = function(event) { 
                         document.execCommand('insertHTML', false, `<br><img src="${event.target.result}" style="max-width:100%; border-radius:8px;"><br>`); 
                         if(isPreviewUpdate) updateAddQPreview();
@@ -916,8 +934,6 @@
 
         function parseTextToQuestions(rawHtml, rawPlain, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
-            
-            // Ép xóa sạch mọi định dạng inline style dơ bẩn lọt vào khi copy từ Word
             let tempDiv = document.createElement('div');
             tempDiv.innerHTML = rawHtml;
             let els = tempDiv.getElementsByTagName('*');
@@ -929,6 +945,7 @@
             let safeHtml = tempDiv.innerHTML;
             let safePlain = tempDiv.innerText || tempDiv.textContent;
 
+            // Xử lý không bị gộp câu kể cả dán nhiều hình ảnh
             const rawBlocks = safePlain.split(/(?=(?:Câu|Bài)\s*\d+[\s:.\-_])/i);
 
             rawBlocks.forEach((block, index) => {
@@ -939,7 +956,6 @@
                 let qType = selectedType;
                 let qContent = ''; let options = ['', '', '', '']; let ans = ''; let explanation = '';
 
-                // Bóc tách trên safeHtml để giữ được hình ảnh nhưng đã sạch font rác
                 if (qType === 'MCQ') {
                     let parts = safeHtml.split(/(?:^|<br>|\s)A\s*[\).]/);
                     qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
@@ -1108,6 +1124,9 @@
         async function saveExamFinal() {
             const method = document.getElementById('add-method-bank').style.display !== 'none' ? 'bank' : 'paste';
             const examId = document.getElementById('new-exam-id').value.trim(); const examTitle = document.getElementById('new-exam-title').value.trim(); const grade = document.getElementById('new-exam-grade').value; const topic = document.getElementById('new-exam-topic').value; const mode = document.getElementById('new-exam-mode').value; const timeLimit = parseInt(document.getElementById('new-exam-time').value) || 15;
+            
+            // Lấy pass từ ô nhập (nếu có)
+            const examPass = document.getElementById('new-exam-pass') ? document.getElementById('new-exam-pass').value.trim() : '';
 
             if (!examId || !examTitle) { alert("Vui lòng điền đủ Mã Đề và Tên Đề!"); return; }
             let finalQuestions = [];
@@ -1128,7 +1147,9 @@
             }
 
             try {
-                const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle, grade: grade, topic: topic, mode: mode, timeLimit: timeLimit, questions: finalQuestions }) });
+                // Đóng gói thêm thuộc tính examPass để gửi lên Google Sheets
+                const payload = { action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle, grade: grade, topic: topic, mode: mode, timeLimit: timeLimit, examPass: examPass, questions: finalQuestions };
+                const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                 const data = await res.json();
                 if (data.status === "success") {
                     alert("🎉 Đã tạo đề thi mới và lưu lên Google Sheets thành công!");
@@ -1230,7 +1251,7 @@
         function loadKahootQuestion() {
             const mcqQuestions = activeExam.questions.filter(q => q.type === 'MCQ');
             if (kahootCurrentIndex >= mcqQuestions.length) {
-                document.getElementById('kahoot-view').innerHTML = `<div style="padding: 40px; text-align: center;"><i class="fa-solid fa-trophy" style="font-size: 4rem; color: #fbbf24; margin-bottom: 20px;"></i><h2 style="color: #7c3aed; margin-bottom: 10px;">Hoàn Thành Đấu Trường!</h2><p style="font-size: 1.3rem; font-weight: bold; color: #1e293b; margin-bottom: 25px;">Điểm số của bạn: ${kahootScore} / ${mcqQuestions.length * 10}</p><button class="btn-start" style="background: #7c3aed; width: 200px; margin: 0 auto;" onclick="backToPortal()"><i class="fa-solid fa-house"></i> Về Trang Chủ</button></div>`; return;
+                document.getElementById('kahoot-view').innerHTML = `<div style="padding: 40px; text-align: center;"><i class="fa-solid fa-trophy" style="font-size: 4rem; color: #fbbf24; margin-bottom: 20px;"></i><h2 style="color: #7c3aed; margin-bottom: 10px;">Hoàn Thành Đấu Trường!</h2><p style="font-size: 1.3rem; font-weight: bold; color: #1e293b; margin-bottom: 25px;">Điểm số của bạn: ${kahootScore} / ${mcqQuestions.length * 10}</p></div>`; return;
             }
             const q = mcqQuestions[kahootCurrentIndex]; document.getElementById('kahoot-progress').innerText = `Câu ${kahootCurrentIndex + 1} / ${mcqQuestions.length}`; document.getElementById('kahoot-q-text').innerHTML = q.q;
             const grid = document.getElementById('kahoot-options-grid'); grid.innerHTML = '';
@@ -1260,8 +1281,9 @@
         function updateTimerDisplay() { const m = Math.floor(secondsRemaining / 60); const s = secondsRemaining % 60; document.getElementById('time-left').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`; }
 
         function backToPortal() {
+            // Khóa chặt nút trở về nếu mở bài tập bằng link
             const params = new URLSearchParams(window.location.search);
-            if (params.get('exam')) { alert("Bạn đang làm bài qua đường link bảo mật. Không thể thoát về trang chủ!"); return; }
+            if (params.get('exam')) { return; }
             clearInterval(timerInterval); clearInterval(kahootTimer); window.onblur = null; document.body.classList.remove('secure-exam-mode');
             document.getElementById('quiz-view').style.display = 'none'; document.getElementById('kahoot-view').style.display = 'none'; document.getElementById('portal-view').style.display = 'block';
             window.history.pushState({}, document.title, window.location.pathname); window.scrollTo({ top: 0, behavior: 'smooth' });

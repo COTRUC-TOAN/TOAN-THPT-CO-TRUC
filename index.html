@@ -50,10 +50,17 @@
         body { font-family: 'Times New Roman', Times, serif; background-color: var(--bg); color: var(--text-dark); min-height: 100vh; padding-bottom: 50px; font-size: 1.15rem; line-height: 1.5; }
         .wrapper { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
-        /* Khóa học sinh: Ẩn menu khi làm bài từ link */
-        .locked-ui .navbar, .locked-ui .sidebar, .locked-ui .grade-bar { display: none !important; }
-        .locked-ui .portal-layout { display: block !important; grid-template-columns: 1fr !important; }
-        .locked-ui .btn-back { display: none !important; }
+        /* Khóa học sinh tuyệt đối: Ẩn menu khi làm bài từ link (Áp dụng cho cả Kiểm tra và Kahoot) */
+        body.locked-ui .navbar, 
+        body.locked-ui .sidebar, 
+        body.locked-ui .grade-bar, 
+        body.locked-ui .btn-back { 
+            display: none !important; 
+        }
+        body.locked-ui .portal-layout { 
+            display: block !important; 
+            grid-template-columns: 1fr !important; 
+        }
 
         .navbar { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 14px 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .brand { font-size: 1.4rem; font-weight: bold; color: #0f172a; display: flex; align-items: center; gap: 10px; font-family: 'Times New Roman', Times, serif; }
@@ -183,11 +190,11 @@
         .q-title { font-weight: bold; margin-bottom: 14px; color: #0f172a; line-height: 1.8; font-size: 1.15rem; }
         
         /* CHỐNG RỚT DÒNG CÔNG THỨC TOÁN Ở ĐÁP ÁN */
-        .mcq-option { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; cursor: pointer; font-size: 1.15rem; line-height: 1.6; white-space: nowrap; overflow-x: auto; }
+        .mcq-option { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; cursor: pointer; font-size: 1.15rem; line-height: 1.6; white-space: nowrap !important; overflow-x: auto !important; }
         .mcq-option:hover { background: #f0f7ff; border-color: var(--primary); }
         
-        .tf-row { border-bottom: 1px dashed #cbd5e1; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; font-size: 1.15rem; white-space: nowrap; overflow-x: auto; }
-        .tf-btns { display: flex; gap: 16px; white-space: nowrap; margin-left: 10px; }
+        .tf-row { border-bottom: 1px dashed #cbd5e1; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; font-size: 1.15rem; white-space: nowrap !important; overflow-x: auto !important; }
+        .tf-btns { display: flex; gap: 16px; white-space: nowrap !important; margin-left: 10px; }
         
         .sa-input { width: 240px; padding: 10px 14px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1.15rem; font-weight: bold; margin-top: 10px; font-family: 'Times New Roman', Times, serif; }
         .btn-submit { width: 100%; padding: 15px; background: #16a34a; color: #fff; border: none; border-radius: var(--radius-md); font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 25px; font-family: 'Times New Roman', Times, serif; }

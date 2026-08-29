@@ -138,6 +138,11 @@
         .student-box { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
         .student-box input { padding: 12px 14px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 1rem; font-weight: 600; font-family: inherit; }
 
+        .btn-export-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-export-action { padding: 8px 16px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-family: inherit; }
+        .btn-exp-pdf { background: #dc2626; color: #fff; }
+        .btn-exp-word { background: #2563eb; color: #fff; }
+
         /* GIAO DIỆN ĐẤU TRƯỜNG KAHOOT */
         #kahoot-view { display: none; max-width: 750px; margin: 0 auto; background: #fff; padding: 30px; border-radius: var(--radius-lg); border: 2px solid #7c3aed; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15); text-align: center; }
         .kahoot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -172,6 +177,16 @@
         .q-card img, .bank-q-item img, .preview-box img, .kahoot-question img { max-width: 100%; height: auto; border-radius: 8px; margin: 10px auto; display: block; border: 1px solid #e2e8f0; }
         .MathJax_Display { margin: 0.6em 0 !important; }
         .MathJax { font-size: 105% !important; }
+
+        /* ĐỊNH DẠNG TRANG IN CHUẨN A4 */
+        @media print {
+            body { background: #fff; color: #000; padding: 0; }
+            .navbar, .btn-back, .btn-submit, .anti-cheat-alert, .timer-box, .toast-msg, .student-box, .btn-export-group { display: none !important; }
+            #quiz-view { max-width: 100%; border: none; padding: 0; box-shadow: none; display: block !important; }
+            .q-card { background: #fff; border: none; border-bottom: 1px solid #e2e8f0; padding: 12px 0; page-break-inside: avoid; }
+            .mcq-option { border: none; padding: 4px 0; }
+            .mcq-option input, .tf-btns input { display: inline-block; }
+        }
     </style>
 </head>
 <body>
@@ -222,7 +237,7 @@
             <div class="teacher-nav">
                 <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
                 <button class="btn-t-tab" id="btn-t-bulk" onclick="switchTeacherTab('bulk')"><i class="fa-solid fa-paste"></i> Nạp Ngân Hàng Nhanh</button>
-                <button class="btn-t-tab" id="btn-t-add-single" onclick="switchTeacherTab('add_single')"><i class="fa-solid fa-circle-plus"></i> Nạp Câu Hỏi Thủ Công</button>
+                <button class="btn-t-tab" id="btn-t-add_single" onclick="switchTeacherTab('add_single')"><i class="fa-solid fa-circle-plus"></i> Nạp Câu Hỏi Thủ Công</button>
                 <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo & Soạn Đề Mới</button>
             </div>
 
@@ -259,7 +274,6 @@
                 </div>
             </div>
 
-            <!-- NẠP NGÂN HÀNG NHANH -->
             <div id="sec-t-bulk" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -313,8 +327,7 @@
                 </div>
             </div>
 
-            <!-- NẠP THỦ CÔNG -->
-            <div id="sec-t-add-single" style="display: none;">
+            <div id="sec-t-add_single" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
                         <h3 style="margin-bottom: 14px; color: #059669;"><i class="fa-solid fa-pen-to-square"></i> Nhập Thông Tin Câu Hỏi</h3>
@@ -356,7 +369,6 @@
                 </div>
             </div>
 
-            <!-- TẠO & SOẠN ĐỀ TỪ NGÂN HÀNG HOẶC DÁN NHANH -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -446,7 +458,6 @@
             </div>
         </div>
 
-        <!-- MÀN HÌNH NHẬP MẬT KHẨU BẢO MẬT -->
         <div id="password-lock-screen">
             <i class="fa-solid fa-shield-halved" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
             <h2 style="color: #1e293b; margin-bottom: 10px;">Phòng Thi Bảo Mật</h2>
@@ -455,20 +466,24 @@
             <button class="btn-start" style="width: 100%; background: #dc2626; justify-content: center;" onclick="verifyExamPassword()"><i class="fa-solid fa-key"></i> Xác Thực & Vào Thi</button>
         </div>
 
-        <!-- GIAO DIỆN LÀM BÀI TRUYỀN THỐNG -->
         <div id="quiz-view">
             <div class="quiz-topbar">
                 <button class="btn-back" onclick="backToPortal()"><i class="fa-solid fa-arrow-left"></i> Trở về</button>
                 <h3 id="quiz-title" style="color: #0f172a; font-size: 1.15rem;"></h3>
                 <div class="timer-box" id="timer-display"><i class="fa-regular fa-clock"></i> <span id="time-left">15:00</span></div>
             </div>
+
+            <div class="btn-export-group">
+                <button class="btn-export-action btn-exp-pdf" onclick="printQuizPDF()"><i class="fa-solid fa-print"></i> 🖨️ In Đề Thi / Xuất PDF</button>
+                <button class="btn-export-action btn-exp-word" onclick="exportQuizToWord()"><i class="fa-solid fa-file-word"></i> 📄 Xuất File Word (.doc)</button>
+            </div>
+
             <div class="anti-cheat-alert" id="cheat-warning"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Cảnh báo:</strong> Rời khỏi bài thi (<span id="cheat-count">0</span>/3 lần). Quá 3 lần bài thi sẽ tự động kết thúc!</div>
             <div class="student-box"><input type="text" id="std-name" placeholder="Họ và tên học sinh *" required><input type="text" id="std-class" placeholder="Lớp (Ví dụ: 12A1) *" required></div>
             <form id="quiz-form"><div id="quiz-content"></div><button type="submit" class="btn-submit" id="btn-submit-quiz"><i class="fa-solid fa-paper-plane"></i> Nộp Bài & Xem Điểm</button></form>
             <div id="quiz-result"></div>
         </div>
 
-        <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT -->
         <div id="kahoot-view">
             <div class="kahoot-header">
                 <button class="btn-back" onclick="backToPortal()"><i class="fa-solid fa-arrow-left"></i> Thoát</button>
@@ -480,7 +495,6 @@
         </div>
     </div>
 
-    <!-- MODAL LÝ THUYẾT -->
     <div class="modal-overlay" id="theory-modal">
         <div class="modal-content">
             <div class="modal-header"><h2 id="modal-theory-title" style="font-size: 1.2rem; font-weight: 700;">Tóm tắt kiến thức</h2><button class="btn-close-modal" onclick="closeTheoryModal()"><i class="fa-solid fa-xmark"></i></button></div>
@@ -810,7 +824,8 @@
         }
 
         function switchTeacherTab(tab) {
-            ['scores', 'bulk', 'add-single', 'creator'].forEach(t => {
+            const tabIds = ['scores', 'bulk', 'add_single', 'creator'];
+            tabIds.forEach(t => {
                 const sec = document.getElementById(`sec-t-${t}`);
                 const btn = document.getElementById(`btn-t-${t}`);
                 if (sec) sec.style.display = 'none';
@@ -820,7 +835,7 @@
             const activeBtn = document.getElementById(`btn-t-${tab}`);
             if (activeSec) activeSec.style.display = 'block';
             if (activeBtn) activeBtn.classList.add('active');
-            if (tab === 'add-single') generateNewQId();
+            if (tab === 'add_single') generateNewQId();
             if (tab === 'creator') filterQuestionBankList();
         }
 
@@ -1102,6 +1117,51 @@
                 } else { alert("Lỗi: " + data.message); }
             } catch (err) { alert("Lỗi kết nối khi gửi đề!"); }
             btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Lưu & Xuất Bản Đề Thi';
+        }
+
+        function printQuizPDF() {
+            window.print();
+        }
+
+        function exportQuizToWord() {
+            if (!activeExam) { alert("Vui lòng chọn một đề thi trước khi xuất Word!"); return; }
+            let header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>"+
+                "<head><meta charset='utf-8'><title>" + activeExam.title + "</title>"+
+                "<style>body{font-family: 'Arial', sans-serif; font-size: 12pt; line-height: 1.25;} .q-title{font-weight: bold; margin-top: 12px;} .opt-table{width:100%; margin-top:6px;}</style>"+
+                "</head><body>";
+            
+            let content = "<h2 style='text-align:center;'>" + activeExam.title.toUpperCase() + "</h2>"+
+                "<p style='text-align:center;'><i>Thời gian làm bài: " + activeExam.timeLimit + " phút</i></p><hr><br>";
+            
+            let qIdx = 0;
+            activeExam.questions.forEach((q) => {
+                qIdx++;
+                content += "<div class='q-title'>Câu " + qIdx + ": " + q.q + "</div>";
+                if (q.type === 'MCQ' && q.options) {
+                    content += "<table class='opt-table'><tr>"+
+                        "<td style='width:50%;'><b>A.</b> " + (q.options[0]||'') + "</td>"+
+                        "<td style='width:50%;'><b>B.</b> " + (q.options[1]||'') + "</td>"+
+                        "</tr><tr>"+
+                        "<td style='width:50%;'><b>C.</b> " + (q.options[2]||'') + "</td>"+
+                        "<td style='width:50%;'><b>D.</b> " + (q.options[3]||'') + "</td>"+
+                        "</tr></table><br>";
+                } else if (q.type === 'TF' && q.options) {
+                    content += "<div>a) " + (q.options[0]||'') + "</div>"+
+                        "<div>b) " + (q.options[1]||'') + "</div>"+
+                        "<div>c) " + (q.options[2]||'') + "</div>"+
+                        "<div>d) " + (q.options[3]||'') + "</div><br>";
+                } else if (q.type === 'SA') {
+                    content += "<div><i>Đáp số: ....................</i></div><br>";
+                }
+            });
+            
+            let footer = "</body></html>";
+            let blob = new Blob(['\ufeff' + header + content + footer], { type: 'application/msword' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement("a");
+            a.href = url;
+            a.download = `${activeExam.id}_${activeExam.title.replace(/[^a-zA-Z0-9_]/g, '_')}.doc`;
+            a.click();
         }
 
         function showPortalView() { document.getElementById('teacher-view').style.display = 'none'; document.getElementById('quiz-view').style.display = 'none'; document.getElementById('kahoot-view').style.display = 'none'; document.getElementById('portal-view').style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' }); }

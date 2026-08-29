@@ -137,6 +137,7 @@
         /* GIAO DIỆN LÀM BÀI TRUYỀN THỐNG */
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
         .quiz-topbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
+        .btn-back { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: var(--radius-md); font-weight: bold; cursor: pointer; font-family: 'Times New Roman', Times, serif; font-size: 1.05rem; display: none; }
         .timer-box { font-size: 1.3rem; font-weight: bold; color: #dc2626; background: #fee2e2; padding: 6px 16px; border-radius: var(--radius-pill); display: flex; align-items: center; gap: 6px; }
         .timer-box.practice { color: #16a34a; background: #dcfce7; }
         .anti-cheat-alert { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px 14px; border-radius: 8px; margin-bottom: 15px; display: none; }
@@ -399,7 +400,6 @@
                             <div class="form-row"><label>Thời Gian (Phút):</label><input type="number" class="form-input" id="new-exam-time" value="15"></div>
                         </div>
 
-                        <!-- Ô Nhập Mật Khẩu (Chỉ hiện khi chọn chế độ Kiểm tra) -->
                         <div class="form-row" id="exam-password-row" style="display: none; margin-top: 5px;">
                             <label style="color: #dc2626;">🔑 Mật Khẩu Bài Kiểm Tra (Tùy chọn):</label>
                             <input type="text" class="form-input" id="new-exam-pass" placeholder="VD: 12a1 (Để trống mặc định là truc2712)">
@@ -490,7 +490,6 @@
                 <div class="timer-box" id="timer-display"><i class="fa-regular fa-clock"></i> <span id="time-left">15:00</span></div>
             </div>
 
-            <!-- NÚT XUẤT WORD VÀ XUẤT PDF / IN ĐỀ -->
             <div class="btn-export-group">
                 <button class="btn-export-action btn-exp-pdf" onclick="printQuizPDF()"><i class="fa-solid fa-print"></i> 🖨️ In Đề Thi / Xuất PDF</button>
                 <button class="btn-export-action btn-exp-word" onclick="exportQuizToWord()"><i class="fa-solid fa-file-word"></i> 📄 Xuất File Word (.doc)</button>
@@ -741,12 +740,11 @@
             }
         }
 
-        // KHÓA CHẶT GIAO DIỆN NẾU VÀO TỪ LINK
         function checkUrlParams() {
             const params = new URLSearchParams(window.location.search);
             const examId = params.get('exam');
             if (examId) {
-                document.body.classList.add('locked-ui'); // Kích hoạt CSS ẩn menu/thanh công cụ
+                document.body.classList.add('locked-ui');
                 const checkExist = setInterval(() => {
                     if (examBank.length > 0) {
                         clearInterval(checkExist);
@@ -763,7 +761,6 @@
 
         function verifyExamPassword() {
             const enteredPass = document.getElementById('exam-secure-pass').value.trim();
-            // Lấy pass riêng của đề, nếu thầy ko đặt thì pass mặc định là truc2712
             const correctPass = activeExam.examPass ? activeExam.examPass : "truc2712"; 
             if (enteredPass === correctPass) {
                 document.getElementById('password-lock-screen').style.display = 'none';
@@ -831,22 +828,43 @@
         }
 
         async function openTeacherLogin() {
-            // Gõ sẵn truc2712, thầy chỉ việc nhấn OK
-            const pass = prompt("🔐 Vui lòng nhập Mật khẩu Quản lý Giáo viên:", "truc2712");
+            // KHÔNG điền sẵn mật khẩu để bảo mật tuyệt đối
+            const pass = prompt("🔐 Vui lòng nhập Mật khẩu Quản lý Giáo viên:");
             if (!pass) return;
-            if (pass === "truc2712") {
-                try {
-                    const res = await fetch(`${SCRIPT_URL}?action=get_results&password=${encodeURIComponent(pass)}`);
-                    const data = await res.json();
-                    if (data.status === "success") {
-                        teacherPassAuth = pass; resultsBank = data.results || [];
-                        document.getElementById('portal-view').style.display = 'none'; document.getElementById('quiz-view').style.display = 'none'; document.getElementById('kahoot-view').style.display = 'none';
-                        document.getElementById('teacher-view').style.display = 'block';
-                        populateClassAndExamFilters(); applyScoreFilters(); loadQuestionBank();
-                        updateBankBulkTopicDropdown(); updateAddQTopicDropdown(); updateNewExamTopicDropdown(); updateBankFilterTopics();
-                    } else { alert("❌ Lấy dữ liệu thất bại, vui lòng tải lại trang!"); }
-                } catch (err) { alert("Lỗi kết nối máy chủ!"); }
-            } else { alert("❌ Sai mật khẩu quản lý!"); }
+            
+            // Xử lý hiển thị ngay lập tức để không bao giờ bị trắng trang
+            document.getElementById('portal-view').style.display = 'none'; 
+            document.getElementById('quiz-view').style.display = 'none'; 
+            document.getElementById('kahoot-view').style.display = 'none';
+            document.getElementById('teacher-view').style.display = 'block';
+            switchTeacherTab('scores');
+            
+            document.getElementById('scores-table-body').innerHTML = '<tr><td colspan="9" style="text-align: center; color: #3b82f6; padding: 30px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang kiểm tra kết nối với Google Sheets...</td></tr>';
+
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=get_results&password=${encodeURIComponent(pass)}`);
+                const data = await res.json();
+                if (data.status === "success") {
+                    teacherPassAuth = pass; 
+                    resultsBank = data.results || [];
+                    populateClassAndExamFilters(); 
+                    applyScoreFilters(); 
+                    loadQuestionBank();
+                    updateBankBulkTopicDropdown(); 
+                    updateAddQTopicDropdown(); 
+                    updateNewExamTopicDropdown(); 
+                    updateBankFilterTopics();
+                } else { 
+                    alert("❌ Sai mật khẩu quản lý!");
+                    // Nếu nhập sai, tự động quay lại trang chủ
+                    document.getElementById('teacher-view').style.display = 'none';
+                    document.getElementById('portal-view').style.display = 'block';
+                }
+            } catch (err) { 
+                alert("Lỗi kết nối máy chủ Google!"); 
+                document.getElementById('teacher-view').style.display = 'none';
+                document.getElementById('portal-view').style.display = 'block';
+            }
         }
 
         function switchTeacherTab(tab) {
@@ -945,7 +963,6 @@
             let safeHtml = tempDiv.innerHTML;
             let safePlain = tempDiv.innerText || tempDiv.textContent;
 
-            // Xử lý không bị gộp câu kể cả dán nhiều hình ảnh
             const rawBlocks = safePlain.split(/(?=(?:Câu|Bài)\s*\d+[\s:.\-_])/i);
 
             rawBlocks.forEach((block, index) => {
@@ -1147,7 +1164,6 @@
             }
 
             try {
-                // Đóng gói thêm thuộc tính examPass để gửi lên Google Sheets
                 const payload = { action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle, grade: grade, topic: topic, mode: mode, timeLimit: timeLimit, examPass: examPass, questions: finalQuestions };
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                 const data = await res.json();
@@ -1251,7 +1267,7 @@
         function loadKahootQuestion() {
             const mcqQuestions = activeExam.questions.filter(q => q.type === 'MCQ');
             if (kahootCurrentIndex >= mcqQuestions.length) {
-                document.getElementById('kahoot-view').innerHTML = `<div style="padding: 40px; text-align: center;"><i class="fa-solid fa-trophy" style="font-size: 4rem; color: #fbbf24; margin-bottom: 20px;"></i><h2 style="color: #7c3aed; margin-bottom: 10px;">Hoàn Thành Đấu Trường!</h2><p style="font-size: 1.3rem; font-weight: bold; color: #1e293b; margin-bottom: 25px;">Điểm số của bạn: ${kahootScore} / ${mcqQuestions.length * 10}</p></div>`; return;
+                document.getElementById('kahoot-view').innerHTML = `<div style="padding: 40px; text-align: center;"><i class="fa-solid fa-trophy" style="font-size: 4rem; color: #fbbf24; margin-bottom: 20px;"></i><h2 style="color: #7c3aed; margin-bottom: 10px;">Hoàn Thành Đấu Trường!</h2><p style="font-size: 1.3rem; font-weight: bold; color: #1e293b; margin-bottom: 25px;">Điểm số của bạn: ${kahootScore} / ${mcqQuestions.length * 10}</p><button class="btn-start" style="background: #7c3aed; width: 200px; margin: 0 auto;" onclick="backToPortal()"><i class="fa-solid fa-house"></i> Về Trang Chủ</button></div>`; return;
             }
             const q = mcqQuestions[kahootCurrentIndex]; document.getElementById('kahoot-progress').innerText = `Câu ${kahootCurrentIndex + 1} / ${mcqQuestions.length}`; document.getElementById('kahoot-q-text').innerHTML = q.q;
             const grid = document.getElementById('kahoot-options-grid'); grid.innerHTML = '';

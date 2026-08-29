@@ -679,7 +679,6 @@
             if (activeExam && activeExam.mode === 'KIEMTRA') e.preventDefault();
         });
 
-        /* MỤC LỤC ĐẦY ĐỦ CHO CẢ 3 KHỐI 12, 11, 10 THEO SGK KNTT */
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
@@ -1209,7 +1208,7 @@
         }
 
         /* -------------------------------------------------------------------------
-           BỘ BÓC TÁCH ĐỀ NHANH (LOẠI BỎ TRIỆT ĐỂ CHỮ A, B, C, D TRONG NỘI DUNG)
+           BỘ BÓC TÁCH ĐỀ NHANH (ĐÃ KHÓA CHẶT THUẬT TOÁN CẮT BỎ HOÀN TOÀN CHỮ A,B,C,D)
         ------------------------------------------------------------------------- */
         function parseBulkRawExam() {
             const rawContainer = document.getElementById('bulk-raw-text');
@@ -1240,8 +1239,9 @@
                 let explanation = '';
 
                 if (qType === 'MCQ') {
-                    // Cắt bỏ hoàn toàn từ chữ A. hoặc A) trở đi khỏi nội dung chính để loại bỏ triệt để việc lặp
-                    qContent = trimmed.split(/(?:^|\s|\n)A\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                    // Cắt cực mạnh từ chữ A xuất hiện đầu tiên (có thể là A., A), ...) ra khỏi phần đề chính
+                    let parts = trimmed.split(/(?:^|\s|\n)A\s*[\).]/);
+                    qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
 
                     ['A', 'B', 'C', 'D'].forEach((char, idx) => {
                         const optMatch = trimmed.match(new RegExp(`(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[A-D]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
@@ -1253,7 +1253,8 @@
                     else ans = 'A';
                 }
                 else if (qType === 'TF') {
-                    qContent = trimmed.split(/(?:^|\s|\n)a\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                    let parts = trimmed.split(/(?:^|\s|\n)a\s*[\).]/);
+                    qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
 
                     ['a', 'b', 'c', 'd'].forEach((char, idx) => {
                         const optMatch = trimmed.match(new RegExp(`(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[a-d]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
@@ -1273,9 +1274,10 @@
                     if (ansMatch) ans = ansMatch[1].trim();
                 }
 
+                // Xử lý sạch phần HTML/ảnh nếu có trong ô dán
                 if (rawHtml.includes('<img')) {
-                    const cleanHtmlParts = rawHtml.split(/(?:^|<br>|\s)[A]\s*[\).]/);
-                    qContent = cleanHtmlParts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                    let htmlParts = rawHtml.split(/(?:^|<br>|\s)A\s*[\).]/);
+                    qContent = htmlParts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
                 }
 
                 const expMatch = trimmed.match(/(?:Lời giải|Hướng dẫn giải)\s*[:\-]?\s*(.*$)/is);

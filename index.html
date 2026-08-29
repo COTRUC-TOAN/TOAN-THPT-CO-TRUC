@@ -333,7 +333,7 @@
                 </div>
             </div>
 
-            <!-- 2. NẠP ĐỀ NHANH (TỰ ĐỘNG CẬP NHẬT BÀI THEO KHỐI & LỌC SẠCH ĐÁP ÁN LẶP) -->
+            <!-- 2. NẠP ĐỀ NHANH -->
             <div id="sec-t-bulk" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -346,7 +346,6 @@
                                     <option value="12">Toán 12</option>
                                     <option value="11">Toán 11</option>
                                     <option value="10">Toán 10</option>
-                                    <option value="thpt">Trung học phổ thông Quốc gia</option>
                                 </select>
                             </div>
                             <div class="form-row">
@@ -372,7 +371,7 @@
                             <div class="form-row">
                                 <label>Chuyên Đề / Bài học:</label>
                                 <select class="form-input" id="bulk-q-topic">
-                                    <!-- Sẽ tự động đổ danh sách theo khối lớp -->
+                                    <!-- Đổ động theo khối -->
                                 </select>
                             </div>
                         </div>
@@ -426,7 +425,7 @@
                         <div class="form-row">
                             <label>Bài học thuộc KNTT:</label>
                             <select class="form-input" id="add-q-topic">
-                                <!-- Đổ dữ liệu động theo khối -->
+                                <!-- Đổ động theo khối -->
                             </select>
                         </div>
 
@@ -490,13 +489,12 @@
                                 <option value="12">Toán 12</option>
                                 <option value="11">Toán 11</option>
                                 <option value="10">Toán 10</option>
-                                <option value="thpt">Trung học phổ thông Quốc gia</option>
                             </select>
                         </div>
                         <div class="form-row">
                             <label>Chuyên Mục Hiển Thị:</label>
                             <select class="form-input" id="new-exam-topic">
-                                <!-- Đổ dữ liệu động -->
+                                <!-- Đổ động theo khối -->
                             </select>
                         </div>
                         <div class="form-row">
@@ -681,6 +679,7 @@
             if (activeExam && activeExam.mode === 'KIEMTRA') e.preventDefault();
         });
 
+        /* MỤC LỤC ĐẦY ĐỦ CHO CẢ 3 KHỐI 12, 11, 10 THEO SGK KNTT */
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
@@ -712,7 +711,7 @@
                 { id: '12-bai-11', name: 'Bài 11. Nguyên hàm', icon: 'fa-infinity' },
                 { id: '12-bai-12', name: 'Bài 12. Tích phân', icon: 'fa-square-root-variable' },
                 { id: '12-bai-13', name: 'Bài 13. Ứng dụng hình học tích phân', icon: 'fa-shapes' },
-                { type: 'header', title: 'CHƯƠNG V. TOẠ ĐỘ KHÔNG GIAN OXYZ' },
+                { type: 'header', title: 'CHƯƠNG V. TOẠ ĐỘ OXYZ' },
                 { id: '12-chuong-5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
                 { id: '12-bai-14', name: 'Bài 14. Phương trình mặt phẳng', icon: 'fa-square' },
                 { id: '12-bai-15', name: 'Bài 15. Phương trình đường thẳng', icon: 'fa-bars' },
@@ -725,26 +724,103 @@
             ],
             g11: [
                 { type: 'header', title: 'CHƯƠNG I. HÀM SỐ LƯỢNG GIÁC' },
-                { id: '11-chuong-1', name: 'Tổng hợp Chương 1 (K11)', icon: 'fa-folder-open' },
-                { id: '11-bai-1', name: 'Bài 1. Giá trị lượng giác', icon: 'fa-wave-square' },
+                { id: '11-chuong-1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
+                { id: '11-bai-1', name: 'Bài 1. Giá trị lượng giác góc lượng giác', icon: 'fa-wave-square' },
                 { id: '11-bai-2', name: 'Bài 2. Công thức lượng giác', icon: 'fa-square-root-variable' },
                 { id: '11-bai-3', name: 'Bài 3. Hàm số lượng giác', icon: 'fa-chart-line' },
                 { id: '11-bai-4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' },
                 { type: 'header', title: 'CHƯƠNG II. DÃY SỐ - CẤP SỐ' },
-                { id: '11-chuong-2', name: 'Tổng hợp Chương 2 (K11)', icon: 'fa-folder-open' },
+                { id: '11-chuong-2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
                 { id: '11-bai-5', name: 'Bài 5. Dãy số', icon: 'fa-list-ol' },
                 { id: '11-bai-6', name: 'Bài 6. Cấp số cộng', icon: 'fa-plus' },
-                { id: '11-bai-7', name: 'Bài 7. Cấp số nhân', icon: 'fa-xmark' }
+                { id: '11-bai-7', name: 'Bài 7. Cấp số nhân', icon: 'fa-xmark' },
+                { type: 'header', title: 'CHƯƠNG III. THỐNG KÊ (GHÉP NHÓM)' },
+                { id: '11-chuong-3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
+                { id: '11-bai-8', name: 'Bài 8. Mẫu số liệu ghép nhóm', icon: 'fa-chart-simple' },
+                { id: '11-bai-9', name: 'Bài 9. Các số đặc trưng đo xu thế trung tâm', icon: 'fa-chart-pie' },
+                { type: 'header', title: 'CHƯƠNG IV. QUAN HỆ SONG SONG' },
+                { id: '11-chuong-4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
+                { id: '11-bai-10', name: 'Bài 10. Đường thẳng và mặt phẳng không gian', icon: 'fa-bars' },
+                { id: '11-bai-11', name: 'Bài 11. Hai đường thẳng song song', icon: 'fa-equals' },
+                { id: '11-bai-12', name: 'Bài 12. Đường thẳng & mặt phẳng song song', icon: 'fa-layer-group' },
+                { id: '11-bai-13', name: 'Bài 13. Hai mặt phẳng song song', icon: 'fa-clone' },
+                { id: '11-bai-14', name: 'Bài 14. Phép chiếu song song', icon: 'fa-project-diagram' },
+                { type: 'header', title: 'CHƯƠNG V. GIỚI HẠN - HÀM SỐ LIÊN TỤC' },
+                { id: '11-chuong-5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
+                { id: '11-bai-15', name: 'Bài 15. Giới hạn của dãy số', icon: 'fa-arrow-right-arrow-left' },
+                { id: '11-bai-16', name: 'Bài 16. Giới hạn của hàm số', icon: 'fa-arrows-split-up-and-left' },
+                { id: '11-bai-17', name: 'Bài 17. Hàm số liên tục', icon: 'fa-infinity' },
+                { type: 'header', title: 'CHƯƠNG VI. HÀM SỐ MŨ & LÔGARIT' },
+                { id: '11-chuong-6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
+                { id: '11-bai-18', name: 'Bài 18. Lũy thừa với số mũ thực', icon: 'fa-superscript' },
+                { id: '11-bai-19', name: 'Bài 19. Lôgarit', icon: 'fa-square-root-variable' },
+                { id: '11-bai-20', name: 'Bài 20. Hàm số mũ và hàm số lôgarit', icon: 'fa-chart-line' },
+                { id: '11-bai-21', name: 'Bài 21. Phương trình, bất phương trình mũ & lôgarit', icon: 'fa-equals' },
+                { type: 'header', title: 'CHƯƠNG VII. QUAN HỆ VUÔNG GÓC' },
+                { id: '11-chuong-7', name: 'Tổng hợp Chương 7', icon: 'fa-folder-open' },
+                { id: '11-bai-22', name: 'Bài 22. Hai đường thẳng vuông góc', icon: 'fa-vector-square' },
+                { id: '11-bai-23', name: 'Bài 23. Đường thẳng vuông góc mặt phẳng', icon: 'fa-draw-polygon' },
+                { id: '11-bai-24', name: 'Bài 24. Góc giữa đường thẳng và mặt phẳng', icon: 'fa-shapes' },
+                { id: '11-bai-25', name: 'Bài 25. Hai mặt phẳng vuông góc', icon: 'fa-cube' },
+                { id: '11-bai-26', name: 'Bài 26. Khoảng cách', icon: 'fa-ruler-combined' },
+                { id: '11-bai-27', name: 'Bài 27. Thể tích', icon: 'fa-cubes' },
+                { type: 'header', title: 'CHƯƠNG VIII. XÁC SUẤT' },
+                { id: '11-chuong-8', name: 'Tổng hợp Chương 8', icon: 'fa-folder-open' },
+                { id: '11-bai-28', name: 'Bài 28. Biến cố hợp, giao, độc lập', icon: 'fa-dice' },
+                { id: '11-bai-29', name: 'Bài 29. Công thức cộng xác suất', icon: 'fa-plus-circle' },
+                { id: '11-bai-30', name: 'Bài 30. Công thức nhân xác suất', icon: 'fa-times-circle' },
+                { type: 'header', title: 'CHƯƠNG IX. ĐẠO HÀM' },
+                { id: '11-chuong-9', name: 'Tổng hợp Chương 9', icon: 'fa-folder-open' },
+                { id: '11-bai-31', name: 'Bài 31. Định nghĩa và ý nghĩa đạo hàm', icon: 'fa-bolt' },
+                { id: '11-bai-32', name: 'Bài 32. Các quy tắc tính đạo hàm', icon: 'fa-calculator' },
+                { id: '11-bai-33', name: 'Bài 33. Đạo hàm cấp hai', icon: 'fa-chart-line' }
             ],
             g10: [
                 { type: 'header', title: 'CHƯƠNG I. MỆNH ĐỀ & TẬP HỢP' },
-                { id: '10-chuong-1', name: 'Tổng hợp Chương 1 (K10)', icon: 'fa-folder-open' },
+                { id: '10-chuong-1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
                 { id: '10-bai-1', name: 'Bài 1. Mệnh đề', icon: 'fa-check' },
-                { id: '10-bai-2', name: 'Bài 2. Tập hợp và các phép toán', icon: 'fa-object-group' },
-                { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH' },
-                { id: '10-chuong-2', name: 'Tổng hợp Chương 2 (K10)', icon: 'fa-folder-open' },
+                { id: '10-bai-2', name: 'Bài 2. Tập hợp và các phép toán trên tập hợp', icon: 'fa-object-group' },
+                { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH BẬC NHẤT' },
+                { id: '10-chuong-2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
                 { id: '10-bai-3', name: 'Bài 3. Bất phương trình bậc nhất hai ẩn', icon: 'fa-table-cells' },
-                { id: '10-bai-4', name: 'Bài 4. Hệ bất phương trình hai ẩn', icon: 'fa-table' }
+                { id: '10-bai-4', name: 'Bài 4. Hệ bất phương trình bậc nhất hai ẩn', icon: 'fa-table' },
+                { type: 'header', title: 'CHƯƠNG III. HỆ THỨC LƯỢNG' },
+                { id: '10-chuong-3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
+                { id: '10-bai-5', name: 'Bài 5. Giá trị lượng giác góc từ 0° đến 180°', icon: 'fa-angle-right' },
+                { id: '10-bai-6', name: 'Bài 6. Hệ thức lượng trong tam giác', icon: 'fa-draw-polygon' },
+                { type: 'header', title: 'CHƯƠNG IV. VECTƠ' },
+                { id: '10-chuong-4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
+                { id: '10-bai-7', name: 'Bài 7. Các khái niệm mở đầu', icon: 'fa-arrow-right' },
+                { id: '10-bai-8', name: 'Bài 8. Tổng và hiệu của hai vectơ', icon: 'fa-plus' },
+                { id: '10-bai-9', name: 'Bài 9. Tích của vectơ với một số', icon: 'fa-xmark' },
+                { id: '10-bai-10', name: 'Bài 10. Vectơ trong mặt phẳng tọa độ', icon: 'fa-location-dot' },
+                { id: '10-bai-11', name: 'Bài 11. Tích vô hướng của hai vectơ', icon: 'fa-calculator' },
+                { type: 'header', title: 'CHƯƠNG V. THỐNG KÊ' },
+                { id: '10-chuong-5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
+                { id: '10-bai-12', name: 'Bài 12. Số gần đúng và sai số', icon: 'fa-hashtag' },
+                { id: '10-bai-13', name: 'Bài 13. Các số đặc trưng đo xu thế trung tâm', icon: 'fa-chart-pie' },
+                { id: '10-bai-14', name: 'Bài 14. Các số đặc trưng đo độ phân tán', icon: 'fa-chart-simple' },
+                { type: 'header', title: 'CHƯƠNG VI. HÀM SỐ & ĐỒ THỊ' },
+                { id: '10-chuong-6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
+                { id: '10-bai-15', name: 'Bài 15. Hàm số', icon: 'fa-chart-line' },
+                { id: '10-bai-16', name: 'Bài 16. Hàm số bậc hai', icon: 'fa-wave-square' },
+                { id: '10-bai-17', name: 'Bài 17. Dấu của tam thức bậc hai', icon: 'fa-equals' },
+                { id: '10-bai-18', name: 'Bài 18. Phương trình quy về phương trình bậc hai', icon: 'fa-square-root-variable' },
+                { type: 'header', title: 'CHƯƠNG VII. TOẠ ĐỘ TRONG MẶT PHẲNG' },
+                { id: '10-chuong-7', name: 'Tổng hợp Chương 7', icon: 'fa-folder-open' },
+                { id: '10-bai-19', name: 'Bài 19. Phương trình đường thẳng', icon: 'fa-bars' },
+                { id: '10-bai-20', name: 'Bài 20. Đường thẳng trong mặt phẳng tọa độ', icon: 'fa-compass' },
+                { id: '10-bai-21', name: 'Bài 21. Đường tròn trong mặt phẳng tọa độ', icon: 'fa-circle' },
+                { id: '10-bai-22', name: 'Bài 22. Ba đường conic', icon: 'fa-shapes' },
+                { type: 'header', title: 'CHƯƠNG VIII. ĐẠI SỐ TỔ HỢP' },
+                { id: '10-chuong-8', name: 'Tổng hợp Chương 8', icon: 'fa-folder-open' },
+                { id: '10-bai-23', name: 'Bài 23. Quy tắc đếm', icon: 'fa-list-ol' },
+                { id: '10-bai-24', name: 'Bài 24. Hoán vị, chỉnh hợp và tổ hợp', icon: 'fa-layer-group' },
+                { id: '10-bai-25', name: 'Bài 25. Nhị thức Newton', icon: 'fa-superscript' },
+                { type: 'header', title: 'CHƯƠNG IX. TÍNH XÁC SUẤT' },
+                { id: '10-chuong-9', name: 'Tổng hợp Chương 9', icon: 'fa-folder-open' },
+                { id: '10-bai-26', name: 'Bài 26. Biến cố và định nghĩa cổ điển xác suất', icon: 'fa-dice' },
+                { id: '10-bai-27', name: 'Bài 27. Thực hành tính xác suất cổ điển', icon: 'fa-check-circle' }
             ]
         };
 
@@ -774,7 +850,6 @@
             });
         }
 
-        // Cập nhật danh sách bài học động theo khối lớp cho giáo viên
         function getTopicsForGrade(grade) {
             let res = [...topicsConfig.general];
             if (grade === '12') res = res.concat(topicsConfig.g12);
@@ -1198,9 +1273,7 @@
                     if (ansMatch) ans = ansMatch[1].trim();
                 }
 
-                // Xử lý sạch phần HTML/ảnh để không bị dính cụm đáp án thô
                 if (rawHtml.includes('<img')) {
-                    // Lấy phần trước chữ A viết hoa đầu tiên
                     const cleanHtmlParts = rawHtml.split(/(?:^|<br>|\s)[A]\s*[\).]/);
                     qContent = cleanHtmlParts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
                 }
@@ -1913,7 +1986,7 @@
                 if (data.status === "success") {
                     const resDiv = document.getElementById('quiz-result');
                     resDiv.style.display = 'block';
-                    resDiv.innerHTML = `🎉 Điểm số của bạn: <strong>${data.totalScore} / 10</strong><br><small>(P.I: ${data.p1Score}đ | P.II: ${data.p2Score}đ | P.III: ${data.p3Score}đ)</small><br><span style="color: #15803d; font-size: 0.95rem;">Graded & saved!</span>`;
+                    resDiv.innerHTML = `🎉 Điểm số của bạn: <strong>${data.totalScore} / 10</strong><br><small>(P.I: ${data.p1Score}đ | P.II: ${data.p2Score}đ | P.III: ${data.p3Score}đ)</small><br><span style="color: #15803d; font-size: 0.95rem;">Đã ghi nhận kết quả vào sổ điểm giáo viên!</span>`;
                     btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Đã hoàn thành nộp bài';
 
                     if (activeExam.mode === 'LUYENTAP' && data.details) {

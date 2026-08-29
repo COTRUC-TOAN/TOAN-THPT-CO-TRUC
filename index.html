@@ -72,14 +72,14 @@
         .grade-pill:hover { background: #f1f5f9; }
         .grade-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3); }
 
-        .portal-layout { display: grid; grid-template-columns: 320px 1fr; gap: 25px; align-items: start; }
+        .portal-layout { display: grid; grid-template-columns: 290px 1fr; gap: 25px; align-items: start; }
         @media (max-width: 900px) { .portal-layout { grid-template-columns: 1fr; } }
 
         .sidebar { background: var(--card-bg); border-radius: var(--radius-lg); padding: 18px 14px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .sidebar-title { font-size: 1.05rem; font-weight: 700; color: #334155; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .topic-list { list-style: none; display: flex; flex-direction: column; gap: 4px; max-height: 70vh; overflow-y: auto; padding-right: 4px; }
-        .topic-group-title { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #1e40af; background: #eff6ff; padding: 6px 10px; border-radius: 6px; margin: 12px 0 6px 0; letter-spacing: 0.5px; }
-        .topic-item { padding: 9px 12px; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; color: #475569; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+        .topic-group-title { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: #94a3b8; margin: 10px 0 4px 8px; letter-spacing: 0.5px; }
+        .topic-item { padding: 9px 12px; border-radius: var(--radius-md); font-size: 0.92rem; font-weight: 600; color: #475569; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
         .topic-item:hover { background: #f1f5f9; color: var(--primary); }
         .topic-item.active { background: #eff6ff; color: var(--primary); font-weight: 700; border-left: 3px solid var(--primary); }
 
@@ -93,9 +93,11 @@
         .exam-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
         .card-banner { height: 130px; position: relative; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); color: #fff; }
         .card-banner.exam-mode { background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%); }
+        .card-banner.kahoot-mode { background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%); }
         .card-icon { width: 52px; height: 52px; background: rgba(255,255,255,0.95); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #0f172a; font-size: 1.4rem; }
         .card-badge { position: absolute; bottom: 8px; left: 10px; font-size: 0.72rem; font-weight: 800; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); padding: 3px 8px; border-radius: 4px; }
         .card-mode-badge { position: absolute; top: 10px; right: 10px; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 4px; background: #fff; }
+        
         .card-body { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .card-title { font-size: 1.08rem; font-weight: 700; color: #1e293b; margin-bottom: 8px; line-height: 1.4; }
         .card-meta { display: flex; gap: 14px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; font-weight: 600; }
@@ -160,7 +162,7 @@
         .selected-item { background: #fff; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .btn-remove-q { color: #dc2626; background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px; }
 
-        /* GIAO DIỆN LÀM BÀI */
+        /* GIAO DIỆN LÀM BÀI TRUYỀN THỐNG */
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
         .quiz-topbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
         .btn-back { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-family: inherit; }
@@ -169,6 +171,19 @@
         .anti-cheat-alert { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px 14px; border-radius: 8px; margin-bottom: 15px; display: none; }
         .student-box { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
         .student-box input { padding: 12px 14px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 1rem; font-weight: 600; font-family: inherit; }
+
+        /* GIAO DIỆN ĐẤU TRƯỜNG KAHOOT */
+        #kahoot-view { display: none; max-width: 750px; margin: 0 auto; background: #fff; padding: 30px; border-radius: var(--radius-lg); border: 2px solid #7c3aed; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15); text-align: center; }
+        .kahoot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .kahoot-timer { width: 65px; height: 65px; border-radius: 50%; background: #7c3aed; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; }
+        .kahoot-question { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 25px; line-height: 1.8; text-align: left; }
+        .kahoot-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .kahoot-opt-btn { padding: 22px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 700; color: #fff; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 12px; text-align: left; font-family: inherit; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .kahoot-opt-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .k-opt-0 { background: #e11d48; } /* Đỏ - A */
+        .k-opt-1 { background: #2563eb; } /* Xanh dương - B */
+        .k-opt-2 { background: #d97706; } /* Vàng cam - C */
+        .k-opt-3 { background: #16a34a; } /* Xanh lá - D */
 
         .secure-exam-mode { user-select: none !important; -webkit-user-select: none !important; }
 
@@ -195,7 +210,7 @@
         .formula-box { background: #f8fafc; border-left: 4px solid var(--primary); padding: 18px; border-radius: 8px; font-size: 1.05rem; }
         .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: 600; z-index: 1000; display: none; }
 
-        .q-card img, .bank-q-item img, .preview-box img {
+        .q-card img, .bank-q-item img, .preview-box img, .kahoot-question img {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
@@ -318,7 +333,7 @@
                 </div>
             </div>
 
-            <!-- 2. NẠP ĐỀ NHANH (DÁN LATEX & ẢNH) -->
+            <!-- 2. NẠP ĐỀ NHANH (DÁN LATEX & ẢNH, KHÔNG LẶP ĐÁP ÁN) -->
             <div id="sec-t-bulk" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -334,6 +349,17 @@
                                 </select>
                             </div>
                             <div class="form-row">
+                                <label>Dạng Câu HỏI (Mặc định khi bóc tách):</label>
+                                <select class="form-input" id="bulk-q-type-default">
+                                    <option value="MCQ">Trắc nghiệm 4 lựa chọn (MCQ)</option>
+                                    <option value="TF">Đúng / Sai (TF)</option>
+                                    <option value="SA">Trả lời ngắn (SA)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="form-row">
                                 <label>Mức độ mặc định:</label>
                                 <select class="form-input" id="bulk-q-level">
                                     <option value="NB">Nhận biết (NB)</option>
@@ -342,27 +368,26 @@
                                     <option value="VDC">Vận dụng cao (VDC)</option>
                                 </select>
                             </div>
-                        </div>
-
-                        <div class="form-row">
-                            <label>Chuyên Đề:</label>
-                            <select class="form-input" id="bulk-q-topic">
-                                <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
-                                <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian (K12)</option>
-                                <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm (K12)</option>
-                                <option value="12-nguyen-ham-tich-phan">Chương 4: Nguyên hàm & Tích phân (K12)</option>
-                                <option value="12-oxyz">Chương 5: Phương pháp tọa độ Oxyz (K12)</option>
-                                <option value="12-xac-suat">Chương 6: Xác suất có điều kiện (K12)</option>
-                                <option value="giua-ki-1">Kiểm tra Giữa Kì 1</option>
-                                <option value="hoc-ki-1">Kiểm tra Học Kì 1</option>
-                                <option value="giua-ki-2">Kiểm tra Giữa Kì 2</option>
-                                <option value="hoc-ki-2">Kiểm tra Học Kì 2</option>
-                                <option value="thpt-qg">Luyện đề Tốt Nghiệp THPT</option>
-                                <option value="11-luong-giac">K11: Hàm số & PT Lượng giác</option>
-                                <option value="11-day-so-cap-so">K11: Dãy số, Cấp số cộng & Nhân</option>
-                                <option value="10-menh-de-tap-hop">K10: Mệnh đề & Tập hợp</option>
-                                <option value="10-he-thuc-luong">K10: Hệ thức lượng trong tam giác</option>
-                            </select>
+                            <div class="form-row">
+                                <label>Chuyên Đề:</label>
+                                <select class="form-input" id="bulk-q-topic">
+                                    <option value="12-ham-so">Chương 1: Khảo sát hàm số & Đạo hàm (K12)</option>
+                                    <option value="12-vecto-khong-gian">Chương 2: Vectơ & Tọa độ không gian (K12)</option>
+                                    <option value="12-thong-ke">Chương 3: Thống kê số liệu ghép nhóm (K12)</option>
+                                    <option value="12-nguyen-ham-tich-phan">Chương 4: Nguyên hàm & Tích phân (K12)</option>
+                                    <option value="12-oxyz">Chương 5: Phương pháp tọa độ Oxyz (K12)</option>
+                                    <option value="12-xac-suat">Chương 6: Xác suất có điều kiện (K12)</option>
+                                    <option value="giua-ki-1">Kiểm tra Giữa Kì 1</option>
+                                    <option value="hoc-ki-1">Kiểm tra Học Kì 1</option>
+                                    <option value="giua-ki-2">Kiểm tra Giữa Kì 2</option>
+                                    <option value="hoc-ki-2">Kiểm tra Học Kì 2</option>
+                                    <option value="thpt-qg">Luyện đề Tốt Nghiệp THPT</option>
+                                    <option value="11-luong-giac">K11: Hàm số & PT Lượng giác</option>
+                                    <option value="11-day-so-cap-so">K11: Dãy số, Cấp số cộng & Nhân</option>
+                                    <option value="10-menh-de-tap-hop">K10: Mệnh đề & Tập hợp</option>
+                                    <option value="10-he-thuc-luong">K10: Hệ thức lượng trong tam giác</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="form-row">
@@ -520,10 +545,11 @@
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="form-row">
-                                <label>Chế Độ:</label>
+                                <label>Chế Độ / Kiểu Thi:</label>
                                 <select class="form-input" id="new-exam-mode">
                                     <option value="LUYENTAP">🟢 Luyện Tập (Xem lời giải)</option>
                                     <option value="KIEMTRA">🔴 Kiểm Tra (Bảo mật máy chủ)</option>
+                                    <option value="KAHOOT">⚡ Đấu Trường Kahoot (Tốc độ)</option>
                                 </select>
                             </div>
                             <div class="form-row">
@@ -613,6 +639,7 @@
             </div>
         </div>
 
+        <!-- GIAO DIỆN LÀM BÀI TRUYỀN THỐNG -->
         <div id="quiz-view">
             <div class="quiz-topbar">
                 <button class="btn-back" onclick="backToPortal()"><i class="fa-solid fa-arrow-left"></i> Trở về</button>
@@ -635,6 +662,21 @@
             </form>
 
             <div id="quiz-result"></div>
+        </div>
+
+        <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT -->
+        <div id="kahoot-view">
+            <div class="kahoot-header">
+                <button class="btn-back" onclick="backToPortal()"><i class="fa-solid fa-arrow-left"></i> Thoát</button>
+                <div id="kahoot-progress" style="font-weight: 800; color: #7c3aed; font-size: 1.1rem;">Câu 1 / 10</div>
+                <div class="kahoot-timer" id="kahoot-timer-val">20</div>
+            </div>
+            
+            <div class="kahoot-question" id="kahoot-q-text">Đang tải câu hỏi...</div>
+            
+            <div class="kahoot-options-grid" id="kahoot-options-grid">
+                <!-- Các nút đáp án Kahoot -->
+            </div>
         </div>
     </div>
 
@@ -671,6 +713,12 @@
         let secondsRemaining = 0;
         let cheatWarnings = 0;
 
+        // Biến cho chế độ Kahoot
+        let kahootCurrentIndex = 0;
+        let kahootScore = 0;
+        let kahootTimer = null;
+        let kahootSeconds = 20;
+
         function renderMath(targetElement) {
             if (window.MathJax && MathJax.Hub && MathJax.Hub.Queue) {
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, targetElement || document.body]);
@@ -680,15 +728,7 @@
         document.addEventListener('contextmenu', e => {
             if (activeExam && activeExam.mode === 'KIEMTRA') e.preventDefault();
         });
-        document.addEventListener('keydown', e => {
-            if (activeExam && activeExam.mode === 'KIEMTRA') {
-                if (e.key === 'F12' || (e.ctrlKey && (e.key === 'u' || e.key === 'c' || e.key === 's')) || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                    e.preventDefault();
-                }
-            }
-        });
 
-        /* GIỮ NGUYÊN DANH MỤC TIÊU CHUẨN ĐỂ KHÔNG BỊ LỆCH TÊN VỚI GOOGLE SHEETS */
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
@@ -805,15 +845,16 @@
             }
 
             list.forEach(ex => {
+                const isKahoot = ex.mode === 'KAHOOT';
                 const isExamMode = ex.mode === 'KIEMTRA';
                 const card = document.createElement('div');
                 card.className = 'exam-card';
                 card.innerHTML = `
-                    <div class="card-banner ${isExamMode ? 'exam-mode' : ''}">
-                        <div class="card-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <div class="card-banner ${isKahoot ? 'kahoot-mode' : (isExamMode ? 'exam-mode' : '')}">
+                        <div class="card-icon"><i class="fa-solid ${isKahoot ? 'fa-bolt' : 'fa-book-open'}"></i></div>
                         <div class="card-badge">KHỐI ${ex.grade.toString().toUpperCase()}</div>
-                        <div class="card-mode-badge ${isExamMode ? 'mode-kiem-tra' : 'mode-luyen-tap'}">
-                            ${isExamMode ? '🔴 KIỂM TRA' : '🟢 LUYỆN TẬP'}
+                        <div class="card-mode-badge" style="color: ${isKahoot ? '#7c3aed' : (isExamMode ? '#dc2626' : '#16a34a')};">
+                            ${isKahoot ? '⚡ KAHOOT' : (isExamMode ? '🔴 KIỂM TRA' : '🟢 LUYỆN TẬP')}
                         </div>
                     </div>
                     <div class="card-body">
@@ -865,6 +906,7 @@
                     resultsBank = data.results || [];
                     document.getElementById('portal-view').style.display = 'none';
                     document.getElementById('quiz-view').style.display = 'none';
+                    document.getElementById('kahoot-view').style.display = 'none';
                     document.getElementById('teacher-view').style.display = 'block';
                     populateClassAndExamFilters();
                     applyScoreFilters();
@@ -911,7 +953,6 @@
             document.getElementById('add-q-id').value = `CH${gr}_AUTO_${r}`;
         }
 
-        /* HỖ TRỢ DÁN TRỰC TIẾP HÌNH ẢNH (CTRL + V) */
         function handleBulkPaste(e) {
             const items = (e.clipboardData || e.originalEvent.clipboardData).items;
             for (let i = 0; i < items.length; i++) {
@@ -1048,7 +1089,7 @@
         }
 
         /* -------------------------------------------------------------------------
-           BỘ BÓC TÁCH ĐỀ NHANH (GIỮ NGUYÊN ẢNH VÀ CÔNG THỨC)
+           BỘ BÓC TÁCH ĐỀ NHANH (ĐÃ KHẮC PHỤC LỖI LẶP ĐÁP ÁN & CÓ CHỌN DẠNG)
         ------------------------------------------------------------------------- */
         function parseBulkRawExam() {
             const rawContainer = document.getElementById('bulk-raw-text');
@@ -1057,6 +1098,7 @@
             const grade = document.getElementById('bulk-q-grade').value;
             const topic = document.getElementById('bulk-q-topic').value;
             const defaultLevel = document.getElementById('bulk-q-level').value;
+            const selectedType = document.getElementById('bulk-q-type-default').value;
 
             if (!rawPlain) {
                 alert("Vui lòng dán nội dung đề bài!");
@@ -1071,18 +1113,15 @@
                 if (!trimmed) return;
 
                 const qId = `CH${grade}_${topic.substring(0, 4).toUpperCase()}_${Date.now().toString().slice(-4)}_${index + 1}`;
-                let qType = 'MCQ';
+                let qType = selectedType;
                 let qContent = '';
                 let options = ['', '', '', ''];
                 let ans = '';
                 let explanation = '';
 
-                const hasMCQOpts = /(?:^|\s|\n)A\s*[\).]/m.test(trimmed) && /(?:^|\s|\n)B\s*[\).]/m.test(trimmed);
-                const hasTFOpts = /(?:^|\s|\n)a\s*[\).]/m.test(trimmed) && /(?:^|\s|\n)b\s*[\).]/m.test(trimmed);
-
-                if (hasMCQOpts) {
-                    qType = 'MCQ';
-                    qContent = trimmed.split(/(?:^|\s|\n)A\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                if (qType === 'MCQ') {
+                    // Tự động cắt bỏ phần đáp án A, B, C, D ra khỏi nội dung đề bài chính để không bị lặp
+                    qContent = trimmed.split(/(?:^|\s|\n)[A-D]\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
 
                     ['A', 'B', 'C', 'D'].forEach((char, idx) => {
                         const optMatch = trimmed.match(new RegExp(`(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[A-D]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
@@ -1093,9 +1132,8 @@
                     if (ansMatch) ans = ansMatch[1].toUpperCase();
                     else ans = 'A';
                 }
-                else if (hasTFOpts) {
-                    qType = 'TF';
-                    qContent = trimmed.split(/(?:^|\s|\n)a\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
+                else if (qType === 'TF') {
+                    qContent = trimmed.split(/(?:^|\s|\n)[a-d]\s*[\).]/)[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
 
                     ['a', 'b', 'c', 'd'].forEach((char, idx) => {
                         const optMatch = trimmed.match(new RegExp(`(?:^|\\s|\\n)${char}\\s*[\\).](.*?)(?=(?:(?:^|\\s|\\n)[a-d]\\s*[\\).]|Lời giải|Đáp án|Chọn|$))`, 's'));
@@ -1115,6 +1153,7 @@
                     if (ansMatch) ans = ansMatch[1].trim();
                 }
 
+                // Nếu có ảnh dán vào, giữ nguyên hình ảnh trong qContent
                 if (rawHtml.includes('<img')) {
                     qContent = rawHtml;
                 }
@@ -1447,6 +1486,7 @@
         function showPortalView() {
             document.getElementById('teacher-view').style.display = 'none';
             document.getElementById('quiz-view').style.display = 'none';
+            document.getElementById('kahoot-view').style.display = 'none';
             document.getElementById('portal-view').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1565,13 +1605,91 @@
 
         function closeTheoryModal() { document.getElementById('theory-modal').style.display = 'none'; }
 
-        /* VÀO LÀM BÀI */
+        /* BẮT ĐẦU LÀM BÀI (PHÂN LOẠI THEO CHẾ ĐỘ TRUYỀN THỐNG HOẶC KAHOOT) */
         function startExam(id) {
             activeExam = examBank.find(e => e.id === id);
             if (!activeExam) return;
 
             document.getElementById('portal-view').style.display = 'none';
             document.getElementById('teacher-view').style.display = 'none';
+
+            if (activeExam.mode === 'KAHOOT') {
+                startKahootMode();
+            } else {
+                startTraditionalExamMode();
+            }
+        }
+
+        /* KHỞI ĐỘNG CHẾ ĐỘ KAHOOT */
+        function startKahootMode() {
+            document.getElementById('kahoot-view').style.display = 'block';
+            kahootCurrentIndex = 0;
+            kahootScore = 0;
+            loadKahootQuestion();
+        }
+
+        function loadKahootQuestion() {
+            const mcqQuestions = activeExam.questions.filter(q => q.type === 'MCQ');
+            if (kahootCurrentIndex >= mcqQuestions.length) {
+                // Hoàn thành Kahoot
+                document.getElementById('kahoot-view').innerHTML = `
+                    <div style="padding: 40px; text-align: center;">
+                        <i class="fa-solid fa-trophy" style="font-size: 4rem; color: #fbbf24; margin-bottom: 20px;"></i>
+                        <h2 style="color: #7c3aed; margin-bottom: 10px;">Hoàn Thành Đấu Trường!</h2>
+                        <p style="font-size: 1.3rem; font-weight: 800; color: #1e293b; margin-bottom: 25px;">Điểm số của bạn: ${kahootScore} / ${mcqQuestions.length * 10}</p>
+                        <button class="btn-start" style="background: #7c3aed; width: 200px; margin: 0 auto;" onclick="backToPortal()"><i class="fa-solid fa-house"></i> Về Trang Chủ</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = mcqQuestions[kahootCurrentIndex];
+            document.getElementById('kahoot-progress').innerText = `Câu ${kahootCurrentIndex + 1} / ${mcqQuestions.length}`;
+            document.getElementById('kahoot-q-text').innerHTML = q.q;
+
+            const grid = document.getElementById('kahoot-options-grid');
+            grid.innerHTML = '';
+            ['A', 'B', 'C', 'D'].forEach((ch, idx) => {
+                grid.innerHTML += `
+                    <button class="kahoot-opt-btn k-opt-${idx}" onclick="answerKahoot('${ch}', '${q.ans}')">
+                        <span style="font-size: 1.3rem; background: rgba(0,0,0,0.2); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">${ch}</span>
+                        <span>${q.options[idx] || ''}</span>
+                    </button>
+                `;
+            });
+
+            renderMath(document.getElementById('kahoot-view'));
+
+            // Đếm ngược Kahoot (20 giây/câu)
+            kahootSeconds = 20;
+            document.getElementById('kahoot-timer-val').innerText = kahootSeconds;
+            clearInterval(kahootTimer);
+            kahootTimer = setInterval(() => {
+                kahootSeconds--;
+                document.getElementById('kahoot-timer-val').innerText = kahootSeconds;
+                if (kahootSeconds <= 0) {
+                    clearInterval(kahootTimer);
+                    // Hết giờ tính là sai, chuyển câu tiếp
+                    kahootCurrentIndex++;
+                    loadKahootQuestion();
+                }
+            }, 1000);
+        }
+
+        function answerKahoot(selected, correct) {
+            clearInterval(kahootTimer);
+            if (selected === correct.trim().toUpperCase()) {
+                kahootScore += 10 + kahootSeconds; // Thưởng điểm theo tốc độ thời gian còn lại
+                alert("✨ Chính xác! Tuyệt vời.");
+            } else {
+                alert(`❌ Sai rồi! Đáp án đúng là: ${correct}`);
+            }
+            kahootCurrentIndex++;
+            loadKahootQuestion();
+        }
+
+        /* CHẾ ĐỘ LÀM BÀI TRUYỀN THỐNG (LUYỆN TẬP / KIỂM TRA) */
+        function startTraditionalExamMode() {
             document.getElementById('quiz-view').style.display = 'block';
             document.getElementById('quiz-title').innerText = activeExam.title;
             document.getElementById('quiz-result').style.display = 'none';
@@ -1689,9 +1807,11 @@
 
         function backToPortal() {
             clearInterval(timerInterval);
+            clearInterval(kahootTimer);
             window.onblur = null;
             document.body.classList.remove('secure-exam-mode');
             document.getElementById('quiz-view').style.display = 'none';
+            document.getElementById('kahoot-view').style.display = 'none';
             document.getElementById('portal-view').style.display = 'block';
             window.history.pushState({}, document.title, window.location.pathname);
             window.scrollTo({ top: 0, behavior: 'smooth' });

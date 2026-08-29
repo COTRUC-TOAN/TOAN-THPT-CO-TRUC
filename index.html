@@ -162,10 +162,13 @@
         .selected-item { background: #fff; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .btn-remove-q { color: #dc2626; background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px; }
 
+        /* MÀN HÌNH NHẬP MẬT KHẨU KIỂM TRA BẢO MẬT */
+        #password-lock-screen { display: none; max-width: 500px; margin: 80px auto; background: #fff; padding: 40px; border-radius: var(--radius-lg); border: 2px solid #dc2626; text-align: center; box-shadow: 0 10px 30px rgba(220, 38, 38, 0.15); }
+        
         /* GIAO DIỆN LÀM BÀI TRUYỀN THỐNG */
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
         .quiz-topbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
-        .btn-back { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-family: inherit; }
+        .btn-back { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-family: inherit; display: none; /* Khóa nút trở về khi học sinh bấm qua link riêng */ }
         .timer-box { font-size: 1.2rem; font-weight: 800; color: #dc2626; background: #fee2e2; padding: 6px 16px; border-radius: var(--radius-pill); display: flex; align-items: center; gap: 6px; }
         .timer-box.practice { color: #16a34a; background: #dcfce7; }
         .anti-cheat-alert { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px 14px; border-radius: 8px; margin-bottom: 15px; display: none; }
@@ -370,9 +373,7 @@
                             </div>
                             <div class="form-row">
                                 <label>Chuyên Đề / Bài học:</label>
-                                <select class="form-input" id="bulk-q-topic">
-                                    <!-- Đổ động theo khối -->
-                                </select>
+                                <select class="form-input" id="bulk-q-topic"></select>
                             </div>
                         </div>
 
@@ -424,9 +425,7 @@
 
                         <div class="form-row">
                             <label>Bài học thuộc KNTT:</label>
-                            <select class="form-input" id="add-q-topic">
-                                <!-- Đổ động theo khối -->
-                            </select>
+                            <select class="form-input" id="add-q-topic"></select>
                         </div>
 
                         <div class="form-row">
@@ -493,9 +492,7 @@
                         </div>
                         <div class="form-row">
                             <label>Chuyên Mục Hiển Thị:</label>
-                            <select class="form-input" id="new-exam-topic">
-                                <!-- Đổ động theo khối -->
-                            </select>
+                            <select class="form-input" id="new-exam-topic"></select>
                         </div>
                         <div class="form-row">
                             <label>Mã Đề (Ví dụ: LT12-01-b, KT12-05-b):</label>
@@ -511,7 +508,7 @@
                                 <label>Chế Độ / Kiểu Thi:</label>
                                 <select class="form-input" id="new-exam-mode">
                                     <option value="LUYENTAP">🟢 Luyện Tập (Xem lời giải)</option>
-                                    <option value="KIEMTRA">🔴 Kiểm Tra (Bảo mật máy chủ)</option>
+                                    <option value="KIEMTRA">🔴 Kiểm Tra (Bảo mật - Cần mật khẩu)</option>
                                     <option value="KAHOOT">⚡ Đấu Trường Kahoot (Tốc độ)</option>
                                 </select>
                             </div>
@@ -551,7 +548,6 @@
                             <button onclick="autoPickRandomQuestions()" style="width: 100%; margin-top: 10px; padding: 8px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;"><i class="fa-solid fa-bolt"></i> Bốc Ngẫu Nhiên Vào Đề</button>
                         </div>
 
-                        <!-- BỘ LỌC ĐA NĂNG -->
                         <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px;">
                             <select class="form-input" id="bank-filter-grade" onchange="updateBankFilterTopics(); filterQuestionBankList();">
                                 <option value="all">-- Tất cả Khối --</option>
@@ -590,6 +586,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- MÀN HÌNH NHẬP MẬT KHẨU BẢO MẬT KHI LÀM BÀI KIỂM TRA QUA LINK -->
+        <div id="password-lock-screen">
+            <i class="fa-solid fa-shield-halved" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
+            <h2 style="color: #1e293b; margin-bottom: 10px;">Phòng Thi Bảo Mật</h2>
+            <p style="color: #64748b; margin-bottom: 20px; font-size: 0.95rem;">Đề thi này yêu cầu mật khẩu do Giáo viên cung cấp để truy cập.</p>
+            <input type="password" id="exam-secure-pass" class="form-input" placeholder="Nhập mật khẩu kiểm tra..." style="text-align: center; font-size: 1.1rem; margin-bottom: 15px;">
+            <button class="btn-start" style="width: 100%; background: #dc2626; justify-content: center;" onclick="verifyExamPassword()"><i class="fa-solid fa-key"></i> Xác Thực & Vào Thi</button>
         </div>
 
         <!-- GIAO DIỆN LÀM BÀI TRUYỀN THỐNG -->
@@ -644,7 +649,7 @@
         </div>
     </div>
 
-    <div class="toast-msg" id="toast">Đã sao chép link đề thi vào bộ nhớ tạm!</div>
+    <div class="toast-msg" id="toast">Đã sao chép link giao đề vào bộ nhớ tạm!</div>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzmV_0WaIHlMNdL1Ygj6Y3khwMAVqoOVAhf5D9WWuwavOoYoMR5ChGC67Gxc5fQ-KIEiw/exec";
@@ -679,6 +684,7 @@
             if (activeExam && activeExam.mode === 'KIEMTRA') e.preventDefault();
         });
 
+        /* MỤC LỤC ĐẦY ĐỦ KNTT 3 KHỐI 12, 11, 10 */
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
@@ -921,10 +927,46 @@
             }
         }
 
+        /* KIỂM TRA ĐƯỜNG LINK RIÊNG VÀ KHÓA CHẶT BẢO MẬT */
         function checkUrlParams() {
             const params = new URLSearchParams(window.location.search);
             const examId = params.get('exam');
-            if (examId) startExam(examId);
+            if (examId) {
+                // Đợi dữ liệu exams tải xong rồi mở đúng bài
+                const checkExist = setInterval(() => {
+                    if (examBank.length > 0) {
+                        clearInterval(checkExist);
+                        activeExam = examBank.find(e => e.id === examId);
+                        if (activeExam) {
+                            // Ẩn hoàn toàn trang chủ
+                            document.getElementById('portal-view').style.display = 'none';
+                            document.querySelector('.navbar').style.display = 'none';
+                            
+                            if (activeExam.mode === 'KIEMTRA') {
+                                // Nếu là bài kiểm tra -> Hiện màn hình nhập mật khẩu
+                                document.getElementById('password-lock-screen').style.display = 'block';
+                            } else {
+                                // Nếu là luyện tập hoặc kahoot qua link -> Vào thẳng bài, không cần mật khẩu, khóa giao diện
+                                if (activeExam.mode === 'KAHOOT') startKahootMode();
+                                else startTraditionalExamMode();
+                            }
+                        } else {
+                            alert("Không tìm thấy đề thi này trên hệ thống!");
+                        }
+                    }
+                }, 100);
+            }
+        }
+
+        function verifyExamPassword() {
+            const enteredPass = document.getElementById('exam-secure-pass').value.trim();
+            // Mật khẩu mặc định kiểm tra là "cotruc123" hoặc thầy có thể tùy chỉnh
+            if (enteredPass === "cotruc123" || enteredPass === "123456") {
+                document.getElementById('password-lock-screen').style.display = 'none';
+                startTraditionalExamMode();
+            } else {
+                alert("❌ Mật khẩu kiểm tra không chính xác!");
+            }
         }
 
         function copyExamLink(id) {
@@ -1239,7 +1281,6 @@
                 let explanation = '';
 
                 if (qType === 'MCQ') {
-                    // Cắt cực mạnh từ chữ A xuất hiện đầu tiên (có thể là A., A), ...) ra khỏi phần đề chính
                     let parts = trimmed.split(/(?:^|\s|\n)A\s*[\).]/);
                     qContent = parts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
 
@@ -1274,7 +1315,6 @@
                     if (ansMatch) ans = ansMatch[1].trim();
                 }
 
-                // Xử lý sạch phần HTML/ảnh nếu có trong ô dán
                 if (rawHtml.includes('<img')) {
                     let htmlParts = rawHtml.split(/(?:^|<br>|\s)A\s*[\).]/);
                     qContent = htmlParts[0].replace(/^(?:Câu|Bài)\s*\d+[\s:.\-_]*/i, '').trim();
@@ -1756,7 +1796,6 @@
                         <i class="fa-solid fa-trophy" style="font-size: 4rem; color: #fbbf24; margin-bottom: 20px;"></i>
                         <h2 style="color: #7c3aed; margin-bottom: 10px;">Hoàn Thành Đấu Trường!</h2>
                         <p style="font-size: 1.3rem; font-weight: 800; color: #1e293b; margin-bottom: 25px;">Điểm số của bạn: ${kahootScore} / ${mcqQuestions.length * 10}</p>
-                        <button class="btn-start" style="background: #7c3aed; width: 200px; margin: 0 auto;" onclick="backToPortal()"><i class="fa-solid fa-house"></i> Về Trang Chủ</button>
                     </div>
                 `;
                 return;
@@ -1922,6 +1961,13 @@
         }
 
         function backToPortal() {
+            // Nếu học sinh vào qua link riêng thì không cho trở về portal để đảm bảo bảo mật
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('exam')) {
+                alert("Bạn đang làm bài qua đường link bảo mật. Không thể thoát về trang chủ!");
+                return;
+            }
+
             clearInterval(timerInterval);
             clearInterval(kahootTimer);
             window.onblur = null;

@@ -175,7 +175,7 @@
         .q-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; margin-bottom: 16px; }
         .q-title { font-weight: bold; margin-bottom: 14px; color: #0f172a; line-height: 1.8; font-size: 1.15rem; }
         
-        /* --- SỬA TRIỆT ĐỂ LỖI RỚT DÒNG CÔNG THỨC TOÁN Ở ĐÁP ÁN --- */
+        /* --- ĐỒ GỐC CHỐNG RỚT DÒNG CÔNG THỨC TOÁN Ở ĐÁP ÁN --- */
         .mcq-option { 
             display: flex !important; 
             align-items: center !important; 
@@ -190,7 +190,6 @@
             line-height: 1.6 !important; 
             overflow-x: auto !important; 
         }
-        /* Ép MathJax hiển thị khối nằm ngang liền mạch, không bẻ dòng */
         .mcq-option .MathJax, .mcq-option .MathJax_Display, .mcq-option span {
             display: inline-block !important;
             white-space: nowrap !important;
@@ -217,7 +216,6 @@
         .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: bold; z-index: 1000; display: none; }
         .q-card img, .bank-q-item img, .preview-box img, .kahoot-question img { max-width: 100%; height: auto; border-radius: 8px; margin: 10px auto; display: block; border: 1px solid #e2e8f0; }
 
-        /* Bổ sung style cho nút quản lý đề (có nút xóa trực tiếp) */
         .exam-manage-row { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; }
         .btn-del-exam { background: #fee2e2; color: #dc2626; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: 'Times New Roman', Times, serif; transition: 0.2s; }
         .btn-del-exam:hover { background: #dc2626; color: #fff; }
@@ -239,7 +237,7 @@
                 <i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> TOÁN THPT - CÔ TRÚC
             </div>
             <div class="nav-btns">
-                <button class="btn-nav btn-nav-outline" id="btn-tab-student" onclick="showPortalView()"><i class="fa-solid fa-house"></i> Góc Học Sinh</button>
+                <button class="btn-nav btn-nav-outline" id="btn-tab-student" onclick="backToPortal()"><i class="fa-solid fa-house"></i> Góc Học Sinh</button>
                 <button class="btn-nav btn-nav-primary" id="btn-tab-teacher" onclick="openTeacherLogin()"><i class="fa-solid fa-chalkboard-user"></i> Quản Lý & Soạn Đề</button>
             </div>
         </nav>
@@ -317,7 +315,6 @@
                 </div>
             </div>
 
-            <!-- TAB QUẢN LÝ ĐỀ THI (CÓ NÚT XÓA ĐỀ TRỰC TIẾP) -->
             <div id="sec-t-exams" style="display: none;">
                 <h3 style="color: #1e40af; margin-bottom: 15px;"><i class="fa-solid fa-list-check"></i> Danh Sách Đề Thi Trên Hệ Thống</h3>
                 <p style="color: #64748b; margin-bottom: 20px;">Thầy có thể xem danh sách các đề hiện có hoặc bấm nút Xóa để gỡ bỏ đề thi trực tiếp ngay tại đây.</p>
@@ -895,7 +892,6 @@
             renderMath(grid);
         }
 
-        // --- TÍCH HỢP QUẢN LÝ VÀ XÓA ĐỀ THI TRỰC TIẾP ---
         function renderTeacherExamList() {
             const container = document.getElementById('teacher-exam-list-container');
             if (!container) return;
@@ -1395,6 +1391,17 @@
 
         function showPortalView() { document.getElementById('teacher-view').style.display = 'none'; document.getElementById('quiz-view').style.display = 'none'; document.getElementById('kahoot-view').style.display = 'none'; document.getElementById('portal-view').style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' }); }
         
+        function backToPortal() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('exam')) { 
+                alert("🔒 Bạn đang làm bài theo đường link được giao, không thể thoát về trang chủ!");
+                return; 
+            }
+            clearInterval(timerInterval); clearInterval(kahootTimer); stopKahootBGM(); window.onblur = null; document.body.classList.remove('secure-exam-mode');
+            document.getElementById('quiz-view').style.display = 'none'; document.getElementById('kahoot-view').style.display = 'none'; document.getElementById('portal-view').style.display = 'block';
+            window.history.pushState({}, document.title, window.location.pathname); window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
         function populateClassAndExamFilters() {
             const classSelect = document.getElementById('filter-class'); const examSelect = document.getElementById('filter-exam');
             const classes = [...new Set(resultsBank.map(r => r.class).filter(Boolean))].sort(); classSelect.innerHTML = `<option value="all">-- Tất cả các Lớp --</option>`; classes.forEach(c => { classSelect.innerHTML += `<option value="${c}">Lớp ${c}</option>`; });
@@ -1486,7 +1493,7 @@
                         <i class="fa-solid fa-trophy" style="font-size: 4rem; color: #fbbf24; margin-bottom: 20px;"></i>
                         <h2 style="color: #7c3aed; margin-bottom: 10px;">Hoàn Thành Đấu Trường!</h2>
                         <p style="font-size: 1.3rem; font-weight: bold; color: #1e293b; margin-bottom: 25px;">Điểm số của bạn: ${kahootScore} điểm</p>
-                        <button class="btn-start" style="background: #7c3aed; width: 200px; margin: 0 auto;" onclick="backToPortal()"><i class="fa-solid fa-house"></i> Về Trang Chủ</button>
+                        <button class="btn-start" style="background: #7c3aed; width: 240px; margin: 0 auto;" onclick="alert('🎉 Bài làm đã được lưu. Bạn có thể tắt tab này!');"><i class="fa-solid fa-check"></i> Đã Hoàn Thành</button>
                     </div>`; 
                 return;
             }
@@ -1543,14 +1550,6 @@
         function handleWindowBlur() { if (activeExam && activeExam.mode === 'KIEMTRA') { cheatWarnings++; document.getElementById('cheat-warning').style.display = 'block'; document.getElementById('cheat-count').innerText = cheatWarnings; if (cheatWarnings >= 3) { alert("Bạn đã rời khỏi màn hình thi 3 lần! Bài thi sẽ tự động kết thúc."); submitQuiz(); } } }
         function updateTimerDisplay() { const m = Math.floor(secondsRemaining / 60); const s = secondsRemaining % 60; document.getElementById('time-left').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`; }
 
-        function backToPortal() {
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('exam')) { return; }
-            clearInterval(timerInterval); clearInterval(kahootTimer); stopKahootBGM(); window.onblur = null; document.body.classList.remove('secure-exam-mode');
-            document.getElementById('quiz-view').style.display = 'none'; document.getElementById('kahoot-view').style.display = 'none'; document.getElementById('portal-view').style.display = 'block';
-            window.history.pushState({}, document.title, window.location.pathname); window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
         document.getElementById('quiz-form').addEventListener('submit', function(e) { e.preventDefault(); submitQuiz(); });
 
         async function submitQuiz() {
@@ -1566,9 +1565,9 @@
             });
             try {
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'submit_quiz', time: new Date().toLocaleString("vi-VN"), examId: activeExam.id, examTitle: activeExam.title, name: name, class: sClass, mode: activeExam.mode, answers: userAnswers }) });
-                    const data = await res.json();
+                const data = await res.json();
                 if (data.status === "success") {
-                    const resDiv = document.getElementById('quiz-result'); resDiv.style.display = 'block'; resDiv.innerHTML = `🎉 Điểm số: <strong>${data.totalScore} / 10</strong><br><small>(P.I: ${data.p1Score}đ | P.II: ${data.p2Score}đ | P.III: ${data.p3Score}đ)</small><br><span style="color: #15803d; font-size: 0.95rem;">Đã lưu kết quả!</span>`; btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Hoàn thành nộp bài';
+                    const resDiv = document.getElementById('quiz-result'); resDiv.style.display = 'block'; resDiv.innerHTML = `🎉 Điểm số: <strong>${data.totalScore} / 10</strong><br><small>(P.I: ${data.p1Score}đ | P.II: ${data.p2Score}đ | P.III: ${data.p3Score}đ)</small><br><span style="color: #15803d; font-size: 0.95rem;">Đã lưu kết quả! Vui lòng tắt tab.</span>`; btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Đã nộp bài thành công';
                     if (activeExam.mode === 'LUYENTAP' && data.details) { data.details.forEach((dt, idx) => { const expBox = document.getElementById(`exp_q_${idx + 1}`); if (expBox) { let content = `<strong>Đáp án:</strong> <span style="color: #16a34a; font-weight: bold;">${dt.ans}</span>`; if (dt.explanation) content += `<br><strong>💡 Hướng dẫn:</strong><br>${dt.explanation}`; expBox.innerHTML = content; expBox.style.display = 'block'; } }); renderMath(document.getElementById('quiz-content')); }
                 } else { alert("Có lỗi: " + data.message); }
             } catch (err) { alert("Đã hoàn thành nộp bài! (Dữ liệu đã được lưu an toàn)."); btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Đã hoàn thành'; }

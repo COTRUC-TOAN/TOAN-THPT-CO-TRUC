@@ -161,7 +161,8 @@
         .btn-exp-pdf { background: #dc2626; color: #fff; }
         .btn-exp-word { background: #2563eb; color: #fff; }
 
-        #kahoot-view { display: none; max-width: 750px; margin: 0 auto; background: #fff; padding: 30px; border-radius: var(--radius-lg); border: 2px solid #7c3aed; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15); text-align: center; }
+        /* GIAO DIỆN ĐẤU TRƯỜNG KAHOOT SỐNG ĐỘNG */
+        #kahoot-view { display: none; max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: var(--radius-lg); border: 2px solid #7c3aed; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15); text-align: center; }
         .kahoot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .kahoot-timer { width: 65px; height: 65px; border-radius: 50%; background: #7c3aed; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: bold; }
         .kahoot-question { font-size: 1.25rem; font-weight: bold; color: #1e293b; margin-bottom: 25px; line-height: 1.8; text-align: left; }
@@ -169,13 +170,16 @@
         .kahoot-opt-btn { padding: 22px; border-radius: 12px; border: none; font-size: 1.15rem; font-weight: bold; color: #fff; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 12px; text-align: left; font-family: 'Times New Roman', Times, serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .kahoot-opt-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
         .k-opt-0 { background: #e11d48; } .k-opt-1 { background: #2563eb; } .k-opt-2 { background: #d97706; } .k-opt-3 { background: #16a34a; }
+        
+        .leaderboard-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-top: 20px; text-align: left; max-height: 300px; overflow-y: auto; }
+        .leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; font-weight: bold; }
 
         .secure-exam-mode { user-select: none !important; -webkit-user-select: none !important; }
         .section-header { background: #eff6ff; padding: 12px 16px; border-radius: 8px; font-weight: bold; color: #1e40af; margin: 28px 0 14px; font-size: 1.15rem; border-left: 5px solid var(--primary); }
         .q-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; margin-bottom: 16px; }
         .q-title { font-weight: bold; margin-bottom: 14px; color: #0f172a; line-height: 1.8; font-size: 1.15rem; }
         
-        /* --- ĐỒ GỐC CHỐNG RỚT DÒNG CÔNG THỨC TOÁN Ở ĐÁP ÁN --- */
+        /* --- CHỐNG RỚT DÒNG CÔNG THỨC TOÁN Ở ĐÁP ÁN --- */
         .mcq-option { 
             display: flex !important; 
             align-items: center !important; 
@@ -546,7 +550,7 @@
             <div id="quiz-result"></div>
         </div>
 
-        <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT -->
+        <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT SỐNG ĐỘNG -->
         <div id="kahoot-view">
             <div class="kahoot-header">
                 <div id="kahoot-progress" style="font-weight: bold; color: #7c3aed; font-size: 1.25rem;">⚡ ĐẤU TRƯỜNG KAHOOT</div>
@@ -563,6 +567,14 @@
             <div id="kahoot-game-box" style="display: none;">
                 <div class="kahoot-question" id="kahoot-q-text">Đang tải câu hỏi...</div>
                 <div class="kahoot-options-grid" id="kahoot-options-grid"></div>
+                
+                <!-- Bảng xếp hạng trực tuyến chạy liên tục -->
+                <div style="margin-top: 25px; text-align: left;">
+                    <h4 style="color: #7c3aed; margin-bottom: 10px;"><i class="fa-solid fa-ranking-star"></i> Bảng Xếp Hạng Đua Top Trực Tuyến</h4>
+                    <div class="leaderboard-box" id="kahoot-leaderboard">
+                        <p style="text-align: center; color: #64748b;">Đang cập nhật bảng xếp hạng...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -799,6 +811,8 @@
                 theoryBank = data.theories || {};
                 renderExams();
                 renderTeacherExamList();
+                
+                // Đảm bảo dữ liệu đã tải xong xuôi rồi mới kiểm tra mở link đề
                 checkUrlParams();
             } catch (err) {
                 console.error(err);
@@ -806,30 +820,30 @@
             }
         }
 
-     function checkUrlParams() {
-    const params = new URLSearchParams(window.location.search);
-    const examId = params.get('exam');
-    if (examId) {
-        document.body.classList.add('locked-ui');
-        activeExam = examBank.find(e => e.id === examId);
-        if (activeExam) {
-            document.getElementById('portal-view').style.display = 'none';
-            document.querySelector('.navbar').style.display = 'none';
-            if (activeExam.mode === 'KIEMTRA') { 
-                if (activeExam.examPass && activeExam.examPass.trim() !== "") {
-                    document.getElementById('password-lock-screen').style.display = 'block'; 
-                } else {
-                    startTraditionalExamMode();
+        function checkUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const examId = params.get('exam');
+            if (examId) {
+                document.body.classList.add('locked-ui');
+                activeExam = examBank.find(e => e.id === examId);
+                if (activeExam) {
+                    document.getElementById('portal-view').style.display = 'none';
+                    document.querySelector('.navbar').style.display = 'none';
+                    if (activeExam.mode === 'KIEMTRA') { 
+                        if (activeExam.examPass && activeExam.examPass.trim() !== "") {
+                            document.getElementById('password-lock-screen').style.display = 'block'; 
+                        } else {
+                            startTraditionalExamMode();
+                        }
+                    } else { 
+                        if (activeExam.mode === 'KAHOOT') startKahootMode(); 
+                        else startTraditionalExamMode(); 
+                    }
+                } else { 
+                    alert("Không tìm thấy đề thi này trên hệ thống!"); 
                 }
-            } else { 
-                if (activeExam.mode === 'KAHOOT') startKahootMode(); 
-                else startTraditionalExamMode(); 
             }
-        } else { 
-            alert("Không tìm thấy đề thi này trên hệ thống!"); 
         }
-    }
-}        }
 
         function verifyExamPassword() {
             const enteredPass = document.getElementById('exam-secure-pass').value.trim();
@@ -1439,7 +1453,7 @@
             if (activeExam.mode === 'KAHOOT') { startKahootMode(); } else { startTraditionalExamMode(); }
         }
 
-        // --- HỆ THỐNG ĐẤU TRƯỜNG KAHOOT ---
+        // --- HỆ THỐNG ĐẤU TRƯỜNG KAHOOT SỐNG ĐỘNG & BẢNG XẾP HẠNG ---
         function startKahootMode() { 
             document.getElementById('kahoot-view').style.display = 'block'; 
             document.getElementById('kahoot-login-box').style.display = 'block';
@@ -1455,6 +1469,7 @@
             document.getElementById('kahoot-game-box').style.display = 'block';
             playKahootBGM();
             loadKahootQuestion();
+            listenKahootLeaderboard();
         }
 
         function playKahootBGM() {
@@ -1469,6 +1484,30 @@
 
         function stopKahootBGM() {
             if (kahootAudio) { kahootAudio.pause(); kahootAudio.currentTime = 0; }
+        }
+
+        function listenKahootLeaderboard() {
+            try {
+                db.ref('kahoot_scores/' + activeExam.id).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    const lbContainer = document.getElementById('kahoot-leaderboard');
+                    if (!lbContainer) return;
+                    if (!data) {
+                        lbContainer.innerHTML = `<p style="text-align: center; color: #64748b;">Chưa có ai tham gia đua top.</p>`;
+                        return;
+                    }
+                    let list = [];
+                    for (let key in data) {
+                        list.push(data[key]);
+                    }
+                    list.sort((a, b) => b.score - a.score);
+                    lbContainer.innerHTML = '';
+                    list.slice(0, 5).forEach((item, idx) => {
+                        let rankIcon = idx === 0 ? '👑' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx+1}`));
+                        lbContainer.innerHTML += `<div class="leaderboard-item"><span>${rankIcon} ${item.name} (${item.class})</span><span style="color: #7c3aed;">${item.score} đ</span></div>`;
+                    });
+                });
+            } catch(e) { console.error(e); }
         }
 
         function loadKahootQuestion() {
@@ -1524,6 +1563,18 @@
             } else { 
                 alert(`❌ Sai rồi! Đáp án đúng là: ${correct}`); 
             } 
+            
+            // Cập nhật điểm ngay lập tức lên bảng xếp hạng Firebase
+            try {
+                const cleanName = kahootStdName.replace(/[\.#$\/\[\]]/g, "_");
+                db.ref('kahoot_scores/' + activeExam.id + '/' + cleanName).set({
+                    name: kahootStdName,
+                    class: kahootStdClass,
+                    score: kahootScore,
+                    time: new Date().toLocaleTimeString()
+                });
+            } catch(e) {}
+
             kahootCurrentIndex++; 
             loadKahootQuestion(); 
         }

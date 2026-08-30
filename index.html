@@ -821,7 +821,7 @@
                     qGlobalIdx++;
                     let rows = '';
                     ['a', 'b', 'c', 'd'].forEach((ch, idx) => {
-                        if (q.options[idx]) {
+                        if (q.options && q.options[idx]) {
                             rows += `<div class="tf-row"><span><strong>${ch})</strong> ${q.options[idx]}</span><div class="tf-btns"><label><input type="radio" name="q_${qGlobalIdx}_${ch}" value="D" required> Đúng</label><label><input type="radio" name="q_${qGlobalIdx}_${ch}" value="S" required> Sai</label></div></div>`;
                         }
                     });
@@ -886,7 +886,7 @@
                 } else if (q.type === 'TF') {
                     let tfCorrect = true;
                     ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
-                        if (q.options[subIdx]) {
+                        if (q.options && q.options[subIdx]) {
                             let subAns = document.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`)?.value || "";
                             let correctSub = (q.ansOptions && q.ansOptions[subIdx]) ? q.ansOptions[subIdx] : 'D';
                             if (subAns !== correctSub) tfCorrect = false;
@@ -1044,7 +1044,7 @@
             } catch (e) { alert("Lỗi lưu câu hỏi!"); }
         }
 
-        // --- THUẬT TOÁN BÓC TÁCH ĐÚNG/SAI CHUẨN XÁC VÀ BỀN VỮNG NHẤT ---
+        // --- THUẬT TOÁN BÓC TÁCH ĐÚNG/SAI CHUẨN XÁC GIỮ LẠI a,b,c,d ---
         function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             if (rawHtml.normalize) { rawHtml = rawHtml.normalize('NFC'); }
@@ -1091,7 +1091,11 @@
                         else if (matchB) options[1] = matchB[1].trim();
                         else if (matchC) options[2] = matchC[1].trim();
                         else if (matchD) options[3] = matchD[1].trim();
-                        else qLines.push(lTrim);
+                        else {
+                            if (!/^Đáp án/i.test(lTrim)) {
+                                qLines.push(lTrim);
+                            }
+                        }
                     });
 
                     let qContent = qLines.join('<br>').replace(/^(?:C[ââ]u|B[àà]i)\s*\d+[\s:.\-_]+/i, '').trim();

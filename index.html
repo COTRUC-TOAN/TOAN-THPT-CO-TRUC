@@ -93,7 +93,7 @@
         .btn-start:hover { background: #1e40af; }
         .btn-share { padding: 10px 14px; background: #f1f5f9; color: #475569; border: 1px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; font-weight: bold; }
 
-        /* KHU VỰC GIÁO VIÊN ĐẦY ĐỦ 5 TAB */
+        /* KHU VỰC GIÁO VIÊN */
         #teacher-view { display: none; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         .teacher-nav { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; flex-wrap: wrap; }
         .btn-t-tab { padding: 9px 18px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #f1f5f9; color: #475569; font-family: 'Times New Roman', Times, serif; font-size: 1.05rem;}
@@ -102,17 +102,12 @@
         .stat-card { background: #f8fafc; border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); text-align: center; }
         .stat-card h4 { font-size: 1rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
         .stat-card .stat-val { font-size: 1.8rem; font-weight: bold; color: var(--primary); }
-        .filter-controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; align-items: center; justify-content: space-between; }
-        .filter-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .select-filter, .search-input { padding: 9px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; outline: none; font-family: 'Times New Roman', Times, serif; }
-        .btn-export { background: #16a34a; color: #fff; border: none; padding: 9px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: 'Times New Roman', Times, serif; font-size: 1.05rem; }
         .table-responsive { overflow-x: auto; }
         .scores-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 1.05rem; }
         .scores-table th { background: #f1f5f9; color: #334155; padding: 12px 14px; font-weight: bold; border-bottom: 2px solid var(--border-color); }
         .scores-table td { padding: 12px 14px; border-bottom: 1px solid var(--border-color); color: #1e293b; }
         .badge-score { font-weight: bold; padding: 4px 8px; border-radius: 6px; }
         .badge-pass { background: #dcfce7; color: #166534; }
-        .badge-fail { background: #fee2e2; color: #991b1b; }
 
         .creator-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; margin-top: 15px; }
         @media (max-width: 950px) { .creator-container { grid-template-columns: 1fr; } }
@@ -126,11 +121,11 @@
         .btn-del-exam { background: #fee2e2; color: #dc2626; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: 'Times New Roman', Times, serif; }
         .btn-del-exam:hover { background: #dc2626; color: #fff; }
         .selected-list-box { margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 15px; }
-        .selected-item { background: #fff; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 1.05rem; }
 
-        /* KHỐI XEM TRƯỚC BÓC TÁCH ĐỀ RÕ RÀNG TỪNG CÂU */
+        /* KHỐI XEM TRƯỚC BÓC TÁCH & CHỌN CÂU HỎI TỪ NGÂN HÀNG RÕ RÀNG */
         .parsed-q-preview-card { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 1.05rem; }
         .parsed-q-preview-card strong { color: #1e40af; }
+        .bank-q-select-card { background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-bottom: 12px; display: flex; gap: 12px; align-items: flex-start; font-size: 1.05rem; }
 
         #password-lock-screen { display: none; max-width: 500px; margin: 80px auto; background: #fff; padding: 40px; border-radius: var(--radius-lg); border: 2px solid #dc2626; text-align: center; box-shadow: 0 10px 30px rgba(220, 38, 38, 0.15); }
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
@@ -141,7 +136,7 @@
         .student-box { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
         .student-box input { padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; font-family: 'Times New Roman', Times, serif; }
 
-        /* GIAO DIỆN ĐẤU TRƯỜNG KAHOOT SỐNG ĐỘNG */
+        /* GIAO DIỆN ĐẤU TRƯỜNG KAHOOT */
         #kahoot-view { display: none; max-width: 850px; margin: 0 auto; background: #fff; padding: 30px; border-radius: var(--radius-lg); border: 2px solid #7c3aed; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15); text-align: center; }
         .kahoot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .kahoot-timer-circle { width: 55px; height: 55px; border-radius: 50%; background: #7c3aed; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; }
@@ -295,7 +290,7 @@
                 </div>
             </div>
 
-            <!-- TAB 5: TẠO & SOẠN ĐỀ MỚI (CÓ THỜI GIAN BẮT ĐẦU & DEADLINE) -->
+            <!-- TAB 5: TẠO & SOẠN ĐỀ MỚI (CHỌN THỦ CÔNG HOẶC TRỘN THEO MA TRẬN) -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -310,7 +305,6 @@
                             <div class="form-row"><label>Thời Gian (Phút):</label><input type="number" class="form-input" id="new-exam-time" value="45"></div>
                         </div>
 
-                        <!-- CẤU HÌNH BẢO MẬT & THỜI GIAN MỞ/ĐÓNG ĐỀ -->
                         <div class="form-row" id="exam-password-row" style="display: none;"><label style="color:#dc2626;">🔑 Mật Khẩu Phòng Thi:</label><input type="text" class="form-input" id="new-exam-pass" placeholder="VD: 12a1"></div>
                         <div class="form-row"><label style="color:#16a34a;">🟢 Thời gian BẮT ĐẦU mở đề:</label><input type="datetime-local" class="form-input" id="new-exam-start-time"></div>
                         <div class="form-row"><label style="color:#dc2626;">🔴 Thời hạn ĐÓNG đề (Deadline):</label><input type="datetime-local" class="form-input" id="new-exam-deadline"></div>
@@ -328,9 +322,12 @@
                     <div class="creator-card">
                         <h3 style="color: #059669; margin-bottom: 14px;"><i class="fa-solid fa-layer-group"></i> 2. Nguồn Tạo Đề</h3>
                         <div style="display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
-                            <button class="btn-t-tab active" id="tab-add-bank" onclick="switchAddMethod('bank')">Từ Ngân Hàng (Chọn/Trộn)</button>
+                            <button class="btn-t-tab active" id="tab-add-bank" onclick="switchAddMethod('bank')">Chọn Từ Ngân Hàng</button>
+                            <button class="btn-t-tab" id="tab-add-matrix" onclick="switchAddMethod('matrix')">Trộn Đề Theo Ma Trận</button>
                             <button class="btn-t-tab" id="tab-add-paste" onclick="switchAddMethod('paste')">Tạo Đề Nhanh (Dán Văn Bản)</button>
                         </div>
+                        
+                        <!-- CHỌN THỦ CÔNG TỪ NGÂN HÀNG (HIỂN THỊ RỘNG RÃI TỪNG CÂU) -->
                         <div id="add-method-bank">
                             <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px;">
                                 <select class="form-input" id="bank-filter-grade" onchange="updateBankFilterTopics(); filterQuestionBankList();"><option value="all">-- Khối --</option><option value="12">12</option><option value="11">11</option><option value="10">10</option></select>
@@ -341,14 +338,26 @@
                                 <select class="form-input" id="bank-filter-type" onchange="filterQuestionBankList()"><option value="all">-- Dạng --</option><option value="MCQ">MCQ</option><option value="TF">Đúng/Sai</option><option value="SA">Ngắn</option></select>
                             </div>
                             <div style="margin-bottom: 10px;"><input type="text" class="form-input" id="bank-search-text" placeholder="🔍 Tìm từ khóa..." oninput="filterQuestionBankList()"></div>
-                            <div id="bank-q-list" style="max-height: 400px; overflow-y: auto;"><p style="text-align: center; color: #94a3b8;">Đang tải...</p></div>
+                            <div id="bank-q-list" style="max-height: 480px; overflow-y: auto;"></div>
                         </div>
+
+                        <!-- TRỘN ĐỀ THEO MA TRẬN TỰ ĐỘNG -->
+                        <div id="add-method-matrix" style="display: none;">
+                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 15px;">Hệ thống sẽ tự động bốc ngẫu nhiên số lượng câu hỏi theo đúng ma trận cấu hình bên dưới.</p>
+                            <div class="form-row"><label>Số câu Nhận Biết (NB):</label><input type="number" class="form-input" id=" matrix-nb" value="5"></div>
+                            <div class="form-row"><label>Số câu Thông Hiểu (TH):</label><input type="number" class="form-input" id="matrix-th" value="5"></div>
+                            <div class="form-row"><label>Số câu Vận Dụng (VD):</label><input type="number" class="form-input" id="matrix-vd" value="2"></div>
+                            <div class="form-row"><label>Số câu Vận Dụng Cao (VDC):</label><input type="number" class="form-input" id="matrix-vdc" value="1"></div>
+                            <button class="btn-start" style="width: 100%; background: #059669; margin-top: 15px;" onclick="generateMatrixExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Đề Ngẫu Nhiên Theo Ma Trận</button>
+                        </div>
+
+                        <!-- TẠO ĐỀ NHANH DÁN VĂN BẢN -->
                         <div id="add-method-paste" style="display: none;">
-                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán toàn bộ văn bản đề thi vào đây. Hệ thống sẽ bóc tách đồng loạt thành đề thi ngay lập tức.</p>
+                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán toàn bộ văn bản đề thi vào đây. Hỗ trợ bóc tách Trắc nghiệm, Đúng/Sai và Trả lời ngắn.</p>
                             <div class="form-row"><label>Dạng Mặc Định:</label><select class="form-input" id="direct-q-type"><option value="MCQ">Trắc nghiệm (MCQ)</option><option value="TF">Đúng/Sai (TF)</option><option value="SA">Trả lời ngắn (SA)</option></select></div>
                             <div class="form-row"><label>Nội dung Đề (Ctrl+V dán ảnh):</label><div class="rich-textarea" id="direct-raw-text" contenteditable="true" onpaste="handlePasteData(event, false)" placeholder="Dán văn bản đề thi..."></div></div>
                             <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Bóc Tách Đề Nhanh</button>
-                            <div style="margin-top: 15px;"><strong style="color: #334155;">Xem Trước Tách Lớp (<span id="direct-parsed-count">0</span> câu)</strong></div>
+                            <div style="margin-top: 15px;"><strong style="color: #334155;">Xem Trước (<span id="direct-parsed-count">0</span> câu)</strong></div>
                             <div class="preview-box" id="direct-preview-box" style="max-height: 300px; overflow-y: auto;"><em>Chưa bóc tách.</em></div>
                         </div>
                     </div>
@@ -356,7 +365,7 @@
             </div>
         </div>
 
-        <!-- MÀN HÌNH KHÓA (CHƯA ĐẾN GIỜ HOẶC ĐÃ HẾT HẠN) -->
+        <!-- MÀN HÌNH KHÓA -->
         <div id="password-lock-screen">
             <i class="fa-solid fa-shield-halved" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
             <h2 style="color: #1e293b; margin-bottom: 10px;" id="lock-screen-title">Phòng Kiểm Tra Bảo Mật</h2>
@@ -588,9 +597,7 @@
                     document.querySelector('.navbar').style.display = 'none';
 
                     const now = new Date().getTime();
-
-                    // KIỂM TRA THỜI GIAN BẮT ĐẦU MỞ ĐỀ
-                    if (activeExam.startTime) {
+                    if (activeExam.startTime && activeExam.startTime.trim() !== "") {
                         const startTime = new Date(activeExam.startTime).getTime();
                         if (now < startTime) {
                             document.getElementById('password-lock-screen').style.display = 'block';
@@ -601,8 +608,7 @@
                         }
                     }
 
-                    // KIỂM TRA DEADLINE HẠN NỘP BÀI
-                    if (activeExam.deadline) {
+                    if (activeExam.deadline && activeExam.deadline.trim() !== "") {
                         const deadlineTime = new Date(activeExam.deadline).getTime();
                         if (now > deadlineTime) {
                             document.getElementById('password-lock-screen').style.display = 'block';
@@ -676,7 +682,7 @@
             document.getElementById('portal-view').style.display = 'none';
 
             const now = new Date().getTime();
-            if (activeExam.startTime) {
+            if (activeExam.startTime && activeExam.startTime.trim() !== "") {
                 const startTime = new Date(activeExam.startTime).getTime();
                 if (now < startTime) {
                     document.getElementById('password-lock-screen').style.display = 'block';
@@ -687,7 +693,7 @@
                 }
             }
 
-            if (activeExam.deadline) {
+            if (activeExam.deadline && activeExam.deadline.trim() !== "") {
                 const deadlineTime = new Date(activeExam.deadline).getTime();
                 if (now > deadlineTime) {
                     document.getElementById('password-lock-screen').style.display = 'block';
@@ -873,6 +879,14 @@
                 } else if (q.type === 'SA') {
                     userAns = document.querySelector(`input[name="q_${idx + 1}"]`)?.value.trim() || "";
                     if (userAns.toLowerCase() === (q.ans || "").toString().trim().toLowerCase()) correctCount++;
+                } else if (q.type === 'TF') {
+                    let tfCorrect = true;
+                    ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
+                        let subAns = document.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`)?.value || "";
+                        let correctSub = (q.ansOptions && q.ansOptions[subIdx]) ? q.ansOptions[subIdx] : 'D';
+                        if (subAns !== correctSub) tfCorrect = false;
+                    });
+                    if (tfCorrect) correctCount++;
                 }
             });
 
@@ -931,11 +945,11 @@
         }
 
         function switchAddMethod(method) {
-            document.getElementById('tab-add-bank').classList.toggle('active', method === 'bank');
-            document.getElementById('tab-add-paste').classList.toggle('active', method === 'paste');
-            document.getElementById('add-method-bank').style.display = (method === 'bank') ? 'block' : 'none';
-            document.getElementById('add-method-paste').style.display = (method === 'paste') ? 'block' : 'none';
-            document.getElementById('bank-selected-box').style.display = (method === 'bank') ? 'block' : 'none';
+            ['bank', 'matrix', 'paste'].forEach(m => {
+                document.getElementById(`tab-add-${m}`).classList.toggle('active', m === method);
+                document.getElementById(`add-method-${m}`).style.display = (m === method) ? 'block' : 'none';
+            });
+            document.getElementById('bank-selected-box').style.display = (method === 'bank' || method === 'matrix') ? 'block' : 'none';
         }
 
         async function loadTeacherScores() {
@@ -1020,6 +1034,7 @@
             } catch (e) { alert("Lỗi lưu câu hỏi!"); }
         }
 
+        // --- THUẬT TOÁN BÓC TÁCH THÔNG MINH CHO CẢ 3 DẠNG ---
         function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             if (rawHtml.normalize) { rawHtml = rawHtml.normalize('NFC'); }
@@ -1038,18 +1053,45 @@
                 if (!blockStr) return;
 
                 const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
-                let options = ['', '', '', '']; let ans = 'A';
+                let options = ['', '', '', '']; let ans = 'A'; let ansOptions = [];
 
-                let ansMatch = blockStr.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D])/i);
-                if (ansMatch) { ans = ansMatch[1].toUpperCase(); blockStr = blockStr.substring(0, ansMatch.index).trim(); }
+                if (selectedType === 'TF') {
+                    let ansMatch = blockStr.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([D|S][-\s]*[D|S][-\s]*[D|S][-\s]*[D|S])/i);
+                    if (ansMatch) {
+                        ans = ansMatch[1].toUpperCase().replace(/[^DS]/g, '');
+                        ansOptions = ans.split('');
+                        blockStr = blockStr.substring(0, ansMatch.index).trim();
+                    } else { ans = "D-S-D-S"; ansOptions = ['D', 'S', 'D', 'S']; }
 
-                let mD = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*D\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s); if (mD) options[3] = mD[1].trim();
-                let mC = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*C\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s); if (mC) options[2] = mC[1].trim();
-                let mB = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*B\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s); if (mB) options[1] = mB[1].trim();
-                let mA = blockStr.match(/(?:^|<br>|\s|\n)(?:<[^>]+>\s*)*A\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s); if (mA) options[0] = mA[1].trim();
+                    let ma = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*a[\)\.]\s*(.*?)(?=(?:<br>|\s|\n)(?:<[^>]+>\s*)*b[\)\.]|$)/s);
+                    let mb = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*b[\)\.]\s*(.*?)(?=(?:<br>|\s|\n)(?:<[^>]+>\s*)*c[\)\.]|$)/s);
+                    let mc = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*c[\)\.]\s*(.*?)(?=(?:<br>|\s|\n)(?:<[^>]+>\s*)*d[\)\.]|$)/s);
+                    let md = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*d[\)\.]\s*(.*?)$/s);
 
-                let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
-                parsedArr.push({ id: qId, grade: grade, topic: topic, level: defaultLevel, type: selectedType, q: qContent, options: options, ans: ans });
+                    if (ma) options[0] = ma[1].trim(); if (mb) options[1] = mb[1].trim();
+                    if (mc) options[2] = mc[1].trim(); if (md) options[3] = md[1].trim();
+
+                    let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').replace(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*[a-d][\)\.].*/gs, '').trim();
+                    parsedArr.push({ id: qId, grade: grade, topic: topic, level: defaultLevel, type: selectedType, q: qContent, options: options, ans: ans, ansOptions: ansOptions });
+
+                } else if (selectedType === 'SA') {
+                    let ansMatch = blockStr.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*(.*?)$/i);
+                    if (ansMatch) { ans = ansMatch[1].trim(); blockStr = blockStr.substring(0, ansMatch.index).trim(); }
+                    let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
+                    parsedArr.push({ id: qId, grade: grade, topic: topic, level: defaultLevel, type: selectedType, q: qContent, options: [], ans: ans });
+
+                } else {
+                    let ansMatch = blockStr.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D])/i);
+                    if (ansMatch) { ans = ansMatch[1].toUpperCase(); blockStr = blockStr.substring(0, ansMatch.index).trim(); }
+
+                    let mD = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*D\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s); if (mD) options[3] = mD[1].trim();
+                    let mC = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*C\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s); if (mC) options[2] = mC[1].trim();
+                    let mB = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*B\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s); if (mB) options[1] = mB[1].trim();
+                    let mA = blockStr.match(/(?:^|<br>|\s|\n)(?:<[^>]+>\s*)*A\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s); if (mA) options[0] = mA[1].trim();
+
+                    let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
+                    parsedArr.push({ id: qId, grade: grade, topic: topic, level: defaultLevel, type: selectedType, q: qContent, options: options, ans: ans });
+                }
             });
             return parsedArr;
         }
@@ -1089,15 +1131,42 @@
             } catch (e) {}
         }
 
+        // --- HIỂN THỊ DANH SÁCH NGÂN HÀNG RỘNG RÃI, RÕ RÀNG TỪNG CÂU ---
         function filterQuestionBankList() {
             const container = document.getElementById('bank-q-list');
             if (!container) return;
-            container.innerHTML = questionBank.map(q => `
-                <div class="bank-q-item" style="padding:10px; border:1px solid #e2e8f0; margin-bottom:8px; border-radius:6px; display:flex; gap:10px;">
-                    <input type="checkbox" onchange="toggleSelectQ('${q.id}', this)" ${selectedQuestions.some(sq => sq.id === q.id) ? 'checked' : ''}>
-                    <div><strong>[${q.level}]</strong> ${q.q.substring(0, 50)}...</div>
+            const fGrade = document.getElementById('bank-filter-grade').value;
+            const fTopic = document.getElementById('bank-filter-topic').value;
+            const fLevel = document.getElementById('bank-filter-level').value;
+            const fType = document.getElementById('bank-filter-type').value;
+            const fText = document.getElementById('bank-search-text').value.toLowerCase();
+
+            const filtered = questionBank.filter(q => {
+                if (fGrade !== 'all' && q.grade.toString() !== fGrade) return false;
+                if (fTopic !== 'all' && q.topic !== fTopic) return false;
+                if (fLevel !== 'all' && q.level !== fLevel) return false;
+                if (fType !== 'all' && q.type !== fType) return false;
+                if (fText && !q.q.toLowerCase().includes(fText)) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p style="color:#94a3b8; text-align:center; padding: 20px;">Không tìm thấy câu hỏi phù hợp trong ngân hàng.</p>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(q => `
+                <div class="bank-q-select-card">
+                    <input type="checkbox" style="margin-top: 4px; transform: scale(1.3);" onchange="toggleSelectQ('${q.id}', this)" ${selectedQuestions.some(sq => sq.id === q.id) ? 'checked' : ''}>
+                    <div style="flex-grow: 1;">
+                        <div style="margin-bottom: 6px;"><span class="badge-score badge-pass">[${q.level}]</span> <span style="font-size: 0.95rem; color:#64748b;">Mã: ${q.id}</span></div>
+                        <div style="font-weight: bold; margin-bottom: 8px;">${q.q}</div>
+                        ${q.type === 'MCQ' && q.options ? `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.95rem; color: #475569;">${q.options.map((opt, i) => `<div><strong>${['A','B','C','D'][i]}.</strong> ${opt}</div>`).join('')}</div>` : ''}
+                        <div style="margin-top: 6px; font-size: 0.95rem; color: #16a34a; font-weight: bold;">Đáp án: ${q.ans}</div>
+                    </div>
                 </div>
-            `).join('') || '<p style="color:#94a3b8; text-align:center;">Chưa có câu hỏi trong ngân hàng.</p>';
+            `).join('');
+            renderMath(container);
         }
 
         function toggleSelectQ(id, cb) {
@@ -1111,11 +1180,37 @@
 
         function clearSelectedQuestions() { selectedQuestions = []; filterQuestionBankList(); document.getElementById('selected-q-count').innerText = '0'; document.getElementById('selected-items-container').innerHTML = 'Chưa chọn câu.'; }
 
+        // --- TẠO ĐỀ TỰ ĐỘNG THEO MA TRẬN ---
+        function generateMatrixExam() {
+            const nbCount = parseInt(document.getElementById('matrix-nb').value) || 0;
+            const thCount = parseInt(document.getElementById('matrix-th').value) || 0;
+            const vdCount = parseInt(document.getElementById('matrix-vd').value) || 0;
+            const vdcCount = parseInt(document.getElementById('matrix-vdc').value) || 0;
+
+            const getByLevel = (lvl, count) => {
+                let list = questionBank.filter(q => q.level === lvl);
+                shuffleArray(list);
+                return list.slice(0, count);
+            };
+
+            selectedQuestions = [
+                ...getByLevel('NB', nbCount),
+                ...getByLevel('TH', thCount),
+                ...getByLevel('VD', vdCount),
+                ...getByLevel('VDC', vdcCount)
+            ];
+
+            document.getElementById('selected-q-count').innerText = selectedQuestions.length;
+            document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `<div>${idx+1}. [${sq.level}] ${sq.id}</div>`).join('');
+            alert(`🎉 Đã trộn ngẫu nhiên thành công ${selectedQuestions.length} câu theo ma trận!`);
+            switchAddMethod('bank');
+        }
+
         async function saveExamFinal() {
-            const method = document.getElementById('add-method-bank').style.display !== 'none' ? 'bank' : 'paste';
+            const method = document.getElementById('add-method-paste').style.display !== 'none' ? 'paste' : 'bank';
             const examId = document.getElementById('new-exam-id').value.trim();
             const examTitle = document.getElementById('new-exam-title').value.trim();
-            let finalQuestions = (method === 'bank') ? selectedQuestions : directParsedQuestions;
+            let finalQuestions = (method === 'paste') ? directParsedQuestions : selectedQuestions;
 
             if (!examId || !examTitle || finalQuestions.length === 0) { alert("Vui lòng điền đủ Mã đề, Tên đề và có ít nhất 1 câu hỏi!"); return; }
             const payload = {

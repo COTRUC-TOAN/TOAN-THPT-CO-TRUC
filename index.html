@@ -137,16 +137,19 @@
         .student-box { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
         .student-box input { padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; font-family: 'Times New Roman', Times, serif; }
 
+        /* GIAO DIỆN ĐẤU TRƯỜNG KAHOOT SỐNG ĐỘNG CÓ ÂM THANH & BẢNG XẾP HẠNG */
         #kahoot-view { display: none; max-width: 850px; margin: 0 auto; background: #fff; padding: 30px; border-radius: var(--radius-lg); border: 2px solid #7c3aed; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15); text-align: center; }
         .kahoot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .kahoot-timer-circle { width: 55px; height: 55px; border-radius: 50%; background: #7c3aed; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; }
         .kahoot-question { font-size: 1.25rem; font-weight: bold; color: #1e293b; margin-bottom: 25px; line-height: 1.8; text-align: left; }
         .kahoot-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .kahoot-opt-btn { padding: 22px; border-radius: 12px; border: none; font-size: 1.15rem; font-weight: bold; color: #fff; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 12px; text-align: left; font-family: 'Times New Roman', Times, serif; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .kahoot-opt-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
         .k-opt-0 { background: #e11d48; } .k-opt-1 { background: #2563eb; } .k-opt-2 { background: #d97706; } .k-opt-3 { background: #16a34a; }
         
-        .host-lobby-box { background: #f8fafc; border: 2px dashed #7c3aed; border-radius: 12px; padding: 25px; margin-top: 15px; text-align: left; }
+        .host-lobby-box { background: #f8fafc; border: 2px dashed #7c3aed; border-radius: 12px; padding: 20px; margin-top: 15px; text-align: left; max-height: 200px; overflow-y: auto; }
         .student-chip { display: inline-block; background: #7c3aed; color: #fff; padding: 6px 14px; border-radius: 50px; font-weight: bold; margin: 4px; font-size: 1rem; }
+        .leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; font-weight: bold; }
 
         .secure-exam-mode { user-select: none !important; -webkit-user-select: none !important; }
         .section-header { background: #eff6ff; padding: 12px 16px; border-radius: 8px; font-weight: bold; color: #1e40af; margin: 28px 0 14px; font-size: 1.15rem; border-left: 5px solid var(--primary); }
@@ -366,9 +369,12 @@
             <div id="quiz-result"></div>
         </div>
 
-        <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT -->
+        <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT SỐNG ĐỘNG CÓ ÂM THANH & BẢNG XẾP HẠNG -->
         <div id="kahoot-view">
-            <div class="kahoot-header"><div id="kahoot-progress" style="font-weight: bold; color: #7c3aed; font-size: 1.25rem;">⚡ ĐẤU TRƯỜNG KAHOOT</div></div>
+            <div class="kahoot-header">
+                <div id="kahoot-progress" style="font-weight: bold; color: #7c3aed; font-size: 1.25rem;">⚡ ĐẤU TRƯỜNG KAHOOT</div>
+                <div class="kahoot-timer-circle" id="kahoot-timer-display">20</div>
+            </div>
             <div id="kahoot-login-box" style="padding: 20px; text-align: left;">
                 <h3 style="color: #7c3aed; margin-bottom: 15px; text-align: center;"><i class="fa-solid fa-user-astronaut"></i> Đăng Ký Vào Đấu Trường</h3>
                 <div class="form-row" style="margin-bottom:12px;"><label>Họ và Tên:</label><input type="text" class="form-input" id="k-std-name"></div>
@@ -383,6 +389,7 @@
             <div id="kahoot-game-box" style="display: none;">
                 <div class="kahoot-question" id="kahoot-q-text">Đang chờ câu hỏi...</div>
                 <div class="kahoot-options-grid" id="kahoot-options-grid"></div>
+                <div id="kahoot-feedback" style="font-weight: bold; font-size: 1.2rem; margin-top: 15px; min-height: 30px;"></div>
             </div>
             <div id="kahoot-host-box" style="display: none; padding: 15px; text-align: left;">
                 <div style="background: #eff6ff; border: 2px solid #bfdbfe; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
@@ -392,14 +399,10 @@
                 <h4 style="color: #334155; margin-bottom: 10px;"><i class="fa-solid fa-users"></i> Danh Sách Học Sinh (<span id="host-student-count">0</span>):</h4>
                 <div class="host-lobby-box" id="host-students-list"><p style="color: #64748b; text-align: center;">Chưa có học sinh nào đăng nhập.</p></div>
                 <div id="host-analytics-section" style="display: none; margin-top: 30px; border-top: 2px solid #e2e8f0; padding-top: 20px;">
-                    <h3 style="color: #7c3aed; margin-bottom: 15px;"><i class="fa-solid fa-chart-pie"></i> PHÂN TÍCH KẾT QUẢ</h3>
+                    <h3 style="color: #7c3aed; margin-bottom: 15px;"><i class="fa-solid fa-chart-pie"></i> BẢNG XẾP HẠNG & THỐNG KÊ TRỰC TUYẾN</h3>
                     <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
-                        <h4 style="color: #1e293b; margin-bottom: 10px;">👑 Top 3 Học Sinh Xuất Sắc Nhất</h4>
-                        <div id="host-top3-box" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px;">
-                        <h4 style="color: #1e293b; margin-bottom: 10px;">📊 Thống Kê Tỷ Lệ Sai Sót Từng Câu Hỏi</h4>
-                        <div id="host-question-stats"></div>
+                        <h4 style="color: #1e293b; margin-bottom: 10px;">👑 Bảng Xếp Hạng Thời Gian Thực</h4>
+                        <div id="host-leaderboard-box"></div>
                     </div>
                 </div>
             </div>
@@ -414,7 +417,36 @@
         let selectedQuestions = []; let directParsedQuestions = []; let bankParsedQuestions = [];
         let activeExam = null; let teacherPassAuth = ""; let currentGrade = 'all'; let currentTopic = 'all';
         let kahootCurrentIndex = 0; let kahootScore = 0; let kahootStdName = ""; let kahootStdClass = "";
-        let studentDetailedAnswers = {}; let timerInterval = null; let secondsRemaining = 0; let cheatWarnings = 0;
+        let kahootTimer = null; let kahootTimeLeft = 20;
+
+        // --- HỆ THỐNG ÂM THANH WEB AUDIO API (SỐNG ĐỘNG NHƯ KAHOOT THẬT) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+
+            if (type === 'tick') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, now);
+                gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                osc.start(now); osc.stop(now + 0.08);
+            } else if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                osc.start(now); osc.stop(now + 0.4);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.setValueAtTime(140, now + 0.15);
+                gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                osc.start(now); osc.stop(now + 0.35);
+            }
+        }
 
         const topicsConfig = {
             general: [
@@ -464,99 +496,13 @@
                 { id: '11-bai-1', name: 'Bài 1. Giá trị lượng giác', icon: 'fa-wave-square' },
                 { id: '11-bai-2', name: 'Bài 2. Công thức lượng giác', icon: 'fa-square-root-variable' },
                 { id: '11-bai-3', name: 'Bài 3. Hàm số lượng giác', icon: 'fa-chart-line' },
-                { id: '11-bai-4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' },
-                { type: 'header', title: 'CHƯƠNG II. DÃY SỐ - CẤP SỐ' },
-                { id: '11-chuong-2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
-                { id: '11-bai-5', name: 'Bài 5. Dãy số', icon: 'fa-list-ol' },
-                { id: '11-bai-6', name: 'Bài 6. Cấp số cộng', icon: 'fa-plus' },
-                { id: '11-bai-7', name: 'Bài 7. Cấp số nhân', icon: 'fa-xmark' },
-                { type: 'header', title: 'CHƯƠNG III. THỐNG KÊ' },
-                { id: '11-chuong-3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
-                { id: '11-bai-8', name: 'Bài 8. Mẫu số liệu ghép nhóm', icon: 'fa-chart-simple' },
-                { id: '11-bai-9', name: 'Bài 9. Các số đặc trưng', icon: 'fa-chart-pie' },
-                { type: 'header', title: 'CHƯƠNG IV. QUAN HỆ SONG SONG' },
-                { id: '11-chuong-4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
-                { id: '11-bai-10', name: 'Bài 10. Đường thẳng và mặt phẳng', icon: 'fa-bars' },
-                { id: '11-bai-11', name: 'Bài 11. Hai đường thẳng song song', icon: 'fa-equals' },
-                { id: '11-bai-12', name: 'Bài 12. ĐT & MP song song', icon: 'fa-layer-group' },
-                { id: '11-bai-13', name: 'Bài 13. Hai mặt phẳng song song', icon: 'fa-clone' },
-                { id: '11-bai-14', name: 'Bài 14. Phép chiếu song song', icon: 'fa-project-diagram' },
-                { type: 'header', title: 'CHƯƠNG V. GIỚI HẠN - LIÊN TỤC' },
-                { id: '11-chuong-5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
-                { id: '11-bai-15', name: 'Bài 15. Giới hạn của dãy số', icon: 'fa-arrow-right-arrow-left' },
-                { id: '11-bai-16', name: 'Bài 16. Giới hạn của hàm số', icon: 'fa-arrows-split-up-and-left' },
-                { id: '11-bai-17', name: 'Bài 17. Hàm số liên tục', icon: 'fa-infinity' },
-                { type: 'header', title: 'CHƯƠNG VI. MŨ & LÔGARIT' },
-                { id: '11-chuong-6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
-                { id: '11-bai-18', name: 'Bài 18. Lũy thừa', icon: 'fa-superscript' },
-                { id: '11-bai-19', name: 'Bài 19. Lôgarit', icon: 'fa-square-root-variable' },
-                { id: '11-bai-20', name: 'Bài 20. Hàm số mũ và lôgarit', icon: 'fa-chart-line' },
-                { id: '11-bai-21', name: 'Bài 21. PT, BPT mũ & lôgarit', icon: 'fa-equals' },
-                { type: 'header', title: 'CHƯƠNG VII. QUAN HỆ VUÔNG GÓC' },
-                { id: '11-chuong-7', name: 'Tổng hợp Chương 7', icon: 'fa-folder-open' },
-                { id: '11-bai-22', name: 'Bài 22. Hai đường thẳng vuông góc', icon: 'fa-vector-square' },
-                { id: '11-bai-23', name: 'Bài 23. ĐT vuông góc mặt phẳng', icon: 'fa-draw-polygon' },
-                { id: '11-bai-24', name: 'Bài 24. Góc', icon: 'fa-shapes' },
-                { id: '11-bai-25', name: 'Bài 25. Hai mặt phẳng vuông góc', icon: 'fa-cube' },
-                { id: '11-bai-26', name: 'Bài 26. Khoảng cách', icon: 'fa-ruler-combined' },
-                { id: '11-bai-27', name: 'Bài 27. Thể tích', icon: 'fa-cubes' },
-                { type: 'header', title: 'CHƯƠNG VIII. XÁC SUẤT' },
-                { id: '11-chuong-8', name: 'Tổng hợp Chương 8', icon: 'fa-folder-open' },
-                { id: '11-bai-28', name: 'Bài 28. Biến cố độc lập', icon: 'fa-dice' },
-                { id: '11-bai-29', name: 'Bài 29. Công thức cộng', icon: 'fa-plus-circle' },
-                { id: '11-bai-30', name: 'Bài 30. Công thức nhân', icon: 'fa-times-circle' },
-                { type: 'header', title: 'CHƯƠNG IX. ĐẠO HÀM' },
-                { id: '11-chuong-9', name: 'Tổng hợp Chương 9', icon: 'fa-folder-open' },
-                { id: '11-bai-31', name: 'Bài 31. Ý nghĩa đạo hàm', icon: 'fa-bolt' },
-                { id: '11-bai-32', name: 'Bài 32. Các quy tắc tính đạo hàm', icon: 'fa-calculator' },
-                { id: '11-bai-33', name: 'Bài 33. Đạo hàm cấp hai', icon: 'fa-chart-line' }
+                { id: '11-bai-4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' }
             ],
             g10: [
                 { type: 'header', title: 'CHƯƠNG I. MỆNH ĐỀ & TẬP HỢP' },
                 { id: '10-chuong-1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
                 { id: '10-bai-1', name: 'Bài 1. Mệnh đề', icon: 'fa-check' },
-                { id: '10-bai-2', name: 'Bài 2. Tập hợp', icon: 'fa-object-group' },
-                { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH' },
-                { id: '10-chuong-2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
-                { id: '10-bai-3', name: 'Bài 3. Bất phương trình bậc nhất hai ẩn', icon: 'fa-table-cells' },
-                { id: '10-bai-4', name: 'Bài 4. Hệ bất phương trình hai ẩn', icon: 'fa-table' },
-                { type: 'header', title: 'CHƯƠNG III. HỆ THỨC LƯỢNG' },
-                { id: '10-chuong-3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
-                { id: '10-bai-5', name: 'Bài 5. Giá trị lượng giác', icon: 'fa-angle-right' },
-                { id: '10-bai-6', name: 'Bài 6. Hệ thức lượng tam giác', icon: 'fa-draw-polygon' },
-                { type: 'header', title: 'CHƯƠNG IV. VECTƠ' },
-                { id: '10-chuong-4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
-                { id: '10-bai-7', name: 'Bài 7. Các khái niệm mở đầu', icon: 'fa-arrow-right' },
-                { id: '10-bai-8', name: 'Bài 8. Tổng và hiệu vectơ', icon: 'fa-plus' },
-                { id: '10-bai-9', name: 'Bài 9. Tích vectơ với một số', icon: 'fa-xmark' },
-                { id: '10-bai-10', name: 'Bài 10. Vectơ mặt phẳng tọa độ', icon: 'fa-location-dot' },
-                { id: '10-bai-11', name: 'Bài 11. Tích vô hướng', icon: 'fa-calculator' },
-                { type: 'header', title: 'CHƯƠNG V. THỐNG KÊ' },
-                { id: '10-chuong-5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
-                { id: '10-bai-12', name: 'Bài 12. Số gần đúng', icon: 'fa-hashtag' },
-                { id: '10-bai-13', name: 'Bài 13. Số đặc trưng xu thế trung tâm', icon: 'fa-chart-pie' },
-                { id: '10-bai-14', name: 'Bài 14. Số đặc trưng độ phân tán', icon: 'fa-chart-simple' },
-                { type: 'header', title: 'CHƯƠNG VI. HÀM SỐ & ĐỒ THỊ' },
-                { id: '10-chuong-6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
-                { id: '10-bai-15', name: 'Bài 15. Hàm số', icon: 'fa-chart-line' },
-                { id: '10-bai-16', name: 'Bài 16. Hàm số bậc hai', icon: 'fa-wave-square' },
-                { id: '10-bai-17', name: 'Bài 17. Dấu tam thức bậc hai', icon: 'fa-equals' },
-                { id: '10-bai-18', name: 'Bài 18. Phương trình quy về bậc hai', icon: 'fa-square-root-variable' },
-                { type: 'header', title: 'CHƯƠNG VII. TOẠ ĐỘ TRONG MẶT PHẲNG' },
-                { id: '10-chuong-7', name: 'Tổng hợp Chương 7', icon: 'fa-folder-open' },
-                { id: '10-bai-19', name: 'Bài 19. Phương trình đường thẳng', icon: 'fa-bars' },
-                { id: '10-bai-20', name: 'Bài 20. Đường thẳng', icon: 'fa-compass' },
-                { id: '10-bai-21', name: 'Bài 21. Đường tròn', icon: 'fa-circle' },
-                { id: '10-bai-22', name: 'Bài 22. Ba đường conic', icon: 'fa-shapes' },
-                { type: 'header', title: 'CHƯƠNG VIII. ĐẠI SỐ TỔ HỢP' },
-                { id: '10-chuong-8', name: 'Tổng hợp Chương 8', icon: 'fa-folder-open' },
-                { id: '10-bai-23', name: 'Bài 23. Quy tắc đếm', icon: 'fa-list-ol' },
-                { id: '10-bai-24', name: 'Bài 24. Hoán vị, chỉnh hợp, tổ hợp', icon: 'fa-layer-group' },
-                { id: '10-bai-25', name: 'Bài 25. Nhị thức Newton', icon: 'fa-superscript' },
-                { type: 'header', title: 'CHƯƠNG IX. TÍNH XÁC SUẤT' },
-                { id: '10-chuong-9', name: 'Tổng hợp Chương 9', icon: 'fa-folder-open' },
-                { id: '10-bai-26', name: 'Bài 26. Biến cố & XS cổ điển', icon: 'fa-dice' },
-                { id: '10-bai-27', name: 'Bài 27. Thực hành tính XS', icon: 'fa-check-circle' }
+                { id: '10-bai-2', name: 'Bài 2. Tập hợp', icon: 'fa-object-group' }
             ]
         };
 
@@ -718,7 +664,6 @@
             } else { alert("❌ Mật khẩu bảo mật không chính xác!"); }
         }
 
-        // --- ĐẢO ĐỀ & ĐẢO ĐÁP ÁN (Dành cho Đề Kiểm Tra) ---
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -746,7 +691,6 @@
             return cloned;
         }
 
-        // --- CHẤM ĐIỂM & LÀM BÀI TRUYỀN THỐNG ---
         let processedQuestions = [];
         function startTraditionalExamMode() {
             document.getElementById('quiz-view').style.display = 'block';
@@ -883,7 +827,6 @@
             } catch (e) {}
         }
 
-        // --- HỆ THỐNG BÓC TÁCH VĂN BẢN & GIAO DIỆN GIÁO VIÊN ---
         async function openTeacherLogin() {
             const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
             if (!pass) return;
@@ -1129,18 +1072,28 @@
             document.getElementById('exam-password-row').style.display = (document.getElementById('new-exam-mode').value === 'KIEMTRA') ? 'block' : 'none';
         }
 
-        // --- KAHOOT MÁY CHỦ & HỌC SINH ---
+        // --- ĐẤU TRƯỜNG KAHOOT (ÂM THANH, BẢNG XẾP HẠNG & ĐIỀU KHIỂN) ---
+        let kahootLeaderboardData = [];
         function startHostMode() {
             document.getElementById('portal-view').style.display = 'none';
             document.getElementById('kahoot-view').style.display = 'block';
             document.getElementById('kahoot-login-box').style.display = 'none';
             document.getElementById('kahoot-host-box').style.display = 'block';
+            document.getElementById('host-analytics-section').style.display = 'block';
             db.ref('kahoot_rooms/' + activeExam.id).set({ status: 'waiting' });
             db.ref('kahoot_rooms/' + activeExam.id + '/students').on('value', snapshot => {
                 const val = snapshot.val();
                 const list = val ? Object.values(val) : [];
                 document.getElementById('host-student-count').innerText = list.length;
                 document.getElementById('host-students-list').innerHTML = list.map(s => `<span class="student-chip">${s.name} (${s.class})</span>`).join('') || 'Chưa có học sinh.';
+            });
+            db.ref('kahoot_rooms/' + activeExam.id + '/scores').on('value', snapshot => {
+                const val = snapshot.val();
+                if (!val) { document.getElementById('host-leaderboard-box').innerHTML = '<em>Chưa có điểm số.</em>'; return; }
+                let ranking = Object.values(val).sort((a, b) => b.score - a.score);
+                document.getElementById('host-leaderboard-box').innerHTML = ranking.map((st, i) => `
+                    <div class="leaderboard-item"><span>${i+1}. ${st.name} (${st.class})</span><span style="color: #7c3aed;">${st.score} điểm</span></div>
+                `).join('');
             });
         }
         function hostStartExam() {
@@ -1160,7 +1113,6 @@
             const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
             db.ref('kahoot_rooms/' + activeExam.id + '/students/' + cleanName).set({ name: kahootStdName, class: kahootStdClass });
             
-            // LẮNG NGHE TÍN HIỆU TỪ MÁY CHỦ (BẮT ĐẦU TRẬN ĐẤU)
             db.ref('kahoot_rooms/' + activeExam.id).on('value', snapshot => {
                 const roomData = snapshot.val();
                 if (roomData && roomData.status === 'started') {
@@ -1173,21 +1125,54 @@
         function loadKahootQuestion() {
             const qList = activeExam.questions || [];
             if (kahootCurrentIndex >= qList.length) {
-                document.getElementById('kahoot-game-box').innerHTML = `<h2>Hoàn Thành! Điểm: ${kahootScore}</h2>`;
+                playSound('correct');
+                document.getElementById('kahoot-game-box').innerHTML = `<h2 style="color: #7c3aed; margin-bottom: 20px;"><i class="fa-solid fa-trophy"></i> Hoàn Thành Đấu Trường!</h2><h3 style="color: #1e293b;">Tổng điểm của bạn: ${kahootScore}</h3>`;
                 return;
             }
             const q = qList[kahootCurrentIndex];
             document.getElementById('kahoot-q-text').innerHTML = `Câu ${kahootCurrentIndex + 1}: ${q.q}`;
+            document.getElementById('kahoot-feedback').innerText = '';
             const opts = Array.isArray(q.options) ? q.options : [];
             const labels = ['A', 'B', 'C', 'D'];
             document.getElementById('kahoot-options-grid').innerHTML = opts.map((opt, i) => `
                 <button class="kahoot-opt-btn k-opt-${i}" onclick="answerKahoot('${labels[i]}', '${q.ans || 'A'}', this)">${labels[i]}. ${opt}</button>
             `).join('');
             renderMath(document.getElementById('kahoot-game-box'));
+
+            kahootTimeLeft = 20;
+            document.getElementById('kahoot-timer-display').innerText = kahootTimeLeft;
+            clearInterval(kahootTimer);
+            kahootTimer = setInterval(() => {
+                kahootTimeLeft--;
+                document.getElementById('kahoot-timer-display').innerText = kahootTimeLeft;
+                playSound('tick');
+                if (kahootTimeLeft <= 0) {
+                    clearInterval(kahootTimer);
+                    document.getElementById('kahoot-feedback').innerHTML = `<span style="color: #dc2626;">⏰ Hết giờ!</span>`;
+                    setTimeout(() => { kahootCurrentIndex++; loadKahootQuestion(); }, 1200);
+                }
+            }, 1000);
         }
         function answerKahoot(selected, correct, btnEl) {
-            if (selected.trim().toUpperCase() === correct.trim().toUpperCase()) { kahootScore += 1000; }
-            setTimeout(() => { kahootCurrentIndex++; loadKahootQuestion(); }, 800);
+            clearInterval(kahootTimer);
+            const feedback = document.getElementById('kahoot-feedback');
+            const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
+            
+            if (selected.trim().toUpperCase() === correct.trim().toUpperCase()) {
+                kahootScore += 1000 + (kahootTimeLeft * 25);
+                playSound('correct');
+                feedback.innerHTML = `<span style="color: #16a34a;"><i class="fa-solid fa-circle-check"></i> Chính xác! (+${1000 + kahootTimeLeft*25} điểm)</span>`;
+            } else {
+                playSound('wrong');
+                feedback.innerHTML = `<span style="color: #dc2626;"><i class="fa-solid fa-circle-xmark"></i> Sai rồi! Đáp án đúng là ${correct}</span>`;
+            }
+
+            db.ref('kahoot_rooms/' + activeExam.id + '/scores/' + cleanName).set({ name: kahootStdName, class: kahootStdClass, score: kahootScore });
+
+            setTimeout(() => {
+                kahootCurrentIndex++;
+                loadKahootQuestion();
+            }, 1500);
         }
 
         function showPortalView() {

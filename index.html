@@ -289,7 +289,7 @@
                 </div>
             </div>
 
-            <!-- TAB 5: TẠO & SOẠN ĐỀ MỚI (ĐẦY ĐỦ 2 PHƯƠNG PHÁP: TỪ NGÂN HÀNG HOẶC TẠO ĐỀ NHANH ĐỒNG LOẠT) -->
+            <!-- TAB 5: TẠO & SOẠN ĐỀ MỚI (ĐẦY ĐỦ 2 PHƯƠNG PHÁP: NGÂN HÀNG HOẶC TẠO ĐỀ NHANH) -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -337,9 +337,9 @@
                             <div id="bank-q-list" style="max-height: 400px; overflow-y: auto;"><p style="text-align: center; color: #94a3b8;">Đang tải...</p></div>
                         </div>
 
-                        <!-- Phương pháp 2: Tạo Đề Nhanh Đồng Loạt (Dán văn bản) -->
+                        <!-- Phương pháp 2: Tạo Đề Nhanh (Dán văn bản đồng loạt) -->
                         <div id="add-method-paste" style="display: none;">
-                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán toàn bộ văn bản đề thi vào đây. Hệ thống sẽ bóc tách đồng loạt thành đề thi ngay lập tức.</p>
+                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán toàn bộ văn bản đề thi vào đây. Hệ thống sẽ tự động bóc tách chuẩn xác thành danh sách câu hỏi của đề.</p>
                             <div class="form-row"><label>Dạng Câu Hỏi Mặc Định:</label><select class="form-input" id="direct-q-type"><option value="MCQ">Trắc nghiệm (MCQ)</option><option value="TF">Đúng/Sai (TF)</option><option value="SA">Trả lời ngắn (SA)</option></select></div>
                             <div class="form-row"><label>Nội dung Đề (Ctrl+V dán ảnh):</label><div class="rich-textarea" id="direct-raw-text" contenteditable="true" onpaste="handlePasteData(event, false)" placeholder="Dán văn bản đề thi vào đây..."></div></div>
                             <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Bóc Tách Đề Nhanh</button>
@@ -471,13 +471,99 @@
                 { id: '11-bai-1', name: 'Bài 1. Giá trị lượng giác', icon: 'fa-wave-square' },
                 { id: '11-bai-2', name: 'Bài 2. Công thức lượng giác', icon: 'fa-square-root-variable' },
                 { id: '11-bai-3', name: 'Bài 3. Hàm số lượng giác', icon: 'fa-chart-line' },
-                { id: '11-bai-4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' }
+                { id: '11-bai-4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' },
+                { type: 'header', title: 'CHƯƠNG II. DÃY SỐ - CẤP SỐ' },
+                { id: '11-chuong-2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
+                { id: '11-bai-5', name: 'Bài 5. Dãy số', icon: 'fa-list-ol' },
+                { id: '11-bai-6', name: 'Bài 6. Cấp số cộng', icon: 'fa-plus' },
+                { id: '11-bai-7', name: 'Bài 7. Cấp số nhân', icon: 'fa-xmark' },
+                { type: 'header', title: 'CHƯƠNG III. THỐNG KÊ' },
+                { id: '11-chuong-3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
+                { id: '11-bai-8', name: 'Bài 8. Mẫu số liệu ghép nhóm', icon: 'fa-chart-simple' },
+                { id: '11-bai-9', name: 'Bài 9. Các số đặc trưng', icon: 'fa-chart-pie' },
+                { type: 'header', title: 'CHƯƠNG IV. QUAN HỆ SONG SONG' },
+                { id: '11-chuong-4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
+                { id: '11-bai-10', name: 'Bài 10. Đường thẳng và mặt phẳng', icon: 'fa-bars' },
+                { id: '11-bai-11', name: 'Bài 11. Hai đường thẳng song song', icon: 'fa-equals' },
+                { id: '11-bai-12', name: 'Bài 12. ĐT & MP song song', icon: 'fa-layer-group' },
+                { id: '11-bai-13', name: 'Bài 13. Hai mặt phẳng song song', icon: 'fa-clone' },
+                { id: '11-bai-14', name: 'Bài 14. Phép chiếu song song', icon: 'fa-project-diagram' },
+                { type: 'header', title: 'CHƯƠNG V. GIỚI HẠN - LIÊN TỤC' },
+                { id: '11-chuong-5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
+                { id: '11-bai-15', name: 'Bài 15. Giới hạn của dãy số', icon: 'fa-arrow-right-arrow-left' },
+                { id: '11-bai-16', name: 'Bài 16. Giới hạn của hàm số', icon: 'fa-arrows-split-up-and-left' },
+                { id: '11-bai-17', name: 'Bài 17. Hàm số liên tục', icon: 'fa-infinity' },
+                { type: 'header', title: 'CHƯƠNG VI. MŨ & LÔGARIT' },
+                { id: '11-chuong-6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
+                { id: '11-bai-18', name: 'Bài 18. Lũy thừa', icon: 'fa-superscript' },
+                { id: '11-bai-19', name: 'Bài 19. Lôgarit', icon: 'fa-square-root-variable' },
+                { id: '11-bai-20', name: 'Bài 20. Hàm số mũ và lôgarit', icon: 'fa-chart-line' },
+                { id: '11-bai-21', name: 'Bài 21. PT, BPT mũ & lôgarit', icon: 'fa-equals' },
+                { type: 'header', title: 'CHƯƠNG VII. QUAN HỆ VUÔNG GÓC' },
+                { id: '11-chuong-7', name: 'Tổng hợp Chương 7', icon: 'fa-folder-open' },
+                { id: '11-bai-22', name: 'Bài 22. Hai đường thẳng vuông góc', icon: 'fa-vector-square' },
+                { id: '11-bai-23', name: 'Bài 23. ĐT vuông góc mặt phẳng', icon: 'fa-draw-polygon' },
+                { id: '11-bai-24', name: 'Bài 24. Góc', icon: 'fa-shapes' },
+                { id: '11-bai-25', name: 'Bài 25. Hai mặt phẳng vuông góc', icon: 'fa-cube' },
+                { id: '11-bai-26', name: 'Bài 26. Khoảng cách', icon: 'fa-ruler-combined' },
+                { id: '11-bai-27', name: 'Bài 27. Thể tích', icon: 'fa-cubes' },
+                { type: 'header', title: 'CHƯƠNG VIII. XÁC SUẤT' },
+                { id: '11-chuong-8', name: 'Tổng hợp Chương 8', icon: 'fa-folder-open' },
+                { id: '11-bai-28', name: 'Bài 28. Biến cố độc lập', icon: 'fa-dice' },
+                { id: '11-bai-29', name: 'Bài 29. Công thức cộng', icon: 'fa-plus-circle' },
+                { id: '11-bai-30', name: 'Bài 30. Công thức nhân', icon: 'fa-times-circle' },
+                { type: 'header', title: 'CHƯƠNG IX. ĐẠO HÀM' },
+                { id: '11-chuong-9', name: 'Tổng hợp Chương 9', icon: 'fa-folder-open' },
+                { id: '11-bai-31', name: 'Bài 31. Ý nghĩa đạo hàm', icon: 'fa-bolt' },
+                { id: '11-bai-32', name: 'Bài 32. Các quy tắc tính đạo hàm', icon: 'fa-calculator' },
+                { id: '11-bai-33', name: 'Bài 33. Đạo hàm cấp hai', icon: 'fa-chart-line' }
             ],
             g10: [
                 { type: 'header', title: 'CHƯƠNG I. MỆNH ĐỀ & TẬP HỢP' },
                 { id: '10-chuong-1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
                 { id: '10-bai-1', name: 'Bài 1. Mệnh đề', icon: 'fa-check' },
-                { id: '10-bai-2', name: 'Bài 2. Tập hợp', icon: 'fa-object-group' }
+                { id: '10-bai-2', name: 'Bài 2. Tập hợp', icon: 'fa-object-group' },
+                { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH' },
+                { id: '10-chuong-2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
+                { id: '10-bai-3', name: 'Bài 3. Bất phương trình bậc nhất hai ẩn', icon: 'fa-table-cells' },
+                { id: '10-bai-4', name: 'Bài 4. Hệ bất phương trình hai ẩn', icon: 'fa-table' },
+                { type: 'header', title: 'CHƯƠNG III. HỆ THỨC LƯỢNG' },
+                { id: '10-chuong-3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
+                { id: '10-bai-5', name: 'Bài 5. Giá trị lượng giác', icon: 'fa-angle-right' },
+                { id: '10-bai-6', name: 'Bài 6. Hệ thức lượng tam giác', icon: 'fa-draw-polygon' },
+                { type: 'header', title: 'CHƯƠNG IV. VECTƠ' },
+                { id: '10-chuong-4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
+                { id: '10-bai-7', name: 'Bài 7. Các khái niệm mở đầu', icon: 'fa-arrow-right' },
+                { id: '10-bai-8', name: 'Bài 8. Tổng và hiệu vectơ', icon: 'fa-plus' },
+                { id: '10-bai-9', name: 'Bài 9. Tích vectơ với một số', icon: 'fa-xmark' },
+                { id: '10-bai-10', name: 'Bài 10. Vectơ mặt phẳng tọa độ', icon: 'fa-location-dot' },
+                { id: '10-bai-11', name: 'Bài 11. Tích vô hướng', icon: 'fa-calculator' },
+                { type: 'header', title: 'CHƯƠNG V. THỐNG KÊ' },
+                { id: '10-chuong-5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
+                { id: '10-bai-12', name: 'Bài 12. Số gần đúng', icon: 'fa-hashtag' },
+                { id: '10-bai-13', name: 'Bài 13. Số đặc trưng xu thế trung tâm', icon: 'fa-chart-pie' },
+                { id: '10-bai-14', name: 'Bài 14. Số đặc trưng độ phân tán', icon: 'fa-chart-simple' },
+                { type: 'header', title: 'CHƯƠNG VI. HÀM SỐ & ĐỒ THỊ' },
+                { id: '10-chuong-6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
+                { id: '10-bai-15', name: 'Bài 15. Hàm số', icon: 'fa-chart-line' },
+                { id: '10-bai-16', name: 'Bài 16. Hàm số bậc hai', icon: 'fa-wave-square' },
+                { id: '10-bai-17', name: 'Bài 17. Dấu tam thức bậc hai', icon: 'fa-equals' },
+                { id: '10-bai-18', name: 'Bài 18. Phương trình quy về bậc hai', icon: 'fa-square-root-variable' },
+                { type: 'header', title: 'CHƯƠNG VII. TOẠ ĐỘ TRONG MẶT PHẲNG' },
+                { id: '10-chuong-7', name: 'Tổng hợp Chương 7', icon: 'fa-folder-open' },
+                { id: '10-bai-19', name: 'Bài 19. Phương trình đường thẳng', icon: 'fa-bars' },
+                { id: '10-bai-20', name: 'Bài 20. Đường thẳng', icon: 'fa-compass' },
+                { id: '10-bai-21', name: 'Bài 21. Đường tròn', icon: 'fa-circle' },
+                { id: '10-bai-22', name: 'Bài 22. Ba đường conic', icon: 'fa-shapes' },
+                { type: 'header', title: 'CHƯƠNG VIII. ĐẠI SỐ TỔ HỢP' },
+                { id: '10-chuong-8', name: 'Tổng hợp Chương 8', icon: 'fa-folder-open' },
+                { id: '10-bai-23', name: 'Bài 23. Quy tắc đếm', icon: 'fa-list-ol' },
+                { id: '10-bai-24', name: 'Bài 24. Hoán vị, chỉnh hợp, tổ hợp', icon: 'fa-layer-group' },
+                { id: '10-bai-25', name: 'Bài 25. Nhị thức Newton', icon: 'fa-superscript' },
+                { type: 'header', title: 'CHƯƠNG IX. TÍNH XÁC SUẤT' },
+                { id: '10-chuong-9', name: 'Tổng hợp Chương 9', icon: 'fa-folder-open' },
+                { id: '10-bai-26', name: 'Bài 26. Biến cố & XS cổ điển', icon: 'fa-dice' },
+                { id: '10-bai-27', name: 'Bài 27. Thực hành tính XS', icon: 'fa-check-circle' }
             ]
         };
 
@@ -804,6 +890,61 @@
             } catch (e) {}
         }
 
+        // --- HỆ THỐNG BÓC TÁCH VĂN BẢN THÔNG MINH (CHO CẢ NẠP NHANH & TẠO ĐỀ NHANH) ---
+        function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
+            let parsedArr = [];
+            if (rawHtml.normalize) { rawHtml = rawHtml.normalize('NFC'); }
+
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = rawHtml;
+            let safeHtml = tempDiv.innerHTML.replace(/<\/?(div|p|h[1-6]|ul|ol|li|table|tr|td|th)[^>]*>/gi, '<br>');
+            safeHtml = safeHtml.replace(/(<br>\s*)+/gi, '<br>');
+
+            let markerRegex = /(?=(?:^|<br>|\n|\s)(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_])/i;
+            let htmlBlocks = safeHtml.split(markerRegex);
+
+            htmlBlocks.forEach((blockHtml) => {
+                let blockStr = blockHtml.trim();
+                blockStr = blockStr.replace(/^(?:<br>\s*)+/i, '').trim();
+                if (!blockStr) return;
+
+                let tDiv = document.createElement('div');
+                tDiv.innerHTML = blockStr;
+                let bPlain = (tDiv.innerText || tDiv.textContent).replace(/^[\s\uFEFF\xA0]+/g, '');
+                if (!/^(?:Câu|Bài)\s*\d+/i.test(bPlain)) return;
+
+                const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
+                let qType = selectedType;
+                let options = ['', '', '', '']; let ans = 'A';
+
+                // Bóc tách đáp án
+                let ansMatch = blockStr.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D])/i);
+                if (ansMatch) {
+                    ans = ansMatch[1].toUpperCase();
+                    blockStr = blockStr.substring(0, ansMatch.index).trim();
+                }
+
+                // Bóc tách A, B, C, D
+                let mD = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*D\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
+                if (mD) { options[3] = mD[1].trim(); blockStr = blockStr.substring(0, mD.index).trim(); }
+                let mC = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*C\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
+                if (mC) { options[2] = mC[1].trim(); blockStr = blockStr.substring(0, mC.index).trim(); }
+                let mB = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*B\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
+                if (mB) { options[1] = mB[1].trim(); blockStr = blockStr.substring(0, mB.index).trim(); }
+                let mA = blockStr.match(/(?:^|<br>|\s|\n)(?:<[^>]+>\s*)*A\s*(?:<[^>]+>\s*)*[\.\)](.*?)$/s);
+                if (mA) { options[0] = mA[1].trim(); blockStr = blockStr.substring(0, mA.index).trim(); }
+
+                let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
+                qContent = qContent.replace(/(?:<br>\s*)+$/i, '');
+
+                parsedArr.push({
+                    id: qId, grade: grade, topic: topic, level: defaultLevel,
+                    type: qType, q: qContent, options: options, ans: ans
+                });
+            });
+            return parsedArr;
+        }
+
         // --- QUẢN LÝ GIÁO VIÊN & NẠP ĐỀ (ĐẦY ĐỦ 5 TAB) ---
         async function openTeacherLogin() {
             const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
@@ -922,34 +1063,6 @@
                 questionBank.push(qObj);
                 filterQuestionBankList();
             } catch (e) { alert("Lỗi lưu câu hỏi!"); }
-        }
-
-        function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
-            let parsedArr = [];
-            let tempDiv = document.createElement('div');
-            tempDiv.innerHTML = rawHtml;
-            let safeHtml = tempDiv.innerHTML.replace(/<\/?(div|p|h[1-6]|ul|ol|li|table|tr|td|th)[^>]*>/gi, '<br>');
-            let markerRegex = /(?=(?:^|<br>|\n)(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_])/i;
-            let htmlBlocks = safeHtml.split(markerRegex);
-
-            htmlBlocks.forEach((blockHtml) => {
-                let blockStr = blockHtml.trim();
-                if (!blockStr) return;
-                const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
-                let options = ['', '', '', '']; let ans = 'A';
-                
-                let ansMatch = blockStr.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D])/i);
-                if (ansMatch) { ans = ansMatch[1].toUpperCase(); blockStr = blockStr.substring(0, ansMatch.index); }
-
-                let mD = blockStr.match(/(?:<br>|\s)D[\.\)](.*?)$/s); if (mD) options[3] = mD[1].trim();
-                let mC = blockStr.match(/(?:<br>|\s)C[\.\)](.*?)$/s); if (mC) options[2] = mC[1].trim();
-                let mB = blockStr.match(/(?:<br>|\s)B[\.\)](.*?)$/s); if (mB) options[1] = mB[1].trim();
-                let mA = blockStr.match(/(?:<br>|\s)A[\.\)](.*?)$/s); if (mA) options[0] = mA[1].trim();
-
-                let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').trim();
-                parsedArr.push({ id: qId, grade: grade, topic: topic, level: defaultLevel, type: selectedType, q: qContent, options: options, ans: ans });
-            });
-            return parsedArr;
         }
 
         function parseBankBulkQuestions() {

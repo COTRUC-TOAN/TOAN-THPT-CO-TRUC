@@ -128,6 +128,10 @@
         .selected-list-box { margin-top: 15px; border-top: 1px dashed #cbd5e1; padding-top: 15px; }
         .selected-item { background: #fff; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 1.05rem; }
 
+        /* KHỐI XEM TRƯỚC BÓC TÁCH ĐỀ RÕ RÀNG TỪNG CÂU */
+        .parsed-q-preview-card { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 1.05rem; }
+        .parsed-q-preview-card strong { color: #1e40af; }
+
         #password-lock-screen { display: none; max-width: 500px; margin: 80px auto; background: #fff; padding: 40px; border-radius: var(--radius-lg); border: 2px solid #dc2626; text-align: center; box-shadow: 0 10px 30px rgba(220, 38, 38, 0.15); }
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
         .quiz-topbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
@@ -291,7 +295,7 @@
                 </div>
             </div>
 
-            <!-- TAB 5: TẠO & SOẠN ĐỀ MỚI (ĐÃ TÍCH HỢP BẢO MẬT & DEADLINE) -->
+            <!-- TAB 5: TẠO & SOẠN ĐỀ MỚI (CÓ THỜI GIAN BẮT ĐẦU & DEADLINE) -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -306,9 +310,10 @@
                             <div class="form-row"><label>Thời Gian (Phút):</label><input type="number" class="form-input" id="new-exam-time" value="45"></div>
                         </div>
 
-                        <!-- CẤU HÌNH BẢO MẬT NÂNG CAO -->
+                        <!-- CẤU HÌNH BẢO MẬT & THỜI GIAN MỞ/ĐÓNG ĐỀ -->
                         <div class="form-row" id="exam-password-row" style="display: none;"><label style="color:#dc2626;">🔑 Mật Khẩu Phòng Thi:</label><input type="text" class="form-input" id="new-exam-pass" placeholder="VD: 12a1"></div>
-                        <div class="form-row"><label style="color:#1d4ed8;">⏰ Thời hạn đóng đề (Deadline):</label><input type="datetime-local" class="form-input" id="new-exam-deadline"></div>
+                        <div class="form-row"><label style="color:#16a34a;">🟢 Thời gian BẮT ĐẦU mở đề:</label><input type="datetime-local" class="form-input" id="new-exam-start-time"></div>
+                        <div class="form-row"><label style="color:#dc2626;">🔴 Thời hạn ĐÓNG đề (Deadline):</label><input type="datetime-local" class="form-input" id="new-exam-deadline"></div>
 
                         <div class="selected-list-box" id="bank-selected-box">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -343,15 +348,15 @@
                             <div class="form-row"><label>Dạng Mặc Định:</label><select class="form-input" id="direct-q-type"><option value="MCQ">Trắc nghiệm (MCQ)</option><option value="TF">Đúng/Sai (TF)</option><option value="SA">Trả lời ngắn (SA)</option></select></div>
                             <div class="form-row"><label>Nội dung Đề (Ctrl+V dán ảnh):</label><div class="rich-textarea" id="direct-raw-text" contenteditable="true" onpaste="handlePasteData(event, false)" placeholder="Dán văn bản đề thi..."></div></div>
                             <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Bóc Tách Đề Nhanh</button>
-                            <div style="margin-top: 15px;"><strong style="color: #334155;">Xem Trước (<span id="direct-parsed-count">0</span> câu)</strong></div>
-                            <div class="preview-box" id="direct-preview-box" style="max-height: 250px; overflow-y: auto;"><em>Chưa bóc tách.</em></div>
+                            <div style="margin-top: 15px;"><strong style="color: #334155;">Xem Trước Tách Lớp (<span id="direct-parsed-count">0</span> câu)</strong></div>
+                            <div class="preview-box" id="direct-preview-box" style="max-height: 300px; overflow-y: auto;"><em>Chưa bóc tách.</em></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- MÀN HÌNH NHẬP MẬT KHẨU BẢO MẬT & THÔNG BÁO DEADLINE -->
+        <!-- MÀN HÌNH KHÓA (CHƯA ĐẾN GIỜ HOẶC ĐÃ HẾT HẠN) -->
         <div id="password-lock-screen">
             <i class="fa-solid fa-shield-halved" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
             <h2 style="color: #1e293b; margin-bottom: 10px;" id="lock-screen-title">Phòng Kiểm Tra Bảo Mật</h2>
@@ -423,7 +428,7 @@
         let selectedQuestions = []; let directParsedQuestions = []; let bankParsedQuestions = [];
         let activeExam = null; let teacherPassAuth = ""; let currentGrade = 'all'; let currentTopic = 'all';
         let kahootCurrentIndex = 0; let kahootScore = 0; let kahootStdName = ""; let kahootStdClass = "";
-        let kahootTimer = null; let kahootTimeLeft = 20; let resultsBank = [];
+        let kahootTimer = null; let kahootTimeLeft = 20;
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(type) {
@@ -582,9 +587,22 @@
                     document.getElementById('portal-view').style.display = 'none';
                     document.querySelector('.navbar').style.display = 'none';
 
+                    const now = new Date().getTime();
+
+                    // KIỂM TRA THỜI GIAN BẮT ĐẦU MỞ ĐỀ
+                    if (activeExam.startTime) {
+                        const startTime = new Date(activeExam.startTime).getTime();
+                        if (now < startTime) {
+                            document.getElementById('password-lock-screen').style.display = 'block';
+                            document.getElementById('lock-screen-title').innerText = "Đề Thi Chưa Mở";
+                            document.getElementById('lock-screen-desc').innerText = `Đề thi sẽ chính thức bắt đầu lúc: ${new Date(activeExam.startTime).toLocaleString("vi-VN")}`;
+                            document.getElementById('password-input-group').style.display = 'none';
+                            return;
+                        }
+                    }
+
                     // KIỂM TRA DEADLINE HẠN NỘP BÀI
                     if (activeExam.deadline) {
-                        const now = new Date().getTime();
                         const deadlineTime = new Date(activeExam.deadline).getTime();
                         if (now > deadlineTime) {
                             document.getElementById('password-lock-screen').style.display = 'block';
@@ -657,8 +675,19 @@
             if (!activeExam) return;
             document.getElementById('portal-view').style.display = 'none';
 
+            const now = new Date().getTime();
+            if (activeExam.startTime) {
+                const startTime = new Date(activeExam.startTime).getTime();
+                if (now < startTime) {
+                    document.getElementById('password-lock-screen').style.display = 'block';
+                    document.getElementById('lock-screen-title').innerText = "Đề Thi Chưa Mở";
+                    document.getElementById('lock-screen-desc').innerText = `Đề thi sẽ chính thức bắt đầu lúc: ${new Date(activeExam.startTime).toLocaleString("vi-VN")}`;
+                    document.getElementById('password-input-group').style.display = 'none';
+                    return;
+                }
+            }
+
             if (activeExam.deadline) {
-                const now = new Date().getTime();
                 const deadlineTime = new Date(activeExam.deadline).getTime();
                 if (now > deadlineTime) {
                     document.getElementById('password-lock-screen').style.display = 'block';
@@ -820,7 +849,6 @@
             const name = document.getElementById('std-name').value.trim() || "Ẩn danh";
             const sClass = document.getElementById('std-class').value.trim() || "Tự do";
 
-            // KIỂM TRA CHẶN NỘP BÀI LẶP LẠI (MỖI HỌC SINH CHỈ 1 LẦN)
             try {
                 const checkRes = await fetch(`${SCRIPT_URL}?action=get_results&password=${encodeURIComponent(teacherPassAuth || '123')}`);
                 const checkData = await checkRes.json();
@@ -1031,7 +1059,7 @@
             if (!rawHtml) { alert("Dán nội dung vào đi thầy!"); return; }
             bankParsedQuestions = parseTextToQuestions(rawHtml, document.getElementById('bank-bulk-grade').value, document.getElementById('bank-bulk-topic').value, document.getElementById('bank-bulk-level').value, document.getElementById('bank-bulk-type').value);
             document.getElementById('bank-parsed-count').innerText = bankParsedQuestions.length;
-            document.getElementById('bank-bulk-preview-box').innerHTML = bankParsedQuestions.map((q, i) => `<div><strong>C${i+1}:</strong> ${q.q}</div>`).join('');
+            document.getElementById('bank-bulk-preview-box').innerHTML = bankParsedQuestions.map((q, i) => `<div class="parsed-q-preview-card"><strong>C${i+1}:</strong> ${q.q}<br><span style="color:#16a34a; font-weight:bold;">Đáp án: ${q.ans}</span></div>`).join('');
             document.getElementById('btn-save-bank-bulk').style.display = 'inline-block';
             renderMath(document.getElementById('bank-bulk-preview-box'));
         }
@@ -1049,7 +1077,7 @@
             if (!rawHtml) { alert("Vui lòng dán văn bản đề thi!"); return; }
             directParsedQuestions = parseTextToQuestions(rawHtml, document.getElementById('new-exam-grade').value, document.getElementById('new-exam-topic').value, 'TH', document.getElementById('direct-q-type').value);
             document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
-            document.getElementById('direct-preview-box').innerHTML = directParsedQuestions.map((q, i) => `<div><strong>C${i+1}:</strong> ${q.q}</div>`).join('');
+            document.getElementById('direct-preview-box').innerHTML = directParsedQuestions.map((q, i) => `<div class="parsed-q-preview-card"><strong>C${i+1}:</strong> ${q.q}<br><span style="color:#16a34a; font-weight:bold;">Đáp án: ${q.ans}</span></div>`).join('');
             renderMath(document.getElementById('direct-preview-box'));
         }
 
@@ -1094,7 +1122,7 @@
                 action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle,
                 grade: document.getElementById('new-exam-grade').value, topic: document.getElementById('new-exam-topic').value,
                 mode: document.getElementById('new-exam-mode').value, timeLimit: parseInt(document.getElementById('new-exam-time').value) || 45,
-                examPass: document.getElementById('new-exam-pass').value.trim(), deadline: document.getElementById('new-exam-deadline').value, questions: finalQuestions
+                examPass: document.getElementById('new-exam-pass').value.trim(), startTime: document.getElementById('new-exam-start-time').value, deadline: document.getElementById('new-exam-deadline').value, questions: finalQuestions
             };
             try {
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });

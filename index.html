@@ -125,6 +125,10 @@
         .parsed-q-preview-card { background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 1.05rem; }
         .parsed-q-preview-card strong { color: #1e40af; }
         .bank-q-select-card { background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-bottom: 12px; display: flex; gap: 12px; align-items: flex-start; font-size: 1.05rem; }
+        
+        .matrix-topic-row { background: #fff; border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; margin-bottom: 10px; }
+        .matrix-topic-row h5 { color: #1e40af; margin-bottom: 8px; font-size: 1.05rem; }
+        .matrix-inputs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 
         #password-lock-screen { display: none; max-width: 500px; margin: 80px auto; background: #fff; padding: 40px; border-radius: var(--radius-lg); border: 2px solid #dc2626; text-align: center; box-shadow: 0 10px 30px rgba(220, 38, 38, 0.15); }
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
@@ -293,8 +297,8 @@
                 <div class="creator-container">
                     <div class="creator-card">
                         <h3 style="margin-bottom: 14px; color: var(--primary);"><i class="fa-solid fa-file-signature"></i> 1. Cấu Hình Đề Thi & Bảo Mật</h3>
-                        <div class="form-row"><label>Khối Lớp:</label><select class="form-input" id="new-exam-grade" onchange="updateNewExamTopicDropdown()"><option value="12">Toán 12</option><option value="11">Toán 11</option><option value="10">Toán 10</option></select></div>
-                        <div class="form-row"><label>Chuyên Mục:</label><select class="form-input" id="new-exam-topic"></select></div>
+                        <div class="form-row"><label>Khối Lớp:</label><select class="form-input" id="new-exam-grade" onchange="updateNewExamTopicDropdown(); renderMatrixTable();"><option value="12">Toán 12</option><option value="11">Toán 11</option><option value="10">Toán 10</option></select></div>
+                        <div class="form-row"><label>Chuyên Mục Chung:</label><select class="form-input" id="new-exam-topic"></select></div>
                         <div class="form-row"><label>Mã Đề:</label><input type="text" class="form-input" id="new-exam-id" placeholder="KT12-01"></div>
                         <div class="form-row"><label>Tên Đề:</label><input type="text" class="form-input" id="new-exam-title" placeholder="Kiểm Tra 45 Phút"></div>
                         
@@ -321,7 +325,7 @@
                         <h3 style="color: #059669; margin-bottom: 14px;"><i class="fa-solid fa-layer-group"></i> 2. Nguồn Tạo Đề</h3>
                         <div style="display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
                             <button class="btn-t-tab active" id="tab-add-bank" onclick="switchAddMethod('bank')">Chọn Từ Ngân Hàng</button>
-                            <button class="btn-t-tab" id="tab-add-matrix" onclick="switchAddMethod('matrix')">Trộn Đề Theo Ma Trận</button>
+                            <button class="btn-t-tab" id="tab-add-matrix" onclick="switchAddMethod('matrix')">Trộn Đề Theo Ma Trận (Từng Bài)</button>
                             <button class="btn-t-tab" id="tab-add-paste" onclick="switchAddMethod('paste')">Tạo Đề Nhanh (Dán Văn Bản)</button>
                         </div>
                         
@@ -338,17 +342,15 @@
                             <div id="bank-q-list" style="max-height: 480px; overflow-y: auto;"></div>
                         </div>
 
+                        <!-- MA TRẬN CHI TIẾT THEO TỪNG BÀI -->
                         <div id="add-method-matrix" style="display: none;">
-                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 15px;">Hệ thống sẽ tự động bốc ngẫu nhiên số lượng câu hỏi theo đúng ma trận cấu hình bên dưới.</p>
-                            <div class="form-row"><label>Số câu Nhận Biết (NB):</label><input type="number" class="form-input" id="matrix-nb" value="5"></div>
-                            <div class="form-row"><label>Số câu Thông Hiểu (TH):</label><input type="number" class="form-input" id="matrix-th" value="5"></div>
-                            <div class="form-row"><label>Số câu Vận Dụng (VD):</label><input type="number" class="form-input" id="matrix-vd" value="2"></div>
-                            <div class="form-row"><label>Số câu Vận Dụng Cao (VDC):</label><input type="number" class="form-input" id="matrix-vdc" value="1"></div>
-                            <button class="btn-start" style="width: 100%; background: #059669; margin-top: 15px;" onclick="generateMatrixExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Đề Ngẫu Nhiên Theo Ma Trận</button>
+                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 15px;">Nhập số lượng câu hỏi cần lấy cho từng bài học cụ thể bên dưới:</p>
+                            <div id="matrix-topics-container" style="max-height: 420px; overflow-y: auto; margin-bottom: 15px; padding-right: 5px;"></div>
+                            <button class="btn-start" style="width: 100%; background: #059669;" onclick="generateMatrixExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Đề Ngẫu Nhiên Theo Ma Trận Bài</button>
                         </div>
 
                         <div id="add-method-paste" style="display: none;">
-                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán toàn bộ văn bản đề thi vào đây. Hỗ trợ bóc tách Trắc nghiệm, Đúng/Sai và Trả lời ngắn.</p>
+                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán toàn bộ văn bản đề thi vào đây. Hỗ trợ bóc tách Trắc nghiệm, Đúng/Sai (3 hoặc 4 ý a,b,c,d) và Trả lời ngắn.</p>
                             <div class="form-row"><label>Dạng Mặc Định:</label><select class="form-input" id="direct-q-type"><option value="MCQ">Trắc nghiệm (MCQ)</option><option value="TF">Đúng/Sai (TF)</option><option value="SA">Trả lời ngắn (SA)</option></select></div>
                             <div class="form-row"><label>Nội dung Đề (Ctrl+V dán ảnh):</label><div class="rich-textarea" id="direct-raw-text" contenteditable="true" onpaste="handlePasteData(event, false)" placeholder="Dán văn bản đề thi..."></div></div>
                             <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Bóc Tách Đề Nhanh</button>
@@ -459,7 +461,6 @@
             }
         }
 
-        // MỤC LỤC ĐẦY ĐỦ 3 KHỐI 10, 11, 12 CHUẨN SÁCH GIÁO KHOA
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
@@ -470,136 +471,56 @@
                 { id: 'thpt-qg', name: 'Luyện đề Tốt Nghiệp THPT', icon: 'fa-award' }
             ],
             g12: [
-                { type: 'header', title: 'CHƯƠNG I. ỨNG DỤNG ĐẠO HÀM KHẢO SÁT VÀ VẼ ĐỒ THỊ HÀM SỐ' },
-                { id: '12-c1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
-                { id: '12-c1-b1', name: 'Bài 1. Tính đơn điệu và cực trị của hàm số', icon: 'fa-chart-line' },
-                { id: '12-c1-b2', name: 'Bài 2. Giá trị lớn nhất và giá trị nhỏ nhất', icon: 'fa-arrow-trend-up' },
-                { id: '12-c1-b3', name: 'Bài 3. Đường tiệm cận của đồ thị hàm số', icon: 'fa-arrows-split-up-and-left' },
-                { id: '12-c1-b4', name: 'Bài 4. Khảo sát sự biến thiên và vẽ đồ thị hàm số', icon: 'fa-pen-ruler' },
-                { id: '12-c1-b5', name: 'Bài 5. Ứng dụng đạo hàm để giải quyết một số vấn đề thực tiễn', icon: 'fa-lightbulb' },
-                { type: 'header', title: 'CHƯƠNG II. VECTƠ VÀ HỆ TRỤC TOẠ ĐỘ TRONG KHÔNG GIAN' },
-                { id: '12-c2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
-                { id: '12-c2-b1', name: 'Bài 1. Vectơ trong không gian', icon: 'fa-location-arrow' },
-                { id: '12-c2-b2', name: 'Bài 2. Toạ độ của vectơ trong không gian', icon: 'fa-cube' },
-                { id: '12-c2-b3', name: 'Bài 3. Biểu thức toạ độ của phép toán vectơ', icon: 'fa-calculator' },
-                { type: 'header', title: 'CHƯƠNG III. CÁC SỐ ĐẶC TRƯNG ĐO MỨC ĐỘ PHÂN TÁN CHO MẪU SỐ LIỆU GHÉP NHÓM' },
-                { id: '12-c3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
-                { id: '12-c3-b1', name: 'Bài 1. Khoảng biến thiên và khoảng tứ phân vị', icon: 'fa-chart-simple' },
-                { id: '12-c3-b2', name: 'Bài 2. Phương sai và độ lệch chuẩn', icon: 'fa-chart-pie' },
-                { type: 'header', title: 'CHƯƠNG IV. NGUYÊN HÀM VÀ TÍCH PHÂN' },
-                { id: '12-c4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
+                { type: 'header', title: 'CHƯƠNG I. ỨNG DỤNG ĐẠO HÀM' },
+                { id: '12-c1-b1', name: 'Bài 1. Tính đơn điệu và cực trị', icon: 'fa-chart-line' },
+                { id: '12-c1-b2', name: 'Bài 2. GTLN và GTNN', icon: 'fa-arrow-trend-up' },
+                { id: '12-c1-b3', name: 'Bài 3. Đường tiệm cận', icon: 'fa-arrows-split-up-and-left' },
+                { id: '12-c1-b4', name: 'Bài 4. Khảo sát & vẽ đồ thị', icon: 'fa-pen-ruler' },
+                { id: '12-c1-b5', name: 'Bài 5. Ứng dụng đạo hàm thực tiễn', icon: 'fa-lightbulb' },
+                { type: 'header', title: 'CHƯƠNG II. VECTƠ TRONG KHÔNG GIAN' },
+                { id: '12-c2-b1', name: 'Bài 1. Vectơ không gian', icon: 'fa-location-arrow' },
+                { id: '12-c2-b2', name: 'Bài 2. Toạ độ vectơ không gian', icon: 'fa-cube' },
+                { id: '12-c2-b3', name: 'Bài 3. Biểu thức toạ độ vectơ', icon: 'fa-calculator' },
+                { type: 'header', title: 'CHƯƠNG III. THỐNG KÊ (GHÉP NHÓM)' },
+                { id: '12-c3-b1', name: 'Bài 1. Khoảng biến thiên & tứ phân vị', icon: 'fa-chart-simple' },
+                { id: '12-c3-b2', name: 'Bài 2. Phương sai & độ lệch chuẩn', icon: 'fa-chart-pie' },
+                { type: 'header', title: 'CHƯƠNG IV. NGUYÊN HÀM & TÍCH PHÂN' },
                 { id: '12-c4-b1', name: 'Bài 1. Nguyên hàm', icon: 'fa-infinity' },
                 { id: '12-c4-b2', name: 'Bài 2. Tích phân', icon: 'fa-square-root-variable' },
-                { id: '12-c4-b3', name: 'Bài 3. Ứng dụng hình học của tích phân', icon: 'fa-shapes' },
-                { type: 'header', title: 'CHƯƠNG V. PHƯƠNG TRÌNH MẶT PHẲNG, MẶT CẦU, ĐƯỜNG THẲNG TRONG OXYZ' },
-                { id: '12-c5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
+                { id: '12-c4-b3', name: 'Bài 3. Ứng dụng hình học', icon: 'fa-shapes' },
+                { type: 'header', title: 'CHƯƠNG V. TOẠ ĐỘ OXYZ' },
                 { id: '12-c5-b1', name: 'Bài 1. Phương trình mặt phẳng', icon: 'fa-square' },
-                { id: '12-c5-b2', name: 'Bài 2. Phương trình đường thẳng trong không gian', icon: 'fa-bars' },
+                { id: '12-c5-b2', name: 'Bài 2. Phương trình đường thẳng', icon: 'fa-bars' },
                 { id: '12-c5-b3', name: 'Bài 3. Phương trình mặt cầu', icon: 'fa-circle' },
                 { type: 'header', title: 'CHƯƠNG VI. XÁC SUẤT' },
-                { id: '12-c6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
                 { id: '12-c6-b1', name: 'Bài 1. Xác suất có điều kiện', icon: 'fa-dice' },
-                { id: '12-c6-b2', name: 'Bài 2. Công thức xác suất toàn phần và Bayes', icon: 'fa-network-wired' }
+                { id: '12-c6-b2', name: 'Bài 2. Xác suất toàn phần & Bayes', icon: 'fa-network-wired' }
             ],
             g11: [
-                { type: 'header', title: 'CHƯƠNG I. HÀM SỐ LƯỢNG GIÁC VÀ PHƯƠNG TRÌNH LƯỢNG GIÁC' },
-                { id: '11-c1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
-                { id: '11-c1-b1', name: 'Bài 1. Góc lượng giác. Giá trị lượng giác của góc lượng giác', icon: 'fa-wave-square' },
+                { type: 'header', title: 'CHƯƠNG I. HÀM SỐ LƯỢNG GIÁC' },
+                { id: '11-c1-b1', name: 'Bài 1. Góc lượng giác & giá trị lượng giác', icon: 'fa-wave-square' },
                 { id: '11-c1-b2', name: 'Bài 2. Các phép biến đổi lượng giác', icon: 'fa-square-root-variable' },
-                { id: '11-c1-b3', name: 'Bài 3. Hàm số lượng giác và đồ thị', icon: 'fa-chart-line' },
+                { id: '11-c1-b3', name: 'Bài 3. Hàm số lượng giác & đồ thị', icon: 'fa-chart-line' },
                 { id: '11-c1-b4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' },
-                { type: 'header', title: 'CHƯƠNG II. DÃY SỐ. CẤP SỐ CỘNG VÀ CẤP SỐ NHÂN' },
-                { id: '11-c2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
+                { type: 'header', title: 'CHƯƠNG II. DÃY SỐ - CẤP SỐ' },
                 { id: '11-c2-b1', name: 'Bài 1. Dãy số', icon: 'fa-list-ol' },
                 { id: '11-c2-b2', name: 'Bài 2. Cấp số cộng', icon: 'fa-plus' },
                 { id: '11-c2-b3', name: 'Bài 3. Cấp số nhân', icon: 'fa-xmark' },
-                { type: 'header', title: 'CHƯƠNG III. GIỚI HẠN. HÀM SỐ LIÊN TỤC' },
-                { id: '11-c3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
-                { id: '11-c3-b1', name: 'Bài 1. Giới hạn của dãy số', icon: 'fa-arrow-right-arrow-left' },
-                { id: '11-c3-b2', name: 'Bài 2. Giới hạn của hàm số', icon: 'fa-gauge' },
-                { id: '11-c3-b3', name: 'Bài 3. Hàm số liên tục', icon: 'fa-link' },
-                { type: 'header', title: 'CHƯƠNG IV. ĐƯỜNG THẲNG VÀ MẶT PHẲNG TRONG KHÔNG GIAN' },
-                { id: '11-c4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
-                { id: '11-c4-b1', name: 'Bài 1. Điểm, đường thẳng, mặt phẳng trong không gian', icon: 'fa-cube' },
-                { id: '11-c4-b2', name: 'Bài 2. Hai đường thẳng song song trong không gian', icon: 'fa-bars' },
-                { id: '11-c4-b3', name: 'Bài 3. Đường thẳng và mặt phẳng song song', icon: 'fa-layer-group' },
-                { id: '11-c4-b4', name: 'Bài 4. Hai mặt phẳng song song', icon: 'fa-clone' },
-                { id: '11-c4-b5', name: 'Bài 5. Phép chiếu song song', icon: 'fa-film' },
-                { type: 'header', title: 'CHƯƠNG V. CÁC SỐ ĐẶC TRƯNG ĐO XU THU TÂM CHO MẪU SỐ LIỆU GHÉP NHÓM' },
-                { id: '11-c5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
-                { id: '11-c5-b1', name: 'Bài 1. Số trung bình và mốt của mẫu số liệu ghép nhóm', icon: 'fa-chart-column' },
-                { id: '11-c5-b2', name: 'Bài 2. Trung vị và tứ phân vị của mẫu số liệu ghép nhóm', icon: 'fa-chart-pie' },
-                { type: 'header', title: 'CHƯƠNG VI. HÀM SỐ MŨ VÀ HÀM SỐ LOGARIT' },
-                { id: '11-c6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
-                { id: '11-c6-b1', name: 'Bài 1. Phép tính lũy thừa với số mũ thực', icon: 'fa-superscript' },
-                { id: '11-c6-b2', name: 'Bài 2. Phép tính lôgarit', icon: 'fa-calculator' },
-                { id: '11-c6-b3', name: 'Bài 3. Hàm số mũ. Hàm số lôgarit', icon: 'fa-chart-line' },
-                { id: '11-c6-b4', name: 'Bài 4. Phương trình, bất phương trình mũ và lôgarit', icon: 'fa-equals' },
-                { type: 'header', title: 'CHƯƠNG VII. QUAN HỆ VUÔNG GÓC TRONG KHÔNG GIAN' },
-                { id: '11-c7', name: 'Tổng hợp Chương 7', icon: 'fa-folder-open' },
-                { id: '11-c7-b1', name: 'Bài 1. Hai đường thẳng vuông góc', icon: 'fa-cross' },
-                { id: '11-c7-b2', name: 'Bài 2. Đường thẳng vuông góc với mặt phẳng', icon: 'fa-arrows-up-down' },
-                { id: '11-c7-b3', name: 'Bài 3. Hai mặt phẳng vuông góc', icon: 'fa-square' },
-                { id: '11-c7-b4', name: 'Bài 4. Khoảng cách trong không gian', icon: 'fa-ruler' },
-                { id: '11-c7-b5', name: 'Bài 5. Góc giữa đường thẳng và mặt phẳng. Góc nhị diện', icon: 'fa-draw-polygon' },
-                { type: 'header', title: 'CHƯƠNG VIII. CÁC QUY TÍNH XÁC SUẤT' },
-                { id: '11-c8', name: 'Tổng hợp Chương 8', icon: 'fa-folder-open' },
-                { id: '11-c8-b1', name: 'Bài 1. Biến cố giao và biến cố độc lập', icon: 'fa-diagram-project' },
-                { id: '11-c8-b2', name: 'Bài 2. Công thức cộng xác suất', icon: 'fa-plus-minus' },
-                { id: '11-c8-b3', name: 'Bài 3. Công thức nhân xác suất cho biến cố độc lập', icon: 'fa-asterisk' },
-                { type: 'header', title: 'CHƯƠNG IX. ĐẠO HÀM' },
-                { id: '11-c9', name: 'Tổng hợp Chương 9', icon: 'fa-folder-open' },
-                { id: '11-c9-b1', name: 'Bài 1. Đạo hàm', icon: 'fa-bolt' },
-                { id: '11-c9-b2', name: 'Bài 2. Các quy tắc tính đạo hàm', icon: 'fa-gears' },
-                { id: '11-c9-b3', name: 'Bài 3. Đạo hàm cấp hai', icon: 'fa-arrow-up-9-1' }
+                { type: 'header', title: 'CHƯƠNG III. GIỚI HẠN' },
+                { id: '11-c3-b1', name: 'Bài 1. Giới hạn dãy số', icon: 'fa-arrow-right-arrow-left' },
+                { id: '11-c3-b2', name: 'Bài 2. Giới hạn hàm số', icon: 'fa-gauge' },
+                { id: '11-c3-b3', name: 'Bài 3. Hàm số liên tục', icon: 'fa-link' }
             ],
             g10: [
-                { type: 'header', title: 'CHƯƠNG I. MỆNH ĐỀ VÀ TẬP HỢP' },
-                { id: '10-c1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
+                { type: 'header', title: 'CHƯƠNG I. MỆNH ĐỀ & TẬP HỢP' },
                 { id: '10-c1-b1', name: 'Bài 1. Mệnh đề toán học', icon: 'fa-check' },
-                { id: '10-c1-b2', name: 'Bài 2. Tập hợp. Các phép toán trên tập hợp', icon: 'fa-object-group' },
-                { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH VÀ HỆ BẤT PHƯƠNG TRÌNH BẬC NHẤT HAI ẨN' },
-                { id: '10-c2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
+                { id: '10-c1-b2', name: 'Bài 2. Tập hợp & các phép toán', icon: 'fa-object-group' },
+                { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH' },
                 { id: '10-c2-b1', name: 'Bài 1. Bất phương trình bậc nhất hai ẩn', icon: 'fa-greater-than-equal' },
                 { id: '10-c2-b2', name: 'Bài 2. Hệ bất phương trình bậc nhất hai ẩn', icon: 'fa-table-cells' },
-                { type: 'header', title: 'CHƯƠNG III. HÀM SỐ BẬC HAI VÀ ĐỒ THỊ' },
-                { id: '10-c3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
-                { id: '10-c3-b1', name: 'Bài 1. Hàm số và đồ thị', icon: 'fa-chart-line' },
-                { id: '10-c3-b2', name: 'Bài 2. Hàm số bậc hai. Đồ thị hàm số bậc hai và ứng dụng', icon: 'fa-arrow-trend-up' },
-                { id: '10-c3-b3', name: 'Bài 3. Dấu của tam thức bậc hai. Phương trình quy về phương trình bậc hai', icon: 'fa-square-root-variable' },
-                { type: 'header', title: 'CHƯƠNG IV. HỆ THỨC LƯỢNG TRONG TAM GIÁC' },
-                { id: '10-c4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
-                { id: '10-c4-b1', name: 'Bài 1. Giá trị lượng giác của một góc từ 0 đến 180 độ', icon: 'fa-angles-right' },
-                { id: '10-c4-b2', name: 'Bài 2. Định lý côsin và định lý sin trong tam giác', icon: 'fa-triangle-exclamation' },
-                { id: '10-c4-b3', name: 'Bài 3. Giải tam giác và ứng dụng thực tế', icon: 'fa-compass-drafting' },
-                { type: 'header', title: 'CHƯƠNG V. VECTƠ' },
-                { id: '10-c5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
-                { id: '10-c5-b1', name: 'Bài 1. Khái niệm vectơ', icon: 'fa-location-arrow' },
-                { id: '10-c5-b2', name: 'Bài 2. Tổng và hiệu của hai vectơ', icon: 'fa-plus' },
-                { id: '10-c5-b3', name: 'Bài 3. Tích của một số với một vectơ', icon: 'fa-xmark' },
-                { id: '10-c5-b4', name: 'Bài 4. Tích vô hướng của hai vectơ', icon: 'fa-bullseye' },
-                { type: 'header', title: 'CHƯƠNG VI. THỐNG KÊ' },
-                { id: '10-c6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
-                { id: '10-c6-b1', name: 'Bài 1. Số gần đúng. Sai số', icon: 'fa-calculator' },
-                { id: '10-c6-b2', name: 'Bài 2. Mô tả và biểu diễn số liệu trên các bảng và biểu đồ', icon: 'fa-chart-column' },
-                { id: '10-c6-b3', name: 'Bài 3. Các số đặc trưng đo xu thế trung tâm cho mẫu số liệu không ghép nhóm', icon: 'fa-chart-pie' },
-                { id: '10-c6-b4', name: 'Bài 4. Các số đặc trưng đo mức độ phân tán cho mẫu số liệu không ghép nhóm', icon: 'fa-chart-simple' },
-                { type: 'header', title: 'CHƯƠNG VII. PHƯƠNG PHÁP TOẠ ĐỘ TRONG MẶT PHẲNG' },
-                { id: '10-c7', name: 'Tổng hợp Chương 7', icon: 'fa-folder-open' },
-                { id: '10-c7-b1', name: 'Bài 1. Toạ độ của vectơ', icon: 'fa-cube' },
-                { id: '10-c7-b2', name: 'Bài 2. Toạ độ của mặt phẳng', icon: 'fa-map' },
-                { id: '10-c7-b3', name: 'Bài 3. Phương trình đường thẳng', icon: 'fa-bars' },
-                { id: '10-c7-b4', name: 'Bài 4. Phương trình đường tròn', icon: 'fa-circle' },
-                { id: '10-c7-b5', name: 'Bài 5. Ba đường conic', icon: 'fa-shapes' },
-                { type: 'header', title: 'CHƯƠNG VIII. ĐẠI SƠN TỔ HỢP' },
-                { id: '10-c8', name: 'Tổng hợp Chương 8', icon: 'fa-folder-open' },
-                { id: '10-c8-b1', name: 'Bài 1. Quy tắc đếm', icon: 'fa-list-ol' },
-                { id: '10-c8-b2', name: 'Bài 2. Hoán vị, chỉnh hợp và tổ hợp', icon: 'fa-shuffle' },
-                { id: '10-c8-b3', name: 'Bài 3. Nhị thức Newton', icon: 'fa-square-root-variable' },
-                { type: 'header', title: 'CHƯƠNG IX. TÍNH XÁC SUẤT BAN ĐẦU' },
-                { id: '10-c9', name: 'Tổng hợp Chương 9', icon: 'fa-folder-open' },
-                { id: '10-c9-b1', name: 'Bài 1. Không gian mẫu và biến cố', icon: 'fa-dice' },
-                { id: '10-c9-b2', name: 'Bài 2. Xác suất của biến cố', icon: 'fa-percent' }
+                { type: 'header', title: 'CHƯƠNG III. HÀM SỐ BẬC HAI' },
+                { id: '10-c3-b1', name: 'Bài 1. Hàm số & đồ thị', icon: 'fa-chart-line' },
+                { id: '10-c3-b2', name: 'Bài 2. Hàm số bậc hai', icon: 'fa-arrow-trend-up' }
             ]
         };
 
@@ -627,11 +548,11 @@
         }
 
         function getTopicsForGrade(grade) {
-            let res = [...topicsConfig.general];
-            if (grade === '12') res = res.concat(topicsConfig.g12);
-            else if (grade === '11') res = res.concat(topicsConfig.g11);
-            else if (grade === '10') res = res.concat(topicsConfig.g10);
-            else res = res.concat(topicsConfig.g12, topicsConfig.g11, topicsConfig.g10);
+            let res = [];
+            if (grade === '12') res = topicsConfig.g12;
+            else if (grade === '11') res = topicsConfig.g11;
+            else if (grade === '10') res = topicsConfig.g10;
+            else res = [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10];
             return res.filter(item => item.type !== 'header');
         }
 
@@ -900,7 +821,9 @@
                     qGlobalIdx++;
                     let rows = '';
                     ['a', 'b', 'c', 'd'].forEach((ch, idx) => {
-                        rows += `<div class="tf-row"><span><strong>${ch})</strong> ${q.options[idx]}</span><div class="tf-btns"><label><input type="radio" name="q_${qGlobalIdx}_${ch}" value="D" required> Đúng</label><label><input type="radio" name="q_${qGlobalIdx}_${ch}" value="S" required> Sai</label></div></div>`;
+                        if (q.options[idx]) {
+                            rows += `<div class="tf-row"><span><strong>${ch})</strong> ${q.options[idx]}</span><div class="tf-btns"><label><input type="radio" name="q_${qGlobalIdx}_${ch}" value="D" required> Đúng</label><label><input type="radio" name="q_${qGlobalIdx}_${ch}" value="S" required> Sai</label></div></div>`;
+                        }
                     });
                     container.innerHTML += `<div class="q-card" id="card_q_${qGlobalIdx}"><div class="q-title">Câu ${qGlobalIdx}: ${q.q}</div>${rows}<div class="explanation-box" id="exp_q_${qGlobalIdx}" style="display: none;"></div></div>`;
                 });
@@ -963,9 +886,11 @@
                 } else if (q.type === 'TF') {
                     let tfCorrect = true;
                     ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
-                        let subAns = document.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`)?.value || "";
-                        let correctSub = (q.ansOptions && q.ansOptions[subIdx]) ? q.ansOptions[subIdx] : 'D';
-                        if (subAns !== correctSub) tfCorrect = false;
+                        if (q.options[subIdx]) {
+                            let subAns = document.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`)?.value || "";
+                            let correctSub = (q.ansOptions && q.ansOptions[subIdx]) ? q.ansOptions[subIdx] : 'D';
+                            if (subAns !== correctSub) tfCorrect = false;
+                        }
                     });
                     if (tfCorrect) correctCount++;
                 }
@@ -1022,7 +947,10 @@
             });
             if (tab === 'exams') renderTeacherExamList();
             if (tab === 'add_single') generateNewQId();
-            if (tab === 'creator') filterQuestionBankList();
+            if (tab === 'creator') {
+                filterQuestionBankList();
+                renderMatrixTable();
+            }
         }
 
         function switchAddMethod(method) {
@@ -1031,6 +959,7 @@
                 document.getElementById(`add-method-${m}`).style.display = (m === method) ? 'block' : 'none';
             });
             document.getElementById('bank-selected-box').style.display = (method === 'bank' || method === 'matrix') ? 'block' : 'none';
+            if (method === 'matrix') renderMatrixTable();
         }
 
         async function loadTeacherScores() {
@@ -1115,7 +1044,7 @@
             } catch (e) { alert("Lỗi lưu câu hỏi!"); }
         }
 
-        // --- THUẬT TOÁN BÓC TÁCH CHUẨN XÁC CHO ĐÚNG/SAI, TRẢ LỜI NGẮN & MCQ ---
+        // --- THUẬT TOÁN BÓC TÁCH ĐÚNG/SAI CHUẨN XÁC TUYỆT ĐỐI ---
         function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             if (rawHtml.normalize) { rawHtml = rawHtml.normalize('NFC'); }
@@ -1136,16 +1065,15 @@
                 const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
                 let options = ['', '', '', '']; let ans = 'A'; let ansOptions = [];
 
-                // Tự động phát hiện dạng câu hỏi nếu người dùng chọn nhầm
                 let currentType = selectedType;
-                if (/a[\)\.]\s/i.test(blockStr) && /b[\)\.]\s/i.test(blockStr)) {
+                if (/a[\)\.]\s/i.test(blockStr) || /b[\)\.]\s/i.test(blockStr) || /c[\)\.]\s/i.test(blockStr)) {
                     currentType = 'TF';
                 } else if (/Đáp án\s*[:\-]?\s*[D|S]\s*[-\s]*[D|S]/i.test(blockStr)) {
                     currentType = 'TF';
                 }
 
                 if (currentType === 'TF') {
-                    let ansMatch = blockStr.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([D|S][-\s]*[D|S][-\s]*[D|S][-\s]*[D|S])/i);
+                    let ansMatch = blockStr.match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([D|S][-\s]*[D|S][-\s]*[D|S][-\s]*[D|S]|[D|S][-\s]*[D|S][-\s]*[D|S]|[D|S][-\s]*[D|S])/i);
                     if (ansMatch) {
                         ans = ansMatch[1].toUpperCase().replace(/[^DS]/g, '');
                         ansOptions = ans.split('');
@@ -1157,8 +1085,10 @@
                     let mc = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*c[\)\.]\s*(.*?)(?=(?:<br>|\s|\n)(?:<[^>]+>\s*)*d[\)\.]|$)/s);
                     let md = blockStr.match(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*d[\)\.]\s*(.*?)$/s);
 
-                    if (ma) options[0] = ma[1].trim(); if (mb) options[1] = mb[1].trim();
-                    if (mc) options[2] = mc[1].trim(); if (md) options[3] = md[1].trim();
+                    if (ma) options[0] = ma[1].trim(); 
+                    if (mb) options[1] = mb[1].trim();
+                    if (mc) options[2] = mc[1].trim(); 
+                    if (md) options[3] = md[1].trim();
 
                     let qContent = blockStr.replace(/^(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_]+/i, '').replace(/(?:<br>|\s|\n)(?:<[^>]+>\s*)*[a-d][\)\.].*/gs, '').trim();
                     parsedArr.push({ id: qId, grade: grade, topic: topic, level: defaultLevel, type: 'TF', q: qContent, options: options, ans: ans, ansOptions: ansOptions });
@@ -1250,7 +1180,7 @@
                         <div style="margin-bottom: 6px;"><span class="badge-score badge-pass">[${q.level}] [${q.type}]</span> <span style="font-size: 0.95rem; color:#64748b;">Mã: ${q.id}</span></div>
                         <div style="font-weight: bold; margin-bottom: 8px;">${q.q}</div>
                         ${q.type === 'MCQ' && q.options ? `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.95rem; color: #475569;">${q.options.map((opt, i) => `<div><strong>${['A','B','C','D'][i]}.</strong> ${opt}</div>`).join('')}</div>` : ''}
-                        ${q.type === 'TF' && q.options ? `<div style="font-size: 0.95rem; color: #475569;">${q.options.map((opt, i) => `<div><strong>${['a','b','c','d'][i]})</strong> ${opt}</div>`).join('')}</div>` : ''}
+                        ${q.type === 'TF' && q.options ? `<div style="font-size: 0.95rem; color: #475569;">${q.options.map((opt, i) => opt ? `<div><strong>${['a','b','c','d'][i]})</strong> ${opt}</div>` : '').join('')}</div>` : ''}
                         <div style="margin-top: 6px; font-size: 0.95rem; color: #16a34a; font-weight: bold;">Đáp án: ${q.ans}</div>
                     </div>
                 </div>
@@ -1269,28 +1199,57 @@
 
         function clearSelectedQuestions() { selectedQuestions = []; filterQuestionBankList(); document.getElementById('selected-q-count').innerText = '0'; document.getElementById('selected-items-container').innerHTML = 'Chưa chọn câu.'; }
 
+        // --- RENDER BẢNG MA TRẬN CHI TIẾT TỪNG BÀI ---
+        function renderMatrixTable() {
+            const grade = document.getElementById('new-exam-grade').value;
+            const topics = getTopicsForGrade(grade);
+            const container = document.getElementById('matrix-topics-container');
+            if (!container) return;
+
+            container.innerHTML = topics.map(top => `
+                <div class="matrix-topic-row">
+                    <h5>${top.name}</h5>
+                    <div class="matrix-inputs-grid">
+                        <div><label style="font-size:0.9rem;">NB:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="NB" value="0" min="0"></div>
+                        <div><label style="font-size:0.9rem;">TH:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="TH" value="0" min="0"></div>
+                        <div><label style="font-size:0.9rem;">VD:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="VD" value="0" min="0"></div>
+                        <div><label style="font-size:0.9rem;">VDC:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="VDC" value="0" min="0"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         function generateMatrixExam() {
-            const nbCount = parseInt(document.getElementById('matrix-nb').value) || 0;
-            const thCount = parseInt(document.getElementById('matrix-th').value) || 0;
-            const vdCount = parseInt(document.getElementById('matrix-vd').value) || 0;
-            const vdcCount = parseInt(document.getElementById('matrix-vdc').value) || 0;
+            const rows = document.querySelectorAll('.matrix-topic-row');
+            selectedQuestions = [];
 
-            const getByLevel = (lvl, count) => {
-                let list = questionBank.filter(q => q.level === lvl);
-                shuffleArray(list);
-                return list.slice(0, count);
-            };
+            rows.forEach(row => {
+                const topicId = row.querySelector('.matrix-input').getAttribute('data-topic');
+                const nb = parseInt(row.querySelector('[data-lvl="NB"]').value) || 0;
+                const th = parseInt(row.querySelector('[data-lvl="TH"]').value) || 0;
+                const vd = parseInt(row.querySelector('[data-lvl="VD"]').value) || 0;
+                const vdc = parseInt(row.querySelector('[data-lvl="VDC"]').value) || 0;
 
-            selectedQuestions = [
-                ...getByLevel('NB', nbCount),
-                ...getByLevel('TH', thCount),
-                ...getByLevel('VD', vdCount),
-                ...getByLevel('VDC', vdcCount)
-            ];
+                const getByTopicAndLevel = (top, lvl, count) => {
+                    let list = questionBank.filter(q => q.topic === top && q.level === lvl);
+                    shuffleArray(list);
+                    return list.slice(0, count);
+                };
+
+                selectedQuestions.push(...getByTopicAndLevel(topicId, 'NB', nb));
+                selectedQuestions.push(...getByTopicAndLevel(topicId, 'TH', th));
+                selectedQuestions.push(...getByTopicAndLevel(topicId, 'VD', vd));
+                selectedQuestions.push(...getByTopicAndLevel(topicId, 'VDC', vdc));
+            });
+
+            if (selectedQuestions.length === 0) {
+                alert("⚠️ Vui lòng nhập số lượng câu hỏi cho các bài tương ứng trong ma trận!");
+                return;
+            }
 
             document.getElementById('selected-q-count').innerText = selectedQuestions.length;
-            document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `<div>${idx+1}. [${sq.level}] ${sq.id}</div>`).join('');
-            alert(`🎉 Đã trộn ngẫu nhiên thành công ${selectedQuestions.length} câu theo ma trận!`);
+            document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `<div>${idx+1}. [${sq.topic} - ${sq.level}] ${sq.id}</div>`).join('');
+            alert(`🎉 Đã trộn ngẫu nhiên thành công ${selectedQuestions.length} câu theo ma trận từng bài!`);
             switchAddMethod('bank');
         }
 
@@ -1322,7 +1281,7 @@
         }
         function updateBankBulkTopicDropdown() { populateSelect('bank-bulk-topic', getTopicsForGrade(document.getElementById('bank-bulk-grade').value)); }
         function updateAddQTopicDropdown() { populateSelect('add-q-topic', getTopicsForGrade(document.getElementById('add-q-grade').value)); }
-        function updateNewExamTopicDropdown() { populateSelect('new-exam-topic', getTopicsForGrade(document.getElementById('new-exam-grade').value)); }
+        function updateNewExamTopicDropdown() { populateSelect('new-exam-topic', getTopicsForGrade(document.getElementById('new-exam-grade').value)); renderMatrixTable(); }
         function updateBankFilterTopics() { populateSelect('bank-filter-topic', getTopicsForGrade(document.getElementById('bank-filter-grade').value)); }
 
         function toggleExamPasswordField() {

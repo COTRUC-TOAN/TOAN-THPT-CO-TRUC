@@ -241,7 +241,7 @@
                 <i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> TOÁN THPT - CÔ TRÚC
             </div>
             <div class="nav-btns">
-         <button class="btn-nav btn-nav-outline" id="btn-tab-student" onclick="showPortalView()"><i class="fa-solid fa-house"></i> Góc Học Sinh</button>
+                <button class="btn-nav btn-nav-outline" id="btn-tab-student" onclick="showPortalView()"><i class="fa-solid fa-house"></i> Góc Học Sinh</button>
                 <button class="btn-nav btn-nav-primary" id="btn-tab-teacher" onclick="openTeacherLogin()"><i class="fa-solid fa-chalkboard-user"></i> Quản Lý & Soạn Đề</button>
             </div>
         </nav>
@@ -812,7 +812,6 @@
                 renderExams();
                 renderTeacherExamList();
                 
-                // Đảm bảo dữ liệu đã tải xong xuôi rồi mới kiểm tra mở link đề
                 checkUrlParams();
             } catch (err) {
                 console.error(err);
@@ -1400,7 +1399,13 @@
             a.click();
         }
 
-        function showPortalView() { document.getElementById('teacher-view').style.display = 'none'; document.getElementById('quiz-view').style.display = 'none'; document.getElementById('kahoot-view').style.display = 'none'; document.getElementById('portal-view').style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        function showPortalView() { 
+            document.getElementById('teacher-view').style.display = 'none'; 
+            document.getElementById('quiz-view').style.display = 'none'; 
+            document.getElementById('kahoot-view').style.display = 'none'; 
+            document.getElementById('portal-view').style.display = 'block'; 
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        }
         
         function backToPortal() {
             const params = new URLSearchParams(window.location.search);
@@ -1454,247 +1459,231 @@
         }
 
         // --- HỆ THỐNG ĐẤU TRƯỜNG KAHOOT SỐNG ĐỘNG & BẢNG XẾP HẠNG ---
+        const kahootAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playKahootSound(type) {
+            if (kahootAudioCtx.state === 'suspended') kahootAudioCtx.resume();
+            const now = kahootAudioCtx.currentTime;
+            const osc = kahootAudioCtx.createOscillator();
+            const gain = kahootAudioCtx.createGain();
+            osc.connect(gain); gain.connect(kahootAudioCtx.destination);
 
-// 1. BỘ PHÁT ÂM THANH GAME ĐẤU TRƯỜNG (Web Audio API)
-const kahootAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-function playKahootSound(type) {
-  if (kahootAudioCtx.state === 'suspended') kahootAudioCtx.resume();
-  const now = kahootAudioCtx.currentTime;
-  const osc = kahootAudioCtx.createOscillator();
-  const gain = kahootAudioCtx.createGain();
-  osc.connect(gain); gain.connect(kahootAudioCtx.destination);
+            if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.08);
+                osc.frequency.setValueAtTime(783.99, now + 0.16);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now); osc.stop(now + 0.4);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(160, now);
+                osc.frequency.linearRampToValueAtTime(70, now + 0.3);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now); osc.stop(now + 0.35);
+            } else if (type === 'tick') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                osc.start(now); osc.stop(now + 0.08);
+            } else if (type === 'victory') {
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                    const o = kahootAudioCtx.createOscillator();
+                    const g = kahootAudioCtx.createGain();
+                    o.connect(g); g.connect(kahootAudioCtx.destination);
+                    o.type = 'triangle';
+                    o.frequency.setValueAtTime(freq, now + idx * 0.12);
+                    g.gain.setValueAtTime(0.25, now + idx * 0.12);
+                    g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.5);
+                    o.start(now + idx * 0.12); o.stop(now + idx * 0.12 + 0.5);
+                });
+            }
+        }
 
-  if (type === 'correct') { // Chọn đúng: Âm chuông vui tươi
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(523.25, now);
-    osc.frequency.setValueAtTime(659.25, now + 0.08);
-    osc.frequency.setValueAtTime(783.99, now + 0.16);
-    gain.gain.setValueAtTime(0.3, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-    osc.start(now); osc.stop(now + 0.4);
-  } else if (type === 'wrong') { // Chọn sai: Âm buzzer trầm
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(160, now);
-    osc.frequency.linearRampToValueAtTime(70, now + 0.3);
-    gain.gain.setValueAtTime(0.3, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
-    osc.start(now); osc.stop(now + 0.35);
-  } else if (type === 'tick') { // Đếm ngược 3s cuối
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(800, now);
-    gain.gain.setValueAtTime(0.12, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-    osc.start(now); osc.stop(now + 0.08);
-  } else if (type === 'victory') { // Hoàn thành trận đấu
-    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-      const o = kahootAudioCtx.createOscillator();
-      const g = kahootAudioCtx.createGain();
-      o.connect(g); g.connect(kahootAudioCtx.destination);
-      o.type = 'triangle';
-      o.frequency.setValueAtTime(freq, now + idx * 0.12);
-      g.gain.setValueAtTime(0.25, now + idx * 0.12);
-      g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.5);
-      o.start(now + idx * 0.12); o.stop(now + idx * 0.12 + 0.5);
-    });
-  }
-}
+        let kahootStreak = 0;
+        let kahootTotalTime = 0;
 
-// Biến quản lý chuỗi Combo & Thời gian
-let kahootStreak = 0;
-let kahootTotalTime = 0;
+        function startKahootMode() {
+            document.getElementById('kahoot-view').style.display = 'block';
+            document.getElementById('kahoot-login-box').style.display = 'block';
+            document.getElementById('kahoot-game-box').style.display = 'none';
 
-// 2. KHỞI ĐỘNG ĐẤU TRƯỜNG
-function startKahootMode() {
-  document.getElementById('kahoot-view').style.display = 'block';
-  document.getElementById('kahoot-login-box').style.display = 'block';
-  document.getElementById('kahoot-game-box').style.display = 'none';
+            kahootCurrentIndex = 0;
+            kahootScore = 0;
+            kahootStreak = 0;
+            kahootTotalTime = 0;
+        }
 
-  kahootCurrentIndex = 0;
-  kahootScore = 0;
-  kahootStreak = 0;
-  kahootTotalTime = 0;
-}
+        function joinKahootArena() {
+            kahootStdName = document.getElementById('k-std-name').value.trim();
+            kahootStdClass = document.getElementById('k-std-class').value.trim();
 
-// 3. THÍ SINH ĐĂNG KÝ VÀO PHÒNG ĐẤU
-function joinKahootArena() {
-  kahootStdName = document.getElementById('k-std-name').value.trim();
-  kahootStdClass = document.getElementById('k-std-class').value.trim();
+            if (!kahootStdName || !kahootStdClass) {
+                alert("Vui lòng nhập đầy đủ Họ tên và Lớp!");
+                return;
+            }
 
-  if (!kahootStdName || !kahootStdClass) {
-    alert("Vui lòng nhập đầy đủ Họ tên và Lớp!");
-    return;
-  }
+            document.getElementById('kahoot-login-box').style.display = 'none';
+            document.getElementById('kahoot-game-box').style.display = 'block';
 
-  document.getElementById('kahoot-login-box').style.display = 'none';
-  document.getElementById('kahoot-game-box').style.display = 'block';
+            if (kahootAudioCtx.state === 'suspended') kahootAudioCtx.resume();
 
-  if (kahootAudioCtx.state === 'suspended') kahootAudioCtx.resume();
+            loadKahootQuestion();
+            listenKahootLeaderboard();
+        }
 
-  loadKahootQuestion();
-  listenKahootLeaderboard();
-}
+        function loadKahootQuestion() {
+            const qList = activeExam.questions || [];
+            if (kahootCurrentIndex >= qList.length) {
+                finishKahootExam();
+                return;
+            }
 
-// 4. HIỂN THỊ CÂU HỎI & 4 MÀU ĐÁP ÁN
-function loadKahootQuestion() {
-  const qList = activeExam.questionsJson || [];
-  if (kahootCurrentIndex >= qList.length) {
-    finishKahootExam();
-    return;
-  }
+            const q = qList[kahootCurrentIndex];
+            const totalSec = activeExam.timeLimit || 20;
+            kahootSeconds = totalSec;
 
-  const q = qList[kahootCurrentIndex];
-  const totalSec = activeExam.timeLimit || 20;
-  kahootSeconds = totalSec;
+            const timerEl = document.getElementById('kahoot-timer-val');
+            if (timerEl) timerEl.innerText = kahootSeconds;
 
-  // Cập nhật điểm & thời gian lên giao diện
-  const timerEl = document.getElementById('k-timer-text') || document.querySelector('.kahoot-timer');
-  if (timerEl) timerEl.innerText = kahootSeconds;
+            const qEl = document.getElementById('kahoot-q-text');
+            if (qEl) {
+                let cleanQ = (q.q || '').replace(/^<\/b>/i, '').replace(/<\/?o:p>/gi, '').replace(/\n/g, '<br>');
+                qEl.innerHTML = `Câu ${kahootCurrentIndex + 1}: ${cleanQ}`;
+            }
 
-  const scoreEl = document.getElementById('k-current-score');
-  if (scoreEl) scoreEl.innerText = kahootScore.toLocaleString();
+            const grid = document.getElementById('kahoot-options-grid');
+            if (grid) {
+                const opts = Array.isArray(q.options) ? q.options : [];
+                const labels = ['A', 'B', 'C', 'D'];
+                const shapes = ['▲', '◆', '●', '■'];
+                const correctVal = (q.ans || 'A').toString().trim();
 
-  // Hiển thị nội dung câu hỏi
-  const qEl = document.querySelector('.kahoot-question') || document.getElementById('k-question-text');
-  if (qEl) {
-    let cleanQ = (q.q || q.question || '').replace(/^<\/b>/i, '').replace(/<\/?o:p>/gi, '').replace(/\n/g, '<br>');
-    qEl.innerHTML = `Câu ${kahootCurrentIndex + 1}: ${cleanQ}`;
-  }
+                grid.innerHTML = opts.map((opt, i) => {
+                    let cleanOpt = (opt || '').toString().replace(/<\/?o:p>/gi, '');
+                    return `
+                        <button class="kahoot-opt-btn k-opt-${i}" onclick="answerKahoot('${labels[i]}', '${correctVal}', this)">
+                            <span style="font-size: 1.2em; margin-right: 8px;">${shapes[i]}</span> ${cleanOpt}
+                        </button>
+                    `;
+                }).join('');
+            }
 
-  // Hiển thị 4 nút đáp án
-  const grid = document.querySelector('.kahoot-options-grid') || document.getElementById('k-options-grid');
-  if (grid) {
-    const opts = Array.isArray(q.options) ? q.options : [q.a, q.b, q.c, q.d];
-    const labels = ['A', 'B', 'C', 'D'];
-    const shapes = ['▲', '◆', '●', '■'];
-    const correctVal = (q.ans || q.correct || 'A').toString().trim();
+            renderMath(document.getElementById('kahoot-game-box'));
 
-    grid.innerHTML = opts.map((opt, i) => {
-      let cleanOpt = (opt || '').toString().replace(/<\/?o:p>/gi, '');
-      return `
-        <button class="kahoot-opt-btn k-opt-${i}" onclick="answerKahoot('${labels[i]}', '${correctVal}', this)">
-          <span style="font-size: 1.2em; margin-right: 8px;">${shapes[i]}</span> ${cleanOpt}
-        </button>
-      `;
-    }).join('');
-  }
+            clearInterval(kahootTimer);
+            kahootTimer = setInterval(() => {
+                kahootSeconds--;
+                kahootTotalTime++;
+                if (timerEl) timerEl.innerText = kahootSeconds;
 
-  if (typeof renderMath === 'function') {
-    renderMath(document.getElementById('kahoot-game-box'));
-  }
+                if (kahootSeconds <= 3 && kahootSeconds > 0) {
+                    playKahootSound('tick');
+                }
 
-  // Đếm ngược từng giây
-  clearInterval(kahootTimer);
-  kahootTimer = setInterval(() => {
-    kahootSeconds--;
-    kahootTotalTime++;
-    if (timerEl) timerEl.innerText = kahootSeconds;
+                if (kahootSeconds <= 0) {
+                    clearInterval(kahootTimer);
+                    answerKahoot('TIME_OUT', q.ans || 'A', null);
+                }
+            }, 1000);
+        }
 
-    if (kahootSeconds <= 3 && kahootSeconds > 0) {
-      playKahootSound('tick');
-    }
+        function answerKahoot(selected, correct, btnEl) {
+            clearInterval(kahootTimer);
 
-    if (kahootSeconds <= 0) {
-      clearInterval(kahootTimer);
-      answerKahoot('TIME_OUT', q.ans || q.correct || 'A', null);
-    }
-  }, 1000);
-}
+            const isCorrect = (selected.trim().toUpperCase() === correct.trim().toUpperCase());
+            const totalSec = activeExam.timeLimit || 20;
 
-// 5. CHẤM ĐIỂM TỐC ĐỘ, COMBO & LƯU FIREBASE
-function answerKahoot(selected, correct, btnEl) {
-  clearInterval(kahootTimer);
+            document.querySelectorAll('.kahoot-opt-btn').forEach(b => b.disabled = true);
 
-  const isCorrect = (selected.trim().toUpperCase() === correct.trim().toUpperCase());
-  const totalSec = activeExam.timeLimit || 20;
+            if (isCorrect) {
+                kahootStreak++;
+                const base = 1000;
+                const speedBonus = Math.round(base * (kahootSeconds / totalSec));
+                let multiplier = 1.0;
+                if (kahootStreak >= 5) multiplier = 1.5;
+                else if (kahootStreak >= 3) multiplier = 1.2;
 
-  // Khóa nút tránh bấm nhiều lần
-  document.querySelectorAll('.kahoot-opt-btn').forEach(b => b.disabled = true);
+                const earned = Math.round((base + speedBonus) * multiplier);
+                kahootScore += earned;
 
-  if (isCorrect) {
-    kahootStreak++;
+                playKahootSound('correct');
+                if (btnEl) btnEl.style.boxShadow = '0 0 25px #22c55e';
+            } else {
+                kahootStreak = 0;
+                playKahootSound('wrong');
+                if (btnEl) btnEl.style.opacity = '0.4';
+            }
 
-    // Điểm cơ bản 1000đ + tối đa 1000đ thưởng tốc độ
-    const base = 1000;
-    const speedBonus = Math.round(base * (kahootSeconds / totalSec));
+            try {
+                if (typeof db !== 'undefined' && db && activeExam.id) {
+                    const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
+                    db.ref('kahoot_scores/' + activeExam.id + '/' + cleanName).set({
+                        name: kahootStdName,
+                        class: kahootStdClass,
+                        score: kahootScore,
+                        timeSpent: kahootTotalTime,
+                        time: new Date().toLocaleTimeString('vi-VN')
+                    });
+                }
+            } catch (e) {}
 
-    // Hệ số Combo: x1.2 khi đúng 3 câu, x1.5 khi đúng từ 5 câu
-    let multiplier = 1.0;
-    if (kahootStreak >= 5) multiplier = 1.5;
-    else if (kahootStreak >= 3) multiplier = 1.2;
+            setTimeout(() => {
+                kahootCurrentIndex++;
+                loadKahootQuestion();
+            }, 1200);
+        }
 
-    const earned = Math.round((base + speedBonus) * multiplier);
-    kahootScore += earned;
+        function listenKahootLeaderboard() {
+            const lbContainer = document.getElementById('kahoot-leaderboard');
+            if (!lbContainer || typeof db === 'undefined' || !db || !activeExam.id) return;
 
-    playKahootSound('correct');
-    if (btnEl) btnEl.style.boxShadow = '0 0 25px #22c55e';
-  } else {
-    kahootStreak = 0;
-    playKahootSound('wrong');
-    if (btnEl) btnEl.style.opacity = '0.4';
-  }
+            db.ref('kahoot_scores/' + activeExam.id).on('value', snapshot => {
+                const val = snapshot.val();
+                if (!val) {
+                    lbContainer.innerHTML = `<p style="text-align: center; color: #64748b;">Chưa có ai tham gia đua top.</p>`;
+                    return;
+                }
+                const list = Object.values(val).sort((a, b) => b.score - a.score || a.timeSpent - b.timeSpent).slice(0, 10);
 
-  // Cập nhật điểm thời gian thực lên Firebase
-  try {
-    if (typeof db !== 'undefined' && db && activeExam.id) {
-      const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
-      db.ref('kahoot_scores/' + activeExam.id + '/' + cleanName).set({
-        name: kahootStdName,
-        class: kahootStdClass,
-        score: kahootScore,
-        timeSpent: kahootTotalTime,
-        time: new Date().toLocaleTimeString('vi-VN')
-      });
-    }
-  } catch (e) {}
+                lbContainer.innerHTML = list.map((p, idx) => {
+                    let rankIcon = idx === 0 ? '👑' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : `#${idx+1}`));
+                    return `<div class="leaderboard-item"><span>${rankIcon} ${p.name} (${p.class})</span><span style="color: #7c3aed;">${(p.score || 0).toLocaleString()} đ</span></div>`;
+                }).join('');
+            });
+        }
 
-  setTimeout(() => {
-    kahootCurrentIndex++;
-    loadKahootQuestion();
-  }, 1200);
-}
+        async function finishKahootExam() {
+            playKahootSound('victory');
+            clearInterval(kahootTimer);
 
-// 6. LẮNG NGHE BẢNG XẾP HẠNG FIREBASE
-function listenKahootLeaderboard() {
-  const tbody = document.getElementById('k-leaderboard-body') || document.querySelector('.kahoot-leaderboard-list');
-  if (!tbody || typeof db === 'undefined' || !db || !activeExam.id) return;
+            document.getElementById('kahoot-view').innerHTML = `
+                <div style="padding: 40px; text-align: center;">
+                    <i class="fa-solid fa-trophy" style="font-size: 4rem; color: #fbbf24; margin-bottom: 20px;"></i>
+                    <h2 style="color: #7c3aed; margin-bottom: 10px;">Hoàn Thành Đấu Trường!</h2>
+                    <p style="font-size: 1.3rem; font-weight: bold; color: #1e293b; margin-bottom: 25px;">Điểm số của bạn: ${kahootScore.toLocaleString()} điểm</p>
+                    <button class="btn-start" style="background: #7c3aed; width: 240px; margin: 0 auto;" onclick="alert('🎉 Bài làm đã được lưu. Bạn có thể tắt tab này!');"><i class="fa-solid fa-check"></i> Đã Hoàn Thành</button>
+                </div>`;
 
-  db.ref('kahoot_scores/' + activeExam.id).on('value', snapshot => {
-    const val = snapshot.val();
-    if (!val) return;
-    const list = Object.values(val).sort((a, b) => b.score - a.score || a.timeSpent - b.timeSpent).slice(0, 10);
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        action: "saveScore",
+                        examId: activeExam.id,
+                        name: kahootStdName,
+                        class: kahootStdClass,
+                        score: kahootScore,
+                        timeSpent: kahootTotalTime
+                    })
+                });
+            } catch (err) {
+                console.error("Lỗi lưu Sheet:", err);
+            }
+        }
 
-    tbody.innerHTML = list.map((p, idx) => `
-      <div style="display:flex; justify-content:space-between; padding:8px 12px; border-bottom:1px solid #e2e8f0; font-weight:${idx < 3 ? 'bold' : 'normal'}">
-        <span>${idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : idx + 1}. ${p.name} (${p.class || p.className})</span>
-        <span style="color:#16a34a">${(p.score || 0).toLocaleString()} đ</span>
-      </div>
-    `).join('');
-  });
-}
-
-// 7. KẾT THÚC VÒNG ĐẤU & LƯU GOOGLE SHEETS
-async function finishKahootExam() {
-  playKahootSound('victory');
-  clearInterval(kahootTimer);
-
-  alert(`🎉 CHÚC MỪNG BẠN ĐÃ HOÀN THÀNH!\nTổng điểm: ${kahootScore.toLocaleString()} điểm\nThời gian: ${kahootTotalTime} giây`);
-
-  // Lưu vào Google Sheet (sheet BXH)
-  try {
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        exam: activeExam.id || "thu",
-        name: kahootStdName,
-        className: kahootStdClass,
-        score: kahootScore,
-        timeSpent: kahootTotalTime
-      })
-    });
-  } catch (err) {
-    console.error("Lỗi lưu Sheet:", err);
-  }
-}
         // --- CHẤM ĐIỂM TRUYỀN THỐNG ---
         function startTraditionalExamMode() {
             document.getElementById('quiz-view').style.display = 'block'; document.getElementById('quiz-title').innerText = activeExam.title; document.getElementById('quiz-result').style.display = 'none'; document.getElementById('cheat-warning').style.display = 'none'; document.getElementById('quiz-form').reset(); document.getElementById('btn-submit-quiz').disabled = false; document.getElementById('btn-submit-quiz').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Nộp Bài & Xem Điểm'; cheatWarnings = 0;

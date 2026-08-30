@@ -806,41 +806,30 @@
             }
         }
 
-      function checkUrlParams() {
-            const params = new URLSearchParams(window.location.search);
-            const examId = params.get('exam');
-            if (examId) {
-                document.body.classList.add('locked-ui');
-                let attempts = 0;
-                const checkExist = setInterval(() => {
-                    attempts++;
-                    if (examBank.length > 0) {
-                        clearInterval(checkExist);
-                        activeExam = examBank.find(e => e.id === examId);
-                        if (activeExam) {
-                            document.getElementById('portal-view').style.display = 'none';
-                            document.querySelector('.navbar').style.display = 'none';
-                            if (activeExam.mode === 'KIEMTRA') { 
-                                if (activeExam.examPass && activeExam.examPass.trim() !== "") {
-                                    document.getElementById('password-lock-screen').style.display = 'block'; 
-                                } else {
-                                    startTraditionalExamMode();
-                                }
-                            } else { 
-                                if (activeExam.mode === 'KAHOOT') startKahootMode(); 
-                                else startTraditionalExamMode(); 
-                            }
-                        } else { 
-                            // Chỉ báo lỗi khi đã tải xong dữ liệu mà vẫn không thấy đề
-                            alert("Không tìm thấy đề thi này trên hệ thống!"); 
-                        }
-                    } else if (attempts > 30) { // Quá 6 giây mà không kết nối được server
-                        clearInterval(checkExist);
-                        alert("Không thể kết nối tải đề từ máy chủ. Vui lòng kiểm tra lại đường link!");
-                    }
-                }, 200);
+     function checkUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const examId = params.get('exam');
+    if (examId) {
+        document.body.classList.add('locked-ui');
+        activeExam = examBank.find(e => e.id === examId);
+        if (activeExam) {
+            document.getElementById('portal-view').style.display = 'none';
+            document.querySelector('.navbar').style.display = 'none';
+            if (activeExam.mode === 'KIEMTRA') { 
+                if (activeExam.examPass && activeExam.examPass.trim() !== "") {
+                    document.getElementById('password-lock-screen').style.display = 'block'; 
+                } else {
+                    startTraditionalExamMode();
+                }
+            } else { 
+                if (activeExam.mode === 'KAHOOT') startKahootMode(); 
+                else startTraditionalExamMode(); 
             }
+        } else { 
+            alert("Không tìm thấy đề thi này trên hệ thống!"); 
         }
+    }
+}        }
 
         function verifyExamPassword() {
             const enteredPass = document.getElementById('exam-secure-pass').value.trim();

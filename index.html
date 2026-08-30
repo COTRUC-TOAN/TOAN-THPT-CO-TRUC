@@ -175,7 +175,7 @@
         .q-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; margin-bottom: 16px; }
         .q-title { font-weight: bold; margin-bottom: 14px; color: #0f172a; line-height: 1.8; font-size: 1.15rem; }
         
-        /* --- ĐOẠN CSS SIÊU CƯỜNG HÓA CHỐNG RỚT DÒNG TOÁN HỌC --- */
+        /* --- SỬA TRIỆT ĐỂ LỖI RỚT DÒNG CÔNG THỨC TOÁN Ở ĐÁP ÁN --- */
         .mcq-option { 
             display: flex !important; 
             align-items: center !important; 
@@ -188,24 +188,18 @@
             cursor: pointer !important; 
             font-size: 1.15rem !important; 
             line-height: 1.6 !important; 
-            white-space: nowrap !important; 
             overflow-x: auto !important; 
         }
-        .mcq-option * { 
-            white-space: nowrap !important; 
-            flex-shrink: 0 !important; 
+        /* Ép MathJax hiển thị khối nằm ngang liền mạch, không bẻ dòng */
+        .mcq-option .MathJax, .mcq-option .MathJax_Display, .mcq-option span {
+            display: inline-block !important;
+            white-space: nowrap !important;
         }
-        .mcq-option span { 
-            display: inline-flex !important; 
-            align-items: center !important; 
-            gap: 6px !important; 
-            white-space: nowrap !important; 
-        }
+        .mcq-option:hover { background: #f0f7ff; border-color: var(--primary); }
         .mcq-option::-webkit-scrollbar { height: 4px; }
         .mcq-option::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
         .tf-row { border-bottom: 1px dashed #cbd5e1; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; font-size: 1.15rem; overflow-x: auto !important; }
-        .tf-row * { white-space: nowrap !important; }
         .tf-btns { display: flex; gap: 16px; margin-left: 10px; flex-shrink: 0; }
         
         .sa-input { width: 240px; padding: 10px 14px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1.15rem; font-weight: bold; margin-top: 10px; font-family: 'Times New Roman', Times, serif; }
@@ -222,6 +216,11 @@
         .formula-box { background: #f8fafc; border-left: 4px solid var(--primary); padding: 18px; border-radius: 8px; font-size: 1.15rem; }
         .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: bold; z-index: 1000; display: none; }
         .q-card img, .bank-q-item img, .preview-box img, .kahoot-question img { max-width: 100%; height: auto; border-radius: 8px; margin: 10px auto; display: block; border: 1px solid #e2e8f0; }
+
+        /* Bổ sung style cho nút quản lý đề (có nút xóa trực tiếp) */
+        .exam-manage-row { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; }
+        .btn-del-exam { background: #fee2e2; color: #dc2626; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-family: 'Times New Roman', Times, serif; transition: 0.2s; }
+        .btn-del-exam:hover { background: #dc2626; color: #fff; }
 
         @media print {
             body { background: #fff; color: #000; padding: 0; font-family: 'Times New Roman', Times, serif; font-size: 12pt; }
@@ -279,6 +278,7 @@
         <div id="teacher-view">
             <div class="teacher-nav">
                 <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
+                <button class="btn-t-tab" id="btn-t-exams" onclick="switchTeacherTab('exams')"><i class="fa-solid fa-list-check"></i> Quản Lý Đề Thi</button>
                 <button class="btn-t-tab" id="btn-t-bulk" onclick="switchTeacherTab('bulk')"><i class="fa-solid fa-paste"></i> Nạp Ngân Hàng Nhanh</button>
                 <button class="btn-t-tab" id="btn-t-add_single" onclick="switchTeacherTab('add_single')"><i class="fa-solid fa-circle-plus"></i> Nạp Câu Hỏi Thủ Công</button>
                 <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo & Soạn Đề Mới</button>
@@ -314,6 +314,15 @@
                             <tr><td colspan="9" style="text-align: center; color: #94a3b8; padding: 30px;">Chưa có dữ liệu bài làm nào.</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- TAB QUẢN LÝ ĐỀ THI (CÓ NÚT XÓA ĐỀ TRỰC TIẾP) -->
+            <div id="sec-t-exams" style="display: none;">
+                <h3 style="color: #1e40af; margin-bottom: 15px;"><i class="fa-solid fa-list-check"></i> Danh Sách Đề Thi Trên Hệ Thống</h3>
+                <p style="color: #64748b; margin-bottom: 20px;">Thầy có thể xem danh sách các đề hiện có hoặc bấm nút Xóa để gỡ bỏ đề thi trực tiếp ngay tại đây.</p>
+                <div id="teacher-exam-list-container">
+                    <p style="color: #94a3b8;">Đang tải danh sách đề...</p>
                 </div>
             </div>
 
@@ -583,7 +592,6 @@
         function renderMath(targetElement) {
             if (window.MathJax && MathJax.Hub && MathJax.Hub.Queue) { 
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, targetElement || document.body], function() {
-                    // Tự động quét và khóa cứng các thẻ toán học trong đáp án không bị rớt dòng
                     document.querySelectorAll('.mcq-option').forEach(opt => {
                         opt.style.whiteSpace = 'nowrap';
                         opt.querySelectorAll('.MathJax, .MathJax_Display, span').forEach(el => {
@@ -793,6 +801,7 @@
                 examBank = data.exams || [];
                 theoryBank = data.theories || {};
                 renderExams();
+                renderTeacherExamList();
                 checkUrlParams();
             } catch (err) {
                 console.error(err);
@@ -886,6 +895,50 @@
             renderMath(grid);
         }
 
+        // --- TÍCH HỢP QUẢN LÝ VÀ XÓA ĐỀ THI TRỰC TIẾP ---
+        function renderTeacherExamList() {
+            const container = document.getElementById('teacher-exam-list-container');
+            if (!container) return;
+            if (examBank.length === 0) {
+                container.innerHTML = `<p style="color: #94a3b8;">Chưa có đề thi nào trên hệ thống.</p>`;
+                return;
+            }
+            container.innerHTML = '';
+            examBank.forEach(ex => {
+                const row = document.createElement('div');
+                row.className = 'exam-manage-row';
+                row.innerHTML = `
+                    <div>
+                        <strong>[${ex.id}] ${ex.title}</strong> 
+                        <span style="font-size: 0.9rem; color: #64748b; margin-left: 10px;">(Khối ${ex.grade} - ${ex.mode})</span>
+                    </div>
+                    <button class="btn-del-exam" onclick="deleteExamFromSystem('${ex.id}')"><i class="fa-solid fa-trash-can"></i> Xóa Đề</button>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        async function deleteExamFromSystem(examId) {
+            if (!confirm(`⚠️ Thầy có chắc chắn muốn xóa vĩnh viễn đề thi có mã [${examId}] không?`)) return;
+            try {
+                const res = await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: 'delete_exam', password: teacherPassAuth, examId: examId }) 
+                });
+                const data = await res.json();
+                if (data.status === "success") {
+                    alert("🗑️ Đã xóa đề thi thành công khỏi hệ thống!");
+                    examBank = examBank.filter(e => e.id !== examId);
+                    renderExams();
+                    renderTeacherExamList();
+                } else {
+                    alert("Lỗi khi xóa: " + data.message);
+                }
+            } catch (err) {
+                alert("Lỗi kết nối máy chủ khi xóa đề!");
+            }
+        }
+
         function filterGrade(g, btn) {
             currentGrade = g; currentTopic = 'all';
             document.querySelectorAll('.grade-pill').forEach(b => b.classList.remove('active')); btn.classList.add('active');
@@ -917,6 +970,7 @@
                     populateClassAndExamFilters(); 
                     applyScoreFilters(); 
                     loadQuestionBank();
+                    renderTeacherExamList();
                     updateBankBulkTopicDropdown(); 
                     updateAddQTopicDropdown(); 
                     updateNewExamTopicDropdown(); 
@@ -934,7 +988,7 @@
         }
 
         function switchTeacherTab(tab) {
-            const tabIds = ['scores', 'bulk', 'add_single', 'creator'];
+            const tabIds = ['scores', 'exams', 'bulk', 'add_single', 'creator'];
             tabIds.forEach(t => {
                 const sec = document.getElementById(`sec-t-${t}`);
                 const btn = document.getElementById(`btn-t-${t}`);
@@ -945,6 +999,7 @@
             const activeBtn = document.getElementById(`btn-t-${tab}`);
             if (activeSec) activeSec.style.display = 'block';
             if (activeBtn) activeBtn.classList.add('active');
+            if (tab === 'exams') renderTeacherExamList();
             if (tab === 'add_single') generateNewQId();
             if (tab === 'creator') filterQuestionBankList();
         }
@@ -1511,7 +1566,7 @@
             });
             try {
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'submit_quiz', time: new Date().toLocaleString("vi-VN"), examId: activeExam.id, examTitle: activeExam.title, name: name, class: sClass, mode: activeExam.mode, answers: userAnswers }) });
-                const data = await res.json();
+                    const data = await res.json();
                 if (data.status === "success") {
                     const resDiv = document.getElementById('quiz-result'); resDiv.style.display = 'block'; resDiv.innerHTML = `🎉 Điểm số: <strong>${data.totalScore} / 10</strong><br><small>(P.I: ${data.p1Score}đ | P.II: ${data.p2Score}đ | P.III: ${data.p3Score}đ)</small><br><span style="color: #15803d; font-size: 0.95rem;">Đã lưu kết quả!</span>`; btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Hoàn thành nộp bài';
                     if (activeExam.mode === 'LUYENTAP' && data.details) { data.details.forEach((dt, idx) => { const expBox = document.getElementById(`exp_q_${idx + 1}`); if (expBox) { let content = `<strong>Đáp án:</strong> <span style="color: #16a34a; font-weight: bold;">${dt.ans}</span>`; if (dt.explanation) content += `<br><strong>💡 Hướng dẫn:</strong><br>${dt.explanation}`; expBox.innerHTML = content; expBox.style.display = 'block'; } }); renderMath(document.getElementById('quiz-content')); }

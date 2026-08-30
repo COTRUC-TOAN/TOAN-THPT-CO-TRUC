@@ -289,7 +289,7 @@
                 </div>
             </div>
 
-            <!-- TAB 5: TẠO & SOẠN ĐỀ MỚI -->
+            <!-- TAB 5: TẠO & SOẠN ĐỀ MỚI (ĐẦY ĐỦ 2 PHƯƠNG PHÁP: TỪ NGÂN HÀNG HOẶC TẠO ĐỀ NHANH ĐỒNG LOẠT) -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
@@ -303,6 +303,8 @@
                             <div class="form-row"><label>Thời Gian (Phút):</label><input type="number" class="form-input" id="new-exam-time" value="15"></div>
                         </div>
                         <div class="form-row" id="exam-password-row" style="display: none;"><label style="color:#dc2626;">🔑 Mật Khẩu Kiểm Tra:</label><input type="text" class="form-input" id="new-exam-pass" placeholder="VD: 12a1"></div>
+                        
+                        <!-- Hiển thị khi chọn nguồn Ngân Hàng -->
                         <div class="selected-list-box" id="bank-selected-box">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                                 <strong style="color: #334155;"><i class="fa-solid fa-list-check"></i> Đã Chọn (<span id="selected-q-count" style="color: var(--primary);">0</span> câu)</strong>
@@ -310,21 +312,40 @@
                             </div>
                             <div id="selected-items-container" style="max-height: 200px; overflow-y: auto;"><p style="text-align: center; color: #94a3b8;">Chưa chọn câu hỏi.</p></div>
                         </div>
+
                         <button class="btn-start" style="width: 100%; margin-top: 15px; padding: 12px;" onclick="saveExamFinal()"><i class="fa-solid fa-cloud-arrow-up"></i> Lưu & Xuất Bản Đề</button>
                     </div>
 
                     <div class="creator-card">
-                        <h3 style="color: #059669; margin-bottom: 14px;"><i class="fa-solid fa-layer-group"></i> 2. Chọn Từ Ngân Hàng</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px;">
-                            <select class="form-input" id="bank-filter-grade" onchange="updateBankFilterTopics(); filterQuestionBankList();"><option value="all">-- Khối --</option><option value="12">12</option><option value="11">11</option><option value="10">10</option></select>
-                            <select class="form-input" id="bank-filter-topic" onchange="filterQuestionBankList()"><option value="all">-- Bài / Chương --</option></select>
+                        <h3 style="color: #059669; margin-bottom: 14px;"><i class="fa-solid fa-layer-group"></i> 2. Nguồn Tạo Đề</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                            <button class="btn-t-tab active" id="tab-add-bank" onclick="switchAddMethod('bank')">Từ Ngân Hàng (Chọn/Trộn)</button>
+                            <button class="btn-t-tab" id="tab-add-paste" onclick="switchAddMethod('paste')">Tạo Đề Nhanh (Dán Văn Bản)</button>
                         </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-                            <select class="form-input" id="bank-filter-level" onchange="filterQuestionBankList()"><option value="all">-- Mức Độ --</option><option value="NB">NB</option><option value="TH">TH</option><option value="VD">VD</option><option value="VDC">VDC</option></select>
-                            <select class="form-input" id="bank-filter-type" onchange="filterQuestionBankList()"><option value="all">-- Dạng --</option><option value="MCQ">MCQ</option><option value="TF">Đúng/Sai</option><option value="SA">Ngắn</option></select>
+
+                        <!-- Phương pháp 1: Từ Ngân Hàng -->
+                        <div id="add-method-bank">
+                            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px;">
+                                <select class="form-input" id="bank-filter-grade" onchange="updateBankFilterTopics(); filterQuestionBankList();"><option value="all">-- Khối --</option><option value="12">12</option><option value="11">11</option><option value="10">10</option></select>
+                                <select class="form-input" id="bank-filter-topic" onchange="filterQuestionBankList()"><option value="all">-- Bài / Chương --</option></select>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                                <select class="form-input" id="bank-filter-level" onchange="filterQuestionBankList()"><option value="all">-- Mức Độ --</option><option value="NB">NB</option><option value="TH">TH</option><option value="VD">VD</option><option value="VDC">VDC</option></select>
+                                <select class="form-input" id="bank-filter-type" onchange="filterQuestionBankList()"><option value="all">-- Dạng --</option><option value="MCQ">MCQ</option><option value="TF">Đúng/Sai</option><option value="SA">Ngắn</option></select>
+                            </div>
+                            <div style="margin-bottom: 10px;"><input type="text" class="form-input" id="bank-search-text" placeholder="🔍 Tìm từ khóa..." oninput="filterQuestionBankList()"></div>
+                            <div id="bank-q-list" style="max-height: 400px; overflow-y: auto;"><p style="text-align: center; color: #94a3b8;">Đang tải...</p></div>
                         </div>
-                        <div style="margin-bottom: 10px;"><input type="text" class="form-input" id="bank-search-text" placeholder="🔍 Tìm từ khóa..." oninput="filterQuestionBankList()"></div>
-                        <div id="bank-q-list" style="max-height: 400px; overflow-y: auto;"><p style="text-align: center; color: #94a3b8;">Đang tải...</p></div>
+
+                        <!-- Phương pháp 2: Tạo Đề Nhanh Đồng Loạt (Dán văn bản) -->
+                        <div id="add-method-paste" style="display: none;">
+                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán toàn bộ văn bản đề thi vào đây. Hệ thống sẽ bóc tách đồng loạt thành đề thi ngay lập tức.</p>
+                            <div class="form-row"><label>Dạng Câu Hỏi Mặc Định:</label><select class="form-input" id="direct-q-type"><option value="MCQ">Trắc nghiệm (MCQ)</option><option value="TF">Đúng/Sai (TF)</option><option value="SA">Trả lời ngắn (SA)</option></select></div>
+                            <div class="form-row"><label>Nội dung Đề (Ctrl+V dán ảnh):</label><div class="rich-textarea" id="direct-raw-text" contenteditable="true" onpaste="handlePasteData(event, false)" placeholder="Dán văn bản đề thi vào đây..."></div></div>
+                            <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Bóc Tách Đề Nhanh</button>
+                            <div style="margin-top: 15px;"><strong style="color: #334155;">Xem Trước (<span id="direct-parsed-count">0</span> câu)</strong></div>
+                            <div class="preview-box" id="direct-preview-box" style="max-height: 250px; overflow-y: auto;"><em>Chưa bóc tách.</em></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -405,6 +426,10 @@
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
+                { id: 'giua-ki-1', name: 'Kiểm tra Giữa Kì 1', icon: 'fa-calendar-check' },
+                { id: 'hoc-ki-1', name: 'Kiểm tra Học Kì 1', icon: 'fa-graduation-cap' },
+                { id: 'giua-ki-2', name: 'Kiểm tra Giữa Kì 2', icon: 'fa-calendar-check' },
+                { id: 'hoc-ki-2', name: 'Kiểm tra Học Kì 2', icon: 'fa-graduation-cap' },
                 { id: 'thpt-qg', name: 'Luyện đề Tốt Nghiệp THPT', icon: 'fa-award' }
             ],
             g12: [
@@ -412,7 +437,47 @@
                 { id: '12-chuong-1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
                 { id: '12-bai-1', name: 'Bài 1. Tính đơn điệu và cực trị', icon: 'fa-chart-line' },
                 { id: '12-bai-2', name: 'Bài 2. GTLN và GTNN', icon: 'fa-arrow-trend-up' },
-                { id: '12-bai-3', name: 'Bài 3. Đường tiệm cận', icon: 'fa-arrows-split-up-and-left' }
+                { id: '12-bai-3', name: 'Bài 3. Đường tiệm cận', icon: 'fa-arrows-split-up-and-left' },
+                { id: '12-bai-4', name: 'Bài 4. Khảo sát & vẽ đồ thị', icon: 'fa-pen-ruler' },
+                { id: '12-bai-5', name: 'Bài 5. Ứng dụng đạo hàm thực tiễn', icon: 'fa-lightbulb' },
+                { type: 'header', title: 'CHƯƠNG II. VECTƠ TRONG KHÔNG GIAN' },
+                { id: '12-chuong-2', name: 'Tổng hợp Chương 2', icon: 'fa-folder-open' },
+                { id: '12-bai-6', name: 'Bài 6. Vectơ không gian', icon: 'fa-location-arrow' },
+                { id: '12-bai-7', name: 'Bài 7. Hệ trục tọa độ không gian', icon: 'fa-cube' },
+                { id: '12-bai-8', name: 'Bài 8. Biểu thức tọa độ vectơ', icon: 'fa-calculator' },
+                { type: 'header', title: 'CHƯƠNG III. THỐNG KÊ (GHÉP NHÓM)' },
+                { id: '12-chuong-3', name: 'Tổng hợp Chương 3', icon: 'fa-folder-open' },
+                { id: '12-bai-9', name: 'Bài 9. Khoảng biến thiên & tứ phân vị', icon: 'fa-chart-simple' },
+                { id: '12-bai-10', name: 'Bài 10. Phương sai & độ lệch chuẩn', icon: 'fa-chart-pie' },
+                { type: 'header', title: 'CHƯƠNG IV. NGUYÊN HÀM & TÍCH PHÂN' },
+                { id: '12-chuong-4', name: 'Tổng hợp Chương 4', icon: 'fa-folder-open' },
+                { id: '12-bai-11', name: 'Bài 11. Nguyên hàm', icon: 'fa-infinity' },
+                { id: '12-bai-12', name: 'Bài 12. Tích phân', icon: 'fa-square-root-variable' },
+                { id: '12-bai-13', name: 'Bài 13. Ứng dụng hình học', icon: 'fa-shapes' },
+                { type: 'header', title: 'CHƯƠNG V. TOẠ ĐỘ OXYZ' },
+                { id: '12-chuong-5', name: 'Tổng hợp Chương 5', icon: 'fa-folder-open' },
+                { id: '12-bai-14', name: 'Bài 14. Phương trình mặt phẳng', icon: 'fa-square' },
+                { id: '12-bai-15', name: 'Bài 15. Phương trình đường thẳng', icon: 'fa-bars' },
+                { id: '12-bai-16', name: 'Bài 16. Góc trong không gian', icon: 'fa-draw-polygon' },
+                { id: '12-bai-17', name: 'Bài 17. Phương trình mặt cầu', icon: 'fa-circle' },
+                { type: 'header', title: 'CHƯƠNG VI. XÁC SUẤT' },
+                { id: '12-chuong-6', name: 'Tổng hợp Chương 6', icon: 'fa-folder-open' },
+                { id: '12-bai-18', name: 'Bài 18. Xác suất có điều kiện', icon: 'fa-dice' },
+                { id: '12-bai-19', name: 'Bài 19. Xác suất toàn phần', icon: 'fa-network-wired' }
+            ],
+            g11: [
+                { type: 'header', title: 'CHƯƠNG I. HÀM SỐ LƯỢNG GIÁC' },
+                { id: '11-chuong-1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
+                { id: '11-bai-1', name: 'Bài 1. Giá trị lượng giác', icon: 'fa-wave-square' },
+                { id: '11-bai-2', name: 'Bài 2. Công thức lượng giác', icon: 'fa-square-root-variable' },
+                { id: '11-bai-3', name: 'Bài 3. Hàm số lượng giác', icon: 'fa-chart-line' },
+                { id: '11-bai-4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' }
+            ],
+            g10: [
+                { type: 'header', title: 'CHƯƠNG I. MỆNH ĐỀ & TẬP HỢP' },
+                { id: '10-chuong-1', name: 'Tổng hợp Chương 1', icon: 'fa-folder-open' },
+                { id: '10-bai-1', name: 'Bài 1. Mệnh đề', icon: 'fa-check' },
+                { id: '10-bai-2', name: 'Bài 2. Tập hợp', icon: 'fa-object-group' }
             ]
         };
 
@@ -420,7 +485,12 @@
             const container = document.getElementById('topic-container');
             if (!container) return;
             container.innerHTML = '';
-            let list = [...topicsConfig.general, ...topicsConfig.g12];
+            let list = [...topicsConfig.general];
+            if (currentGrade === '12') list = list.concat(topicsConfig.g12);
+            else if (currentGrade === '11') list = list.concat(topicsConfig.g11);
+            else if (currentGrade === '10') list = list.concat(topicsConfig.g10);
+            else list = list.concat(topicsConfig.g12, topicsConfig.g11, topicsConfig.g10);
+
             list.forEach(item => {
                 if (item.type === 'header') {
                     const h = document.createElement('div'); h.className = 'topic-group-title'; h.innerText = item.title;
@@ -434,6 +504,15 @@
             });
         }
 
+        function getTopicsForGrade(grade) {
+            let res = [...topicsConfig.general];
+            if (grade === '12') res = res.concat(topicsConfig.g12);
+            else if (grade === '11') res = res.concat(topicsConfig.g11);
+            else if (grade === '10') res = res.concat(topicsConfig.g10);
+            else res = res.concat(topicsConfig.g12, topicsConfig.g11, topicsConfig.g10);
+            return res.filter(item => item.type !== 'header');
+        }
+
         function filterTopic(t, item) {
             currentTopic = t; document.querySelectorAll('.topic-item').forEach(i => i.classList.remove('active'));
             if (item) item.classList.add('active'); renderExams();
@@ -442,7 +521,7 @@
         function filterGrade(g, btn) {
             currentGrade = g; currentTopic = 'all';
             document.querySelectorAll('.grade-pill').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-            renderExams();
+            renderSidebarTopics(); renderExams();
         }
 
         function renderMath(targetElement) {
@@ -505,9 +584,9 @@
         function renderExams() {
             const grid = document.getElementById('exam-grid');
             grid.innerHTML = '';
-            const list = examBank.filter(e => currentGrade === 'all' || e.grade.toString() === currentGrade);
+            const list = examBank.filter(e => (currentGrade === 'all' || e.grade.toString() === currentGrade) && (currentTopic === 'all' || e.topic === currentTopic));
             if (list.length === 0) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trên hệ thống.</p>`;
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trong mục này.</p>`;
                 return;
             }
             list.forEach(ex => {
@@ -725,7 +804,7 @@
             } catch (e) {}
         }
 
-        // --- QUẢN LÝ GIÁO VIÊN & NẠP ĐỀ (ĐẦY ĐỦ CÁC TAB) ---
+        // --- QUẢN LÝ GIÁO VIÊN & NẠP ĐỀ (ĐẦY ĐỦ 5 TAB) ---
         async function openTeacherLogin() {
             const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
             if (!pass) return;
@@ -753,6 +832,14 @@
             if (tab === 'exams') renderTeacherExamList();
             if (tab === 'add_single') generateNewQId();
             if (tab === 'creator') filterQuestionBankList();
+        }
+
+        function switchAddMethod(method) {
+            document.getElementById('tab-add-bank').classList.toggle('active', method === 'bank');
+            document.getElementById('tab-add-paste').classList.toggle('active', method === 'paste');
+            document.getElementById('add-method-bank').style.display = (method === 'bank') ? 'block' : 'none';
+            document.getElementById('add-method-paste').style.display = (method === 'paste') ? 'block' : 'none';
+            document.getElementById('bank-selected-box').style.display = (method === 'bank') ? 'block' : 'none';
         }
 
         async function loadTeacherScores() {
@@ -792,7 +879,6 @@
             } catch (e) { alert("Lỗi khi xóa!"); }
         }
 
-        // Hỗ trợ nạp thủ công, dán ảnh, ngân hàng
         function handlePasteData(e, isPreviewUpdate) {
             const items = (e.clipboardData || window.clipboardData).items;
             for (let i = 0; i < items.length; i++) {
@@ -846,7 +932,7 @@
             let markerRegex = /(?=(?:^|<br>|\n)(?:<[^>]+>\s*)*(?:Câu|Bài)\s*\d+[\s:.\-_])/i;
             let htmlBlocks = safeHtml.split(markerRegex);
 
-            htmlBlocks.forEach((blockHtml, index) => {
+            htmlBlocks.forEach((blockHtml) => {
                 let blockStr = blockHtml.trim();
                 if (!blockStr) return;
                 const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
@@ -884,6 +970,15 @@
             bankParsedQuestions = []; loadQuestionBank();
         }
 
+        function parseDirectExam() {
+            const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
+            if (!rawHtml) { alert("Vui lòng dán văn bản đề thi!"); return; }
+            directParsedQuestions = parseTextToQuestions(rawHtml, document.getElementById('new-exam-grade').value, document.getElementById('new-exam-topic').value, 'TH', document.getElementById('direct-q-type').value);
+            document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
+            document.getElementById('direct-preview-box').innerHTML = directParsedQuestions.map((q, i) => `<div><strong>C${i+1}:</strong> ${q.q}</div>`).join('');
+            renderMath(document.getElementById('direct-preview-box'));
+        }
+
         async function loadQuestionBank() {
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=get_question_bank&password=${encodeURIComponent(teacherPassAuth)}`);
@@ -915,14 +1010,17 @@
         function clearSelectedQuestions() { selectedQuestions = []; filterQuestionBankList(); document.getElementById('selected-q-count').innerText = '0'; document.getElementById('selected-items-container').innerHTML = 'Chưa chọn câu.'; }
 
         async function saveExamFinal() {
+            const method = document.getElementById('add-method-bank').style.display !== 'none' ? 'bank' : 'paste';
             const examId = document.getElementById('new-exam-id').value.trim();
             const examTitle = document.getElementById('new-exam-title').value.trim();
-            if (!examId || !examTitle || selectedQuestions.length === 0) { alert("Vui lòng điền đủ Mã đề, Tên đề và chọn câu hỏi!"); return; }
+            let finalQuestions = (method === 'bank') ? selectedQuestions : directParsedQuestions;
+
+            if (!examId || !examTitle || finalQuestions.length === 0) { alert("Vui lòng điền đủ Mã đề, Tên đề và có ít nhất 1 câu hỏi!"); return; }
             const payload = {
                 action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle,
                 grade: document.getElementById('new-exam-grade').value, topic: document.getElementById('new-exam-topic').value,
                 mode: document.getElementById('new-exam-mode').value, timeLimit: parseInt(document.getElementById('new-exam-time').value) || 15,
-                examPass: document.getElementById('new-exam-pass').value.trim(), questions: selectedQuestions
+                examPass: document.getElementById('new-exam-pass').value.trim(), questions: finalQuestions
             };
             try {
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
@@ -937,10 +1035,10 @@
             if (!select) return;
             select.innerHTML = items.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
         }
-        function updateBankBulkTopicDropdown() { populateSelect('bank-bulk-topic', topicsConfig.g12); }
-        function updateAddQTopicDropdown() { populateSelect('add-q-topic', topicsConfig.g12); }
-        function updateNewExamTopicDropdown() { populateSelect('new-exam-topic', topicsConfig.g12); }
-        function updateBankFilterTopics() { populateSelect('bank-filter-topic', topicsConfig.g12); }
+        function updateBankBulkTopicDropdown() { populateSelect('bank-bulk-topic', getTopicsForGrade(document.getElementById('bank-bulk-grade').value)); }
+        function updateAddQTopicDropdown() { populateSelect('add-q-topic', getTopicsForGrade(document.getElementById('add-q-grade').value)); }
+        function updateNewExamTopicDropdown() { populateSelect('new-exam-topic', getTopicsForGrade(document.getElementById('new-exam-grade').value)); }
+        function updateBankFilterTopics() { populateSelect('bank-filter-topic', getTopicsForGrade(document.getElementById('bank-filter-grade').value)); }
 
         function toggleExamPasswordField() {
             document.getElementById('exam-password-row').style.display = (document.getElementById('new-exam-mode').value === 'KIEMTRA') ? 'block' : 'none';

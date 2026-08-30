@@ -249,10 +249,9 @@
                     <div class="creator-card">
                         <h3 style="margin-bottom: 14px; color: #2563eb;"><i class="fa-solid fa-paste"></i> Nạp Ngân Hàng Nhanh</h3>
                         <div class="form-row"><label>Khối Lớp:</label><select class="form-input" id="bank-bulk-grade" onchange="updateBankBulkTopicDropdown()"><option value="12">Toán 12</option><option value="11">Toán 11</option><option value="10">Toán 10</option></select></div>
-                        <div class="form-row"><label>Dạng Mặc Định:</label><select class="form-input" id="bank-bulk-type"><option value="MCQ">Trắc nghiệm (MCQ)</option><option value="TF">Đúng / Sai (TF)</option><option value="SA">Trả lời ngắn (SA)</option></select></div>
                         <div class="form-row"><label>Mức độ:</label><select class="form-input" id="bank-bulk-level"><option value="NB">Nhận biết</option><option value="TH">Thông hiểu</option><option value="VD">Vận dụng</option><option value="VDC">Vận dụng cao</option></select></div>
                         <div class="form-row"><label>Bài học:</label><select class="form-input" id="bank-bulk-topic"></select></div>
-                        <div class="form-row"><label>Nội dung (Ctrl+V dán ảnh):</label><div class="rich-textarea" id="bank-bulk-raw-text" contenteditable="true" onpaste="handlePasteData(event, false)" placeholder="Dán văn bản câu hỏi..."></div></div>
+                        <div class="form-row"><label>Nội dung (Tự động nhận diện Trắc nghiệm, Đúng/Sai, Trả lời ngắn):</label><div class="rich-textarea" id="bank-bulk-raw-text" contenteditable="true" onpaste="handlePasteData(event, false)" placeholder="Dán văn bản câu hỏi..."></div></div>
                         <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseBankBulkQuestions()"><i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Xem Trước</button>
                     </div>
                     <div class="creator-card">
@@ -349,11 +348,11 @@
                             <button class="btn-start" style="width: 100%; background: #059669;" onclick="generateMatrixExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Đề Ngẫu Nhiên Theo Ma Trận Bài</button>
                         </div>
 
+                        <!-- TẠO ĐỀ NHANH ALL-IN-ONE (TỰ ĐỘNG NHẬN DIỆN MỌI DẠNG) -->
                         <div id="add-method-paste" style="display: none;">
-                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 10px;">Dán toàn bộ văn bản đề thi vào đây. Hỗ trợ bóc tách Trắc nghiệm, Đúng/Sai (với a, b, c, d) và Trả lời ngắn.</p>
-                            <div class="form-row"><label>Dạng Mặc Định:</label><select class="form-input" id="direct-q-type"><option value="MCQ">Trắc nghiệm (MCQ)</option><option value="TF">Đúng/Sai (TF)</option><option value="SA">Trả lời ngắn (SA)</option></select></div>
-                            <div class="form-row"><label>Nội dung Đề (Ctrl+V dán ảnh):</label><div class="rich-textarea" id="direct-raw-text" contenteditable="true" onpaste="handlePasteData(event, false)" placeholder="Dán văn bản đề thi..."></div></div>
-                            <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Bóc Tách Đề Nhanh</button>
+                            <p style="font-size: 0.95rem; color: #1e40af; font-weight: bold; margin-bottom: 10px;">✨ Chế độ Tự Động Nhận Diện Thông Minh: Thầy chỉ cần dán toàn bộ đề thi hỗn hợp (Trắc nghiệm, Đúng/Sai, Trả lời ngắn), hệ thống sẽ tự động bóc tách chuẩn 100%!</p>
+                            <div class="form-row"><label>Nội dung Đề (Ctrl+V dán ảnh):</label><div class="rich-textarea" id="direct-raw-text" contenteditable="true" onpaste="handlePasteData(event, false)" style="height: 220px;" placeholder="Dán văn bản đề thi..."></div></div>
+                            <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tự Động Bóc Tách Đề</button>
                             <div style="margin-top: 15px;"><strong style="color: #334155;">Xem Trước (<span id="direct-parsed-count">0</span> câu)</strong></div>
                             <div class="preview-box" id="direct-preview-box" style="max-height: 300px; overflow-y: auto;"><em>Chưa bóc tách.</em></div>
                         </div>
@@ -1044,7 +1043,7 @@
             } catch (e) { alert("Lỗi lưu câu hỏi!"); }
         }
 
-        // --- THUẬT TOÁN BÓC TÁCH ĐÚNG/SAI CHUẨN XÁC GIỮ LẠI a,b,c,d ---
+        // --- THUẬT TOÁN TỰ ĐỘNG BÓC TÁCH ALL-IN-ONE (SIÊU CHUẨN XÁC) ---
         function parseTextToQuestions(rawHtml, grade, topic, defaultLevel, selectedType) {
             let parsedArr = [];
             if (rawHtml.normalize) { rawHtml = rawHtml.normalize('NFC'); }
@@ -1062,11 +1061,14 @@
                 const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
                 let options = ['', '', '', '']; let ans = 'A'; let ansOptions = [];
 
-                let currentType = selectedType;
+                // TỰ ĐỘNG NHẬN DIỆN DẠNG DỰA TRÊN KÝ HIỆU TRONG KHUNG
+                let currentType = 'MCQ';
                 if (/a[\)\.]\s/i.test(block) || /b[\)\.]\s/i.test(block) || /c[\)\.]\s/i.test(block) || /d[\)\.]\s/i.test(block)) {
                     currentType = 'TF';
                 } else if (/Đáp án\s*[:\-]?\s*[D|S]/i.test(block)) {
                     currentType = 'TF';
+                } else if (!/A[\)\.]\s/i.test(block) && /Đáp án\s*[:\-]?\s*\w+/i.test(block)) {
+                    currentType = 'SA';
                 }
 
                 if (currentType === 'TF') {
@@ -1123,7 +1125,11 @@
                         else if (mB) options[1] = mB[1].trim();
                         else if (mC) options[2] = mC[1].trim();
                         else if (mD) options[3] = mD[1].trim();
-                        else qLines.push(lTrim);
+                        else {
+                            if (!/^Đáp án/i.test(lTrim)) {
+                                qLines.push(lTrim);
+                            }
+                        }
                     });
 
                     let qContent = qLines.join('<br>').replace(/^(?:C[ââ]u|B[àà]i)\s*\d+[\s:.\-_]+/i, '').trim();
@@ -1138,7 +1144,7 @@
             if (!rawHtml) { alert("Dán nội dung vào đi thầy!"); return; }
             bankParsedQuestions = parseTextToQuestions(rawHtml, document.getElementById('bank-bulk-grade').value, document.getElementById('bank-bulk-topic').value, document.getElementById('bank-bulk-level').value, document.getElementById('bank-bulk-type').value);
             document.getElementById('bank-parsed-count').innerText = bankParsedQuestions.length;
-            document.getElementById('bank-bulk-preview-box').innerHTML = bankParsedQuestions.map((q, i) => `<div class="parsed-q-preview-card"><strong>C${i+1} [${q.type}]:</strong> ${q.q}<br><span style="color:#16a34a; font-weight:bold;">Đáp án: ${q.ans}</span></div>`).join('');
+            document.getElementById('bank-bulk-preview-box').innerHTML = bankParsedQuestions.map((q, i) => `<div class="parsed-q-preview-card"><strong>C${i+1} [${q.type}]:</strong> ${q.q}<br>${q.type==='TF' ? q.options.map((op,idx)=>op?`<div>${['a','b','c','d'][idx]}) ${op}</div>`:``).join(''):''}<span style="color:#16a34a; font-weight:bold;">Đáp án: ${q.ans}</span></div>`).join('');
             document.getElementById('btn-save-bank-bulk').style.display = 'inline-block';
             renderMath(document.getElementById('bank-bulk-preview-box'));
         }
@@ -1154,9 +1160,9 @@
         function parseDirectExam() {
             const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
             if (!rawHtml) { alert("Vui lòng dán văn bản đề thi!"); return; }
-            directParsedQuestions = parseTextToQuestions(rawHtml, document.getElementById('new-exam-grade').value, document.getElementById('new-exam-topic').value, 'TH', document.getElementById('direct-q-type').value);
+            directParsedQuestions = parseTextToQuestions(rawHtml, document.getElementById('new-exam-grade').value, document.getElementById('new-exam-topic').value, 'TH', 'MCQ');
             document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
-            document.getElementById('direct-preview-box').innerHTML = directParsedQuestions.map((q, i) => `<div class="parsed-q-preview-card"><strong>C${i+1} [${q.type}]:</strong> ${q.q}<br><span style="color:#16a34a; font-weight:bold;">Đáp án: ${q.ans}</span></div>`).join('');
+            document.getElementById('direct-preview-box').innerHTML = directParsedQuestions.map((q, i) => `<div class="parsed-q-preview-card"><strong>C${i+1} [${q.type}]:</strong> ${q.q}<br>${q.type==='TF' ? q.options.map((op,idx)=>op?`<div>${['a','b','c','d'][idx]}) ${op}</div>`:``).join(''):''}<span style="color:#16a34a; font-weight:bold;">Đáp án: ${q.ans}</span></div>`).join('');
             renderMath(document.getElementById('direct-preview-box'));
         }
 

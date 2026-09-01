@@ -1524,6 +1524,28 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         }
 
         fetchData();
+        function updateBankBulkTopicDropdown() {
+    const grade = document.getElementById('examGrade') ? document.getElementById('examGrade').value : 'g12';
+    const select = document.getElementById('examTopic');
+    if (!select) return;
+    select.innerHTML = "";
+    
+    const list = topicsConfig[grade] || [];
+    list.forEach(item => {
+        if (item.type === 'header') {
+            const opt = document.createElement('option');
+            opt.disabled = true;
+            opt.textContent = "--- " + item.title + " ---";
+            opt.style.fontWeight = "bold";
+            select.appendChild(opt);
+        } else {
+            const opt = document.createElement('option');
+            opt.value = item.name;
+            opt.textContent = item.name;
+            select.appendChild(opt);
+        }
+    });
+}
     </script>
 </body>
 </html>

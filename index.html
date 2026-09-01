@@ -1537,6 +1537,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         function filterQuestionBankList() {
             const container = document.getElementById('bank-q-list');
             if (!container) return;
+            if (!questionBank || questionBank.length === 0) return;
             const fGrade = document.getElementById('bank-filter-grade').value;
             const fTopic = document.getElementById('bank-filter-topic').value;
             const fLevel = document.getElementById('bank-filter-level').value;

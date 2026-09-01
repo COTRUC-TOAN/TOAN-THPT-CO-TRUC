@@ -1141,12 +1141,7 @@ if (activeExam.mode === 'LUYENTAP') {
             } catch (e) {}
         }
 
-     async function openTeacherLogin() {
-            const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
-            if (!pass) return;
-            
-            // Tự động kiểm tra mật khẩu tại đây, KHÔNG gọi lên Google nữa để diệt Lỗi Ảo
-            if (pass === "123") {
+    if (pass === "123") {
                 teacherPassAuth = pass;
                 document.getElementById('portal-view').style.display = 'none';
                 document.getElementById('teacher-view').style.display = 'block';
@@ -1157,6 +1152,10 @@ if (activeExam.mode === 'LUYENTAP') {
                 updateBankBulkTopicDropdown(); 
                 updateNewExamTopicDropdown(); 
                 updateBankFilterTopics();
+                // THÊM 2 DÒNG NÀY VÀO CUỐI:
+                updateStudentClassDropdown();
+                updateScoreClassFilter();
+            }
             } else { 
                 alert("❌ Sai mật khẩu!"); 
             }

@@ -739,15 +739,17 @@ const topicsConfig = {
       function renderExams() {
             const grid = document.getElementById('exam-grid');
             grid.innerHTML = '';
-            
-          const list = examBank.filter(e => {
+         const list = examBank.filter(e => {
         if (!e || !e.title || e.title === "undefined" || e.title.toString().trim() === "") return false;
         const gradeStr = e.grade ? e.grade.toString() : '';
         const matchGrade = (currentGrade === 'all' || gradeStr === currentGrade);
-        const matchTopic = (currentTopic === 'all' || e.topic === currentTopic);
+        
+        // Cho phép khớp linh hoạt theo từ khóa topic để không bị lệch chữ
+        const matchTopic = (currentTopic === 'all' || !e.topic || e.topic.includes(currentTopic) || currentTopic.includes(e.topic));
+        
         return matchGrade && matchTopic;
-    });
-
+    });   
+         
             if (list.length === 0) {
                 grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trong mục này.</p>`;
                 return;

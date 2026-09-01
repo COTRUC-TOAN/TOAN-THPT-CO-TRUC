@@ -1180,34 +1180,130 @@ if (activeExam.mode === 'LUYENTAP') {
             if (method === 'matrix') renderMatrixTable();
         }
 
-        async function loadTeacherScores() {
-            try {
-                const res = await fetch(`${SCRIPT_URL}?action=get_results&password=${encodeURIComponent(teacherPassAuth)}`);
-                const data = await res.json();
-                const tbody = document.getElementById('scores-table-body');
-                if (data.status === "success" && data.results && data.results.length > 0) {
-                    document.getElementById('stat-total-submissions').innerText = data.results.length;
-                    const scores = data.results.map(r => parseFloat(r.totalScore) || 0);
-                    document.getElementById('stat-avg-score').innerText = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2);
-                    tbody.innerHTML = data.results.map(r => `<tr><td>${r.time}</td><td><strong>${r.name}</strong></td><td>${r.class}</td><td>${r.examTitle}</td><td><span class="badge-score badge-pass">${r.totalScore}</span></td></tr>`).join('');
-                } else {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Chưa có dữ liệu bài nộp.</td></tr>`;
-                }
-            } catch (e) {}
+        // --- QUẢN LÝ DANH SÁCH LỚP ĐỘNG ---
+        let teacherClasses = JSON.parse(localStorage.getItem('teacher_classes_list')) || [
+            "10A1", "10A2", "10A3", "12A1", "12A3", "12A5", 
+            "Học thêm 1", "Học thêm 2", "Học thêm 3", "Học thêm 4", "Học thêm 5", "Học thêm 6", "Lớp tự do"
+        ];
+
+        function saveTeacherClasses() {
+            localStorage.setItem('teacher_classes_list', JSON.stringify(teacherClasses));
+            updateStudentClassDropdown();
+            renderTeacherClassList();
+            updateScoreClassFilter();
         }
 
-        function renderTeacherExamList() {
-            const container = document.getElementById('teacher-exam-list-container');
+        function addNewClass() {
+            const input = document.getElementById('new-class-name');
+            const cName = input.value.trim();
+            if (!cName) { alert("Vui lòng nhập tên lớp!"); return; }
+            if (teacherClasses.includes(cName)) { alert("Lớp này đã có trong danh sách!"); return; }
+            teacherClasses.push(cName);
+            input.value = '';
+            saveTeacherClasses();
+            alert("🎉 Đã thêm lớp thành công!");
+        }
+
+        function deleteClass(cName) {
+            if (!confirm(`Xóa lớp ${cName} khỏi danh sách?`)) return;
+            teacherClasses = teacherClasses.filter(c => c !== cName);
+            saveTeacherClasses();
+        }
+
+        function renderTeacherClassList() {
+            const container = document.getElementById('teacher-class-list');
             if (!container) return;
-            if (examBank.length === 0) { container.innerHTML = `<p style="color: #94a3b8;">Chưa có đề thi.</p>`; return; }
-            container.innerHTML = examBank.map(ex => `
-                <div class="exam-manage-row">
-                    <div><strong>[${ex.id}] ${ex.title}</strong> <span style="font-size:0.9rem; color:#64748b;">(Khối ${ex.grade} - ${ex.mode})</span></div>
-                    <button class="btn-del-exam" onclick="deleteExamFromSystem('${ex.id}')"><i class="fa-solid fa-trash-can"></i> Xóa</button>
+            container.innerHTML = teacherClasses.map(c => `
+                <div style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: bold;">
+                    <span>${c}</span>
+                    <button onclick="deleteClass('${c}')" style="background: none; border: none; color: #dc2626; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             `).join('');
         }
 
+        function updateStudentClassDropdown() {
+            const classInput = document.getElementById('std-class');
+            if (classInput && classInput.tagName !== 'SELECT') {
+                const select = document.createElement('select');
+                select.id = 'std-class';
+                select.className = 'form-input';
+                select.required = true;
+                select.innerHTML = `<option value="">-- Chọn lớp của bạn * --</option>` + teacherClasses.map(c => `<option value="${c}">${c}</option>`).join('');
+                classInput.parentNode.replaceChild(select, classInput);
+            }
+        }
+
+        function updateScoreClassFilter() {
+            const select = document.getElementById('filter-score-class');
+            if (!select) return;
+            select.innerHTML = `<option value="all">-- Tất cả các lớp --</option>` + teacherClasses.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+
+        let globalScoresData = [];
+
+        async function loadTeacherScores() {
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=get_results&password=${encodeURIComponent(teacherPassAuth)}`);
+                const data = await res.json();
+                if (data.status === "success" && data.results) {
+                    globalScoresData = data.results.map(r => ({
+                        time: r.time || r.Time || '---',
+                        name: r.name || r.Name || 'Ẩn danh',
+                        sClass: r.class || r.Class || r.sClass || 'Tự do',
+                        examTitle: r.examTitle || r.ExamTitle || 'Bài kiểm tra',
+                        totalScore: r.totalScore || r.TotalScore || r.score || '0'
+                    }));
+                    renderScoresTable();
+                } else {
+                    globalScoresData = [];
+                    renderScoresTable();
+                }
+            } catch (e) {
+                globalScoresData = [];
+                renderScoresTable();
+            }
+        }
+
+        function renderScoresTable() {
+            const tbody = document.getElementById('scores-table-body');
+            const filterClass = document.getElementById('filter-score-class').value;
+            
+            let displayList = globalScoresData;
+            if (filterClass !== 'all') {
+                displayList = globalScoresData.filter(r => r.sClass.toLowerCase() === filterClass.toLowerCase());
+            }
+
+            document.getElementById('stat-total-submissions').innerText = displayList.length;
+            if (displayList.length > 0) {
+                const scores = displayList.map(r => parseFloat(r.totalScore) || 0);
+                document.getElementById('stat-avg-score').innerText = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2);
+                tbody.innerHTML = displayList.map(r => `<tr><td>${r.time}</td><td><strong>${r.name}</strong></td><td>${r.sClass}</td><td>${r.examTitle}</td><td><span class="badge-score badge-pass">${r.totalScore}</span></td></tr>`).join('');
+            } else {
+                document.getElementById('stat-avg-score').innerText = '0.0';
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Không có dữ liệu bài nộp cho lớp này.</td></tr>`;
+            }
+        }
+
+        function exportScoresToExcel() {
+            const filterClass = document.getElementById('filter-score-class').value;
+            let displayList = globalScoresData;
+            if (filterClass !== 'all') {
+                displayList = globalScoresData.filter(r => r.sClass.toLowerCase() === filterClass.toLowerCase());
+            }
+
+            if (displayList.length === 0) { alert("Không có dữ liệu để xuất Excel!"); return; }
+
+            let csv = '\uFEFFThời Gian,Họ và Tên,Lớp,Bài Thi,Điểm\n';
+            displayList.forEach(r => {
+                csv += `"${r.time}","${r.name}","${r.sClass}","${r.examTitle}","${r.totalScore}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `BangDiem_${filterClass === 'all' ? 'TatCa' : filterClass}.csv`;
+            link.click();
+        }
         async function deleteExamFromSystem(examId) {
             if (!confirm(`⚠️ Xóa vĩnh viễn đề [${examId}]?`)) return;
             try {

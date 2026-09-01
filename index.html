@@ -1161,7 +1161,11 @@ const topicsConfig = {
                 if(btn) btn.classList.toggle('active', t === tab);
             });
             if (tab === 'exams') renderTeacherExamList();
-            if (tab === 'creator') { filterQuestionBankList(); renderMatrixTable(); }
+            if (tab === 'creator') { 
+                updateNewExamTopicDropdown(); // <-- THÊM DÒNG NÀY VÀO ĐÂY
+                filterQuestionBankList(); 
+                renderMatrixTable(); 
+            }
             if (tab === 'classes') renderTeacherClassList();
         }
 

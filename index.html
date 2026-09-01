@@ -1652,7 +1652,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             
             let isCorrect = selected.toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'') === String(correct).trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
 
-          if (isCorrect) {
+         if (isCorrect) {
                 // Phân bổ điểm gốc chuẩn trọng số theo dạng câu hỏi (Trắc nghiệm: 250đ, Đúng/Sai: 1000đ, Trả lời ngắn: 500đ)
                 const qType = (activeExam.questions[kahootCurrentIndex].type || 'MCQ').toUpperCase();
                 let basePoints = 250;
@@ -1663,8 +1663,13 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
                 kahootScore += earnedPoints;
 
                 playSound('correct');
-                feedback.innerHTML = `<span style="color: #16a34a;"><i class="fa-solid fa-circle-check"></i> Chính xác! (+${earnedPoints} điểm)</span>`;
+                feedback.innerHTML = `<span style="color: #16a34a; font-weight: bold; font-size: 1.1rem;"><i class="fa-solid fa-circle-check"></i> Chính xác! (+${earnedPoints} điểm)</span>`;
+                if(btnEl) btnEl.style.backgroundColor = "#dcfce7"; // Tô nền xanh đáp án đúng trên Kahoot
             } else {
+                playSound('wrong');
+                feedback.innerHTML = `<span style="color: #dc2626; font-weight: bold; font-size: 1.1rem;"><i class="fa-solid fa-circle-xmark"></i> Chưa chính xác!</span>`;
+                if(btnEl) btnEl.style.backgroundColor = "#fee2e2"; // Tô nền đỏ nếu bấm nhầm đáp án sai
+                
                 // Ghi nhận câu sai lên host
                 db.ref('kahoot_rooms/' + activeExam.id + '/wrong/' + kahootCurrentIndex).transaction(current => (current || 0) + 1);
             }

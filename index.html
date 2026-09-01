@@ -222,12 +222,24 @@
                 <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo & Soạn Đề Mới</button>
             </div>
 
-            <!-- TAB 1: SỔ ĐIỂM -->
+           <!-- TAB 1: SỔ ĐIỂM -->
             <div id="sec-t-scores">
                 <div class="stats-grid">
                     <div class="stat-card"><h4>Tổng Số Bài Nộp</h4><div class="stat-val" id="stat-total-submissions">0</div></div>
                     <div class="stat-card"><h4>Điểm Trung Bình</h4><div class="stat-val" id="stat-avg-score">0.0</div></div>
                 </div>
+                
+                <!-- BỘ LỚP & XUẤT EXCEL -->
+                <div style="display: flex; gap: 12px; margin-bottom: 15px; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <label style="font-weight: bold; font-size: 0.95rem; color: #334155;">Lọc theo Lớp:</label>
+                        <select class="form-input" id="filter-score-class" style="width: 180px; display: inline-block;" onchange="renderScoresTable()">
+                            <option value="all">-- Tất cả các lớp --</option>
+                        </select>
+                    </div>
+                    <button class="btn-start" style="background: #059669; padding: 9px 16px; font-size: 1rem;" onclick="exportScoresToExcel()"><i class="fa-solid fa-file-excel"></i> Xuất Excel Theo Lớp</button>
+                </div>
+
                 <div class="table-responsive">
                     <table class="scores-table">
                         <thead>

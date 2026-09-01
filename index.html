@@ -864,16 +864,23 @@ const topicsConfig = {
 
         function prepareExamQuestions(questions, mode) {
             if (mode !== 'KIEMTRA') return JSON.parse(JSON.stringify(questions));
-            let cloned = JSON.parse(JSON.stringify(questions));
+            let cloned = [];
+            try { cloned = JSON.parse(JSON.stringify(questions)); } catch(e) { return questions; }
             cloned = shuffleArray(cloned);
             cloned.forEach(q => {
-                if (q.type === 'MCQ' && Array.isArray(q.options) && q.options.length === 4) {
+                // Thêm bọc thép kiểm tra dữ liệu để không bao giờ bị đứng web
+                if (q && q.type === 'MCQ' && Array.isArray(q.options) && q.options.length >= 4) {
                     const labels = ['A', 'B', 'C', 'D'];
-                    let origCorrectIdx = labels.indexOf((q.ans || 'A').toString().trim().toUpperCase());
-                    let correctOptionText = (origCorrectIdx !== -1) ? q.options[origCorrectIdx] : q.options[0];
-                    let paired = q.options.map((opt, idx) => ({ text: opt, label: labels[idx] }));
+                    let ansStr = (q.ans || 'A').toString().trim().toUpperCase();
+                    let origCorrectIdx = labels.indexOf(ansStr);
+                    if (origCorrectIdx === -1) origCorrectIdx = 0;
+                    
+                    let correctOptionText = q.options[origCorrectIdx];
+                    let paired = [0,1,2,3].map(idx => ({ text: q.options[idx], label: labels[idx] }));
                     paired = shuffleArray(paired);
-                    q.options = paired.map(p => p.text);
+                    
+                    for(let i=0; i<4; i++) { q.options[i] = paired[i].text; }
+                    
                     let newCorrectIdx = paired.findIndex(p => p.text === correctOptionText);
                     q.ans = labels[newCorrectIdx !== -1 ? newCorrectIdx : 0];
                 }
@@ -886,7 +893,7 @@ const topicsConfig = {
         let secondsRemaining = 0;
         let cheatWarnings = 0;
 
-        function startTraditionalExamMode() {
+       function startTraditionalExamMode() {
             document.getElementById('quiz-view').style.display = 'block';
             document.getElementById('quiz-title').innerText = activeExam.title;
             document.getElementById('quiz-result').style.display = 'none';
@@ -905,9 +912,7 @@ const topicsConfig = {
                 timerDisplay.classList.remove('practice');
                 window.onblur = handleWindowBlur;
                 document.addEventListener('contextmenu', preventRightClick);
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen().catch(err => console.log("Lỗi bật toàn màn hình:", err));
-                }
+                // ĐÃ XÓA TÍNH NĂNG ÉP FULLSCREEN ĐỂ TRÁNH LỖI TRẮNG MÀN HÌNH TRÊN ZALO/SAFARI
             } else {
                 document.body.classList.remove('secure-exam-mode');
                 timerDisplay.classList.add('practice');
@@ -916,21 +921,25 @@ const topicsConfig = {
             }
 
             clearInterval(timerInterval);
-            secondsRemaining = activeExam.timeLimit * 60;
+            // Ép kiểu thời gian chống lỗi rỗng dữ liệu
+            secondsRemaining = (parseInt(activeExam.timeLimit) || 45) * 60;
             updateTimerDisplay();
             timerInterval = setInterval(() => {
                 secondsRemaining--;
                 updateTimerDisplay();
                 if (secondsRemaining <= 0) {
                     clearInterval(timerInterval);
-                    alert("Đã hết thời gian làm bài!");
-                    submitQuiz();
+                    window.onblur = null; 
+                    setTimeout(() => {
+                        alert("⏰ Đã hết thời gian làm bài! Hệ thống sẽ tự động thu bài.");
+                        submitQuiz();
+                    }, 300);
                 }
             }, 1000);
 
-            const p1 = processedQuestions.filter(q => q.type === 'MCQ');
-            const p2 = processedQuestions.filter(q => q.type === 'TF');
-            const p3 = processedQuestions.filter(q => q.type === 'SA');
+            const p1 = processedQuestions.filter(q => q && q.type === 'MCQ');
+            const p2 = processedQuestions.filter(q => q && q.type === 'TF');
+            const p3 = processedQuestions.filter(q => q && q.type === 'SA');
             const container = document.getElementById('quiz-content');
             container.innerHTML = '';
             let qGlobalIdx = 0;
@@ -941,7 +950,8 @@ const topicsConfig = {
                     qGlobalIdx++;
                     let opts = '';
                     ['A', 'B', 'C', 'D'].forEach((ch, idx) => {
-                        opts += `<label class="mcq-option"><input type="radio" name="q_${qGlobalIdx}" value="${ch}" required><span><strong>${ch}.</strong> ${q.options[idx]}</span></label>`;
+                        let optText = q.options && q.options[idx] ? q.options[idx] : '';
+                        opts += `<label class="mcq-option"><input type="radio" name="q_${qGlobalIdx}" value="${ch}" required><span><strong>${ch}.</strong> ${optText}</span></label>`;
                     });
                     container.innerHTML += `<div class="q-card" id="card_q_${qGlobalIdx}"><div class="q-title">Câu ${qGlobalIdx}: ${q.q}</div>${opts}<div class="explanation-box" id="exp_q_${qGlobalIdx}" style="display: none;"></div></div>`;
                 });

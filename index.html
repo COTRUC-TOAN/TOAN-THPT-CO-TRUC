@@ -1163,12 +1163,15 @@ if (activeExam.mode === 'LUYENTAP') {
         }
 
         function switchTeacherTab(tab) {
-            ['scores', 'exams', 'creator'].forEach(t => {
-                document.getElementById(`sec-t-${t}`).style.display = (t === tab) ? 'block' : 'none';
-                document.getElementById(`btn-t-${t}`).classList.toggle('active', t === tab);
+            ['scores', 'exams', 'creator', 'classes'].forEach(t => {
+                const sec = document.getElementById(`sec-t-${t}`);
+                if(sec) sec.style.display = (t === tab) ? 'block' : 'none';
+                const btn = document.getElementById(`btn-t-${t}`);
+                if(btn) btn.classList.toggle('active', t === tab);
             });
             if (tab === 'exams') renderTeacherExamList();
             if (tab === 'creator') { filterQuestionBankList(); renderMatrixTable(); }
+            if (tab === 'classes') renderTeacherClassList();
         }
 
         function switchAddMethod(method) {

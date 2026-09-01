@@ -1504,7 +1504,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             loadQuestionBank();
         }
 
-       async function loadQuestionBank() {
+      async function loadQuestionBank() {
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=get_question_bank&password=${encodeURIComponent(teacherPassAuth)}`);
                 const data = await res.json();
@@ -1516,20 +1516,22 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
                         
                         return {
                             id: q.id || q.ID || '',
-                            grade: q.grade || q.Khối || q.Grade || '',
-                            topic: q.topic || q['Chủ đề'] || q.Topic || '',
-                            level: q.level || q['Mức độ'] || q.Level || '',
-                            type: q.type || q.Dạng || q.Type || '',
+                            grade: String(q.grade || q['Khối'] || q['khối'] || q.Grade || '12').trim(),
+                            topic: String(q.topic || q['Chủ đề'] || q['chủ đề'] || q.Topic || '').trim(),
+                            level: String(q.level || q['Mức độ'] || q['mức độ'] || q.Level || 'TH').trim(),
+                            type: String(q.type || q['Dạng'] || q['dạng'] || q.Type || 'MCQ').trim(),
                             q: q.q || q['Nội dung'] || '',
                             options: (typeof optRaw === 'string') ? JSON.parse(optRaw) : optRaw,
-                            ans: q.ans || q['Đáp án'] || q.Ans || '',
+                            ans: q.ans || q['Đáp án'] || q['đáp án'] || q.Ans || '',
                             ansOptions: (typeof aOptRaw === 'string') ? JSON.parse(aOptRaw) : aOptRaw
                         };
                     }).filter(q => q.id && q.id !== "");
                     
                     filterQuestionBankList(); 
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.error("Lỗi tải ngân hàng:", e);
+            }
         }
 
         function filterQuestionBankList() {
@@ -1542,16 +1544,18 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             const fText = document.getElementById('bank-search-text').value.toLowerCase();
 
             const filtered = questionBank.filter(q => {
-                if (fGrade !== 'all' && q.grade.toString() !== fGrade) return false;
-                if (fTopic !== 'all' && q.topic !== fTopic) return false;
-                if (fLevel !== 'all' && q.level !== fLevel) return false;
-                if (fType !== 'all' && q.type !== fType) return false;
+                // Lọc linh hoạt, không phân biệt hoa thường và tự động gạt bỏ khoảng trắng thừa
+                if (fGrade !== 'all' && q.grade !== fGrade) return false;
+                if (fTopic !== 'all' && q.topic.toLowerCase() !== fTopic.toLowerCase()) return false;
+                if (fLevel !== 'all' && q.level.toUpperCase() !== fLevel.toUpperCase()) return false;
+                if (fType !== 'all' && q.type.toUpperCase() !== fType.toUpperCase()) return false;
                 if (fText && !q.q.toLowerCase().includes(fText)) return false;
                 return true;
             });
 
             if (filtered.length === 0) {
-                container.innerHTML = `<p style="color:#94a3b8; text-align:center; padding: 20px;">Không tìm thấy câu hỏi phù hợp.</p>`; return;
+                container.innerHTML = `<p style="color:#94a3b8; text-align:center; padding: 20px;">Không tìm thấy câu hỏi phù hợp.</p>`; 
+                return;
             }
 
             container.innerHTML = filtered.map(q => `

@@ -762,16 +762,13 @@ const topicsConfig = {
       function renderExams() {
             const grid = document.getElementById('exam-grid');
             grid.innerHTML = '';
-         const list = examBank.filter(e => {
-        if (!e || !e.title || e.title === "undefined" || e.title.toString().trim() === "") return false;
-        const gradeStr = e.grade ? e.grade.toString() : '';
-        const matchGrade = (currentGrade === 'all' || gradeStr === currentGrade);
-        
-        // Cho phép khớp linh hoạt theo từ khóa topic để không bị lệch chữ
-        const matchTopic = (currentTopic === 'all' || !e.topic || e.topic.includes(currentTopic) || currentTopic.includes(e.topic));
-        
-        return matchGrade && matchTopic;
-    });   
+            const list = examBank.filter(e => {
+                if (!e || !e.title || e.title === "undefined" || e.title.toString().trim() === "") return false;
+                const gradeStr = e.grade ? e.grade.toString() : '';
+                const matchGrade = (currentGrade === 'all' || gradeStr === currentGrade);
+                const matchTopic = (currentTopic === 'all' || !e.topic || e.topic.includes(currentTopic) || currentTopic.includes(e.topic));
+                return matchGrade && matchTopic;
+            });   
          
             if (list.length === 0) {
                 grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trong mục này.</p>`;
@@ -789,7 +786,10 @@ const topicsConfig = {
                     </div>
                     <div class="card-body">
                         <div><h3 class="card-title">${ex.title}</h3>
-                            <div class="card-meta"><span><i class="fa-regular fa-circle-question"></i> ${ex.questions ? ex.questions.length : 0} câu</span><span><i class="fa-regular fa-clock"></i> ${ex.timeLimit} phút</span></div>
+                            <div class="card-meta">
+                                <span><i class="fa-regular fa-circle-question"></i> ${ex.questions ? ex.questions.length : 0} câu</span>
+                                <span><i class="fa-regular fa-clock"></i> ${ex.timeLimit} ${isKahoot ? 'giây/câu' : 'phút'}</span>
+                            </div>
                         </div>
                         <div class="card-actions">
                             <button class="btn-start" onclick="startExam('${ex.id}')"><i class="fa-solid fa-play"></i> Bắt đầu</button>
@@ -799,7 +799,6 @@ const topicsConfig = {
                 grid.appendChild(card);
             });
         }
-
         function startExam(id) {
             activeExam = examBank.find(e => e.id === id);
             if (!activeExam) return;

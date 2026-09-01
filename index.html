@@ -1627,13 +1627,19 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             
             let isCorrect = selected.toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'') === String(correct).trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
 
-            if (isCorrect) {
-                kahootScore += 1000 + (kahootTimeLeft * 25);
+          if (isCorrect) {
+                // Phân bổ điểm gốc chuẩn trọng số theo dạng câu hỏi (Trắc nghiệm: 250đ, Đúng/Sai: 1000đ, Trả lời ngắn: 500đ)
+                const qType = (activeExam.questions[kahootCurrentIndex].type || 'MCQ').toUpperCase();
+                let basePoints = 250;
+                if (qType === 'TF') basePoints = 1000;
+                else if (qType === 'SA') basePoints = 500;
+
+                let earnedPoints = basePoints + (kahootTimeLeft * 15);
+                kahootScore += earnedPoints;
+
                 playSound('correct');
-                feedback.innerHTML = `<span style="color: #16a34a;"><i class="fa-solid fa-circle-check"></i> Chính xác! (+${1000 + kahootTimeLeft*25} điểm)</span>`;
+                feedback.innerHTML = `<span style="color: #16a34a;"><i class="fa-solid fa-circle-check"></i> Chính xác! (+${earnedPoints} điểm)</span>`;
             } else {
-                playSound('wrong');
-                feedback.innerHTML = `<span style="color: #dc2626;"><i class="fa-solid fa-circle-xmark"></i> Sai rồi! Đáp án đúng là ${correct}</span>`;
                 // Ghi nhận câu sai lên host
                 db.ref('kahoot_rooms/' + activeExam.id + '/wrong/' + kahootCurrentIndex).transaction(current => (current || 0) + 1);
             }

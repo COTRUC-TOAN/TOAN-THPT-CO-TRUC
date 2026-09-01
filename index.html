@@ -687,10 +687,17 @@ const topicsConfig = {
             }
         }
 
-        async function fetchData() {
+     async function fetchData() {
             renderSidebarTopics();
+            
+            // Tạo cơ chế tự động ngắt nếu quá 5 giây không phản hồi
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+
             try {
-                const res = await fetch(SCRIPT_URL);
+                const res = await fetch(SCRIPT_URL, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                
                 const data = await res.json();
                 
                 let rawExams = data.exams || [];
@@ -718,8 +725,11 @@ const topicsConfig = {
                 renderExams();
                 checkUrlParams();
             } catch (err) {
-                console.error(err);
-                document.getElementById('exam-grid').innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px;"><i class="fa-solid fa-triangle-exclamation"></i> Không thể kết nối máy chủ.</p>`;
+                console.error("Lỗi kết nối:", err);
+                const grid = document.getElementById('exam-grid');
+                if (grid) {
+                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px;"><i class="fa-solid fa-triangle-exclamation"></i> Không thể kết nối máy chủ hoặc quá thời gian chờ (Timeout). Vui lòng kiểm tra lại Web App Google Apps Script!</p>`;
+                }
             }
         }
 

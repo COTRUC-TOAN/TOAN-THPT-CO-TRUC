@@ -1030,16 +1030,26 @@ const topicsConfig = {
             const btnSubmit = document.getElementById('btn-submit-quiz');
             btnSubmit.disabled = true; btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang chấm...';
 
-            let correctCount = 0; let totalQ = processedQuestions.length;
+           let totalWeightedScore = 0;
+            let maxPossibleScore = 0;
+            let correctCount = 0;
+
             processedQuestions.forEach((q, idx) => {
-                let userAns = "";
-                if (q.type === 'MCQ') {
-                    userAns = document.querySelector(`input[name="q_${idx + 1}"]:checked`)?.value || "";
-                    if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) correctCount++;
-                } else if (q.type === 'SA') {
-                    userAns = document.querySelector(`input[name="q_${idx + 1}"]`)?.value.trim() || "";
-                    if (userAns.toLowerCase() === String(q.ans || "").trim().toLowerCase()) correctCount++;
-                } else if (q.type === 'TF') {
+                let qType = (q.type || 'MCQ').toUpperCase();
+                let weight = 0.25; // Mặc định trắc nghiệm MCQ là 0.25đ
+                if (qType === 'TF') weight = 1.0;     // Đúng/Sai là 1.0đ
+                else if (qType === 'SA') weight = 0.5; // Trả lời ngắn là 0.5đ
+
+                maxPossibleScore += weight;
+
+                let isQCorrect = false;
+                if (qType === 'MCQ') {
+                    let userAns = document.querySelector(`input[name="q_${idx + 1}"]:checked`)?.value || "";
+                    if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) isQCorrect = true;
+                } else if (qType === 'SA') {
+                    let userAns = document.querySelector(`input[name="q_${idx + 1}"]`)?.value.trim() || "";
+                    if (userAns.toLowerCase() === String(q.ans || "").trim().toLowerCase()) isQCorrect = true;
+                } else if (qType === 'TF') {
                     let tfCorrect = true;
                     ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
                         if (q.options && q.options[subIdx]) {
@@ -1048,11 +1058,18 @@ const topicsConfig = {
                             if (subAns !== correctSub) tfCorrect = false;
                         }
                     });
-                    if (tfCorrect) correctCount++;
+                    if (tfCorrect) tfCorrect = true; // Sửa lỗi gán biến kiểm tra đúng sai ở đây
+                    if (tfCorrect) isQCorrect = true;
+                }
+
+                if (isQCorrect) {
+                    correctCount++;
+                    totalWeightedScore += weight;
                 }
             });
 
-            let finalScore = totalQ > 0 ? ((correctCount / totalQ) * 10).toFixed(2) : 10;
+            // Quy đổi tỉ lệ trọng số chuẩn về thang điểm 10
+            let finalScore = maxPossibleScore > 0 ? ((totalWeightedScore / maxPossibleScore) * 10).toFixed(2) : 10;
             const resDiv = document.getElementById('quiz-result');
             resDiv.style.display = 'block';
             resDiv.innerHTML = `🎉 Điểm số: <strong>${finalScore} / 10</strong>`;

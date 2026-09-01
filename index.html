@@ -1329,7 +1329,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     return parsedArr;
 }      
 
-        function parseDirectExam() {
+       function parseDirectExam() {
             const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
             if (!rawHtml) { alert("Vui lòng dán văn bản đề thi!"); return; }
             
@@ -1355,6 +1355,11 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             document.getElementById('direct-preview-box').innerHTML = previewHtml;
             document.getElementById('btn-save-parsed-bank').style.display = 'inline-block';
             renderMath(document.getElementById('direct-preview-box'));
+
+            // === BỔ SUNG ĐOẠN NÀY ĐỂ CỘT BÊN TRÁI TỰ ĐỘNG NHẬY SỐ CÂU ===
+            selectedQuestions = [...directParsedQuestions];
+            document.getElementById('selected-q-count').innerText = selectedQuestions.length;
+            document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `<div>${idx+1}. ${sq.id}</div>`).join('');
         }
 
         async function saveBankBulkToSheets() {

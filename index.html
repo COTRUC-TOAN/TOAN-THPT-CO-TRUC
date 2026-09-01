@@ -1325,121 +1325,126 @@ const topicsConfig = {
             }
         }
 
-        function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
-            let parsedArr = [];
-            let tempDiv = document.createElement('div');
-            tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
+      // --- THUẬT TOÁN BÓC TÁCH ALL-IN-ONE (ĐỒNG BỘ CHUẨN TÊN CHỦ ĐỀ) ---
+function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
+    let parsedArr = [];
+    let tempDiv = document.createElement('div');
+    tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
 
-            let textContent = tempDiv.innerHTML
-                .replace(/<br\s*[\/]?>/gi, '\n')
-                .replace(/<\/?(div|p|h[1-6]|ul|ol|li|tr)[^>]*>/gi, '\n')
-                .replace(/<(?!img\b|\/img)[^>]*>/gi, '') 
-                .replace(/&nbsp;/gi, ' ')
-                .replace(/\r\n/g, '\n')
-                .replace(/\r/g, '\n');
+    // 1. Chuẩn hóa xuống dòng, loại bỏ thẻ rác nhưng BẢO VỆ thẻ <img>
+    let textContent = tempDiv.innerHTML
+        .replace(/<br\s*[\/]?>/gi, '\n')
+        .replace(/<\/?(div|p|h[1-6]|ul|ol|li|tr)[^>]*>/gi, '\n')
+        .replace(/<(?!img\b|\/img)[^>]*>/gi, '') 
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n');
 
-            let blocks = textContent.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_])/i)
-                .map(b => b.trim())
-                .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+/i.test(b));
+    // 2. Tách theo từng Câu / Bài
+    let blocks = textContent.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_])/i)
+        .map(b => b.trim())
+        .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+/i.test(b));
 
-            blocks.forEach((block, idx) => {
-                let lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
-                const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${idx + 1}`;
+    blocks.forEach((block, idx) => {
+        let lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
+        const qId = `CH${grade}_${Date.now().toString().slice(-4)}_${idx + 1}`;
 
-                let hasMCQ = lines.some(l => /^[A-D][\.\)]\s*/.test(l));
-                let hasTF = lines.some(l => /^[a-d][\)\.]\s*/.test(l));
-                let detectedType = hasMCQ ? 'MCQ' : (hasTF ? 'TF' : 'SA');
+        // Nhận diện loại câu: Phân biệt chính xác chữ HOA (MCQ) và chữ THƯỜNG (TF)
+        let hasMCQ = lines.some(l => /^[A-D][\.\)]\s*/.test(l));
+        let hasTF = lines.some(l => /^[a-d][\)\.]\s*/.test(l));
+        let detectedType = hasMCQ ? 'MCQ' : (hasTF ? 'TF' : 'SA');
 
-                let options = ['', '', '', ''];
-                let ans = '';
-                let ansOptions = [];
-                let qLines = [];
+        let options = ['', '', '', ''];
+        let ans = '';
+        let ansOptions = [];
+        let qLines = [];
 
-                let ansIdx = lines.findIndex(l => /^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?/i.test(l));
-                if (ansIdx !== -1) {
-                    let rawAnsLine = lines[ansIdx].replace(/^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*/i, '').trim();
-                    lines.splice(ansIdx, 1);
+        // BƯỚC A: Bóc tách dòng Đáp án
+        let ansIdx = lines.findIndex(l => /^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?/i.test(l));
+        if (ansIdx !== -1) {
+            let rawAnsLine = lines[ansIdx].replace(/^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*/i, '').trim();
+            lines.splice(ansIdx, 1);
 
-                    if (detectedType === 'TF') {
-                        let cleanTF = rawAnsLine.toUpperCase().replace(/Đ/g, 'D').replace(/[^DS]/g, '');
-                        ans = cleanTF.padEnd(4, 'D').slice(0, 4);
-                        ansOptions = ans.split('');
-                    } else if (detectedType === 'MCQ') {
-                        let m = rawAnsLine.match(/([A-D])/i);
-                        ans = m ? m[1].toUpperCase() : '';
+            if (detectedType === 'TF') {
+                let cleanTF = rawAnsLine.toUpperCase().replace(/Đ/g, 'D').replace(/[^DS]/g, '');
+                ans = cleanTF.padEnd(4, 'D').slice(0, 4);
+                ansOptions = ans.split('');
+            } else if (detectedType === 'MCQ') {
+                let m = rawAnsLine.match(/([A-D])/i);
+                ans = m ? m[1].toUpperCase() : '';
+            } else {
+                ans = rawAnsLine;
+            }
+        }
+
+        // BƯỚC B: Bóc tách thân câu hỏi & phương án
+        let currentOpt = -1;
+
+        if (detectedType === 'MCQ') {
+            lines.forEach(l => {
+                if (/^A[\.\)]\s*(.*)$/.test(l)) {
+                    currentOpt = 0;
+                    options[0] = l.replace(/^A[\.\)]\s*/, '').trim();
+                } else if (/^B[\.\)]\s*(.*)$/.test(l)) {
+                    currentOpt = 1;
+                    options[1] = l.replace(/^B[\.\)]\s*/, '').trim();
+                } else if (/^C[\.\)]\s*(.*)$/.test(l)) {
+                    currentOpt = 2;
+                    options[2] = l.replace(/^C[\.\)]\s*/, '').trim();
+                } else if (/^D[\.\)]\s*(.*)$/.test(l)) {
+                    currentOpt = 3;
+                    options[3] = l.replace(/^D[\.\)]\s*/, '').trim();
+                } else {
+                    if (currentOpt === -1) {
+                        qLines.push(l);
                     } else {
-                        ans = rawAnsLine;
+                        options[currentOpt] += '<br>' + l;
                     }
                 }
-
-                let currentOpt = -1;
-
-                if (detectedType === 'MCQ') {
-                    lines.forEach(l => {
-                        if (/^A[\.\)]\s*(.*)$/.test(l)) {
-                            currentOpt = 0;
-                            options[0] = l.replace(/^A[\.\)]\s*/, '').trim();
-                        } else if (/^B[\.\)]\s*(.*)$/.test(l)) {
-                            currentOpt = 1;
-                            options[1] = l.replace(/^B[\.\)]\s*/, '').trim();
-                        } else if (/^C[\.\)]\s*(.*)$/.test(l)) {
-                            currentOpt = 2;
-                            options[2] = l.replace(/^C[\.\)]\s*/, '').trim();
-                        } else if (/^D[\.\)]\s*(.*)$/.test(l)) {
-                            currentOpt = 3;
-                            options[3] = l.replace(/^D[\.\)]\s*/, '').trim();
-                        } else {
-                            if (currentOpt === -1) {
-                                qLines.push(l);
-                            } else {
-                                options[currentOpt] += '<br>' + l;
-                            }
-                        }
-                    });
-                } else if (detectedType === 'TF') {
-                    lines.forEach(l => {
-                        if (/^a[\)\.]\s*(.*)$/.test(l)) {
-                            currentOpt = 0;
-                            options[0] = l.replace(/^a[\)\.]\s*/, '').trim();
-                        } else if (/^b[\)\.]\s*(.*)$/.test(l)) {
-                            currentOpt = 1;
-                            options[1] = l.replace(/^b[\)\.]\s*/, '').trim();
-                        } else if (/^c[\)\.]\s*(.*)$/.test(l)) {
-                            currentOpt = 2;
-                            options[2] = l.replace(/^c[\)\.]\s*/, '').trim();
-                        } else if (/^d[\)\.]\s*(.*)$/.test(l)) {
-                            currentOpt = 3;
-                            options[3] = l.replace(/^d[\)\.]\s*/, '').trim();
-                        } else {
-                            if (currentOpt === -1) {
-                                qLines.push(l);
-                            } else {
-                                options[currentOpt] += '<br>' + l;
-                            }
-                        }
-                    });
-                } else {
-                    qLines = lines;
-                }
-
-                let qContent = qLines.join('<br>').replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_]+/i, '').trim();
-
-                parsedArr.push({
-                    id: qId,
-                    grade: grade,
-                    topic: topic,
-                    level: 'TH',
-                    type: detectedType,
-                    q: qContent,
-                    options: options,
-                    ans: ans,
-                    ansOptions: ansOptions
-                });
             });
+        } else if (detectedType === 'TF') {
+            lines.forEach(l => {
+                if (/^a[\)\.]\s*(.*)$/.test(l)) {
+                    currentOpt = 0;
+                    options[0] = l.replace(/^a[\)\.]\s*/, '').trim();
+                } else if (/^b[\)\.]\s*(.*)$/.test(l)) {
+                    currentOpt = 1;
+                    options[1] = l.replace(/^b[\)\.]\s*/, '').trim();
+                } else if (/^c[\)\.]\s*(.*)$/.test(l)) {
+                    currentOpt = 2;
+                    options[2] = l.replace(/^c[\)\.]\s*/, '').trim();
+                } else if (/^d[\)\.]\s*(.*)$/.test(l)) {
+                    currentOpt = 3;
+                    options[3] = l.replace(/^d[\)\.]\s*/, '').trim();
+                } else {
+                    if (currentOpt === -1) {
+                        qLines.push(l);
+                    } else {
+                        options[currentOpt] += '<br>' + l;
+                    }
+                }
+            });
+        } else {
+            qLines = lines;
+        }
 
-            return parsedArr;
-        }      
+        let qContent = qLines.join('<br>').replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_]+/i, '').trim();
 
+        parsedArr.push({
+            id: qId,
+            grade: grade,
+            topic: topic, // Lấy trực tiếp tên chủ đề đang chọn ở form
+            level: 'TH',
+            type: detectedType,
+            q: qContent,
+            options: options,
+            ans: ans,
+            ansOptions: ansOptions
+        });
+    });
+
+    return parsedArr;
+}
         function parseDirectExam() {
             const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
             if (!rawHtml) { alert("Vui lòng dán văn bản đề thi!"); return; }

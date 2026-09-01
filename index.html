@@ -330,7 +330,15 @@
                 </div>
             </div>
         </div>
-
+<!-- TAB QUẢN LÝ LỚP -->
+            <div id="sec-t-classes" style="display: none;">
+                <h3 style="color: #1e40af; margin-bottom: 15px;"><i class="fa-solid fa-school"></i> Cấu Hình Danh Sách Lớp Học</h3>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; max-width: 500px;">
+                    <input type="text" class="form-input" id="new-class-name" placeholder="Nhập tên lớp (VD: 12A1, Học thêm 1...)">
+                    <button class="btn-start" style="background: var(--primary); white-space: nowrap;" onclick="addNewClass()">Thêm Lớp</button>
+                </div>
+                <div id="teacher-class-list" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+            </div>
         <!-- MÀN HÌNH KHÓA -->
         <div id="password-lock-screen">
             <i class="fa-solid fa-shield-halved" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>

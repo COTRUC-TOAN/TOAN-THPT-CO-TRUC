@@ -1052,22 +1052,22 @@
                 }
             }
         }
-// --- THUẬT TOÁN BÓC TÁCH ALL-IN-ONE (CHUẨN XÁC 100% MCQ, TF, SA & TỰ ĐỘNG NỐI DÒNG) ---
+// --- THUẬT TOÁN BÓC TÁCH ALL-IN-ONE (GIỮ NGUYÊN ẢNH DÁN <img> & CHUẨN XÁC 3 DẠNG) ---
 function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     let parsedArr = [];
     let tempDiv = document.createElement('div');
     tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
 
-    // 1. Chuẩn hóa xuống dòng và làm sạch thẻ HTML
+    // 1. Chuẩn hóa xuống dòng, loại bỏ thẻ rác nhưng BẢO VỆ thẻ <img>
     let textContent = tempDiv.innerHTML
         .replace(/<br\s*[\/]?>/gi, '\n')
         .replace(/<\/?(div|p|h[1-6]|ul|ol|li|tr)[^>]*>/gi, '\n')
-        .replace(/<[^>]+>/g, '') // Lọc sạch các thẻ HTML rác
+        .replace(/<(?!img\b|\/img)[^>]*>/gi, '') // Giữ nguyên thẻ <img> dán từ clipboard
         .replace(/&nbsp;/gi, ' ')
         .replace(/\r\n/g, '\n')
         .replace(/\r/g, '\n');
 
-    // 2. Tách theo từng Câu / Bài và loại bỏ hoàn toàn phần tiêu đề thừa
+    // 2. Tách theo từng Câu / Bài
     let blocks = textContent.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_])/i)
         .map(b => b.trim())
         .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+/i.test(b));
@@ -1104,8 +1104,8 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             }
         }
 
-        // BƯỚC B: Bóc tách thân câu hỏi & gộp dòng phương án bị ngắt quãng
-        let currentOpt = -1; // -1: Thân câu hỏi, 0: A/a, 1: B/b, 2: C/c, 3: D/d
+        // BƯỚC B: Bóc tách thân câu hỏi & phương án (giữ trọn hình ảnh nếu có)
+        let currentOpt = -1;
 
         if (detectedType === 'MCQ') {
             lines.forEach(l => {
@@ -1125,7 +1125,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
                     if (currentOpt === -1) {
                         qLines.push(l);
                     } else {
-                        options[currentOpt] += ' ' + l; // Nối tiếp dòng bị rớt chữ vào phương án
+                        options[currentOpt] += '<br>' + l;
                     }
                 }
             });
@@ -1147,7 +1147,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
                     if (currentOpt === -1) {
                         qLines.push(l);
                     } else {
-                        options[currentOpt] += ' ' + l; // Nối tiếp dòng bị rớt chữ vào mệnh đề
+                        options[currentOpt] += '<br>' + l;
                     }
                 }
             });

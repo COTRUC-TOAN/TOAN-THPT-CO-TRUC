@@ -1643,13 +1643,19 @@ const topicsConfig = {
             if (!select) return;
             select.innerHTML = items.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
         }
-    function updateNewExamTopicDropdown() {
-            const grade = document.getElementById('new-exam-grade') ? document.getElementById('new-exam-grade').value : '12';
+   function updateNewExamTopicDropdown() {
+            const gradeSelect = document.getElementById('new-exam-grade');
+            const grade = gradeSelect ? gradeSelect.value : '12';
             const select = document.getElementById('new-exam-topic');
             if (!select) return;
             select.innerHTML = "";
             
-            const list = topicsConfig['g' + grade] || [];
+            let list = [];
+            if (grade === '12') list = topicsConfig.g12;
+            else if (grade === '11') list = topicsConfig.g11;
+            else if (grade === '10') list = topicsConfig.g10;
+            else list = [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10];
+
             list.forEach(item => {
                 if (item.type === 'header') {
                     const opt = document.createElement('option');

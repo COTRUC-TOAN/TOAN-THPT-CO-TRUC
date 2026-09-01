@@ -216,11 +216,13 @@
 
         <!-- GIAO DIỆN QUẢN LÝ & SOẠN ĐỀ -->
         <div id="teacher-view" style="display: none;">
-            <div class="teacher-nav">
-                <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
-                <button class="btn-t-tab" id="btn-t-exams" onclick="switchTeacherTab('exams')"><i class="fa-solid fa-list-check"></i> Quản Lý Đề Thi</button>
-                <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo & Soạn Đề Mới</button>
-            </div>
+         <div class="teacher-nav">
+    <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
+    <button class="btn-t-tab" id="btn-t-exams" onclick="switchTeacherTab('exams')"><i class="fa-solid fa-list-check"></i> Quản Lý Đề Thi</button>
+    <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo & Soạn Đề Mới</button>
+    <!-- THÊM NÚT NÀY VÀO ĐÂY -->
+    <button class="btn-t-tab" id="btn-t-classes" onclick="switchTeacherTab('classes')"><i class="fa-solid fa-school"></i> Quản Lý Danh Sách Lớp</button>
+</div>
 
            <!-- TAB 1: SỔ ĐIỂM -->
             <div id="sec-t-scores">

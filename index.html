@@ -736,26 +736,34 @@ const topicsConfig = {
             });
         }
 
-        function renderExams() {
+      function renderExams() {
             const grid = document.getElementById('exam-grid');
             grid.innerHTML = '';
-            const list = examBank.filter(e => (currentGrade === 'all' || e.grade.toString() === currentGrade) && (currentTopic === 'all' || e.topic === currentTopic));
+            
+            const list = examBank.filter(e => {
+                const gradeStr = e.grade ? e.grade.toString() : '';
+                const matchGrade = (currentGrade === 'all' || gradeStr === currentGrade);
+                const matchTopic = (currentTopic === 'all' || e.topic === currentTopic);
+                return matchGrade && matchTopic;
+            });
+
             if (list.length === 0) {
                 grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trong mục này.</p>`;
                 return;
             }
             list.forEach(ex => {
                 const isKahoot = ex.mode === 'KAHOOT'; const isExamMode = ex.mode === 'KIEMTRA';
+                const gradeDisplay = ex.grade ? ex.grade.toString().toUpperCase() : '';
                 const card = document.createElement('div'); card.className = 'exam-card';
                 card.innerHTML = `
                     <div class="card-banner ${isKahoot ? 'kahoot-mode' : (isExamMode ? 'exam-mode' : '')}">
                         <div class="card-icon"><i class="fa-solid ${isKahoot ? 'fa-bolt' : 'fa-book-open'}"></i></div>
-                        <div class="card-badge">KHỐI ${ex.grade.toString().toUpperCase()}</div>
+                        <div class="card-badge">KHỐI ${gradeDisplay}</div>
                         <div class="card-mode-badge" style="color: ${isKahoot ? '#7c3aed' : (isExamMode ? '#dc2626' : '#16a34a')};">${isKahoot ? '⚡ KAHOOT' : (isExamMode ? '🔴 KIỂM TRA' : '🟢 LUYỆN TẬP')}</div>
                     </div>
                     <div class="card-body">
                         <div><h3 class="card-title">${ex.title}</h3>
-                            <div class="card-meta"><span><i class="fa-regular fa-circle-question"></i> ${ex.questions.length} câu</span><span><i class="fa-regular fa-clock"></i> ${ex.timeLimit} phút</span></div>
+                            <div class="card-meta"><span><i class="fa-regular fa-circle-question"></i> ${ex.questions ? ex.questions.length : 0} câu</span><span><i class="fa-regular fa-clock"></i> ${ex.timeLimit} phút</span></div>
                         </div>
                         <div class="card-actions">
                             <button class="btn-start" onclick="startExam('${ex.id}')"><i class="fa-solid fa-play"></i> Bắt đầu</button>

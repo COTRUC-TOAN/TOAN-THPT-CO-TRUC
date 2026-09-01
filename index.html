@@ -436,7 +436,7 @@
         }
         function stopKahootMusicLoop() { clearInterval(loopTimer); }
 
-        // --- MỤC LỤC CHUẨN 100% SGK KNTT & CÁNH DIỀU ---
+       // --- MỤC LỤC CHUẨN 100% SGK KNTT & CÁNH DIỀU ---
         const topicsConfig = {
             general: [
                 { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' },
@@ -453,24 +453,35 @@
                 { id: '12-c1-b3', name: 'Bài 3. Đường tiệm cận của đồ thị', icon: 'fa-arrows-split-up-and-left' },
                 { id: '12-c1-b4', name: 'Bài 4. Khảo sát sự biến thiên và vẽ đồ thị', icon: 'fa-pen-ruler' },
                 { id: '12-c1-b5', name: 'Bài 5. Ứng dụng đạo hàm thực tiễn', icon: 'fa-lightbulb' },
+                { id: '12-c1-on', name: '📌 Ôn tập Chương 1. Ứng dụng đạo hàm', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG II. VECTƠ VÀ HỆ TOẠ ĐỘ OXYZ' },
                 { id: '12-c2-b1', name: 'Bài 1. Vectơ trong không gian', icon: 'fa-location-arrow' },
                 { id: '12-c2-b2', name: 'Bài 2. Toạ độ của vectơ trong không gian', icon: 'fa-cube' },
                 { id: '12-c2-b3', name: 'Bài 3. Biểu thức toạ độ phép toán vectơ', icon: 'fa-calculator' },
+                { id: '12-c2-on', name: '📌 Ôn tập Chương 2. Vectơ và hệ toạ độ Oxyz', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG III. THỐNG KÊ (GHÉP NHÓM)' },
                 { id: '12-c3-b1', name: 'Bài 1. Khoảng biến thiên & tứ phân vị ghép nhóm', icon: 'fa-chart-simple' },
                 { id: '12-c3-b2', name: 'Bài 2. Phương sai & độ lệch chuẩn ghép nhóm', icon: 'fa-chart-pie' },
+                { id: '12-c3-on', name: '📌 Ôn tập Chương 3. Thống kê ghép nhóm', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG IV. NGUYÊN HÀM VÀ TÍCH PHÂN' },
                 { id: '12-c4-b1', name: 'Bài 1. Nguyên hàm', icon: 'fa-infinity' },
                 { id: '12-c4-b2', name: 'Bài 2. Tích phân', icon: 'fa-square-root-variable' },
                 { id: '12-c4-b3', name: 'Bài 3. Ứng dụng hình học của tích phân', icon: 'fa-shapes' },
+                { id: '12-c4-on', name: '📌 Ôn tập Chương 4. Nguyên hàm và Tích phân', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG V. PHƯƠNG TRÌNH MẶT PHẲNG, MẶT CẦU' },
                 { id: '12-c5-b1', name: 'Bài 1. Phương trình mặt phẳng', icon: 'fa-square' },
                 { id: '12-c5-b2', name: 'Bài 2. Phương trình đường thẳng trong Oxyz', icon: 'fa-bars' },
                 { id: '12-c5-b3', name: 'Bài 3. Phương trình mặt cầu', icon: 'fa-circle' },
+                { id: '12-c5-on', name: '📌 Ôn tập Chương 5. Phương trình mặt phẳng, mặt cầu', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG VI. XÁC SUẤT' },
                 { id: '12-c6-b1', name: 'Bài 1. Xác suất có điều kiện', icon: 'fa-dice' },
-                { id: '12-c6-b2', name: 'Bài 2. Xác suất toàn phần và Bayes', icon: 'fa-network-wired' }
+                { id: '12-c6-b2', name: 'Bài 2. Xác suất toàn phần và Bayes', icon: 'fa-network-wired' },
+                { id: '12-c6-on', name: '📌 Ôn tập Chương 6. Xác suất', icon: 'fa-clipboard-list' }
             ],
             g11: [
                 { type: 'header', title: 'CHƯƠNG I. HÀM SỐ & PHƯƠNG TRÌNH LƯỢNG GIÁC' },
@@ -478,82 +489,115 @@
                 { id: '11-c1-b2', name: 'Bài 2. Các phép biến đổi lượng giác', icon: 'fa-square-root-variable' },
                 { id: '11-c1-b3', name: 'Bài 3. Hàm số lượng giác', icon: 'fa-chart-line' },
                 { id: '11-c1-b4', name: 'Bài 4. Phương trình lượng giác cơ bản', icon: 'fa-equals' },
+                { id: '11-c1-on', name: '📌 Ôn tập Chương 1. Lượng giác', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG II. DÃY SỐ - CẤP SỐ' },
                 { id: '11-c2-b1', name: 'Bài 1. Dãy số', icon: 'fa-list-ol' },
                 { id: '11-c2-b2', name: 'Bài 2. Cấp số cộng', icon: 'fa-plus' },
                 { id: '11-c2-b3', name: 'Bài 3. Cấp số nhân', icon: 'fa-xmark' },
+                { id: '11-c2-on', name: '📌 Ôn tập Chương 2. Dãy số - Cấp số', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG III. GIỚI HẠN & LIÊN TỤC' },
                 { id: '11-c3-b1', name: 'Bài 1. Giới hạn dãy số', icon: 'fa-arrow-right-arrow-left' },
                 { id: '11-c3-b2', name: 'Bài 2. Giới hạn hàm số', icon: 'fa-gauge' },
                 { id: '11-c3-b3', name: 'Bài 3. Hàm số liên tục', icon: 'fa-link' },
+                { id: '11-c3-on', name: '📌 Ôn tập Chương 3. Giới hạn & Liên tục', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG IV. QUAN HỆ SONG SONG KHÔNG GIAN' },
                 { id: '11-c4-b1', name: 'Bài 1. Điểm, đường, mặt phẳng', icon: 'fa-cube' },
                 { id: '11-c4-b2', name: 'Bài 2. Hai đường thẳng song song', icon: 'fa-bars' },
                 { id: '11-c4-b3', name: 'Bài 3. Đường thẳng song song mặt phẳng', icon: 'fa-layer-group' },
                 { id: '11-c4-b4', name: 'Bài 4. Hai mặt phẳng song song', icon: 'fa-clone' },
                 { id: '11-c4-b5', name: 'Bài 5. Phép chiếu song song', icon: 'fa-film' },
+                { id: '11-c4-on', name: '📌 Ôn tập Chương 4. Quan hệ song song', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG V. THỐNG KÊ (GHÉP NHÓM CƠ BẢN)' },
                 { id: '11-c5-b1', name: 'Bài 1. Số trung bình và mốt ghép nhóm', icon: 'fa-chart-column' },
                 { id: '11-c5-b2', name: 'Bài 2. Trung vị và tứ phân vị ghép nhóm', icon: 'fa-chart-pie' },
+                { id: '11-c5-on', name: '📌 Ôn tập Chương 5. Thống kê ghép nhóm', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG VI. HÀM SỐ MŨ & LOGARIT' },
                 { id: '11-c6-b1', name: 'Bài 1. Lũy thừa', icon: 'fa-superscript' },
                 { id: '11-c6-b2', name: 'Bài 2. Lôgarit', icon: 'fa-calculator' },
                 { id: '11-c6-b3', name: 'Bài 3. Hàm số mũ và lôgarit', icon: 'fa-chart-line' },
                 { id: '11-c6-b4', name: 'Bài 4. Phương trình mũ và lôgarit', icon: 'fa-equals' },
+                { id: '11-c6-on', name: '📌 Ôn tập Chương 6. Mũ & Logarit', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG VII. QUAN HỆ VUÔNG GÓC' },
                 { id: '11-c7-b1', name: 'Bài 1. Hai đường thẳng vuông góc', icon: 'fa-cross' },
                 { id: '11-c7-b2', name: 'Bài 2. Đường thẳng vuông góc mặt phẳng', icon: 'fa-arrows-up-down' },
                 { id: '11-c7-b3', name: 'Bài 3. Hai mặt phẳng vuông góc', icon: 'fa-square' },
                 { id: '11-c7-b4', name: 'Bài 4. Khoảng cách', icon: 'fa-ruler' },
                 { id: '11-c7-b5', name: 'Bài 5. Góc', icon: 'fa-draw-polygon' },
+                { id: '11-c7-on', name: '📌 Ôn tập Chương 7. Quan hệ vuông góc', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG VIII. XÁC SUẤT CƠ BẢN' },
                 { id: '11-c8-b1', name: 'Bài 1. Biến cố giao & độc lập', icon: 'fa-diagram-project' },
                 { id: '11-c8-b2', name: 'Bài 2. Công thức cộng xác suất', icon: 'fa-plus-minus' },
                 { id: '11-c8-b3', name: 'Bài 3. Công thức nhân xác suất', icon: 'fa-asterisk' },
+                { id: '11-c8-on', name: '📌 Ôn tập Chương 8. Xác suất', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG IX. ĐẠO HÀM' },
                 { id: '11-c9-b1', name: 'Bài 1. Đạo hàm', icon: 'fa-bolt' },
                 { id: '11-c9-b2', name: 'Bài 2. Các quy tắc tính đạo hàm', icon: 'fa-gears' },
-                { id: '11-c9-b3', name: 'Bài 3. Đạo hàm cấp hai', icon: 'fa-arrow-up-9-1' }
+                { id: '11-c9-b3', name: 'Bài 3. Đạo hàm cấp hai', icon: 'fa-arrow-up-9-1' },
+                { id: '11-c9-on', name: '📌 Ôn tập Chương 9. Đạo hàm', icon: 'fa-clipboard-list' }
             ],
             g10: [
                 { type: 'header', title: 'CHƯƠNG I. MỆNH ĐỀ & TẬP HỢP' },
                 { id: '10-c1-b1', name: 'Bài 1. Mệnh đề toán học', icon: 'fa-check' },
                 { id: '10-c1-b2', name: 'Bài 2. Tập hợp', icon: 'fa-object-group' },
+                { id: '10-c1-on', name: '📌 Ôn tập Chương 1. Mệnh đề & Tập hợp', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG II. BẤT PHƯƠNG TRÌNH' },
                 { id: '10-c2-b1', name: 'Bài 1. Bất phương trình bậc nhất 2 ẩn', icon: 'fa-greater-than-equal' },
                 { id: '10-c2-b2', name: 'Bài 2. Hệ bất phương trình', icon: 'fa-table-cells' },
+                { id: '10-c2-on', name: '📌 Ôn tập Chương 2. Bất phương trình', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG III. HÀM SỐ BẬC HAI' },
                 { id: '10-c3-b1', name: 'Bài 1. Hàm số và đồ thị', icon: 'fa-chart-line' },
                 { id: '10-c3-b2', name: 'Bài 2. Hàm số bậc hai', icon: 'fa-arrow-trend-up' },
                 { id: '10-c3-b3', name: 'Bài 3. Dấu tam thức bậc hai', icon: 'fa-square-root-variable' },
+                { id: '10-c3-on', name: '📌 Ôn tập Chương 3. Hàm số bậc hai', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG IV. HỆ THỨC LƯỢNG TAM GIÁC' },
                 { id: '10-c4-b1', name: 'Bài 1. Giá trị lượng giác góc 0-180', icon: 'fa-angles-right' },
                 { id: '10-c4-b2', name: 'Bài 2. Định lý côsin và sin', icon: 'fa-triangle-exclamation' },
                 { id: '10-c4-b3', name: 'Bài 3. Giải tam giác', icon: 'fa-compass-drafting' },
+                { id: '10-c4-on', name: '📌 Ôn tập Chương 4. Hệ thức lượng tam giác', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG V. VECTƠ' },
                 { id: '10-c5-b1', name: 'Bài 1. Khái niệm vectơ', icon: 'fa-location-arrow' },
                 { id: '10-c5-b2', name: 'Bài 2. Tổng và hiệu vectơ', icon: 'fa-plus' },
                 { id: '10-c5-b3', name: 'Bài 3. Tích vô hướng', icon: 'fa-bullseye' },
+                { id: '10-c5-on', name: '📌 Ôn tập Chương 5. Vectơ', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG VI. THỐNG KÊ (KHÔNG GHÉP NHÓM)' },
                 { id: '10-c6-b1', name: 'Bài 1. Số gần đúng. Sai số', icon: 'fa-calculator' },
                 { id: '10-c6-b2', name: 'Bài 2. Biểu diễn số liệu', icon: 'fa-chart-column' },
                 { id: '10-c6-b3', name: 'Bài 3. Số đặc trưng xu thế trung tâm', icon: 'fa-chart-pie' },
                 { id: '10-c6-b4', name: 'Bài 4. Số đặc trưng phân tán', icon: 'fa-chart-simple' },
+                { id: '10-c6-on', name: '📌 Ôn tập Chương 6. Thống kê', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG VII. PHƯƠNG PHÁP TOẠ ĐỘ OXY' },
                 { id: '10-c7-b1', name: 'Bài 1. Toạ độ vectơ & Điểm', icon: 'fa-cube' },
                 { id: '10-c7-b2', name: 'Bài 2. Phương trình đường thẳng', icon: 'fa-bars' },
                 { id: '10-c7-b3', name: 'Bài 3. Phương trình đường tròn', icon: 'fa-circle' },
                 { id: '10-c7-b4', name: 'Bài 4. Ba đường conic', icon: 'fa-shapes' },
+                { id: '10-c7-on', name: '📌 Ôn tập Chương 7. Phương pháp toạ độ Oxy', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG VIII. ĐẠI SỐ TỔ HỢP' },
                 { id: '10-c8-b1', name: 'Bài 1. Quy tắc đếm', icon: 'fa-list-ol' },
                 { id: '10-c8-b2', name: 'Bài 2. Hoán vị, Chỉnh hợp, Tổ hợp', icon: 'fa-shuffle' },
                 { id: '10-c8-b3', name: 'Bài 3. Nhị thức Newton', icon: 'fa-superscript' },
+                { id: '10-c8-on', name: '📌 Ôn tập Chương 8. Đại số tổ hợp', icon: 'fa-clipboard-list' },
+
                 { type: 'header', title: 'CHƯƠNG IX. XÁC SUẤT CƠ BẢN' },
                 { id: '10-c9-b1', name: 'Bài 1. Không gian mẫu và biến cố', icon: 'fa-dice' },
-                { id: '10-c9-b2', name: 'Bài 2. Xác suất của biến cố', icon: 'fa-percent' }
+                { id: '10-c9-b2', name: 'Bài 2. Xác suất của biến cố', icon: 'fa-percent' },
+                { id: '10-c9-on', name: '📌 Ôn tập Chương 9. Xác suất cơ bản', icon: 'fa-clipboard-list' }
             ]
         };
-
         function renderSidebarTopics() {
             const container = document.getElementById('topic-container');
             if (!container) return;

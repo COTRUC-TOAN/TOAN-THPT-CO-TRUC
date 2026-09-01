@@ -1052,22 +1052,22 @@
                 }
             }
         }
-// --- THUẬT TOÁN BÓC TÁCH ALL-IN-ONE CỰC GỌN (CHUẨN XÁC 100% 3 DẠNG) ---
+// --- THUẬT TOÁN BÓC TÁCH ALL-IN-ONE (CHUẨN XÁC 100% MCQ, TF, SA & TỰ ĐỘNG NỐI DÒNG) ---
 function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     let parsedArr = [];
     let tempDiv = document.createElement('div');
     tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
 
-    // 1. Chuyển đổi ngắt dòng và loại bỏ toàn bộ thẻ rác HTML để regex nhận diện chuẩn
+    // 1. Chuẩn hóa xuống dòng và làm sạch thẻ HTML
     let textContent = tempDiv.innerHTML
         .replace(/<br\s*[\/]?>/gi, '\n')
         .replace(/<\/?(div|p|h[1-6]|ul|ol|li|tr)[^>]*>/gi, '\n')
-        .replace(/<[^>]+>/g, '') // Lọc sạch các thẻ <b>, <span> dính vào A., B., a), b)
+        .replace(/<[^>]+>/g, '') // Lọc sạch các thẻ HTML rác
         .replace(/&nbsp;/gi, ' ')
         .replace(/\r\n/g, '\n')
         .replace(/\r/g, '\n');
 
-    // 2. Tách theo Câu 1:, Bài 1: và LOẠI BỎ hoàn toàn phần tiêu đề / khối rỗng ở đầu
+    // 2. Tách theo từng Câu / Bài và loại bỏ hoàn toàn phần tiêu đề thừa
     let blocks = textContent.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_])/i)
         .map(b => b.trim())
         .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+/i.test(b));
@@ -1076,24 +1076,23 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         let lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
         const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${idx + 1}`;
 
-        // Nhận diện loại câu hỏi chính xác
-        let isTF = lines.some(l => /^[a-d][\)\.]\s/i.test(l));
-        let isMCQ = !isTF && lines.some(l => /^[A-D][\)\.]\s/i.test(l));
-        let detectedType = isTF ? 'TF' : (isMCQ ? 'MCQ' : 'SA');
+        // Nhận diện loại câu: Phân biệt chính xác chữ HOA (MCQ) và chữ THƯỜNG (TF)
+        let hasMCQ = lines.some(l => /^[A-D][\.\)]\s*/.test(l));
+        let hasTF = lines.some(l => /^[a-d][\)\.]\s*/.test(l));
+        let detectedType = hasMCQ ? 'MCQ' : (hasTF ? 'TF' : 'SA');
 
         let options = ['', '', '', ''];
         let ans = '';
         let ansOptions = [];
         let qLines = [];
 
-        // Bóc tách dòng Đáp án (Hỗ trợ cả Đ, D, S, A-D, số âm, phân số)
+        // BƯỚC A: Bóc tách dòng Đáp án
         let ansIdx = lines.findIndex(l => /^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?/i.test(l));
         if (ansIdx !== -1) {
             let rawAnsLine = lines[ansIdx].replace(/^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*/i, '').trim();
             lines.splice(ansIdx, 1);
 
             if (detectedType === 'TF') {
-                // Nhận dạng cả Đ/S và D/S (Ví dụ: ĐSĐS, DSDS, Đ-S-Đ-S)
                 let cleanTF = rawAnsLine.toUpperCase().replace(/Đ/g, 'D').replace(/[^DS]/g, '');
                 ans = cleanTF.padEnd(4, 'D').slice(0, 4);
                 ansOptions = ans.split('');
@@ -1101,26 +1100,56 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
                 let m = rawAnsLine.match(/([A-D])/i);
                 ans = m ? m[1].toUpperCase() : '';
             } else {
-                ans = rawAnsLine; // Dạng trả lời ngắn: lấy nguyên giá trị (ví dụ: -2, 0.25)
+                ans = rawAnsLine;
             }
         }
 
-        // Bóc tách nội dung câu hỏi và các phương án
-        if (detectedType === 'TF') {
+        // BƯỚC B: Bóc tách thân câu hỏi & gộp dòng phương án bị ngắt quãng
+        let currentOpt = -1; // -1: Thân câu hỏi, 0: A/a, 1: B/b, 2: C/c, 3: D/d
+
+        if (detectedType === 'MCQ') {
             lines.forEach(l => {
-                if (/^a[\)\.]\s*(.*)$/i.test(l)) options[0] = l.replace(/^a[\)\.]\s*/i, '').trim();
-                else if (/^b[\)\.]\s*(.*)$/i.test(l)) options[1] = l.replace(/^b[\)\.]\s*/i, '').trim();
-                else if (/^c[\)\.]\s*(.*)$/i.test(l)) options[2] = l.replace(/^c[\)\.]\s*/i, '').trim();
-                else if (/^d[\)\.]\s*(.*)$/i.test(l)) options[3] = l.replace(/^d[\)\.]\s*/i, '').trim();
-                else qLines.push(l);
+                if (/^A[\.\)]\s*(.*)$/.test(l)) {
+                    currentOpt = 0;
+                    options[0] = l.replace(/^A[\.\)]\s*/, '').trim();
+                } else if (/^B[\.\)]\s*(.*)$/.test(l)) {
+                    currentOpt = 1;
+                    options[1] = l.replace(/^B[\.\)]\s*/, '').trim();
+                } else if (/^C[\.\)]\s*(.*)$/.test(l)) {
+                    currentOpt = 2;
+                    options[2] = l.replace(/^C[\.\)]\s*/, '').trim();
+                } else if (/^D[\.\)]\s*(.*)$/.test(l)) {
+                    currentOpt = 3;
+                    options[3] = l.replace(/^D[\.\)]\s*/, '').trim();
+                } else {
+                    if (currentOpt === -1) {
+                        qLines.push(l);
+                    } else {
+                        options[currentOpt] += ' ' + l; // Nối tiếp dòng bị rớt chữ vào phương án
+                    }
+                }
             });
-        } else if (detectedType === 'MCQ') {
+        } else if (detectedType === 'TF') {
             lines.forEach(l => {
-                if (/^A[\)\.]\s*(.*)$/i.test(l)) options[0] = l.replace(/^A[\)\.]\s*/i, '').trim();
-                else if (/^B[\)\.]\s*(.*)$/i.test(l)) options[1] = l.replace(/^B[\)\.]\s*/i, '').trim();
-                else if (/^C[\)\.]\s*(.*)$/i.test(l)) options[2] = l.replace(/^C[\)\.]\s*/i, '').trim();
-                else if (/^D[\)\.]\s*(.*)$/i.test(l)) options[3] = l.replace(/^D[\)\.]\s*/i, '').trim();
-                else qLines.push(l);
+                if (/^a[\)\.]\s*(.*)$/.test(l)) {
+                    currentOpt = 0;
+                    options[0] = l.replace(/^a[\)\.]\s*/, '').trim();
+                } else if (/^b[\)\.]\s*(.*)$/.test(l)) {
+                    currentOpt = 1;
+                    options[1] = l.replace(/^b[\)\.]\s*/, '').trim();
+                } else if (/^c[\)\.]\s*(.*)$/.test(l)) {
+                    currentOpt = 2;
+                    options[2] = l.replace(/^c[\)\.]\s*/, '').trim();
+                } else if (/^d[\)\.]\s*(.*)$/.test(l)) {
+                    currentOpt = 3;
+                    options[3] = l.replace(/^d[\)\.]\s*/, '').trim();
+                } else {
+                    if (currentOpt === -1) {
+                        qLines.push(l);
+                    } else {
+                        options[currentOpt] += ' ' + l; // Nối tiếp dòng bị rớt chữ vào mệnh đề
+                    }
+                }
             });
         } else {
             qLines = lines;
@@ -1142,7 +1171,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     });
 
     return parsedArr;
-}       
+}     
 
         function parseDirectExam() {
             const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();

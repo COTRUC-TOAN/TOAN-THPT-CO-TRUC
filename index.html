@@ -1052,78 +1052,97 @@
                 }
             }
         }
+// --- THUẬT TOÁN BÓC TÁCH ALL-IN-ONE CỰC GỌN (CHUẨN XÁC 100% 3 DẠNG) ---
+function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
+    let parsedArr = [];
+    let tempDiv = document.createElement('div');
+    tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
 
-        // --- THUẬT TOÁN BÓC TÁCH ALL-IN-ONE CỰC GỌN (SẠCH KHOẢNG TRỐNG) ---
-        function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
-            let parsedArr = [];
-            let tempDiv = document.createElement('div');
-            tempDiv.innerHTML = rawHtml.normalize('NFC');
-            
-            // Xóa rác và chuyển thẻ thành dòng mới để dễ đọc
-            let textContent = tempDiv.innerHTML.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/?(div|p|h[1-6]|ul|ol|li)[^>]*>/gi, '\n').replace(/&nbsp;/gi, ' ');
-            
-            // Tách theo Câu 1:, Bài 1:
-            let blocks = textContent.split(/(?=(?:C[ââ]u|B[àà]i)\s*\d+[\s:.\-_])/i);
+    // 1. Chuyển đổi ngắt dòng và loại bỏ toàn bộ thẻ rác HTML để regex nhận diện chuẩn
+    let textContent = tempDiv.innerHTML
+        .replace(/<br\s*[\/]?>/gi, '\n')
+        .replace(/<\/?(div|p|h[1-6]|ul|ol|li|tr)[^>]*>/gi, '\n')
+        .replace(/<[^>]+>/g, '') // Lọc sạch các thẻ <b>, <span> dính vào A., B., a), b)
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n');
 
-            blocks.forEach((block) => {
-                block = block.trim();
-                if (!block) return;
+    // 2. Tách theo Câu 1:, Bài 1: và LOẠI BỎ hoàn toàn phần tiêu đề / khối rỗng ở đầu
+    let blocks = textContent.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_])/i)
+        .map(b => b.trim())
+        .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+/i.test(b));
 
-                let lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
-                const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${parsedArr.length + 1}`;
-                
-                // Thuật toán phát hiện thông minh:
-                let isTF = lines.some(l => /^a[\)\.]\s/i.test(l)) && lines.some(l => /^b[\)\.]\s/i.test(l));
-                let isMCQ = !isTF && lines.some(l => /^A[\)\.]\s/i.test(l)) && lines.some(l => /^B[\)\.]\s/i.test(l));
-                let detectedType = isTF ? 'TF' : (isMCQ ? 'MCQ' : 'SA');
+    blocks.forEach((block, idx) => {
+        let lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
+        const qId = `CH${grade}_${topic}_${Date.now().toString().slice(-4)}_${idx + 1}`;
 
-                let options = ['', '', '', '']; let ans = ''; let ansOptions = []; let qLines = [];
+        // Nhận diện loại câu hỏi chính xác
+        let isTF = lines.some(l => /^[a-d][\)\.]\s/i.test(l));
+        let isMCQ = !isTF && lines.some(l => /^[A-D][\)\.]\s/i.test(l));
+        let detectedType = isTF ? 'TF' : (isMCQ ? 'MCQ' : 'SA');
 
-                if (detectedType === 'TF') {
-                    let ansIdx = lines.findIndex(l => /^(?:Đáp án|Chọn)\s*[:\-]?/i.test(l));
-                    if (ansIdx !== -1) {
-                        let aMatch = lines[ansIdx].match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([D|S][-\s]*[D|S][-\s]*[D|S][-\s]*[D|S]|[D|S]+)/i);
-                        if (aMatch) ans = aMatch[1].toUpperCase().replace(/[^DS]/g, '');
-                        lines.splice(ansIdx, 1);
-                    } else ans = "DSDS";
-                    ansOptions = ans.split('');
+        let options = ['', '', '', ''];
+        let ans = '';
+        let ansOptions = [];
+        let qLines = [];
 
-                    lines.forEach(l => {
-                        if (/^a[\)\.]\s*(.*)$/i.test(l)) options[0] = l.replace(/^a[\)\.]\s*/i, '').trim();
-                        else if (/^b[\)\.]\s*(.*)$/i.test(l)) options[1] = l.replace(/^b[\)\.]\s*/i, '').trim();
-                        else if (/^c[\)\.]\s*(.*)$/i.test(l)) options[2] = l.replace(/^c[\)\.]\s*/i, '').trim();
-                        else if (/^d[\)\.]\s*(.*)$/i.test(l)) options[3] = l.replace(/^d[\)\.]\s*/i, '').trim();
-                        else qLines.push(l);
-                    });
-                } else if (detectedType === 'MCQ') {
-                    let ansIdx = lines.findIndex(l => /^(?:Đáp án|Chọn)\s*[:\-]?/i.test(l));
-                    if (ansIdx !== -1) {
-                        let aMatch = lines[ansIdx].match(/(?:Đáp án|Chọn)\s*[:\-]?\s*([A-D])/i);
-                        if (aMatch) ans = aMatch[1].toUpperCase();
-                        lines.splice(ansIdx, 1);
-                    }
+        // Bóc tách dòng Đáp án (Hỗ trợ cả Đ, D, S, A-D, số âm, phân số)
+        let ansIdx = lines.findIndex(l => /^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?/i.test(l));
+        if (ansIdx !== -1) {
+            let rawAnsLine = lines[ansIdx].replace(/^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*/i, '').trim();
+            lines.splice(ansIdx, 1);
 
-                    lines.forEach(l => {
-                        if (/^A[\)\.]\s*(.*)$/i.test(l)) options[0] = l.replace(/^A[\)\.]\s*/i, '').trim();
-                        else if (/^B[\)\.]\s*(.*)$/i.test(l)) options[1] = l.replace(/^B[\)\.]\s*/i, '').trim();
-                        else if (/^C[\)\.]\s*(.*)$/i.test(l)) options[2] = l.replace(/^C[\)\.]\s*/i, '').trim();
-                        else if (/^D[\)\.]\s*(.*)$/i.test(l)) options[3] = l.replace(/^D[\)\.]\s*/i, '').trim();
-                        else qLines.push(l);
-                    });
-                } else {
-                    let ansIdx = lines.findIndex(l => /^(?:Đáp án|Chọn)\s*[:\-]?/i.test(l));
-                    if (ansIdx !== -1) {
-                        ans = lines[ansIdx].replace(/^(?:Đáp án|Chọn)\s*[:\-]?\s*/i, '').trim();
-                        lines.splice(ansIdx, 1);
-                    }
-                    qLines = lines;
-                }
-
-                let qContent = qLines.join('<br>').replace(/^(?:C[ââ]u|B[àà]i)\s*\d+[\s:.\-_]+/i, '').trim();
-                parsedArr.push({ id: qId, grade: grade, topic: topic, level: 'TH', type: detectedType, q: qContent, options: options, ans: ans, ansOptions: ansOptions });
-            });
-            return parsedArr;
+            if (detectedType === 'TF') {
+                // Nhận dạng cả Đ/S và D/S (Ví dụ: ĐSĐS, DSDS, Đ-S-Đ-S)
+                let cleanTF = rawAnsLine.toUpperCase().replace(/Đ/g, 'D').replace(/[^DS]/g, '');
+                ans = cleanTF.padEnd(4, 'D').slice(0, 4);
+                ansOptions = ans.split('');
+            } else if (detectedType === 'MCQ') {
+                let m = rawAnsLine.match(/([A-D])/i);
+                ans = m ? m[1].toUpperCase() : '';
+            } else {
+                ans = rawAnsLine; // Dạng trả lời ngắn: lấy nguyên giá trị (ví dụ: -2, 0.25)
+            }
         }
+
+        // Bóc tách nội dung câu hỏi và các phương án
+        if (detectedType === 'TF') {
+            lines.forEach(l => {
+                if (/^a[\)\.]\s*(.*)$/i.test(l)) options[0] = l.replace(/^a[\)\.]\s*/i, '').trim();
+                else if (/^b[\)\.]\s*(.*)$/i.test(l)) options[1] = l.replace(/^b[\)\.]\s*/i, '').trim();
+                else if (/^c[\)\.]\s*(.*)$/i.test(l)) options[2] = l.replace(/^c[\)\.]\s*/i, '').trim();
+                else if (/^d[\)\.]\s*(.*)$/i.test(l)) options[3] = l.replace(/^d[\)\.]\s*/i, '').trim();
+                else qLines.push(l);
+            });
+        } else if (detectedType === 'MCQ') {
+            lines.forEach(l => {
+                if (/^A[\)\.]\s*(.*)$/i.test(l)) options[0] = l.replace(/^A[\)\.]\s*/i, '').trim();
+                else if (/^B[\)\.]\s*(.*)$/i.test(l)) options[1] = l.replace(/^B[\)\.]\s*/i, '').trim();
+                else if (/^C[\)\.]\s*(.*)$/i.test(l)) options[2] = l.replace(/^C[\)\.]\s*/i, '').trim();
+                else if (/^D[\)\.]\s*(.*)$/i.test(l)) options[3] = l.replace(/^D[\)\.]\s*/i, '').trim();
+                else qLines.push(l);
+            });
+        } else {
+            qLines = lines;
+        }
+
+        let qContent = qLines.join('<br>').replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_]+/i, '').trim();
+
+        parsedArr.push({
+            id: qId,
+            grade: grade,
+            topic: topic,
+            level: 'TH',
+            type: detectedType,
+            q: qContent,
+            options: options,
+            ans: ans,
+            ansOptions: ansOptions
+        });
+    });
+
+    return parsedArr;
+}       
 
         function parseDirectExam() {
             const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();

@@ -661,12 +661,35 @@ const topicsConfig = {
             }
         }
 
-        async function fetchData() {
+       async function fetchData() {
             renderSidebarTopics();
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
-                examBank = data.exams || [];
+                
+                // CHUẨN HÓA DỮ LIỆU ĐỀ THI: Ép kiểu để tương thích 100% với Google Sheets
+                let rawExams = data.exams || [];
+                examBank = rawExams.map(ex => {
+                    let rawQJson = ex.questionsJson || ex.QuestionsJson || ex.questionsjson || "[]";
+                    let parsedQ = [];
+                    try { 
+                        parsedQ = (Array.isArray(ex.questions) && ex.questions.length > 0) ? ex.questions : JSON.parse(rawQJson); 
+                    } catch(e) { parsedQ = []; }
+
+                    return {
+                        id: ex.id || ex.ID || '',
+                        title: ex.title || ex.Title || ex.TITLE || '',
+                        grade: ex.grade || ex.Grade || '',
+                        topic: ex.topic || ex.Topic || '',
+                        mode: ex.mode || ex.Mode || '',
+                        timeLimit: ex.timeLimit || ex.TimeLimit || ex.timelimit || 45,
+                        startTime: ex.startTime || ex.StartTime || '',
+                        deadline: ex.deadline || ex.Deadline || '',
+                        examPass: ex.examPass || ex.ExamPass || '',
+                        questions: parsedQ
+                    };
+                }).filter(e => e.title && e.title !== "undefined" && e.title.trim() !== "");
+
                 renderExams();
                 checkUrlParams();
             } catch (err) {

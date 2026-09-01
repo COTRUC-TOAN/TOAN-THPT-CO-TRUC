@@ -710,7 +710,8 @@ const topicsConfig = {
                     document.querySelector('.navbar').style.display = 'none';
 
                     const now = new Date().getTime();
-                    if (activeExam.startTime && activeExam.startTime.trim() !== "") {
+                    // BỌC THÉP ÉP KIỂU STRING ĐỂ CHỐNG LỖI CÚ PHÁP TRIM() KHI GIÁO VIÊN NHẬP SỐ
+                    if (activeExam.startTime && String(activeExam.startTime).trim() !== "") {
                         const startTime = new Date(activeExam.startTime).getTime();
                         if (now < startTime) {
                             document.getElementById('password-lock-screen').style.display = 'block';
@@ -721,7 +722,8 @@ const topicsConfig = {
                         }
                     }
 
-                    if (activeExam.deadline && activeExam.deadline.trim() !== "") {
+                    // BỌC THÉP ÉP KIỂU STRING ĐỂ CHỐNG LỖI CÚ PHÁP TRIM()
+                    if (activeExam.deadline && String(activeExam.deadline).trim() !== "") {
                         const deadlineTime = new Date(activeExam.deadline).getTime();
                         if (now > deadlineTime) {
                             document.getElementById('password-lock-screen').style.display = 'block';
@@ -738,8 +740,12 @@ const topicsConfig = {
                         if (activeExam.mode === 'KAHOOT') {
                             startStudentKahootMode();
                         } else if (activeExam.mode === 'KIEMTRA') {
-                            if (activeExam.examPass && activeExam.examPass.trim() !== "") {
+                            // BỌC THÉP ÉP KIỂU STRING: Tránh lỗi khi mật khẩu nhập là 123
+                            if (activeExam.examPass && String(activeExam.examPass).trim() !== "") {
                                 document.getElementById('password-lock-screen').style.display = 'block';
+                                document.getElementById('lock-screen-title').innerText = "Phòng Kiểm Tra Bảo Mật";
+                                document.getElementById('lock-screen-desc').innerText = "Đề thi yêu cầu mật khẩu bảo mật từ giáo viên.";
+                                document.getElementById('password-input-group').style.display = 'block';
                             } else {
                                 startTraditionalExamMode();
                             }
@@ -763,7 +769,7 @@ const topicsConfig = {
             const grid = document.getElementById('exam-grid');
             grid.innerHTML = '';
             const list = examBank.filter(e => {
-                if (!e || !e.title || e.title === "undefined" || e.title.toString().trim() === "") return false;
+                if (!e || !e.title || e.title === "undefined" || String(e.title).trim() === "") return false;
                 const gradeStr = e.grade ? e.grade.toString() : '';
                 const matchGrade = (currentGrade === 'all' || gradeStr === currentGrade);
                 const matchTopic = (currentTopic === 'all' || !e.topic || e.topic.includes(currentTopic) || currentTopic.includes(e.topic));
@@ -799,13 +805,15 @@ const topicsConfig = {
                 grid.appendChild(card);
             });
         }
+
         function startExam(id) {
             activeExam = examBank.find(e => e.id === id);
             if (!activeExam) return;
             document.getElementById('portal-view').style.display = 'none';
 
             const now = new Date().getTime();
-            if (activeExam.startTime && activeExam.startTime.trim() !== "") {
+            // BỌC THÉP
+            if (activeExam.startTime && String(activeExam.startTime).trim() !== "") {
                 const startTime = new Date(activeExam.startTime).getTime();
                 if (now < startTime) {
                     document.getElementById('password-lock-screen').style.display = 'block';
@@ -816,7 +824,8 @@ const topicsConfig = {
                 }
             }
 
-            if (activeExam.deadline && activeExam.deadline.trim() !== "") {
+            // BỌC THÉP
+            if (activeExam.deadline && String(activeExam.deadline).trim() !== "") {
                 const deadlineTime = new Date(activeExam.deadline).getTime();
                 if (now > deadlineTime) {
                     document.getElementById('password-lock-screen').style.display = 'block';
@@ -830,7 +839,8 @@ const topicsConfig = {
             if (activeExam.mode === 'KAHOOT') {
                 startHostDirect(id);
             } else if (activeExam.mode === 'KIEMTRA') {
-                if (activeExam.examPass && activeExam.examPass.trim() !== "") {
+                // BỌC THÉP ÉP KIỂU STRING
+                if (activeExam.examPass && String(activeExam.examPass).trim() !== "") {
                     document.getElementById('password-lock-screen').style.display = 'block';
                     document.getElementById('lock-screen-title').innerText = "Phòng Kiểm Tra Bảo Mật";
                     document.getElementById('lock-screen-desc').innerText = "Đề thi yêu cầu mật khẩu bảo mật từ giáo viên.";
@@ -847,7 +857,7 @@ const topicsConfig = {
 
         function verifyExamPassword() {
             const enteredPass = document.getElementById('exam-secure-pass').value.trim();
-            const correctPass = activeExam.examPass ? activeExam.examPass : "";
+            const correctPass = activeExam.examPass ? String(activeExam.examPass).trim() : "";
             if (enteredPass === correctPass) {
                 document.getElementById('password-lock-screen').style.display = 'none';
                 startTraditionalExamMode();
@@ -868,10 +878,10 @@ const topicsConfig = {
             try { cloned = JSON.parse(JSON.stringify(questions)); } catch(e) { return questions; }
             cloned = shuffleArray(cloned);
             cloned.forEach(q => {
-                // Thêm bọc thép kiểm tra dữ liệu để không bao giờ bị đứng web
+                // THÊM BỌC THÉP KIỂM TRA DỮ LIỆU MCQ
                 if (q && q.type === 'MCQ' && Array.isArray(q.options) && q.options.length >= 4) {
                     const labels = ['A', 'B', 'C', 'D'];
-                    let ansStr = (q.ans || 'A').toString().trim().toUpperCase();
+                    let ansStr = String(q.ans || 'A').trim().toUpperCase(); // Bọc thép biến ans
                     let origCorrectIdx = labels.indexOf(ansStr);
                     if (origCorrectIdx === -1) origCorrectIdx = 0;
                     
@@ -912,7 +922,7 @@ const topicsConfig = {
                 timerDisplay.classList.remove('practice');
                 window.onblur = handleWindowBlur;
                 document.addEventListener('contextmenu', preventRightClick);
-                // ĐÃ XÓA TÍNH NĂNG ÉP FULLSCREEN ĐỂ TRÁNH LỖI TRẮNG MÀN HÌNH TRÊN ZALO/SAFARI
+                // ĐÃ XÓA FULLSCREEN TRÁNH SẬP WEB ZALO/SAFARI
             } else {
                 document.body.classList.remove('secure-exam-mode');
                 timerDisplay.classList.add('practice');
@@ -921,7 +931,6 @@ const topicsConfig = {
             }
 
             clearInterval(timerInterval);
-            // Ép kiểu thời gian chống lỗi rỗng dữ liệu
             secondsRemaining = (parseInt(activeExam.timeLimit) || 45) * 60;
             updateTimerDisplay();
             timerInterval = setInterval(() => {
@@ -986,7 +995,10 @@ const topicsConfig = {
                 cheatWarnings++;
                 document.getElementById('cheat-warning').style.display = 'block';
                 document.getElementById('cheat-count').innerText = cheatWarnings;
-                if (cheatWarnings >= 3) { alert("Phát hiện rời khỏi màn hình 3 lần! Tự động nộp bài."); submitQuiz(); }
+                if (cheatWarnings >= 3) { 
+                    window.onblur = null;
+                    setTimeout(() => { alert("⚠️ Phát hiện rời khỏi màn hình 3 lần! Tự động nộp bài."); submitQuiz(); }, 300);
+                }
             }
         }
         function updateTimerDisplay() {
@@ -999,7 +1011,6 @@ const topicsConfig = {
         async function submitQuiz() {
             clearInterval(timerInterval); window.onblur = null; document.removeEventListener('contextmenu', preventRightClick);
             document.body.classList.remove('secure-exam-mode');
-            if (document.fullscreenElement) { document.exitFullscreen().catch(()=>{}); }
 
             const name = document.getElementById('std-name').value.trim() || "Ẩn danh";
             const sClass = document.getElementById('std-class').value.trim() || "Tự do";
@@ -1024,10 +1035,10 @@ const topicsConfig = {
                 let userAns = "";
                 if (q.type === 'MCQ') {
                     userAns = document.querySelector(`input[name="q_${idx + 1}"]:checked`)?.value || "";
-                    if (userAns.trim().toUpperCase() === (q.ans || "").trim().toUpperCase()) correctCount++;
+                    if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) correctCount++;
                 } else if (q.type === 'SA') {
                     userAns = document.querySelector(`input[name="q_${idx + 1}"]`)?.value.trim() || "";
-                    if (userAns.toLowerCase() === (q.ans || "").toString().trim().toLowerCase()) correctCount++;
+                    if (userAns.toLowerCase() === String(q.ans || "").trim().toLowerCase()) correctCount++;
                 } else if (q.type === 'TF') {
                     let tfCorrect = true;
                     ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
@@ -1274,7 +1285,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     });
 
     return parsedArr;
-}     
+}      
 
         function parseDirectExam() {
             const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
@@ -1597,7 +1608,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             const feedback = document.getElementById('kahoot-feedback');
             const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
             
-            let isCorrect = selected.toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'') === correct.toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+            let isCorrect = selected.toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'') === String(correct).trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
 
             if (isCorrect) {
                 kahootScore += 1000 + (kahootTimeLeft * 25);

@@ -1844,4 +1844,27 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 }
     </script>
 </body>
+    <script>
+    async function openTeacherLogin() {
+        const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
+        if (!pass) return;
+        
+        if (pass === "123") {
+            teacherPassAuth = pass;
+            document.getElementById('portal-view').style.display = 'none';
+            document.getElementById('teacher-view').style.display = 'block';
+            switchTeacherTab('scores');
+            loadTeacherScores();
+            renderTeacherExamList();
+            loadQuestionBank();
+            updateBankBulkTopicDropdown(); 
+            updateNewExamTopicDropdown(); 
+            updateBankFilterTopics();
+            updateStudentClassDropdown();
+            updateScoreClassFilter();
+        } else { 
+            alert("❌ Sai mật khẩu!"); 
+        }
+    }
+</script>
 </html>

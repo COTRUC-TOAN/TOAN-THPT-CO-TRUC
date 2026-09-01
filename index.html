@@ -1428,12 +1428,16 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             qLines = lines;
         }
 
-        let qContent = qLines.join('<br>').replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_]+/i, '').trim();
+      let qContent = qLines.join('<br>').replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_]+/i, '').trim();
+
+        // CHUẨN HÓA LẠI ID VÀ GÁN ĐẦY ĐỦ KHỐI LỚP (GRADE)
+        const safeTopicId = topic.replace(/[^a-zA-Z0-9-_]/g, '_');
+        const qId = `CH${grade}_${safeTopicId}_${Date.now().toString().slice(-4)}_${idx + 1}`;
 
         parsedArr.push({
             id: qId,
-            grade: grade,
-            topic: topic, // Lấy trực tiếp tên chủ đề đang chọn ở form
+            grade: String(grade), // Ép kiểu chuỗi để đồng bộ tuyệt đối với bộ lọc
+            topic: topic, 
             level: 'TH',
             type: detectedType,
             q: qContent,

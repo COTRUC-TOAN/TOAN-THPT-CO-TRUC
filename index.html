@@ -1008,7 +1008,7 @@ const topicsConfig = {
 
         document.getElementById('quiz-form').addEventListener('submit', function(e) { e.preventDefault(); submitQuiz(); });
 
-        async function submitQuiz() {
+       async function submitQuiz() {
             clearInterval(timerInterval); window.onblur = null; document.removeEventListener('contextmenu', preventRightClick);
             document.body.classList.remove('secure-exam-mode');
 
@@ -1030,15 +1030,15 @@ const topicsConfig = {
             const btnSubmit = document.getElementById('btn-submit-quiz');
             btnSubmit.disabled = true; btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang chấm...';
 
-           let totalWeightedScore = 0;
+            let totalWeightedScore = 0;
             let maxPossibleScore = 0;
             let correctCount = 0;
 
             processedQuestions.forEach((q, idx) => {
                 let qType = (q.type || 'MCQ').toUpperCase();
-                let weight = 0.25; // Mặc định trắc nghiệm MCQ là 0.25đ
-                if (qType === 'TF') weight = 1.0;     // Đúng/Sai là 1.0đ
-                else if (qType === 'SA') weight = 0.5; // Trả lời ngắn là 0.5đ
+                let weight = 0.25; // Trắc nghiệm
+                if (qType === 'TF') weight = 1.0;     // Đúng/Sai
+                else if (qType === 'SA') weight = 0.5; // Trả lời ngắn
 
                 maxPossibleScore += weight;
 
@@ -1058,7 +1058,6 @@ const topicsConfig = {
                             if (subAns !== correctSub) tfCorrect = false;
                         }
                     });
-                    if (tfCorrect) tfCorrect = true; // Sửa lỗi gán biến kiểm tra đúng sai ở đây
                     if (tfCorrect) isQCorrect = true;
                 }
 
@@ -1068,8 +1067,9 @@ const topicsConfig = {
                 }
             });
 
-            // Quy đổi tỉ lệ trọng số chuẩn về thang điểm 10
+            // Quy đổi trọng số chuẩn về thang điểm 10
             let finalScore = maxPossibleScore > 0 ? ((totalWeightedScore / maxPossibleScore) * 10).toFixed(2) : 10;
+            
             const resDiv = document.getElementById('quiz-result');
             resDiv.style.display = 'block';
             resDiv.innerHTML = `🎉 Điểm số: <strong>${finalScore} / 10</strong>`;

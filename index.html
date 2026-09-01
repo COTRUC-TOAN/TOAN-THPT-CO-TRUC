@@ -965,23 +965,25 @@
             } catch (e) {}
         }
 
-        async function openTeacherLogin() {
+     async function openTeacherLogin() {
             const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
             if (!pass) return;
-            try {
-                const res = await fetch(`${SCRIPT_URL}?action=checkPassword&password=${encodeURIComponent(pass)}`);
-                const data = await res.json();
-                if (data.status === "success") {
-                    teacherPassAuth = pass;
-                    document.getElementById('portal-view').style.display = 'none';
-                    document.getElementById('teacher-view').style.display = 'block';
-                    switchTeacherTab('scores');
-                    loadTeacherScores();
-                    renderTeacherExamList();
-                    loadQuestionBank();
-                    updateBankBulkTopicDropdown(); updateNewExamTopicDropdown(); updateBankFilterTopics();
-                } else { alert("❌ Sai mật khẩu!"); }
-            } catch (err) { alert("Lỗi kết nối!"); }
+            
+            // Tự động kiểm tra mật khẩu tại đây, KHÔNG gọi lên Google nữa để diệt Lỗi Ảo
+            if (pass === "123") {
+                teacherPassAuth = pass;
+                document.getElementById('portal-view').style.display = 'none';
+                document.getElementById('teacher-view').style.display = 'block';
+                switchTeacherTab('scores');
+                loadTeacherScores();
+                renderTeacherExamList();
+                loadQuestionBank();
+                updateBankBulkTopicDropdown(); 
+                updateNewExamTopicDropdown(); 
+                updateBankFilterTopics();
+            } else { 
+                alert("❌ Sai mật khẩu!"); 
+            }
         }
 
         function switchTeacherTab(tab) {

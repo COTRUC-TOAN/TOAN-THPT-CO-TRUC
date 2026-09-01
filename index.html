@@ -740,7 +740,7 @@ const topicsConfig = {
             const grid = document.getElementById('exam-grid');
             grid.innerHTML = '';
             
-           const list = examBank.filter(e => {
+          const list = examBank.filter(e => {
         if (!e || !e.title || e.title === "undefined" || e.title.toString().trim() === "") return false;
         const gradeStr = e.grade ? e.grade.toString() : '';
         const matchGrade = (currentGrade === 'all' || gradeStr === currentGrade);

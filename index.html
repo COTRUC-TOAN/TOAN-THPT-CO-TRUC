@@ -1078,8 +1078,30 @@ const topicsConfig = {
             resDiv.innerHTML = `🎉 Điểm số: <strong>${finalScore} / 10</strong>`;
             btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Đã nộp bài';
 
-            if (activeExam.mode === 'LUYENTAP') {
+if (activeExam.mode === 'LUYENTAP') {
                 processedQuestions.forEach((q, idx) => {
+                    const qCard = document.getElementById(`card_q_${idx + 1}`);
+                    if (qCard) {
+                        let qType = (q.type || 'MCQ').toUpperCase();
+                        if (qType === 'MCQ') {
+                            const selectedInput = qCard.querySelector(`input[name="q_${idx + 1}"]:checked`);
+                            const userVal = selectedInput ? selectedInput.value.trim().toUpperCase() : "";
+                            const correctVal = String(q.ans || "").trim().toUpperCase();
+
+                            qCard.querySelectorAll('.mcq-option').forEach(optLabel => {
+                                const radio = optLabel.querySelector('input');
+                                if (radio) {
+                                    const val = radio.value.trim().toUpperCase();
+                                    if (val === correctVal) {
+                                        optLabel.classList.add('correct-choice'); // Tô xanh đáp án đúng
+                                    } else if (val === userVal && val !== correctVal) {
+                                        optLabel.classList.add('wrong-choice');   // Tô đỏ nếu học sinh chọn nhầm
+                                    }
+                                }
+                            });
+                        }
+                    }
+
                     const expBox = document.getElementById(`exp_q_${idx + 1}`);
                     if (expBox) {
                         expBox.innerHTML = `<strong>Đáp án:</strong> <span style="color: #16a34a; font-weight: bold;">${q.ans}</span>${q.explanation ? '<br><strong>Hướng dẫn:</strong> ' + q.explanation : ''}`;

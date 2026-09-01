@@ -1461,7 +1461,19 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         function updateBankFilterTopics() { populateSelect('bank-filter-topic', getTopicsForGrade(document.getElementById('bank-filter-grade').value)); }
 
         function toggleExamPasswordField() {
-            document.getElementById('exam-password-row').style.display = (document.getElementById('new-exam-mode').value === 'KIEMTRA') ? 'block' : 'none';
+            const mode = document.getElementById('new-exam-mode').value;
+            document.getElementById('exam-password-row').style.display = (mode === 'KIEMTRA') ? 'block' : 'none';
+            
+            // Tự động đổi nhãn thời gian tùy theo chế độ thi
+            const timeInput = document.getElementById('new-exam-time');
+            const timeLabel = timeInput.previousElementSibling; 
+            if (mode === 'KAHOOT') {
+                timeLabel.innerHTML = "Thời gian MỖI CÂU (giây):";
+                if (timeInput.value === "45") timeInput.value = "30"; // Gợi ý mặc định 30s cho Kahoot
+            } else {
+                timeLabel.innerHTML = "Thời Gian (Phút):";
+                if (timeInput.value === "30") timeInput.value = "45"; // Gợi ý mặc định 45p cho tự luận/trắc nghiệm
+            }
         }
 
         function showPortalView() {
@@ -1532,7 +1544,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
                 }
             });
         }
-        function loadKahootQuestion() {
+       function loadKahootQuestion() {
             const qList = activeExam.questions || [];
             if (kahootCurrentIndex >= qList.length) {
                 playSound('correct'); stopKahootMusicLoop();
@@ -1556,8 +1568,10 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             document.getElementById('kahoot-options-grid').innerHTML = btnHtml;
             renderMath(document.getElementById('kahoot-game-box'));
 
-            kahootTimeLeft = 20;
+            // Lấy thời gian thầy tùy chỉnh (nếu lỗi thì dự phòng 30s)
+            kahootTimeLeft = parseInt(activeExam.timeLimit) || 30; 
             document.getElementById('kahoot-timer-display').innerText = kahootTimeLeft;
+            
             clearInterval(kahootTimer);
             kahootTimer = setInterval(() => {
                 kahootTimeLeft--;

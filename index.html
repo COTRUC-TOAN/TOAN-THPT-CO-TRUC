@@ -1329,15 +1329,18 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     return parsedArr;
 }      
 
-       function parseDirectExam() {
+      function parseDirectExam() {
             const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
             if (!rawHtml) { alert("Vui lòng dán văn bản đề thi!"); return; }
             
-            directParsedQuestions = parseTextToQuestionsAllInOne(rawHtml, document.getElementById('new-exam-grade').value, document.getElementById('new-exam-topic').value);
+            const currentGrade = document.getElementById('new-exam-grade').value;
+            const currentTopic = document.getElementById('new-exam-topic').value;
+
+            directParsedQuestions = parseTextToQuestionsAllInOne(rawHtml, currentGrade, currentTopic);
             
             document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
             
-            // Render giao diện gọn gàng, không có khoảng trống
+            // Render giao diện xem trước có kèm ô chọn Mức độ (NB, TH, VD, VDC) cho từng câu
             let previewHtml = directParsedQuestions.map((q, i) => {
                 let optsHtml = '';
                 if (q.type === 'TF') {
@@ -1345,8 +1348,20 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
                 } else if (q.type === 'MCQ') {
                     optsHtml = `<div style="display:grid; grid-template-columns:1fr 1fr;">` + q.options.map((op, idx) => op ? `<div>${['A','B','C','D'][idx]}. ${op}</div>` : '').join('') + `</div>`;
                 }
-                return `<div class="parsed-q-preview-card">
-                            <strong>C${i+1} [${q.type}]:</strong> ${q.q}
+                return `<div class="parsed-q-preview-card" style="border: 1px solid #cbd5e1; padding: 12px; margin-bottom: 10px; border-radius: 8px; background: #fff;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <strong>C${i+1} [${q.type}]</strong>
+                                <div>
+                                    <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Mức độ:</label>
+                                    <select class="form-input" style="padding: 2px 6px; font-size: 0.9rem; display: inline-block; width: auto;" onchange="directParsedQuestions[${i}].level = this.value">
+                                        <option value="NB" ${q.level === 'NB' ? 'selected' : ''}>NB</option>
+                                        <option value="TH" ${q.level === 'TH' ? 'selected' : ''}>TH</option>
+                                        <option value="VD" ${q.level === 'VD' ? 'selected' : ''}>VD</option>
+                                        <option value="VDC" ${q.level === 'VDC' ? 'selected' : ''}>VDC</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 6px;">${q.q}</div>
                             <div style="color: #475569; margin: 4px 0;">${optsHtml}</div>
                             <div style="color:#16a34a; font-weight:bold;">Đ/A: ${q.ans}</div>
                         </div>`;
@@ -1356,10 +1371,10 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             document.getElementById('btn-save-parsed-bank').style.display = 'inline-block';
             renderMath(document.getElementById('direct-preview-box'));
 
-            // === BỔ SUNG ĐOẠN NÀY ĐỂ CỘT BÊN TRÁI TỰ ĐỘNG NHẬY SỐ CÂU ===
+            // Tự động đồng bộ sang danh sách bên trái để không bị số 0
             selectedQuestions = [...directParsedQuestions];
             document.getElementById('selected-q-count').innerText = selectedQuestions.length;
-            document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `<div>${idx+1}. ${sq.id}</div>`).join('');
+            document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `<div>${idx+1}. [${sq.level}] ${sq.id}</div>`).join('');
         }
 
         async function saveBankBulkToSheets() {

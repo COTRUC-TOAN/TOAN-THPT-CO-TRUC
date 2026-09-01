@@ -1304,11 +1304,32 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             loadQuestionBank();
         }
 
-        async function loadQuestionBank() {
+       async function loadQuestionBank() {
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=get_question_bank&password=${encodeURIComponent(teacherPassAuth)}`);
                 const data = await res.json();
-                if (data.status === "success") { questionBank = data.questions || []; filterQuestionBankList(); }
+                if (data.status === "success") { 
+                    // CHUẨN HÓA DỮ LIỆU NGÂN HÀNG: Khớp với tiêu đề tiếng Việt trong Sheet
+                    let rawQs = data.questions || [];
+                    questionBank = rawQs.map(q => {
+                        let optRaw = q.options || q.Options || "[]";
+                        let aOptRaw = q.ansOptions || q.AnsOptions || "[]";
+                        
+                        return {
+                            id: q.id || q.ID || '',
+                            grade: q.grade || q.Khối || q.Grade || '',
+                            topic: q.topic || q['Chủ đề'] || q.Topic || '',
+                            level: q.level || q['Mức độ'] || q.Level || '',
+                            type: q.type || q.Dạng || q.Type || '',
+                            q: q.q || q['Nội dung'] || '',
+                            options: (typeof optRaw === 'string') ? JSON.parse(optRaw) : optRaw,
+                            ans: q.ans || q['Đáp án'] || q.Ans || '',
+                            ansOptions: (typeof aOptRaw === 'string') ? JSON.parse(aOptRaw) : aOptRaw
+                        };
+                    }).filter(q => q.id && q.id !== "");
+                    
+                    filterQuestionBankList(); 
+                }
             } catch (e) {}
         }
 

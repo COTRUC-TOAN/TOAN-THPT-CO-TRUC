@@ -1610,23 +1610,23 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         function clearSelectedQuestions() { selectedQuestions = []; filterQuestionBankList(); document.getElementById('selected-q-count').innerText = '0'; document.getElementById('selected-items-container').innerHTML = 'Chưa chọn câu.'; }
 
         function renderMatrixTable() {
-            const grade = document.getElementById('new-exam-grade').value;
-            const topics = getTopicsForGrade(grade);
-            const container = document.getElementById('matrix-topics-container');
-            if (!container) return;
+        const grade = document.getElementById('new-exam-grade').value;
+        const topics = getTopicsForGrade(grade);
+        const container = document.getElementById('matrix-topics-container');
+        if (!container) return;
 
-            container.innerHTML = topics.map(top => `
-                <div class="matrix-topic-row">
-                    <h5>${top.name}</h5>
-                    <div class="matrix-inputs-grid">
-                        <div><label style="font-size:0.9rem;">NB:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="NB" value="0" min="0"></div>
-                        <div><label style="font-size:0.9rem;">TH:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="TH" value="0" min="0"></div>
-                        <div><label style="font-size:0.9rem;">VD:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="VD" value="0" min="0"></div>
-                        <div><label style="font-size:0.9rem;">VDC:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="VDC" value="0" min="0"></div>
-                    </div>
+        container.innerHTML = topics.map(top => `
+            <div class="matrix-topic-row">
+                <h5>${top.name}</h5>
+                <div class="matrix-inputs-grid">
+                    <div><label style="font-size:0.9rem;">NB:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="NB" value="0" min="0"></div>
+                    <div><label style="font-size:0.9rem;">TH:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="TH" value="0" min="0"></div>
+                    <div><label style="font-size:0.9rem;">VD:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="VD" value="0" min="0"></div>
+                    <div><label style="font-size:0.9rem;">VDC:</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-lvl="VDC" value="0" min="0"></div>
                 </div>
-            `).join('');
-        }
+            </div>
+        `).join('');
+    }
 
         function generateMatrixExam() {
             const rows = document.querySelectorAll('.matrix-topic-row');

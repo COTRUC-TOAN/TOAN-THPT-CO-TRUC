@@ -1262,12 +1262,19 @@ function renderTeacherExamList() {
             }
         }
 
-        function updateScoreClassFilter() {
-            const select = document.getElementById('filter-score-class');
-            if (!select) return;
-            select.innerHTML = `<option value="all">-- Tất cả các lớp --</option>` + teacherClasses.map(c => `<option value="${c}">${c}</option>`).join('');
-        }
+      function updateScoreClassFilter() {
+    const select = document.getElementById('filter-score-class');
+    if (!select) return;
+    
+    let classes = (typeof teacherClasses !== 'undefined' && teacherClasses.length > 0) 
+                  ? teacherClasses 
+                  : (typeof classList !== 'undefined' && classList.length > 0)
+                  ? classList
+                  : JSON.parse(localStorage.getItem('teacher_classes') || '[]');
 
+    select.innerHTML = '<option value="all">-- Tất cả các lớp --</option>' + 
+                       classes.map(c => `<option value="${c}">${c}</option>`).join('');
+}
         let globalScoresData = [];
 
         async function loadTeacherScores() {

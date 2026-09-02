@@ -1359,8 +1359,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
     blocks.forEach((block, idx) => {
         let lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
-        const qId = `CH${grade}_${Date.now().toString().slice(-4)}_${idx + 1}`;
-
+        
         // Nhận diện loại câu: Phân biệt chính xác chữ HOA (MCQ) và chữ THƯỜNG (TF)
         let hasMCQ = lines.some(l => /^[A-D][\.\)]\s*/.test(l));
         let hasTF = lines.some(l => /^[a-d][\)\.]\s*/.test(l));

@@ -1282,6 +1282,15 @@ function renderTeacherExamList() {
                         examTitle: r.examTitle || r.ExamTitle || 'Bài kiểm tra',
                         totalScore: r.totalScore || r.TotalScore || r.score || '0'
                     }));
+
+                    // Tự động gom danh sách các Đề thi duy nhất đưa vào menu lọc
+                    const examFilter = document.getElementById('filter-score-exam');
+                    if (examFilter) {
+                        const uniqueExams = [...new Set(globalScoresData.map(r => r.examTitle).filter(Boolean))];
+                        examFilter.innerHTML = `<option value="all">-- Tất cả các đề thi --</option>` + 
+                            uniqueExams.map(ex => `<option value="${ex}">${ex}</option>`).join('');
+                    }
+
                     renderScoresTable();
                 } else {
                     globalScoresData = [];

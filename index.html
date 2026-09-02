@@ -1302,14 +1302,17 @@ function renderTeacherExamList() {
             }
         }
 
-        function renderScoresTable() {
+      function renderScoresTable() {
             const tbody = document.getElementById('scores-table-body');
             const filterClass = document.getElementById('filter-score-class').value;
+            const filterExam = document.getElementById('filter-score-exam') ? document.getElementById('filter-score-exam').value : 'all';
             
-            let displayList = globalScoresData;
-            if (filterClass !== 'all') {
-                displayList = globalScoresData.filter(r => r.sClass.toLowerCase() === filterClass.toLowerCase());
-            }
+            // Lọc kết hợp đồng thời: Lớp VÀ Đề thi
+            let displayList = globalScoresData.filter(r => {
+                const matchClass = (filterClass === 'all' || r.sClass.toLowerCase() === filterClass.toLowerCase());
+                const matchExam = (filterExam === 'all' || r.examTitle === filterExam);
+                return matchClass && matchExam;
+            });
 
             document.getElementById('stat-total-submissions').innerText = displayList.length;
             if (displayList.length > 0) {
@@ -1318,16 +1321,19 @@ function renderTeacherExamList() {
                 tbody.innerHTML = displayList.map(r => `<tr><td>${r.time}</td><td><strong>${r.name}</strong></td><td>${r.sClass}</td><td>${r.examTitle}</td><td><span class="badge-score badge-pass">${r.totalScore}</span></td></tr>`).join('');
             } else {
                 document.getElementById('stat-avg-score').innerText = '0.0';
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Không có dữ liệu bài nộp cho lớp này.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Không có dữ liệu bài nộp thỏa mãn điều kiện lọc.</td></tr>`;
             }
         }
 
         function exportScoresToExcel() {
             const filterClass = document.getElementById('filter-score-class').value;
-            let displayList = globalScoresData;
-            if (filterClass !== 'all') {
-                displayList = globalScoresData.filter(r => r.sClass.toLowerCase() === filterClass.toLowerCase());
-            }
+            const filterExam = document.getElementById('filter-score-exam') ? document.getElementById('filter-score-exam').value : 'all';
+
+            let displayList = globalScoresData.filter(r => {
+                const matchClass = (filterClass === 'all' || r.sClass.toLowerCase() === filterClass.toLowerCase());
+                const matchExam = (filterExam === 'all' || r.examTitle === filterExam);
+                return matchClass && matchExam;
+            });
 
             if (displayList.length === 0) { alert("Không có dữ liệu để xuất Excel!"); return; }
 
@@ -1339,7 +1345,8 @@ function renderTeacherExamList() {
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `BangDiem_${filterClass === 'all' ? 'TatCa' : filterClass}.csv`;
+            const fileName = `BangDiem_${filterClass !== 'all' ? filterClass : 'TatCaLop'}_${filterExam !== 'all' ? filterExam.replace(/\s+/g, '_') : 'TatCaDe'}.csv`;
+            link.download = fileName;
             link.click();
         }
         async function deleteExamFromSystem(examId) {

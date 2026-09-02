@@ -689,8 +689,8 @@ const topicsConfig = {
 
      async function fetchData() {
             renderSidebarTopics();
+            const grid = document.getElementById('exam-grid');
             try {
-                // Thêm cơ chế ngắt sau 6 giây nếu server không trả lời
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 6000);
                 
@@ -698,7 +698,7 @@ const topicsConfig = {
                 clearTimeout(timeoutId);
                 
                 const data = await res.json();
-                                
+                
                 let rawExams = data.exams || [];
                 examBank = rawExams.map(ex => {
                     let rawQJson = ex.questionsJson || ex.QuestionsJson || ex.questionsjson || "[]";
@@ -719,6 +719,22 @@ const topicsConfig = {
                         examPass: ex.examPass || ex.ExamPass || '',
                         questions: parsedQ
                     };
+                }).filter(e => e.title && e.title !== "undefined" && e.title.trim() !== "");
+
+                renderExams();
+                checkUrlParams();
+            } catch (err) {
+                console.error("Lỗi kết nối:", err);
+                if (grid) {
+                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px;"><i class="fa-solid fa-triangle-exclamation"></i> Không thể kết nối máy chủ dữ liệu hoặc quá thời gian chờ (Timeout).</p>`;
+                }
+            } finally {
+                // BẢO VỆ TUYỆT ĐỐI: Dù thành công hay thất bại, bắt buộc phải xóa ngay biểu tượng quay vòng tròn!
+                if (grid && grid.innerHTML.includes('fa-spinner')) {
+                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trên hệ thống.</p>`;
+                }
+            }
+        }
                 }).filter(e => e.title && e.title !== "undefined" && e.title.trim() !== "");
 
                 renderExams();

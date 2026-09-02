@@ -1164,7 +1164,20 @@ const topicsConfig = {
                 alert("❌ Sai mật khẩu!"); 
             }
         }
-
+function renderTeacherExamList() {
+        const container = document.getElementById('teacher-exam-list-container');
+        if (!container) return;
+        if (examBank.length === 0) {
+            container.innerHTML = `<p style="color: #94a3b8;">Chưa có đề thi nào trên hệ thống.</p>`;
+            return;
+        }
+        container.innerHTML = examBank.map(ex => `
+            <div class="exam-manage-row">
+                <div><strong>[Khối ${ex.grade}] ${ex.title}</strong> <span style="font-size:0.9rem; color:#64748b;">(Mã: ${ex.id} - ${ex.questions ? ex.questions.length : 0} câu)</span></div>
+                <button class="btn-del-exam" onclick="deleteExamFromSystem('${ex.id}')"><i class="fa-solid fa-trash"></i> Xóa Đề</button>
+            </div>
+        `).join('');
+    }
        function switchTeacherTab(tab) {
             ['scores', 'exams', 'creator', 'classes'].forEach(t => {
                 const sec = document.getElementById(`sec-t-${t}`);

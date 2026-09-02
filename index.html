@@ -1108,38 +1108,89 @@ const topicsConfig = {
             resDiv.innerHTML = `🎉 Điểm số: <strong>${finalScore} / 10</strong>`;
             btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Đã nộp bài';
 
-            if (activeExam.mode === 'LUYENTAP') {
-                processedQuestions.forEach((q, idx) => {
-                    const qCard = document.getElementById(`card_q_${idx + 1}`);
-                    if (qCard) {
-                        let qType = (q.type || 'MCQ').toUpperCase();
-                        if (qType === 'MCQ') {
-                            const selectedInput = qCard.querySelector(`input[name="q_${idx + 1}"]:checked`);
-                            const userVal = selectedInput ? selectedInput.value.trim().toUpperCase() : "";
-                            const correctVal = String(q.ans || "").trim().toUpperCase();
+           if (activeExam.mode === 'LUYENTAP') {
+        processedQuestions.forEach((q, idx) => {
+            const qCard = document.getElementById(`card_q_${idx + 1}`);
+            if (!qCard) return;
+            let qType = (q.type || 'MCQ').toUpperCase();
 
-                            qCard.querySelectorAll('.mcq-option').forEach(optLabel => {
-                                const radio = optLabel.querySelector('input');
-                                if (radio) {
-                                    const val = radio.value.trim().toUpperCase();
-                                    if (val === correctVal) {
-                                        optLabel.classList.add('correct-choice'); 
-                                    } else if (val === userVal && val !== correctVal) {
-                                        optLabel.classList.add('wrong-choice');   
-                                    }
-                                }
-                            });
+            // 1. Tô màu trắc nghiệm nhiều lựa chọn (MCQ)
+            if (qType === 'MCQ') {
+                const selectedInput = qCard.querySelector(`input[name="q_${idx + 1}"]:checked`);
+                const userVal = selectedInput ? selectedInput.value.trim().toUpperCase() : "";
+                const correctVal = String(q.ans || "").trim().toUpperCase();
+
+                qCard.querySelectorAll('.mcq-option').forEach(optLabel => {
+                    const radio = optLabel.querySelector('input');
+                    if (radio) {
+                        const val = radio.value.trim().toUpperCase();
+                        if (val === correctVal) {
+                            optLabel.style.backgroundColor = '#dcfce7'; // Nền xanh lá
+                            optLabel.style.borderColor = '#22c55e';
+                            optLabel.style.color = '#15803d';
+                            optLabel.style.fontWeight = 'bold';
+                        } else if (val === userVal && val !== correctVal) {
+                            optLabel.style.backgroundColor = '#fee2e2'; // Nền đỏ nổi bật
+                            optLabel.style.borderColor = '#ef4444';
+                            optLabel.style.color = '#b91c1c';
+                            optLabel.style.fontWeight = 'bold';
                         }
                     }
+                });
+            }
+            // 2. Tô màu trắc nghiệm Đúng / Sai (TF)
+            else if (qType === 'TF') {
+                ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
+                    if (q.ansOptions && q.ansOptions[subIdx]) {
+                        const row = qCard.querySelector(`tr[data-sub="${ch}"]`) || qCard.querySelectorAll('.tf-sub-row')[subIdx];
+                        const checkedRadio = qCard.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`);
+                        const userVal = checkedRadio ? checkedRadio.value : '';
+                        const correctVal = q.ansOptions[subIdx]; // 'D' hoặc 'S'
 
-                    const expBox = document.getElementById(`exp_q_${idx + 1}`);
-                    if (expBox) {
-                        expBox.innerHTML = `<strong>Đáp án:</strong> <span style="color: #16a34a; font-weight: bold;">${q.ans}</span>${q.explanation ? '<br><strong>Hướng dẫn:</strong> ' + q.explanation : ''}`;
-                        expBox.style.display = 'block';
+                        if (row) {
+                            if (userVal === correctVal) {
+                                row.style.backgroundColor = '#dcfce7'; // Đúng -> xanh lá
+                            } else {
+                                row.style.backgroundColor = '#fee2e2'; // Sai hoặc bỏ trống -> đỏ
+                            }
+                        }
                     }
                 });
-                renderMath(document.getElementById('quiz-content'));
             }
+            // 3. Tô màu câu Trả lời ngắn (SA)
+            else if (qType === 'SA') {
+                const saInput = qCard.querySelector(`input[name="q_${idx + 1}"]`);
+                if (saInput) {
+                    const userVal = saInput.value.trim().toLowerCase();
+                    const correctVal = String(q.ans || "").trim().toLowerCase();
+                    if (userVal === correctVal && userVal !== '') {
+                        saInput.style.borderColor = '#22c55e';
+                        saInput.style.backgroundColor = '#dcfce7';
+                        saInput.style.color = '#15803d';
+                    } else {
+                        saInput.style.borderColor = '#ef4444';
+                        saInput.style.backgroundColor = '#fee2e2';
+                        saInput.style.color = '#b91c1c';
+                    }
+                }
+            }
+
+            // Hiển thị hộp giải thích chi tiết & đáp án chuẩn
+            const expBox = document.getElementById(`exp_q_${idx + 1}`);
+            if (expBox) {
+                let ansText = q.ans;
+                if (qType === 'TF' && q.ansOptions) {
+                    ansText = `a) ${q.ansOptions[0] == 'D' ? 'Đúng' : 'Sai'}, b) ${q.ansOptions[1] == 'D' ? 'Đúng' : 'Sai'}, c) ${q.ansOptions[2] == 'D' ? 'Đúng' : 'Sai'}, d) ${q.ansOptions[3] == 'D' ? 'Đúng' : 'Sai'}`;
+                }
+                expBox.innerHTML = `<strong>Đáp án:</strong> <span style="color: #16a34a; font-weight: bold;">${ansText}</span>${q.explanation ? '<br><strong>Hướng dẫn:</strong> ' + q.explanation : ''}`;
+                expBox.style.display = 'block';
+            }
+        });
+
+        if (window.renderMath) {
+            renderMath(document.getElementById('quiz-content'));
+        }
+    }
 
             try {
                 await fetch(SCRIPT_URL, {

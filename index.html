@@ -1152,20 +1152,32 @@ const topicsConfig = {
                     }
                 });
             }
-            // 2. Tô màu trắc nghiệm Đúng / Sai (TF)
+         // 2. Tô màu trắc nghiệm Đúng / Sai (TF)
             else if (qType === 'TF') {
                 ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
+                    const checkedRadio = qCard.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`);
+                    const userVal = checkedRadio ? checkedRadio.value.trim().toUpperCase() : '';
+                    
+                    let correctVal = 'D';
                     if (q.ansOptions && q.ansOptions[subIdx]) {
-                        const row = qCard.querySelector(`tr[data-sub="${ch}"]`) || qCard.querySelectorAll('.tf-sub-row')[subIdx];
-                        const checkedRadio = qCard.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`);
-                        const userVal = checkedRadio ? checkedRadio.value : '';
-                        const correctVal = q.ansOptions[subIdx]; // 'D' hoặc 'S'
+                        correctVal = q.ansOptions[subIdx].trim().toUpperCase();
+                    }
 
-                        if (row) {
-                            if (userVal === correctVal) {
-                                row.style.backgroundColor = '#dcfce7'; // Đúng -> xanh lá
+                    // Tìm thẻ cha bọc toàn bộ dòng của ý này (a, b, c hoặc d)
+                    const anyRadio = qCard.querySelector(`input[name="q_${idx + 1}_${ch}"]`);
+                    if (anyRadio) {
+                        // Lấy khối dòng bao quanh (dù là thẻ tr, div, li hay p)
+                        const subRow = anyRadio.closest('tr') || anyRadio.closest('.tf-sub-row') || anyRadio.closest('div') || anyRadio.parentElement;
+                        
+                        if (subRow) {
+                            if (userVal === correctVal && userVal !== '') {
+                                subRow.style.backgroundColor = '#dcfce7'; // Nền xanh lá nhạt nếu đúng
+                                subRow.style.borderRadius = '6px';
+                                subRow.style.padding = '4px 8px';
                             } else {
-                                row.style.backgroundColor = '#fee2e2'; // Sai hoặc bỏ trống -> đỏ
+                                subRow.style.backgroundColor = '#fee2e2'; // Nền đỏ nhạt nếu sai hoặc chưa chọn
+                                subRow.style.borderRadius = '6px';
+                                subRow.style.padding = '4px 8px';
                             }
                         }
                     }

@@ -1749,17 +1749,64 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             renderMath(container);
         }
 
-        function toggleSelectQ(id, cb) {
-            const q = questionBank.find(item => item.id === id);
-            if (!q) return;
-            if (cb.checked) { if (!selectedQuestions.some(sq => sq.id === id)) selectedQuestions.push(q); }
-            else { selectedQuestions = selectedQuestions.filter(sq => sq.id !== id); }
-            document.getElementById('selected-q-count').innerText = selectedQuestions.length;
-            document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `<div>${idx+1}. ${sq.id}</div>`).join('') || 'Chưa chọn câu.';
+    function updateSelectedItemsDisplay() {
+    const container = document.getElementById('selected-items-container');
+    if (!container) return;
+    document.getElementById('selected-q-count').innerText = selectedQuestions.length;
+    
+    if (selectedQuestions.length === 0) {
+        container.innerHTML = 'Chưa chọn câu hỏi.';
+        return;
+    }
+
+    container.innerHTML = selectedQuestions.map((sq, idx) => {
+        const currentTime = sq.timeLimit || 30;
+        return `
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; margin-bottom: 6px; font-size: 0.9rem;">
+                <span style="font-weight: 600; color: #1e293b;">${idx + 1}. ${sq.id}</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="color: #64748b; font-size: 0.8rem;"><i class="fa-solid fa-stopwatch"></i></span>
+                    <select onchange="changeQTimeLimit('${sq.id}', this.value)" style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; font-size: 0.85rem; font-weight: bold; color: #7c3aed; background: white; cursor: pointer;">
+                        <option value="15" ${currentTime == 15 ? 'selected' : ''}>15s</option>
+                        <option value="20" ${currentTime == 20 ? 'selected' : ''}>20s</option>
+                        <option value="30" ${currentTime == 30 ? 'selected' : ''}>30s</option>
+                        <option value="45" ${currentTime == 45 ? 'selected' : ''}>45s</option>
+                        <option value="60" ${currentTime == 60 ? 'selected' : ''}>60s</option>
+                        <option value="90" ${currentTime == 90 ? 'selected' : ''}>90s</option>
+                        <option value="120" ${currentTime == 120 ? 'selected' : ''}>120s</option>
+                    </select>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function changeQTimeLimit(id, seconds) {
+    const q = selectedQuestions.find(item => item.id === id);
+    if (q) {
+        q.timeLimit = parseInt(seconds, 10);
+    }
+}
+
+function toggleSelectQ(id, cb) {
+    const q = questionBank.find(item => item.id === id);
+    if (!q) return;
+    if (cb.checked) {
+        if (!selectedQuestions.some(sq => sq.id === id)) {
+            if (!q.timeLimit) q.timeLimit = 30;
+            selectedQuestions.push(q);
         }
+    } else {
+        selectedQuestions = selectedQuestions.filter(sq => sq.id !== id);
+    }
+    updateSelectedItemsDisplay();
+}
 
-        function clearSelectedQuestions() { selectedQuestions = []; filterQuestionBankList(); document.getElementById('selected-q-count').innerText = '0'; document.getElementById('selected-items-container').innerHTML = 'Chưa chọn câu.'; }
-
+function clearSelectedQuestions() {
+    selectedQuestions = [];
+    filterQuestionBankList();
+    updateSelectedItemsDisplay();
+}
        function renderMatrixTable() {
             const grade = document.getElementById('new-exam-grade').value;
             const topics = getTopicsForGrade(grade);

@@ -1282,12 +1282,12 @@ function renderTeacherExamList() {
                 const res = await fetch(`${SCRIPT_URL}?action=get_results&password=${encodeURIComponent(teacherPassAuth)}`);
                 const data = await res.json();
                 if (data.status === "success" && data.results) {
-                    globalScoresData = data.results.map(r => ({
-                        time: r.time || r.Time || '---',
-                        name: r.name || r.Name || 'Ẩn danh',
-                        sClass: r.class || r.Class || r.sClass || 'Tự do',
-                        examTitle: r.examTitle || r.ExamTitle || 'Bài kiểm tra',
-                        totalScore: r.totalScore || r.TotalScore || r.score || '0'
+                   globalScoresData = data.results.map(r => ({
+                        time: r['Thời gian'] || r.time || r.Time || '---',
+                        name: r['Họ tên'] || r.name || r.Name || 'Ẩn danh',
+                        sClass: r['Lớp'] || r.class || r.Class || r.sClass || 'Tự do',
+                        examTitle: r['Bài thi'] || r.examTitle || r.ExamTitle || 'Bài kiểm tra',
+                        totalScore: r['Điểm số'] || r.totalScore || r.TotalScore || r.score || '0'
                     }));
 
                     // Tự động gom danh sách các Đề thi duy nhất đưa vào menu lọc

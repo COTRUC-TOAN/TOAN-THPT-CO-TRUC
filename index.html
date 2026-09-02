@@ -1076,30 +1076,44 @@ const topicsConfig = {
 
                 maxPossibleScore += weight;
 
-                let isQCorrect = false;
-                if (qType === 'MCQ') {
-                    let userAns = document.querySelector(`input[name="q_${idx + 1}"]:checked`)?.value || "";
-                    if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) isQCorrect = true;
-                } else if (qType === 'SA') {
-                    let userAns = document.querySelector(`input[name="q_${idx + 1}"]`)?.value.trim() || "";
-                    if (userAns.toLowerCase() === String(q.ans || "").trim().toLowerCase()) isQCorrect = true;
-                } else if (qType === 'TF') {
-                    let tfCorrect = true;
-                    ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
-                        if (q.options && q.options[subIdx]) {
-                            let subAns = document.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`)?.value || "";
-                            let correctSub = (q.ansOptions && q.ansOptions[subIdx]) ? q.ansOptions[subIdx] : 'D';
-                            if (subAns !== correctSub) tfCorrect = false;
-                        }
-                    });
-                    if (tfCorrect) isQCorrect = true;
-                }
-
-                if (isQCorrect) {
+             let isQCorrect = false;
+            if (qType === 'MCQ') {
+                let userAns = document.querySelector(`input[name="q_${idx + 1}"]:checked`)?.value || "";
+                if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) {
+                    isQCorrect = true;
                     correctCount++;
-                    totalWeightedScore += weight;
+                    totalWeightedScore += weight; // +0.25
                 }
-            });
+            } else if (qType === 'SA') {
+                let userAns = document.querySelector(`input[name="q_${idx + 1}"]`)?.value.trim() || "";
+                if (userAns.toLowerCase() === String(q.ans || "").trim().toLowerCase()) {
+                    isQCorrect = true;
+                    correctCount++;
+                    totalWeightedScore += weight; // +0.5
+                }
+            } else if (qType === 'TF') {
+                // Đếm số ý đúng theo chuẩn Bộ GD&ĐT: a, b, c, d
+                let correctSubCount = 0;
+                ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
+                    if (q.ansOptions && q.ansOptions[subIdx]) {
+                        let subAns = document.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`)?.value || "";
+                        let correctSub = q.ansOptions[subIdx] || 'D';
+                        if (subAns === correctSub) {
+                            correctSubCount++;
+                        }
+                    }
+                });
+
+                // Quy đổi thang điểm chuẩn Bộ GD&ĐT
+                if (correctSubCount === 1) totalWeightedScore += 0.1;
+                else if (correctSubCount === 2) totalWeightedScore += 0.25;
+                else if (correctSubCount === 3) totalWeightedScore += 0.5;
+                else if (correctSubCount === 4) {
+                    totalWeightedScore += 1.0;
+                    correctCount++;
+                    isQCorrect = true;
+                }
+            }
 
             let finalScore = maxPossibleScore > 0 ? ((totalWeightedScore / maxPossibleScore) * 10).toFixed(2) : 10;
             

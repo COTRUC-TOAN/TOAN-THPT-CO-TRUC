@@ -1313,18 +1313,32 @@ function renderTeacherExamList() {
             }
         }
 
-      function updateScoreClassFilter() {
+     function updateScoreClassFilter() {
     const select = document.getElementById('filter-score-class');
     if (!select) return;
     
-    let classes = (typeof teacherClasses !== 'undefined' && teacherClasses.length > 0) 
-                  ? teacherClasses 
-                  : (typeof classList !== 'undefined' && classList.length > 0)
-                  ? classList
-                  : JSON.parse(localStorage.getItem('teacher_classes') || '[]');
+    // 1. Lấy danh sách lớp đã cấu hình trong hệ thống
+    let configuredClasses = [];
+    if (typeof teacherClasses !== 'undefined' && Array.isArray(teacherClasses)) configuredClasses = teacherClasses;
+    else if (typeof classList !== 'undefined' && Array.isArray(classList)) configuredClasses = classList;
+    else configuredClasses = JSON.parse(localStorage.getItem('teacher_classes') || '[]');
 
+    // 2. Tự động lấy thêm tất cả các lớp thực tế học sinh đã nộp từ bảng điểm
+    let submittedClasses = [];
+    if (typeof globalScoresData !== 'undefined' && Array.isArray(globalScoresData)) {
+        submittedClasses = globalScoresData.map(r => r.sClass).filter(Boolean);
+    }
+
+    // 3. Gộp chung và loại bỏ trùng lặp
+    const allClasses = [...new Set([...configuredClasses, ...submittedClasses])];
+
+    const currentVal = select.value;
     select.innerHTML = '<option value="all">-- Tất cả các lớp --</option>' + 
-                       classes.map(c => `<option value="${c}">${c}</option>`).join('');
+                       allClasses.map(c => `<option value="${c}">${c}</option>`).join('');
+    
+    if (currentVal && allClasses.includes(currentVal)) {
+        select.value = currentVal;
+    }
 }
         let globalScoresData = [];
 

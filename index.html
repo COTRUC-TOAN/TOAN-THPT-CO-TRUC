@@ -689,17 +689,16 @@ const topicsConfig = {
 
      async function fetchData() {
             renderSidebarTopics();
-            
-            // Tạo cơ chế tự động ngắt nếu quá 5 giây không phản hồi
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000);
-
             try {
+                // Thêm cơ chế ngắt sau 6 giây nếu server không trả lời
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 6000);
+                
                 const res = await fetch(SCRIPT_URL, { signal: controller.signal });
                 clearTimeout(timeoutId);
                 
                 const data = await res.json();
-                
+                                
                 let rawExams = data.exams || [];
                 examBank = rawExams.map(ex => {
                     let rawQJson = ex.questionsJson || ex.QuestionsJson || ex.questionsjson || "[]";

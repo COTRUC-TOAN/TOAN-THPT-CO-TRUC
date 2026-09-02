@@ -1680,11 +1680,11 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             } catch (e) { alert("Lỗi kết nối!"); }
         }
 
-        function populateSelect(selectId, items) {
-            const select = document.getElementById(selectId);
-            if (!select) return;
-            select.innerHTML = items.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
-        }
+      function populateSelect(selectId, items) {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+        select.innerHTML = '<option value="all">-- Bài / Chương --</option>' + items.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
+    }
 function updateNewExamTopicDropdown() {
         const gradeSelect = document.getElementById('new-exam-grade');
         const grade = gradeSelect ? gradeSelect.value : '12';

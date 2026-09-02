@@ -1411,29 +1411,61 @@ function renderTeacherExamList() {
         }
 
         function exportScoresToExcel() {
-            const filterClass = document.getElementById('filter-score-class').value;
-            const filterExam = document.getElementById('filter-score-exam') ? document.getElementById('filter-score-exam').value : 'all';
+    if (!globalScoresData || globalScoresData.length === 0) {
+        alert("Chưa có dữ liệu để xuất Excel!");
+        return;
+    }
 
-            let displayList = globalScoresData.filter(r => {
-                const matchClass = (filterClass === 'all' || r.sClass.toLowerCase() === filterClass.toLowerCase());
-                const matchExam = (filterExam === 'all' || r.examTitle === filterExam);
-                return matchClass && matchExam;
-            });
+    const classVal = document.getElementById('filter-score-class')?.value || 'all';
+    const examVal = document.getElementById('filter-score-exam')?.value || 'all';
 
-            if (displayList.length === 0) { alert("Không có dữ liệu để xuất Excel!"); return; }
+    const filtered = globalScoresData.filter(r => {
+        const matchClass = (classVal === 'all' || (r.sClass && r.sClass.toLowerCase() === classVal.toLowerCase()));
+        const matchExam = (examVal === 'all' || r.examTitle === examVal);
+        return matchClass && matchExam;
+    });
 
-            let csv = '\uFEFFThời Gian,Họ và Tên,Lớp,Bài Thi,Điểm\n';
-            displayList.forEach(r => {
-                csv += `"${r.time}","${r.name}","${r.sClass}","${r.examTitle}","${r.totalScore}"\n`;
-            });
+    if (filtered.length === 0) {
+        alert("Không có dữ liệu phù hợp với bộ lọc để xuất!");
+        return;
+    }
 
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            const fileName = `BangDiem_${filterClass !== 'all' ? filterClass : 'TatCaLop'}_${filterExam !== 'all' ? filterExam.replace(/\s+/g, '_') : 'TatCaDe'}.csv`;
-            link.download = fileName;
-            link.click();
-        }
+    let tableHtml = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="UTF-8"></head>
+        <body>
+            <table border="1">
+                <tr style="background-color: #2563eb; color: white; font-weight: bold; text-align: center;">
+                    <th>Thời Gian</th>
+                    <th>Họ và Tên</th>
+                    <th>Lớp</th>
+                    <th>Bài Thi</th>
+                    <th>Điểm</th>
+                </tr>
+    `;
+
+    filtered.forEach(r => {
+        tableHtml += `
+            <tr>
+                <td style="text-align: center;">${r.time || ''}</td>
+                <td>${r.name || ''}</td>
+                <td style="text-align: center;">${r.sClass || ''}</td>
+                <td>${r.examTitle || ''}</td>
+                <td style="text-align: center; font-weight: bold;">${r.totalScore || ''}</td>
+            </tr>
+        `;
+    });
+
+    tableHtml += `</table></body></html>`;
+
+    const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Bang_Diem_${new Date().toLocaleDateString("vi-VN").replace(/\//g, "-")}.xls`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
         async function deleteExamFromSystem(examId) {
             if (!confirm(`⚠️ Xóa vĩnh viễn đề [${examId}]?`)) return;
             try {

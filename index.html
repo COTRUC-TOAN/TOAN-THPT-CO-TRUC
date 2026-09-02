@@ -1685,51 +1685,57 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             if (!select) return;
             select.innerHTML = items.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
         }
-   function updateNewExamTopicDropdown() {
-            const gradeSelect = document.getElementById('new-exam-grade');
-            const grade = gradeSelect ? gradeSelect.value : '12';
-            const select = document.getElementById('new-exam-topic');
-            if (!select) return;
-            select.innerHTML = "";
-            
-            let list = [];
-            if (grade === '12') list = topicsConfig.g12;
-            else if (grade === '11') list = topicsConfig.g11;
-            else if (grade === '10') list = topicsConfig.g10;
-            else list = [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10];
+function updateNewExamTopicDropdown() {
+        const gradeSelect = document.getElementById('new-exam-grade');
+        const grade = gradeSelect ? gradeSelect.value : '12';
+        const select = document.getElementById('new-exam-topic');
+        if (!select) return;
+        select.innerHTML = "";
+        
+        let list = [];
+        if (grade === '12') list = topicsConfig.g12;
+        else if (grade === '11') list = topicsConfig.g11;
+        else if (grade === '10') list = topicsConfig.g10;
+        else list = [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10];
 
-            list.forEach(item => {
-                if (item.type === 'header') {
-                    const opt = document.createElement('option');
-                    opt.disabled = true;
-                    opt.textContent = "--- " + item.title + " ---";
-                    opt.style.fontWeight = "bold";
-                    select.appendChild(opt);
-                } else {
-                    const opt = document.createElement('option');
-                    opt.value = item.name;
-                    opt.textContent = item.name;
-                    select.appendChild(opt);
-                }
-            });
-            renderMatrixTable();
-        }
-        function updateBankFilterTopics() { populateSelect('bank-filter-topic', getTopicsForGrade(document.getElementById('bank-filter-grade').value)); }
-
-        function toggleExamPasswordField() {
-            const mode = document.getElementById('new-exam-mode').value;
-            document.getElementById('exam-password-row').style.display = (mode === 'KIEMTRA') ? 'block' : 'none';
-            
-            const timeInput = document.getElementById('new-exam-time');
-            const timeLabel = timeInput.previousElementSibling; 
-            if (mode === 'KAHOOT') {
-                timeLabel.innerHTML = "Thời gian MỖI CÂU (giây):";
-                if (timeInput.value === "45") timeInput.value = "30"; 
+        list.forEach(item => {
+            if (item.type === 'header') {
+                const opt = document.createElement('option');
+                opt.disabled = true;
+                opt.textContent = "--- " + item.title + " ---";
+                opt.style.fontWeight = "bold";
+                select.appendChild(opt);
             } else {
-                timeLabel.innerHTML = "Thời Gian (Phút):";
-                if (timeInput.value === "30") timeInput.value = "45"; 
+                const opt = document.createElement('option');
+                opt.value = item.id; // Lấy đúng mã chuẩn (VD: 12-kt-gk1)
+                opt.textContent = item.name; // Vẫn hiển thị tiếng Việt đẹp cho thầy chọn
+                select.appendChild(opt);
             }
-        }
+        });
+        renderMatrixTable();
+    }
+        function updateBankBulkTopicDropdown() {
+        const grade = document.getElementById('examGrade') ? document.getElementById('examGrade').value : 'g12';
+        const select = document.getElementById('examTopic');
+        if (!select) return;
+        select.innerHTML = "";
+        
+        const list = topicsConfig[grade] || [];
+        list.forEach(item => {
+            if (item.type === 'header') {
+                const opt = document.createElement('option');
+                opt.disabled = true;
+                opt.textContent = "--- " + item.title + " ---";
+                opt.style.fontWeight = "bold";
+                select.appendChild(opt);
+            } else {
+                const opt = document.createElement('option');
+                opt.value = item.id; // Lấy đúng mã chuẩn
+                opt.textContent = item.name;
+                select.appendChild(opt);
+            }
+        });
+    }
 
         function showPortalView() {
             document.getElementById('kahoot-view').style.display = 'none';

@@ -1666,8 +1666,8 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             renderMath(document.getElementById('direct-preview-box'));
 
             selectedQuestions = [...directParsedQuestions];
-            document.getElementById('selected-q-count').innerText = selectedQuestions.length;
-            document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `<div>${idx+1}. [${sq.level}] ${sq.id}</div>`).join('');
+           selectedQuestions.forEach(q => { if (!q.timeLimit) q.timeLimit = 30; });
+updateSelectedItemsDisplay();
         }
 
         async function saveBankBulkToSheets() {

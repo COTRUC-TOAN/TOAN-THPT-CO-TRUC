@@ -2128,6 +2128,46 @@ function updateNewExamTopicDropdown() {
                 }
             });
         }
+        // === HỆ THỐNG BẢO MẬT & CHỐNG SOI ĐÁP ÁN KHI LÀM BÀI ===
+(function() {
+    // 1. Chặn chuột phải để không bấm được "Kiểm tra" (Inspect Element)
+    document.addEventListener('contextmenu', function(e) {
+        const quizBox = document.getElementById('quiz-view');
+        const kahootBox = document.getElementById('kahoot-view');
+        const isExamActive = (quizBox && quizBox.style.display !== 'none') || 
+                             (kahootBox && kahootBox.style.display !== 'none');
+        
+        if (isExamActive) {
+            e.preventDefault();
+        }
+    });
+
+    // 2. Chặn các phím tắt mở công cụ lập trình viên (F12, Ctrl+Shift+I, Ctrl+U)
+    document.addEventListener('keydown', function(e) {
+        const quizBox = document.getElementById('quiz-view');
+        const kahootBox = document.getElementById('kahoot-view');
+        const isExamActive = (quizBox && quizBox.style.display !== 'none') || 
+                             (kahootBox && kahootBox.style.display !== 'none');
+
+        if (isExamActive) {
+            // Chặn F12
+            if (e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl + Shift + I (Inspect) hoặc Ctrl + Shift + J (Console)
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+                e.preventDefault();
+                return false;
+            }
+            // Chặn Ctrl + U (Xem nguồn trang web)
+            if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+                e.preventDefault();
+                return false;
+            }
+        }
+    });
+})();
     </script>
 </body>
 </html>

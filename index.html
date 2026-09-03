@@ -221,6 +221,25 @@
     <button class="btn-t-tab" id="btn-t-exams" onclick="switchTeacherTab('exams')"><i class="fa-solid fa-list-check"></i> Quản Lý Đề Thi</button>
     <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo & Soạn Đề Mới</button>
     <button class="btn-t-tab" id="btn-t-classes" onclick="switchTeacherTab('classes')"><i class="fa-solid fa-school"></i> Quản Lý Danh Sách Lớp</button>
+    <button type="button" class="btn-t-tab" onclick="openChangePassModal()" style="margin-left: auto; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1;"><i class="fa-solid fa-key"></i> Đổi Mật Khẩu</button>
+</div>
+            <!-- HỘP THOẠI ĐỔI MẬT KHẨU -->
+<div id="change-pass-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99999; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 12px; padding: 24px; width: 90%; max-width: 360px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <h3 style="margin-top: 0; font-size: 1.15rem; color: #1e293b; text-align: center; margin-bottom: 16px;">Đổi Mật Khẩu Quản Trị</h3>
+        <div style="margin-bottom: 12px;">
+            <label style="font-size: 0.85rem; color: #64748b; display: block; margin-bottom: 4px; font-weight: 500;">Mật khẩu hiện tại:</label>
+            <input type="password" id="old-admin-pass" placeholder="Nhập mật khẩu cũ..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem;">
+        </div>
+        <div style="margin-bottom: 18px;">
+            <label style="font-size: 0.85rem; color: #64748b; display: block; margin-bottom: 4px; font-weight: 500;">Mật khẩu mới:</label>
+            <input type="password" id="new-admin-pass" placeholder="Nhập mật khẩu mới..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem;">
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button type="button" onclick="closeChangePassModal()" style="flex: 1; padding: 8px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; cursor: pointer; font-weight: 600; color: #475569;">Hủy</button>
+            <button type="button" onclick="submitChangePassword()" style="flex: 1; padding: 8px; border: none; background: #2563eb; color: white; border-radius: 6px; font-weight: 600; cursor: pointer;">Cập Nhật</button>
+        </div>
+    </div>
 </div>
 
             <!-- TAB 1: SỔ ĐIỂM -->
@@ -2128,6 +2147,52 @@ function updateNewExamTopicDropdown() {
                 }
             });
         }
+        // === CÁC HÀM XỬ LÝ ĐỔI MẬT KHẨU QUẢN TRỊ ===
+function openChangePassModal() {
+    const modal = document.getElementById('change-pass-modal');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeChangePassModal() {
+    const modal = document.getElementById('change-pass-modal');
+    if (modal) modal.style.display = 'none';
+    const oldInput = document.getElementById('old-admin-pass');
+    const newInput = document.getElementById('new-admin-pass');
+    if (oldInput) oldInput.value = '';
+    if (newInput) newInput.value = '';
+}
+
+async function submitChangePassword() {
+    const oldPass = document.getElementById('old-admin-pass').value.trim();
+    const newPass = document.getElementById('new-admin-pass').value.trim();
+
+    if (!oldPass || !newPass) {
+        alert("Vui lòng nhập đầy đủ cả mật khẩu cũ và mật khẩu mới!");
+        return;
+    }
+
+    try {
+        const res = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'change_password',
+                oldPassword: oldPass,
+                newPassword: newPass
+            })
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            alert("🎉 Đổi mật khẩu thành công! Hãy ghi nhớ mật khẩu mới.");
+            teacherPassAuth = newPass; // Cập nhật phiên đăng nhập của giáo viên
+            closeChangePassModal();
+        } else {
+            alert(data.message || "Mật khẩu cũ không chính xác!");
+        }
+    } catch (err) {
+        alert("Lỗi kết nối máy chủ khi đổi mật khẩu!");
+    }
+}
         // === HỆ THỐNG BẢO MẬT & CHỐNG SOI ĐÁP ÁN KHI LÀM BÀI ===
 (function() {
     // 1. Chặn chuột phải để không bấm được "Kiểm tra" (Inspect Element)

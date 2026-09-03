@@ -1244,25 +1244,39 @@ const topicsConfig = {
             } catch (e) {}
         }
 
-        async function openTeacherLogin() {
+     async function openTeacherLogin() {
             const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
             if (!pass) return;
             
-            if (pass === "123") {
-                teacherPassAuth = pass;
-                document.getElementById('portal-view').style.display = 'none';
-                document.getElementById('teacher-view').style.display = 'block';
-                switchTeacherTab('scores');
-                loadTeacherScores();
-                renderTeacherExamList();
-                loadQuestionBank();
-                updateBankBulkTopicDropdown(); 
-                updateNewExamTopicDropdown(); 
-                //updateBankFilterTopics();
-                updateStudentClassDropdown();
-                updateScoreClassFilter();
-            } else { 
-                alert("❌ Sai mật khẩu!"); 
+            // Hiển thị con trỏ chuột chờ để báo hiệu đang kết nối máy chủ
+            document.body.style.cursor = 'wait';
+
+            try {
+                // Nối dây gọi xuống Google Sheets để kiểm tra mật khẩu thực tế
+                const res = await fetch(`${SCRIPT_URL}?action=checkPassword&password=${encodeURIComponent(pass)}`);
+                const data = await res.json();
+                
+                document.body.style.cursor = 'default';
+
+                if (data.status === "success") {
+                    // Mở khóa thành công
+                    teacherPassAuth = pass;
+                    document.getElementById('portal-view').style.display = 'none';
+                    document.getElementById('teacher-view').style.display = 'block';
+                    switchTeacherTab('scores');
+                    loadTeacherScores();
+                    renderTeacherExamList();
+                    loadQuestionBank();
+                    updateBankBulkTopicDropdown(); 
+                    updateNewExamTopicDropdown(); 
+                    updateStudentClassDropdown();
+                    updateScoreClassFilter();
+                } else { 
+                    alert("❌ Sai mật khẩu!"); 
+                }
+            } catch (err) {
+                document.body.style.cursor = 'default';
+                alert("Lỗi kết nối máy chủ. Vui lòng kiểm tra lại mạng!");
             }
         }
 function renderTeacherExamList() {

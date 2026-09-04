@@ -2338,25 +2338,21 @@ async function submitChangePassword() {
         }
     });
 })();
-    </script>
- // === HÀM ĐIỀU KHIỂN ẨN/HIỆN KHUNG MẬT KHẨU VÀ BÀI GIẢNG ===
+        // === HÀM ĐIỀU KHIỂN ẨN/HIỆN KHUNG MẬT KHẨU VÀ BÀI GIẢNG ===
 function toggleExamPasswordField() {
     var mode = document.getElementById("new-exam-mode").value;
     var passwordRow = document.getElementById("exam-password-row");
     var lectureFields = document.getElementById("lecture-fields"); 
     
-    // Tìm cột "2. Nguồn Tạo Đề" nằm ở bên phải
     var creatorCards = document.querySelectorAll('.creator-card');
     var rightSourceColumn = creatorCards.length > 1 ? creatorCards[1] : null;
 
-    // Ẩn hiện khung mật khẩu nếu là Kiểm tra
     if (mode === "KIEMTRA") {
         if (passwordRow) passwordRow.style.display = "block";
     } else {
         if (passwordRow) passwordRow.style.display = "none";
     }
 
-    // Ẩn hiện khung Bài giảng và ẩn luôn cột Nguồn Tạo Đề nếu chọn Bài giảng
     if (mode === "BAIGIANG") {
         if (lectureFields) lectureFields.style.display = "block";
         if (rightSourceColumn) rightSourceColumn.style.display = "none"; 
@@ -2365,5 +2361,7 @@ function toggleExamPasswordField() {
         if (rightSourceColumn) rightSourceColumn.style.display = "block"; 
     }
 }
+     
+    </script>
 </body>
 </html>

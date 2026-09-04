@@ -2480,6 +2480,20 @@ function submitLectureQuiz() {
     resDiv.style.display = 'block';
     resDiv.innerHTML = `🎉 Bạn đã trả lời đúng <strong>${correctCount} / ${qList.length}</strong> câu hỏi tương tác!`;
 }
+        // Tự động ẩn hiện các khung khi thay đổi chế độ tạo đề
+document.getElementById('new-exam-mode')?.addEventListener('change', function() {
+    const mode = this.value;
+    const timeLimitGroup = document.getElementById('new-exam-time')?.closest('.form-row') || document.getElementById('new-exam-time')?.parentElement;
+    const lectureInputsGroup = document.getElementById('lecture-inputs-group'); // Khung chứa ô nhập YouTube & PDF của cô
+
+    if (mode === 'BAIGIANG') {
+        if (timeLimitGroup) timeLimitGroup.style.display = 'none';
+        if (lectureInputsGroup) lectureInputsGroup.style.display = 'block';
+    } else {
+        if (timeLimitGroup) timeLimitGroup.style.display = 'block';
+        if (lectureInputsGroup) lectureInputsGroup.style.display = 'none';
+    }
+});
     </script>
 </body>
 </html>

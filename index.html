@@ -2049,24 +2049,31 @@ function updateNewExamTopicDropdown() {
             document.getElementById('kahoot-view').style.display = 'block';
             document.getElementById('kahoot-login-box').style.display = 'block';
         }
-        function joinKahootArena() {
-            kahootStdName = document.getElementById('k-std-name').value.trim();
-            kahootStdClass = document.getElementById('k-std-class').value.trim();
-            if (!kahootStdName || !kahootStdClass) { alert("Nhập đủ tên và lớp!"); return; }
-            document.getElementById('kahoot-login-box').style.display = 'none';
-            document.getElementById('kahoot-lobby-box').style.display = 'block';
-            const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
-            db.ref('kahoot_rooms/' + activeExam.id + '/students/' + cleanName).set({ name: kahootStdName, class: kahootStdClass });
-            
-            db.ref('kahoot_rooms/' + activeExam.id).on('value', snapshot => {
-                const roomData = snapshot.val();
-                if (roomData && roomData.status === 'started') {
-                    document.getElementById('kahoot-lobby-box').style.display = 'none';
-                    document.getElementById('kahoot-game-box').style.display = 'block';
-                    loadKahootQuestion();
-                }
-            });
+        let isKahootStarted = false;
+
+function joinKahootArena() {
+    kahootStdName = document.getElementById('k-std-name').value.trim();
+    kahootStdClass = document.getElementById('k-std-class').value.trim();
+    if (!kahootStdName || !kahootStdClass) { alert("Nhập đủ tên và lớp!"); return; }
+    
+    document.getElementById('kahoot-login-box').style.display = 'none';
+    document.getElementById('kahoot-lobby-box').style.display = 'block';
+    
+    const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
+    db.ref('kahoot_rooms/' + activeExam.id + '/students/' + cleanName).set({ name: kahootStdName, class: kahootStdClass });
+    
+    isKahootStarted = false;
+
+    db.ref('kahoot_rooms/' + activeExam.id).on('value', snapshot => {
+        const roomData = snapshot.val();
+        if (roomData && roomData.status === 'started' && !isKahootStarted) {
+            isKahootStarted = true;
+            document.getElementById('kahoot-lobby-box').style.display = 'none';
+            document.getElementById('kahoot-game-box').style.display = 'block';
+            loadKahootQuestion();
         }
+    });
+}
        function loadKahootQuestion() {
             const qList = activeExam.questions || [];
             if (kahootCurrentIndex >= qList.length) {

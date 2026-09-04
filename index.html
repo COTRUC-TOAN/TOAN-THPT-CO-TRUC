@@ -1449,8 +1449,19 @@ function renderTeacherExamList() {
             if (displayList.length > 0) {
                 const scores = displayList.map(r => parseFloat(r.totalScore) || 0);
                 document.getElementById('stat-avg-score').innerText = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2);
-                tbody.innerHTML = displayList.map(r => `<tr><td>${r.time}</td><td><strong>${r.name}</strong></td><td>${r.sClass}</td><td>${r.examTitle}</td><td><span class="badge-score badge-pass">${r.totalScore}</span></td></tr>`).join('');
-            } else {
+              tbody.innerHTML = displayList.map(r => {
+                let sVal = String(r.totalScore || '').trim();
+                // Tự động khôi phục nếu điểm bị Google Sheet biến thành ngày tháng ISO
+                if (sVal.includes('T') && sVal.includes('-')) {
+                    const d = new Date(sVal);
+                    if (!isNaN(d.getDate())) {
+                        sVal = `${d.getDate()}.${d.getMonth() + 1}`;
+                    }
+                }
+                const scoreNum = parseFloat(sVal) || 0;
+                const badgeClass = scoreNum >= 5 ? 'badge-pass' : 'badge-fail';
+                return `<tr><td>${r.time}</td><td><strong>${r.name}</strong></td><td>${r.sClass}</td><td>${r.examTitle}</td><td><span class="badge-score ${badgeClass}">${sVal}</span></td></tr>`;
+            }).join('');
                 document.getElementById('stat-avg-score').innerText = '0.0';
                 tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Không có dữ liệu bài nộp thỏa mãn điều kiện lọc.</td></tr>`;
             }

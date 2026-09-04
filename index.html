@@ -2344,15 +2344,17 @@ function toggleExamPasswordField() {
     var passwordRow = document.getElementById("exam-password-row");
     var lectureFields = document.getElementById("lecture-fields"); 
     
-    var creatorCards = document.querySelectorAll('.creator-card');
-    var rightSourceColumn = creatorCards.length > 1 ? creatorCards[1] : null;
+    // Tìm chính xác cột nguồn tạo đề ở bên phải
+    var rightSourceColumn = document.querySelector('.creator-container > .creator-card:nth-child(2)');
 
+    // Ẩn hiện khung mật khẩu nếu là Kiểm tra
     if (mode === "KIEMTRA") {
         if (passwordRow) passwordRow.style.display = "block";
     } else {
         if (passwordRow) passwordRow.style.display = "none";
     }
 
+    // Ẩn hiện khung Bài giảng và cột Nguồn Tạo Đề bên phải
     if (mode === "BAIGIANG") {
         if (lectureFields) lectureFields.style.display = "block";
         if (rightSourceColumn) rightSourceColumn.style.display = "none"; 

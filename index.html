@@ -2339,5 +2339,25 @@ async function submitChangePassword() {
     });
 })();
     </script>
+    // === HÀM ĐIỀU KHIỂN ẨN/HIỆN KHUNG MẬT KHẨU VÀ BÀI GIẢNG ===
+function toggleExamPasswordField() {
+    var mode = document.getElementById("new-exam-mode").value;
+    var passwordRow = document.getElementById("exam-password-row");
+    var lectureFields = document.getElementById("lecture-fields"); // Khung Bài Giảng
+    
+    // Ẩn hiện khung mật khẩu nếu là Kiểm tra
+    if (mode === "KIEMTRA") {
+        passwordRow.style.display = "block";
+    } else {
+        passwordRow.style.display = "none";
+    }
+
+    // Ẩn hiện khung Bài giảng nếu chọn chế độ Bài giảng
+    if (mode === "BAIGIANG") {
+        lectureFields.style.display = "block";
+    } else {
+        lectureFields.style.display = "none";
+    }
+}
 </body>
 </html>

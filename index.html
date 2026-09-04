@@ -2395,7 +2395,75 @@ function toggleExamPasswordField() {
         if (timeLimitRow) timeLimitRow.style.display = "block"; // Hiện lại khi là Luyện tập hoặc Kiểm tra
     }
 }
-     
+     // === HÀM MỞ GIAO DIỆN BÀI GIẢNG CHO HỌC SINH ===
+function startLectureMode() {
+    document.getElementById('portal-view').style.display = 'none';
+    document.getElementById('lecture-view').style.display = 'block';
+    document.getElementById('lecture-title').innerText = activeExam.title;
+
+    let ytUrl = activeExam.youtubeUrl || "";
+    let embedUrl = "";
+    if (ytUrl.includes("youtu.be/")) {
+        let videoId = ytUrl.split("youtu.be/")[1].split("?")[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    } else if (ytUrl.includes("watch?v=")) {
+        let videoId = ytUrl.split("watch?v=")[1].split("&")[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+    } else if (ytUrl.includes("embed/")) {
+        embedUrl = ytUrl;
+    }
+    
+    const iframe = document.getElementById('lecture-iframe');
+    if (embedUrl) {
+        iframe.src = embedUrl;
+        iframe.parentNode.style.display = 'block';
+    } else {
+        iframe.parentNode.style.display = 'none';
+    }
+
+    const pdfBox = document.getElementById('lecture-pdf-box');
+    const pdfLink = document.getElementById('lecture-pdf-link');
+    if (activeExam.pdfData) {
+        pdfLink.href = activeExam.pdfData;
+        pdfBox.style.display = 'flex';
+    } else {
+        pdfBox.style.display = 'none';
+    }
+
+    const qContainer = document.getElementById('lecture-questions-content');
+    const qList = activeExam.questions || [];
+    if (qList.length > 0) {
+        qContainer.innerHTML = qList.map((q, idx) => {
+            let opts = '';
+            if (q.type === 'MCQ' && q.options) {
+                ['A', 'B', 'C', 'D'].forEach((ch, i) => {
+                    opts += `<label class="mcq-option"><input type="radio" name="l_q_${idx}" value="${ch}"><span><strong>${ch}.</strong> ${q.options[i]}</span></label>`;
+                });
+            }
+            return `<div class="q-card"><div class="q-title">Câu ${idx + 1}: ${q.q}</div>${opts}</div>`;
+        }).join('');
+        if (typeof renderMath === 'function') renderMath(qContainer);
+        document.getElementById('lecture-quiz-form').style.display = 'block';
+    } else {
+        qContainer.innerHTML = `<p style="color: #64748b; font-style: italic;">Bài giảng này không có câu hỏi tương tác đi kèm.</p>`;
+    }
+    document.getElementById('lecture-result').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function submitLectureQuiz() {
+    const qList = activeExam.questions || [];
+    let correctCount = 0;
+    qList.forEach((q, idx) => {
+        const userAns = document.querySelector(`input[name="l_q_${idx}"]:checked`)?.value || "";
+        if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) {
+            correctCount++;
+        }
+    });
+    const resDiv = document.getElementById('lecture-result');
+    resDiv.style.display = 'block';
+    resDiv.innerHTML = `🎉 Bạn đã trả lời đúng <strong>${correctCount} / ${qList.length}</strong> câu hỏi tương tác!`;
+}
     </script>
 </body>
 </html>

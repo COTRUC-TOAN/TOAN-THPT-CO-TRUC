@@ -2338,14 +2338,16 @@ async function submitChangePassword() {
         }
     });
 })();
-        // === HÀM ĐIỀU KHIỂN ẨN/HIỆN KHUNG MẬT KHẨU VÀ BÀI GIẢNG ===
+        // === HÀM ĐIỀU KHIỂN ẨN/HIỆN KHI CHUYỂN CHẾ ĐỘ ===
 function toggleExamPasswordField() {
     var mode = document.getElementById("new-exam-mode").value;
     var passwordRow = document.getElementById("exam-password-row");
     var lectureFields = document.getElementById("lecture-fields"); 
     
-    // Tìm chính xác cột nguồn tạo đề ở bên phải
-    var rightSourceColumn = document.querySelector('.creator-container > .creator-card:nth-child(2)');
+    // Tìm ô nhập "Thời Gian (Phút)" để ẩn đi khi là bài giảng
+    // (Ô thời gian nằm ngay cạnh ô chọn chế độ)
+    var timeLimitInput = document.getElementById("new-exam-time");
+    var timeLimitRow = timeLimitInput ? timeLimitInput.closest('.form-row') : null;
 
     // Ẩn hiện khung mật khẩu nếu là Kiểm tra
     if (mode === "KIEMTRA") {
@@ -2354,13 +2356,13 @@ function toggleExamPasswordField() {
         if (passwordRow) passwordRow.style.display = "none";
     }
 
-    // Ẩn hiện khung Bài giảng và cột Nguồn Tạo Đề bên phải
+    // Nếu là Bài Giảng: hiện khung YouTube/PDF, ẩn ô đếm ngược thời gian
     if (mode === "BAIGIANG") {
         if (lectureFields) lectureFields.style.display = "block";
-        if (rightSourceColumn) rightSourceColumn.style.display = "none"; 
+        if (timeLimitRow) timeLimitRow.style.display = "none"; // Ẩn ô thời gian vì học sinh tự do xem bài
     } else {
         if (lectureFields) lectureFields.style.display = "none";
-        if (rightSourceColumn) rightSourceColumn.style.display = "block"; 
+        if (timeLimitRow) timeLimitRow.style.display = "block"; // Hiện lại khi là Luyện tập hoặc Kiểm tra
     }
 }
      

@@ -296,6 +296,21 @@
                             <div class="form-row"><label>Chế Độ:</label><select class="form-input" id="new-exam-mode" onchange="toggleExamPasswordField()"><option value="BAIGIANG">📘 Bài Giảng</option><option value="LUYENTAP">🟢 Luyện Tập</option><option value="KIEMTRA">🔴 Kiểm Tra (Bảo Mật Cao)</option><option value="KAHOOT">⚡ Đấu Trường Kahoot</option></select></div>
                             <div class="form-row"><label>Thời Gian (Phút):</label><input type="number" class="form-input" id="new-exam-time" value="45"></div>
                         </div>
+                        <!-- KHUNG NHẬP LIỆU DÀNH RIÊNG CHO BÀI GIẢNG -->
+    <div id="lecture-fields" style="display: none; background: #f8fafc; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <h4 style="margin-top: 0; color: #0f172a; margin-bottom: 10px;"><i class="fa-solid fa-photo-film"></i> Thông tin Bài giảng & Tài liệu</h4>
+        
+        <div class="form-row" style="margin-bottom: 10px;">
+            <label style="font-weight: 600; color: #475569;">Link Video YouTube:</label>
+            <input type="text" class="form-input" id="lecture-youtube-url" placeholder="Dán đường dẫn YouTube vào đây (VD: https://youtu.be/...)">
+        </div>
+
+        <div class="form-row" style="margin-bottom: 0;">
+            <label style="font-weight: 600; color: #475569;">Đính kèm tệp PDF từ máy:</label>
+            <input type="file" class="form-input" id="lecture-pdf-file" accept=".pdf" style="padding: 6px; background: #fff;">
+            <small style="color: #64748b; display: block; margin-top: 4px;">Hệ thống sẽ tải file lên để học sinh vừa xem video vừa mở tài liệu ôn tập trực tiếp.</small>
+        </div>
+    </div>
 
                         <div class="form-row" id="exam-password-row" style="display: none;"><label style="color:#dc2626;">🔑 Mật Khẩu Phòng Thi:</label><input type="text" class="form-input" id="new-exam-pass" placeholder="Mật khẩu đề thi..."></div>
                         <div class="form-row"><label style="color:#16a34a;">🟢 Thời gian BẮT ĐẦU mở đề:</label><input type="datetime-local" class="form-input" id="new-exam-start-time"></div>

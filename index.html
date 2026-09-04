@@ -2339,24 +2339,30 @@ async function submitChangePassword() {
     });
 })();
     </script>
-    // === HÀM ĐIỀU KHIỂN ẨN/HIỆN KHUNG MẬT KHẨU VÀ BÀI GIẢNG ===
+ // === HÀM ĐIỀU KHIỂN ẨN/HIỆN KHUNG MẬT KHẨU VÀ BÀI GIẢNG ===
 function toggleExamPasswordField() {
     var mode = document.getElementById("new-exam-mode").value;
     var passwordRow = document.getElementById("exam-password-row");
-    var lectureFields = document.getElementById("lecture-fields"); // Khung Bài Giảng
+    var lectureFields = document.getElementById("lecture-fields"); 
     
+    // Tìm cột "2. Nguồn Tạo Đề" nằm ở bên phải
+    var creatorCards = document.querySelectorAll('.creator-card');
+    var rightSourceColumn = creatorCards.length > 1 ? creatorCards[1] : null;
+
     // Ẩn hiện khung mật khẩu nếu là Kiểm tra
     if (mode === "KIEMTRA") {
-        passwordRow.style.display = "block";
+        if (passwordRow) passwordRow.style.display = "block";
     } else {
-        passwordRow.style.display = "none";
+        if (passwordRow) passwordRow.style.display = "none";
     }
 
-    // Ẩn hiện khung Bài giảng nếu chọn chế độ Bài giảng
+    // Ẩn hiện khung Bài giảng và ẩn luôn cột Nguồn Tạo Đề nếu chọn Bài giảng
     if (mode === "BAIGIANG") {
-        lectureFields.style.display = "block";
+        if (lectureFields) lectureFields.style.display = "block";
+        if (rightSourceColumn) rightSourceColumn.style.display = "none"; 
     } else {
-        lectureFields.style.display = "none";
+        if (lectureFields) lectureFields.style.display = "none";
+        if (rightSourceColumn) rightSourceColumn.style.display = "block"; 
     }
 }
 </body>

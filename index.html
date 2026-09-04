@@ -2124,10 +2124,22 @@ function joinKahootArena() {
                 }
             }, 1000);
         }
-        function answerKahoot(selected, correct, btnEl) {
-            clearInterval(kahootTimer);
-            const feedback = document.getElementById('kahoot-feedback');
-            const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
+    function answerKahoot(selected, correct, btnEl) {
+    clearInterval(kahootTimer);
+    
+    // Khóa ngay lập tức tất cả các nút đáp án để không cho bấm đổi
+    const allBtns = document.querySelectorAll('#kahoot-options-grid button, #kahoot-game-box button');
+    allBtns.forEach(b => {
+        b.disabled = true;
+        b.style.pointerEvents = 'none';
+        b.style.opacity = '0.7';
+    });
+    if (btnEl) {
+        btnEl.style.opacity = '1'; // Giữ sáng rõ đáp án học sinh vừa bấm
+    }
+
+    const feedback = document.getElementById('kahoot-feedback');
+    const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
             
             let isCorrect = selected.toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'') === String(correct).trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
 

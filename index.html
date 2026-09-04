@@ -1512,7 +1512,7 @@ function renderTeacherExamList() {
                         <td>${r.name || ''}</td>
                         <td style="text-align: center;">${r.sClass || ''}</td>
                         <td>${r.examTitle || ''}</td>
-                        <td style="text-align: center; font-weight: bold;">${r.totalScore || ''}</td>
+                     <td style="text-align: center; font-weight: bold; mso-number-format:'\@';">${r.totalScore !== undefined && r.totalScore !== null ? String(r.totalScore) : ''}</td>
                         <td style="text-align: center; font-weight: bold; color: #dc2626;">${autoRank}</td>
                     </tr>
                 `;

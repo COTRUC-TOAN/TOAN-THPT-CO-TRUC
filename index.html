@@ -2033,13 +2033,25 @@ function clearSelectedQuestions() {
             const examTitle = document.getElementById('new-exam-title').value.trim();
             let finalQuestions = (method === 'paste') ? directParsedQuestions : selectedQuestions;
 
-            if (!examId || !examTitle || finalQuestions.length === 0) { alert("Vui lòng điền đủ Mã đề, Tên đề và có câu hỏi!"); return; }
-            const payload = {
-                action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle,
-                grade: document.getElementById('new-exam-grade').value, topic: document.getElementById('new-exam-topic').value,
-                mode: document.getElementById('new-exam-mode').value, timeLimit: parseInt(document.getElementById('new-exam-time').value) || 45,
-                examPass: document.getElementById('new-exam-pass').value.trim(), startTime: document.getElementById('new-exam-start-time').value, deadline: document.getElementById('new-exam-deadline').value, questions: finalQuestions
-            };
+          // Lấy thêm giá trị YouTube và PDF từ giao diện
+    const youtubeUrl = document.getElementById('lecture-youtube-input')?.value.trim() || "";
+    const pdfData = document.getElementById('lecture-pdf-input')?.value.trim() || "";
+
+    // Nới lỏng điều kiện: Chỉ cần có Mã đề, Tên đề VÀ (có câu hỏi HOẶC có link YouTube HOẶC có tệp PDF) là cho phép lưu
+    if (!examId || !examTitle || (finalQuestions.length === 0 && !youtubeUrl && !pdfData)) { 
+        alert("Vui lòng điền đủ Mã đề, Tên đề và có ít nhất Câu hỏi, Link YouTube hoặc File PDF!"); 
+        return; 
+    }
+
+    const payload = {
+        action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle,
+        grade: document.getElementById('new-exam-grade').value, topic: document.getElementById('new-exam-topic').value,
+        mode: document.getElementById('new-exam-mode').value, timeLimit: parseInt(document.getElementById('new-exam-time').value) || 45,
+        examPass: document.getElementById('new-exam-pass').value.trim(), startTime: document.getElementById('new-exam-start-time').value, deadline: document.getElementById('new-exam-deadline').value,
+        questions: finalQuestions,
+        youtubeUrl: youtubeUrl,
+        pdfData: pdfData
+    };
             try {
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                 const data = await res.json();

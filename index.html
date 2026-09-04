@@ -1455,62 +1455,73 @@ function renderTeacherExamList() {
             }
         }
 
-        function exportScoresToExcel() {
-    if (!globalScoresData || globalScoresData.length === 0) {
-        alert("Chưa có dữ liệu để xuất Excel!");
-        return;
-    }
+       function exportScoresToExcel() {
+            if (!globalScoresData || globalScoresData.length === 0) {
+                alert("Chưa có dữ liệu để xuất Excel!");
+                return;
+            }
 
-    const classVal = document.getElementById('filter-score-class')?.value || 'all';
-    const examVal = document.getElementById('filter-score-exam')?.value || 'all';
+            const classVal = document.getElementById('filter-score-class')?.value || 'all';
+            const examVal = document.getElementById('filter-score-exam')?.value || 'all';
 
-    const filtered = globalScoresData.filter(r => {
-        const matchClass = (classVal === 'all' || (r.sClass && r.sClass.toLowerCase() === classVal.toLowerCase()));
-        const matchExam = (examVal === 'all' || r.examTitle === examVal);
-        return matchClass && matchExam;
-    });
+            const filtered = globalScoresData.filter(r => {
+                const matchClass = (classVal === 'all' || (r.sClass && r.sClass.toLowerCase() === classVal.toLowerCase()));
+                const matchExam = (examVal === 'all' || r.examTitle === examVal);
+                return matchClass && matchExam;
+            });
 
-    if (filtered.length === 0) {
-        alert("Không có dữ liệu phù hợp với bộ lọc để xuất!");
-        return;
-    }
+            if (filtered.length === 0) {
+                alert("Không có dữ liệu phù hợp với bộ lọc để xuất!");
+                return;
+            }
 
-    let tableHtml = `
-        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-        <head><meta charset="UTF-8"></head>
-        <body>
-            <table border="1">
-                <tr style="background-color: #2563eb; color: white; font-weight: bold; text-align: center;">
-                    <th>Thời Gian</th>
-                    <th>Họ và Tên</th>
-                    <th>Lớp</th>
-                    <th>Bài Thi</th>
-                    <th>Điểm</th>
-                </tr>
-    `;
+            let tableHtml = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head><meta charset="UTF-8"></head>
+                <body>
+                    <table border="1">
+                        <tr style="background-color: #2563eb; color: white; font-weight: bold; text-align: center;">
+                            <th>Thời Gian</th>
+                            <th>Họ và Tên</th>
+                            <th>Lớp</th>
+                            <th>Bài Thi</th>
+                            <th>Điểm</th>
+                            <th>Xếp Loại</th>
+                        </tr>
+            `;
 
-    filtered.forEach(r => {
-        tableHtml += `
-            <tr>
-                <td style="text-align: center;">${r.time || ''}</td>
-                <td>${r.name || ''}</td>
-                <td style="text-align: center;">${r.sClass || ''}</td>
-                <td>${r.examTitle || ''}</td>
-                <td style="text-align: center; font-weight: bold;">${r.totalScore || ''}</td>
-            </tr>
-        `;
-    });
+            filtered.forEach(r => {
+                let score = parseFloat(r.totalScore) || 0;
+                let autoRank = r.rank || r['Xếp loại'] || "";
+                if (!autoRank) {
+                    if (score >= 8.0) autoRank = "Giỏi";
+                    else if (score >= 6.5) autoRank = "Khá";
+                    else if (score >= 5.0) autoRank = "Trung bình";
+                    else autoRank = "Yếu";
+                }
 
-    tableHtml += `</table></body></html>`;
+                tableHtml += `
+                    <tr>
+                        <td style="text-align: center;">${r.time || ''}</td>
+                        <td>${r.name || ''}</td>
+                        <td style="text-align: center;">${r.sClass || ''}</td>
+                        <td>${r.examTitle || ''}</td>
+                        <td style="text-align: center; font-weight: bold;">${r.totalScore || ''}</td>
+                        <td style="text-align: center; font-weight: bold; color: #dc2626;">${autoRank}</td>
+                    </tr>
+                `;
+            });
 
-    const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `Bang_Diem_${new Date().toLocaleDateString("vi-VN").replace(/\//g, "-")}.xls`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+            tableHtml += `</table></body></html>`;
+
+            const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `Bang_Diem_${new Date().toLocaleDateString("vi-VN").replace(/\//g, "-")}.xls`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
         async function deleteExamFromSystem(examId) {
             if (!confirm(`⚠️ Xóa vĩnh viễn đề [${examId}]?`)) return;
             try {

@@ -913,6 +913,10 @@ const topicsConfig = {
 
         function startExam(id) {
             activeExam = examBank.find(e => e.id === id);
+            if (activeExam.mode === 'BAIGIANG') {
+        startLectureMode();
+        return;
+    }
             if (!activeExam) return;
             document.getElementById('portal-view').style.display = 'none';
 

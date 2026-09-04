@@ -405,6 +405,33 @@
         </div>
 
         <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT -->
+
+        <!-- GIAO DIỆN XEM BÀI GIẢNG & TƯƠNG TÁC CHO HỌC SINH -->
+<div id="lecture-view" style="display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+    <div class="quiz-topbar">
+        <button class="btn-nav btn-nav-outline" onclick="showPortalView()"><i class="fa-solid fa-arrow-left"></i> Trở về</button>
+        <h3 id="lecture-title" style="color: #0f172a; font-size: 1.25rem;"></h3>
+    </div>
+    
+    <!-- Khung phát Video YouTube -->
+    <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 20px; background: #000; border-radius: 8px; overflow: hidden;">
+        <iframe id="lecture-iframe" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen></iframe>
+    </div>
+
+    <!-- Nút mở tài liệu PDF đính kèm -->
+    <div id="lecture-pdf-box" style="margin-bottom: 25px; display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-weight: bold; color: #166534;"><i class="fa-solid fa-file-pdf"></i> Tài liệu học tập đính kèm (PDF)</span>
+        <a id="lecture-pdf-link" href="#" target="_blank" class="btn-start" style="background: #16a34a; padding: 6px 14px; font-size: 0.95rem; text-decoration: none; display: inline-flex; width: auto;"><i class="fa-solid fa-download"></i> Mở / Tải Tài Liệu</a>
+    </div>
+
+    <!-- Phần câu hỏi tương tác củng cố -->
+    <div class="section-header">📝 CÂU HỎI TƯƠNG TÁC CỦNG CỐ KIẾN THỨC</div>
+    <form id="lecture-quiz-form">
+        <div id="lecture-questions-content"></div>
+        <button type="button" class="btn-submit" onclick="submitLectureQuiz()"><i class="fa-solid fa-paper-plane"></i> Nộp Bài Tương Tác</button>
+    </form>
+    <div id="lecture-result" style="display: none; margin-top: 20px; padding: 22px; border-radius: var(--radius-md); text-align: center; font-size: 1.25rem; font-weight: bold; background: #dcfce7; color: #166534;"></div>
+</div>
         <div id="kahoot-view">
             <div class="kahoot-header">
                 <div id="kahoot-progress" style="font-weight: bold; color: #7c3aed; font-size: 1.25rem;">⚡ ĐẤU TRƯỜNG KAHOOT</div>

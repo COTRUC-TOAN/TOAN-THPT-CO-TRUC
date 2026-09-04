@@ -113,7 +113,6 @@
         .form-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; outline: none; background: #fff; font-family: 'Times New Roman', Times, serif; }
         .rich-textarea { width: 100%; height: 160px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.15rem; outline: none; background: #fff; overflow-y: auto; font-family: 'Times New Roman', Times, serif; line-height: 1.6; }
         
-        /* GIAO DIỆN XEM TRƯỚC SÚC TÍCH, GỌN GÀNG */
         .preview-box { background: #fff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 12px; margin-top: 12px; min-height: 80px; font-size: 1.05rem; line-height: 1.5; color: #1e293b; }
         .parsed-q-preview-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 10px; line-height: 1.5; }
         .parsed-q-preview-card strong { color: #1e40af; }
@@ -139,7 +138,6 @@
         .student-box { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
         .student-box input { padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; font-family: 'Times New Roman', Times, serif; }
 
-        /* ĐẤU TRƯỜNG KAHOOT & BẢNG ĐIỂM NHẢY MÚA */
         #kahoot-view { display: none; max-width: 850px; margin: 0 auto; background: #fff; padding: 30px; border-radius: var(--radius-lg); border: 2px solid #7c3aed; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15); text-align: center; }
         .kahoot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .kahoot-timer-circle { width: 55px; height: 55px; border-radius: 50%; background: #7c3aed; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; }
@@ -173,7 +171,6 @@
         .explanation-box { background: #fff; border-left: 4px solid #16a34a; padding: 12px 16px; margin-top: 12px; border-radius: 4px; font-size: 1.05rem; color: #334155; line-height: 1.8; }
         .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: bold; z-index: 1000; display: none; }
         .q-card img, .preview-box img, .kahoot-question img { max-width: 100%; height: auto; border-radius: 8px; margin: 10px auto; display: block; border: 1px solid #e2e8f0; }
-        /* Tùy chỉnh màu sắc trực quan khi nộp bài Luyện tập */
         .mcq-option.correct-choice { background-color: #dcfce7 !important; border-color: #16a34a !important; color: #166534; font-weight: bold; }
         .mcq-option.wrong-choice { background-color: #fee2e2 !important; border-color: #dc2626 !important; color: #991b1b; font-weight: bold; }
     </style>
@@ -296,21 +293,22 @@
                             <div class="form-row"><label>Chế Độ:</label><select class="form-input" id="new-exam-mode" onchange="toggleExamPasswordField()"><option value="BAIGIANG">📘 Bài Giảng</option><option value="LUYENTAP">🟢 Luyện Tập</option><option value="KIEMTRA">🔴 Kiểm Tra (Bảo Mật Cao)</option><option value="KAHOOT">⚡ Đấu Trường Kahoot</option></select></div>
                             <div class="form-row"><label>Thời Gian (Phút):</label><input type="number" class="form-input" id="new-exam-time" value="45"></div>
                         </div>
+                        
                         <!-- KHUNG NHẬP LIỆU DÀNH RIÊNG CHO BÀI GIẢNG -->
-    <div id="lecture-fields" style="display: none; background: #f8fafc; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-        <h4 style="margin-top: 0; color: #0f172a; margin-bottom: 10px;"><i class="fa-solid fa-photo-film"></i> Thông tin Bài giảng & Tài liệu</h4>
-        
-        <div class="form-row" style="margin-bottom: 10px;">
-            <label style="font-weight: 600; color: #475569;">Link Video YouTube:</label>
-            <input type="text" class="form-input" id="lecture-youtube-url" placeholder="Dán đường dẫn YouTube vào đây (VD: https://youtu.be/...)">
-        </div>
+                        <div id="lecture-fields" style="display: none; background: #f8fafc; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <h4 style="margin-top: 0; color: #0f172a; margin-bottom: 10px;"><i class="fa-solid fa-photo-film"></i> Thông tin Bài giảng & Tài liệu</h4>
+                            
+                            <div class="form-row" style="margin-bottom: 10px;">
+                                <label style="font-weight: 600; color: #475569;">Link Video YouTube:</label>
+                                <input type="text" class="form-input" id="lecture-youtube-url" placeholder="Dán đường dẫn YouTube vào đây (VD: https://youtu.be/...)">
+                            </div>
 
-        <div class="form-row" style="margin-bottom: 0;">
-            <label style="font-weight: 600; color: #475569;">Đính kèm tệp PDF từ máy:</label>
-            <input type="file" class="form-input" id="lecture-pdf-file" accept=".pdf" style="padding: 6px; background: #fff;">
-            <small style="color: #64748b; display: block; margin-top: 4px;">Hệ thống sẽ tải file lên để học sinh vừa xem video vừa mở tài liệu ôn tập trực tiếp.</small>
-        </div>
-    </div>
+                            <div class="form-row" style="margin-bottom: 0;">
+                                <label style="font-weight: 600; color: #475569;">Đính kèm tệp PDF từ máy:</label>
+                                <input type="file" class="form-input" id="lecture-pdf-file" accept=".pdf" style="padding: 6px; background: #fff;">
+                                <small style="color: #64748b; display: block; margin-top: 4px;">Hệ thống sẽ tải file lên để học sinh vừa xem video vừa mở tài liệu ôn tập trực tiếp.</small>
+                            </div>
+                        </div>
 
                         <div class="form-row" id="exam-password-row" style="display: none;"><label style="color:#dc2626;">🔑 Mật Khẩu Phòng Thi:</label><input type="text" class="form-input" id="new-exam-pass" placeholder="Mật khẩu đề thi..."></div>
                         <div class="form-row"><label style="color:#16a34a;">🟢 Thời gian BẮT ĐẦU mở đề:</label><input type="datetime-local" class="form-input" id="new-exam-start-time"></div>
@@ -404,8 +402,6 @@
             <div id="quiz-result"></div>
         </div>
 
-        <!-- GIAO DIỆN ĐẤU TRƯỜNG KAHOOT -->
-
         <!-- GIAO DIỆN XEM BÀI GIẢNG & TƯƠNG TÁC CHO HỌC SINH -->
 <div id="lecture-view" style="display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
     <div class="quiz-topbar">
@@ -414,24 +410,25 @@
     </div>
     
     <!-- Khung phát Video YouTube -->
-    <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 20px; background: #000; border-radius: 8px; overflow: hidden;">
+    <div id="lecture-video-container" style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 20px; background: #000; border-radius: 8px; overflow: hidden; display: none;">
         <iframe id="lecture-iframe" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen></iframe>
     </div>
 
     <!-- Nút mở tài liệu PDF đính kèm -->
-    <div id="lecture-pdf-box" style="margin-bottom: 25px; display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;">
+    <div id="lecture-pdf-box" style="margin-bottom: 25px; display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 8px; align-items: center; justify-content: space-between;">
         <span style="font-weight: bold; color: #166534;"><i class="fa-solid fa-file-pdf"></i> Tài liệu học tập đính kèm (PDF)</span>
         <a id="lecture-pdf-link" href="#" target="_blank" class="btn-start" style="background: #16a34a; padding: 6px 14px; font-size: 0.95rem; text-decoration: none; display: inline-flex; width: auto;"><i class="fa-solid fa-download"></i> Mở / Tải Tài Liệu</a>
     </div>
 
     <!-- Phần câu hỏi tương tác củng cố -->
-    <div class="section-header">📝 CÂU HỎI TƯƠNG TÁC CỦNG CỐ KIẾN THỨC</div>
-    <form id="lecture-quiz-form">
+    <div class="section-header" id="lecture-quiz-header" style="display: none;">📝 CÂU HỎI TƯƠNG TÁC CỦNG CỐ KIẾN THỨC</div>
+    <form id="lecture-quiz-form" style="display: none;">
         <div id="lecture-questions-content"></div>
         <button type="button" class="btn-submit" onclick="submitLectureQuiz()"><i class="fa-solid fa-paper-plane"></i> Nộp Bài Tương Tác</button>
     </form>
     <div id="lecture-result" style="display: none; margin-top: 20px; padding: 22px; border-radius: var(--radius-md); text-align: center; font-size: 1.25rem; font-weight: bold; background: #dcfce7; color: #166534;"></div>
 </div>
+
         <div id="kahoot-view">
             <div class="kahoot-header">
                 <div id="kahoot-progress" style="font-weight: bold; color: #7c3aed; font-size: 1.25rem;">⚡ ĐẤU TRƯỜNG KAHOOT</div>
@@ -489,6 +486,9 @@
         let kahootCurrentIndex = 0; let kahootScore = 0; let kahootStdName = ""; let kahootStdClass = "";
         let kahootTimer = null; let kahootTimeLeft = 20;
 
+        // --- BIẾN TOÀN CỤC ĐỌC FILE PDF TỪ MÁY ---
+        let lecturePdfBase64 = "";
+
         // --- HỆ THỐNG ÂM THANH KAHOOT CẢI TIẾN ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let loopOsc = null; let loopTimer = null;
@@ -530,7 +530,7 @@
         }
         function stopKahootMusicLoop() { clearInterval(loopTimer); }
 
-     // --- MỤC LỤC & CHUYÊN MỤC CHUẨN (CẢ 3 KHỐI) ---
+// --- MỤC LỤC & CHUYÊN MỤC CHUẨN (CẢ 3 KHỐI) ---
 const topicsConfig = {
     general: [
         { id: 'all', name: 'Tất cả chuyên đề', icon: 'fa-layer-group' }
@@ -785,6 +785,8 @@ const topicsConfig = {
                         startTime: ex.startTime || ex.StartTime || '',
                         deadline: ex.deadline || ex.Deadline || '',
                         examPass: ex.examPass || ex.ExamPass || '',
+                        youtubeUrl: ex.youtubeUrl || ex.youtubeurl || ex.YOUTUBEURL || '',
+                        pdfData: ex.pdfData || ex.pdfdata || ex.PDFDATA || '',
                         questions: parsedQ
                     };
                 }).filter(e => e.title && e.title !== "undefined" && e.title.trim() !== "");
@@ -876,7 +878,7 @@ const topicsConfig = {
                 const matchGrade = (currentGrade === 'all' || gradeStr === currentGrade);
                 const matchTopic = (currentTopic === 'all' || !e.topic || e.topic.includes(currentTopic) || currentTopic.includes(e.topic));
                 return matchGrade && matchTopic;
-            });   
+            });    
          
             if (list.length === 0) {
                 grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trong mục này.</p>`;
@@ -1140,12 +1142,12 @@ const topicsConfig = {
             processedQuestions.forEach((q, idx) => {
                 let qType = (q.type || 'MCQ').toUpperCase();
                 let weight = 0.25; 
-                if (qType === 'TF') weight = 1.0;   
+                if (qType === 'TF') weight = 1.0;    
                 else if (qType === 'SA') weight = 0.5; 
 
                 maxPossibleScore += weight;
 
-             let isQCorrect = false;
+               let isQCorrect = false;
             if (qType === 'MCQ') {
                 let userAns = document.querySelector(`input[name="q_${idx + 1}"]:checked`)?.value || "";
                 if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) {
@@ -1161,7 +1163,6 @@ const topicsConfig = {
                     totalWeightedScore += weight; // +0.5
                 }
             } else if (qType === 'TF') {
-                // Đếm số ý đúng theo chuẩn Bộ GD&ĐT: a, b, c, d
                 let correctSubCount = 0;
                 ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
                     if (q.ansOptions && q.ansOptions[subIdx]) {
@@ -1173,7 +1174,6 @@ const topicsConfig = {
                     }
                 });
 
-                // Quy đổi thang điểm chuẩn Bộ GD&ĐT
                 if (correctSubCount === 1) totalWeightedScore += 0.1;
                 else if (correctSubCount === 2) totalWeightedScore += 0.25;
                 else if (correctSubCount === 3) totalWeightedScore += 0.5;
@@ -1197,7 +1197,6 @@ const topicsConfig = {
             if (!qCard) return;
             let qType = (q.type || 'MCQ').toUpperCase();
 
-            // 1. Tô màu trắc nghiệm nhiều lựa chọn (MCQ)
             if (qType === 'MCQ') {
                 const selectedInput = qCard.querySelector(`input[name="q_${idx + 1}"]:checked`);
                 const userVal = selectedInput ? selectedInput.value.trim().toUpperCase() : "";
@@ -1208,12 +1207,12 @@ const topicsConfig = {
                     if (radio) {
                         const val = radio.value.trim().toUpperCase();
                         if (val === correctVal) {
-                            optLabel.style.backgroundColor = '#dcfce7'; // Nền xanh lá
+                            optLabel.style.backgroundColor = '#dcfce7'; 
                             optLabel.style.borderColor = '#22c55e';
                             optLabel.style.color = '#15803d';
                             optLabel.style.fontWeight = 'bold';
                         } else if (val === userVal && val !== correctVal) {
-                            optLabel.style.backgroundColor = '#fee2e2'; // Nền đỏ nổi bật
+                            optLabel.style.backgroundColor = '#fee2e2'; 
                             optLabel.style.borderColor = '#ef4444';
                             optLabel.style.color = '#b91c1c';
                             optLabel.style.fontWeight = 'bold';
@@ -1221,7 +1220,6 @@ const topicsConfig = {
                     }
                 });
             }
-         // 2. Tô màu trắc nghiệm Đúng / Sai (TF)
             else if (qType === 'TF') {
                 ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
                     const checkedRadio = qCard.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`);
@@ -1232,19 +1230,17 @@ const topicsConfig = {
                         correctVal = q.ansOptions[subIdx].trim().toUpperCase();
                     }
 
-                    // Tìm thẻ cha bọc toàn bộ dòng của ý này (a, b, c hoặc d)
                     const anyRadio = qCard.querySelector(`input[name="q_${idx + 1}_${ch}"]`);
                     if (anyRadio) {
-                        // Lấy khối dòng bao quanh (dù là thẻ tr, div, li hay p)
                         const subRow = anyRadio.closest('tr') || anyRadio.closest('.tf-sub-row') || anyRadio.closest('div') || anyRadio.parentElement;
                         
                         if (subRow) {
                             if (userVal === correctVal && userVal !== '') {
-                                subRow.style.backgroundColor = '#dcfce7'; // Nền xanh lá nhạt nếu đúng
+                                subRow.style.backgroundColor = '#dcfce7'; 
                                 subRow.style.borderRadius = '6px';
                                 subRow.style.padding = '4px 8px';
                             } else {
-                                subRow.style.backgroundColor = '#fee2e2'; // Nền đỏ nhạt nếu sai hoặc chưa chọn
+                                subRow.style.backgroundColor = '#fee2e2'; 
                                 subRow.style.borderRadius = '6px';
                                 subRow.style.padding = '4px 8px';
                             }
@@ -1252,7 +1248,6 @@ const topicsConfig = {
                     }
                 });
             }
-            // 3. Tô màu câu Trả lời ngắn (SA)
             else if (qType === 'SA') {
                 const saInput = qCard.querySelector(`input[name="q_${idx + 1}"]`);
                 if (saInput) {
@@ -1270,7 +1265,6 @@ const topicsConfig = {
                 }
             }
 
-            // Hiển thị hộp giải thích chi tiết & đáp án chuẩn
             const expBox = document.getElementById(`exp_q_${idx + 1}`);
             if (expBox) {
                 let ansText = q.ans;
@@ -1294,22 +1288,19 @@ const topicsConfig = {
             } catch (e) {}
         }
 
-     async function openTeacherLogin() {
+       async function openTeacherLogin() {
             const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
             if (!pass) return;
             
-            // Hiển thị con trỏ chuột chờ để báo hiệu đang kết nối máy chủ
             document.body.style.cursor = 'wait';
 
             try {
-                // Nối dây gọi xuống Google Sheets để kiểm tra mật khẩu thực tế
                 const res = await fetch(`${SCRIPT_URL}?action=checkPassword&password=${encodeURIComponent(pass)}`);
                 const data = await res.json();
                 
                 document.body.style.cursor = 'default';
 
                 if (data.status === "success") {
-                    // Mở khóa thành công
                     teacherPassAuth = pass;
                     document.getElementById('portal-view').style.display = 'none';
                     document.getElementById('teacher-view').style.display = 'block';
@@ -1352,7 +1343,7 @@ function renderTeacherExamList() {
             });
             if (tab === 'exams') renderTeacherExamList();
             if (tab === 'creator') { 
-                updateNewExamTopicDropdown(); // <-- THÊM DÒNG NÀY VÀO ĐÂY
+                updateNewExamTopicDropdown(); 
                 filterQuestionBankList(); 
                 renderMatrixTable(); 
             }
@@ -1421,23 +1412,20 @@ function renderTeacherExamList() {
             }
         }
 
-     function updateScoreClassFilter() {
+    function updateScoreClassFilter() {
     const select = document.getElementById('filter-score-class');
     if (!select) return;
     
-    // 1. Lấy danh sách lớp đã cấu hình trong hệ thống
     let configuredClasses = [];
     if (typeof teacherClasses !== 'undefined' && Array.isArray(teacherClasses)) configuredClasses = teacherClasses;
     else if (typeof classList !== 'undefined' && Array.isArray(classList)) configuredClasses = classList;
     else configuredClasses = JSON.parse(localStorage.getItem('teacher_classes') || '[]');
 
-    // 2. Tự động lấy thêm tất cả các lớp thực tế học sinh đã nộp từ bảng điểm
     let submittedClasses = [];
     if (typeof globalScoresData !== 'undefined' && Array.isArray(globalScoresData)) {
         submittedClasses = globalScoresData.map(r => r.sClass).filter(Boolean);
     }
 
-    // 3. Gộp chung và loại bỏ trùng lặp
     const allClasses = [...new Set([...configuredClasses, ...submittedClasses])];
 
     const currentVal = select.value;
@@ -1463,7 +1451,6 @@ function renderTeacherExamList() {
                         totalScore: r['Điểm số'] || r.totalScore || r.TotalScore || r.score || '0'
                     }));
 
-                    // Tự động gom danh sách các Đề thi duy nhất đưa vào menu lọc
                     const examFilter = document.getElementById('filter-score-exam');
                     if (examFilter) {
                         const uniqueExams = [...new Set(globalScoresData.map(r => r.examTitle).filter(Boolean))];
@@ -1483,7 +1470,6 @@ function renderTeacherExamList() {
         }
 
 function renderScoresTable() {
-        // BẢO VỆ 1: Ngăn lỗi nếu dữ liệu từ Sheet bị rỗng hoặc lỗi đường truyền
         if (!globalScoresData || !Array.isArray(globalScoresData)) return;
 
         const tbody = document.getElementById('scores-table-body');
@@ -1495,7 +1481,6 @@ function renderScoresTable() {
         const filterClass = classEl ? classEl.value : 'all';
         const filterExam = examEl ? examEl.value : 'all';
 
-        // BẢO VỆ 2: Lọc dữ liệu cực kỳ an toàn (chống lỗi do Văn bản thuần túy)
         let displayList = globalScoresData.filter(r => {
             if (!r) return false;
             const sClass = String(r.sClass || '').toLowerCase().trim();
@@ -1514,9 +1499,8 @@ function renderScoresTable() {
         const avgEl = document.getElementById('stat-avg-score');
 
         if (displayList.length > 0) {
-            // BẢO VỆ 3: Ép kiểu điểm số an toàn tuyệt đối, bất chấp chữ hay số
             const scores = displayList.map(r => {
-                let sVal = String(r.totalScore || '0').replace(',', '.'); // Đề phòng dấu phẩy
+                let sVal = String(r.totalScore || '0').replace(',', '.'); 
                 let num = parseFloat(sVal);
                 return isNaN(num) ? 0 : num;
             });
@@ -1640,13 +1624,11 @@ function renderScoresTable() {
             }
         }
 
-      // --- THUẬT TOÁN BÓC TÁCH ALL-IN-ONE (ĐỒNG BỘ CHUẨN TÊN CHỦ ĐỀ) ---
 function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     let parsedArr = [];
     let tempDiv = document.createElement('div');
     tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
 
-    // 1. Chuẩn hóa xuống dòng, loại bỏ thẻ rác nhưng BẢO VỆ thẻ <img>
     let textContent = tempDiv.innerHTML
         .replace(/<br\s*[\/]?>/gi, '\n')
         .replace(/<\/?(div|p|h[1-6]|ul|ol|li|tr)[^>]*>/gi, '\n')
@@ -1655,7 +1637,6 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         .replace(/\r\n/g, '\n')
         .replace(/\r/g, '\n');
 
-    // 2. Tách theo từng Câu / Bài
     let blocks = textContent.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_])/i)
         .map(b => b.trim())
         .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+/i.test(b));
@@ -1663,7 +1644,6 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     blocks.forEach((block, idx) => {
         let lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
         
-        // Nhận diện loại câu: Phân biệt chính xác chữ HOA (MCQ) và chữ THƯỜNG (TF)
         let hasMCQ = lines.some(l => /^[A-D][\.\)]\s*/.test(l));
         let hasTF = lines.some(l => /^[a-d][\)\.]\s*/.test(l));
         let detectedType = hasMCQ ? 'MCQ' : (hasTF ? 'TF' : 'SA');
@@ -1673,7 +1653,6 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         let ansOptions = [];
         let qLines = [];
 
-        // BƯỚC A: Bóc tách dòng Đáp án
         let ansIdx = lines.findIndex(l => /^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?/i.test(l));
         if (ansIdx !== -1) {
             let rawAnsLine = lines[ansIdx].replace(/^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*/i, '').trim();
@@ -1691,7 +1670,6 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             }
         }
 
-        // BƯỚC B: Bóc tách thân câu hỏi & phương án
         let currentOpt = -1;
 
         if (detectedType === 'MCQ') {
@@ -1744,13 +1722,12 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
       let qContent = qLines.join('<br>').replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_]+/i, '').trim();
 
-        // CHUẨN HÓA LẠI ID VÀ GÁN ĐẦY ĐỦ KHỐI LỚP (GRADE)
         const safeTopicId = topic.replace(/[^a-zA-Z0-9-_]/g, '_');
         const qId = `CH${grade}_${safeTopicId}_${Date.now().toString().slice(-4)}_${idx + 1}`;
 
         parsedArr.push({
             id: qId,
-            grade: String(grade), // Ép kiểu chuỗi để đồng bộ tuyệt đối với bộ lọc
+            grade: String(grade), 
             topic: topic, 
             level: 'TH',
             type: detectedType,
@@ -1859,7 +1836,6 @@ updateSelectedItemsDisplay();
             const fText = document.getElementById('bank-search-text').value.toLowerCase();
 
             const filtered = questionBank.filter(q => {
-                // Lọc linh hoạt, không phân biệt hoa thường và tự động gạt bỏ khoảng trắng thừa
                 if (fGrade !== 'all' && q.grade !== fGrade) return false;
                 if (fTopic !== 'all' && q.topic.toLowerCase() !== fTopic.toLowerCase()) return false;
                 if (fLevel !== 'all' && q.level.toUpperCase() !== fLevel.toUpperCase()) return false;
@@ -1982,9 +1958,6 @@ function clearSelectedQuestions() {
             const inputs = document.querySelectorAll('.matrix-input');
             selectedQuestions = [];
 
-            const levels = ['NB', 'TH', 'VD', 'VDC'];
-            const types = ['MCQ', 'TF', 'SA'];
-
             inputs.forEach(input => {
                 const count = parseInt(input.value) || 0;
                 if (count <= 0) return;
@@ -1993,7 +1966,6 @@ function clearSelectedQuestions() {
                 const qType = input.getAttribute('data-type');
                 const qLvl = input.getAttribute('data-lvl');
 
-                // Lọc đúng: Chủ đề + Dạng + Mức độ
                 let matched = questionBank.filter(q => {
                     const matchTopic = (q.topic === topicId || String(q.id).includes(topicId));
                     const matchType = (String(q.type).trim().toUpperCase() === qType);
@@ -2010,7 +1982,6 @@ function clearSelectedQuestions() {
                 return;
             }
 
-            // Tự động sắp xếp lại đề thi theo chuẩn 3 phần: MCQ -> TF -> SA
             selectedQuestions.sort((a, b) => {
                 const order = { 'MCQ': 1, 'TF': 2, 'SA': 3 };
                 return (order[a.type] || 99) - (order[b.type] || 99);
@@ -2033,25 +2004,23 @@ function clearSelectedQuestions() {
             const examTitle = document.getElementById('new-exam-title').value.trim();
             let finalQuestions = (method === 'paste') ? directParsedQuestions : selectedQuestions;
 
-          // Lấy thêm giá trị YouTube và PDF từ giao diện
-    const youtubeUrl = document.getElementById('lecture-youtube-input')?.value.trim() || "";
-    const pdfData = document.getElementById('lecture-pdf-input')?.value.trim() || "";
+            const youtubeUrl = document.getElementById('lecture-youtube-url')?.value.trim() || "";
+            const pdfData = lecturePdfBase64 || "";
 
-    // Nới lỏng điều kiện: Chỉ cần có Mã đề, Tên đề VÀ (có câu hỏi HOẶC có link YouTube HOẶC có tệp PDF) là cho phép lưu
-    if (!examId || !examTitle || (finalQuestions.length === 0 && !youtubeUrl && !pdfData)) { 
-        alert("Vui lòng điền đủ Mã đề, Tên đề và có ít nhất Câu hỏi, Link YouTube hoặc File PDF!"); 
-        return; 
-    }
+            if (!examId || !examTitle || (finalQuestions.length === 0 && !youtubeUrl && !pdfData)) { 
+                alert("Vui lòng điền đủ Mã đề, Tên đề và có ít nhất Câu hỏi, Link YouTube hoặc File PDF!"); 
+                return; 
+            }
 
-    const payload = {
-        action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle,
-        grade: document.getElementById('new-exam-grade').value, topic: document.getElementById('new-exam-topic').value,
-        mode: document.getElementById('new-exam-mode').value, timeLimit: parseInt(document.getElementById('new-exam-time').value) || 45,
-        examPass: document.getElementById('new-exam-pass').value.trim(), startTime: document.getElementById('new-exam-start-time').value, deadline: document.getElementById('new-exam-deadline').value,
-        questions: finalQuestions,
-        youtubeUrl: youtubeUrl,
-        pdfData: pdfData
-    };
+            const payload = {
+                action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle,
+                grade: document.getElementById('new-exam-grade').value, topic: document.getElementById('new-exam-topic').value,
+                mode: document.getElementById('new-exam-mode').value, timeLimit: parseInt(document.getElementById('new-exam-time').value) || 45,
+                examPass: document.getElementById('new-exam-pass').value.trim(), startTime: document.getElementById('new-exam-start-time').value, deadline: document.getElementById('new-exam-deadline').value,
+                questions: finalQuestions,
+                youtubeUrl: youtubeUrl,
+                pdfData: pdfData
+            };
             try {
                 const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                 const data = await res.json();
@@ -2087,35 +2056,35 @@ function updateNewExamTopicDropdown() {
                 select.appendChild(opt);
             } else {
                 const opt = document.createElement('option');
-                opt.value = item.id; // Lấy đúng mã chuẩn (VD: 12-kt-gk1)
-                opt.textContent = item.name; // Vẫn hiển thị tiếng Việt đẹp cho thầy chọn
+                opt.value = item.id; 
+                opt.textContent = item.name; 
                 select.appendChild(opt);
             }
         });
         renderMatrixTable();
     }
         function updateBankBulkTopicDropdown() {
-        const grade = document.getElementById('examGrade') ? document.getElementById('examGrade').value : 'g12';
-        const select = document.getElementById('examTopic');
-        if (!select) return;
-        select.innerHTML = "";
-        
-        const list = topicsConfig[grade] || [];
-        list.forEach(item => {
-            if (item.type === 'header') {
-                const opt = document.createElement('option');
-                opt.disabled = true;
-                opt.textContent = "--- " + item.title + " ---";
-                opt.style.fontWeight = "bold";
-                select.appendChild(opt);
-            } else {
-                const opt = document.createElement('option');
-                opt.value = item.id; // Lấy đúng mã chuẩn
-                opt.textContent = item.name;
-                select.appendChild(opt);
-            }
-        });
-    }
+            const grade = document.getElementById('examGrade') ? document.getElementById('examGrade').value : 'g12';
+            const select = document.getElementById('examTopic');
+            if (!select) return;
+            select.innerHTML = "";
+            
+            const list = topicsConfig[grade] || [];
+            list.forEach(item => {
+                if (item.type === 'header') {
+                    const opt = document.createElement('option');
+                    opt.disabled = true;
+                    opt.textContent = "--- " + item.title + " ---";
+                    opt.style.fontWeight = "bold";
+                    select.appendChild(opt);
+                } else {
+                    const opt = document.createElement('option');
+                    opt.value = item.name;
+                    opt.textContent = item.name;
+                    select.appendChild(opt);
+                }
+            });
+        }
 
         function showPortalView() {
             document.getElementById('kahoot-view').style.display = 'none';
@@ -2126,7 +2095,6 @@ function updateNewExamTopicDropdown() {
             window.history.pushState({}, document.title, window.location.pathname);
         }
 
-        // --- ĐẤU TRƯỜNG KAHOOT (NHẠC, NHẢY MÚA, CÂU SAI) ---
         function startHostMode() {
             document.getElementById('portal-view').style.display = 'none';
             document.getElementById('kahoot-view').style.display = 'block';
@@ -2233,7 +2201,6 @@ function joinKahootArena() {
     function answerKahoot(selected, correct, btnEl) {
     clearInterval(kahootTimer);
     
-    // Khóa ngay lập tức tất cả các nút đáp án để không cho bấm đổi
     const allBtns = document.querySelectorAll('#kahoot-options-grid button, #kahoot-game-box button');
     allBtns.forEach(b => {
         b.disabled = true;
@@ -2241,7 +2208,7 @@ function joinKahootArena() {
         b.style.opacity = '0.7';
     });
     if (btnEl) {
-        btnEl.style.opacity = '1'; // Giữ sáng rõ đáp án học sinh vừa bấm
+        btnEl.style.opacity = '1'; 
     }
 
     const feedback = document.getElementById('kahoot-feedback');
@@ -2276,30 +2243,7 @@ function joinKahootArena() {
 
         fetchData();
         
-        function updateBankBulkTopicDropdown() {
-            const grade = document.getElementById('examGrade') ? document.getElementById('examGrade').value : 'g12';
-            const select = document.getElementById('examTopic');
-            if (!select) return;
-            select.innerHTML = "";
-            
-            const list = topicsConfig[grade] || [];
-            list.forEach(item => {
-                if (item.type === 'header') {
-                    const opt = document.createElement('option');
-                    opt.disabled = true;
-                    opt.textContent = "--- " + item.title + " ---";
-                    opt.style.fontWeight = "bold";
-                    select.appendChild(opt);
-                } else {
-                    const opt = document.createElement('option');
-                    opt.value = item.name;
-                    opt.textContent = item.name;
-                    select.appendChild(opt);
-                }
-            });
-        }
-        // === CÁC HÀM XỬ LÝ ĐỔI MẬT KHẨU QUẢN TRỊ ===
-function openChangePassModal() {
+        function openChangePassModal() {
     const modal = document.getElementById('change-pass-modal');
     if (modal) modal.style.display = 'flex';
 }
@@ -2335,7 +2279,7 @@ async function submitChangePassword() {
 
         if (data.status === 'success') {
             alert("🎉 Đổi mật khẩu thành công! Hãy ghi nhớ mật khẩu mới.");
-            teacherPassAuth = newPass; // Cập nhật phiên đăng nhập của giáo viên
+            teacherPassAuth = newPass; 
             closeChangePassModal();
         } else {
             alert(data.message || "Mật khẩu cũ không chính xác!");
@@ -2344,9 +2288,8 @@ async function submitChangePassword() {
         alert("Lỗi kết nối máy chủ khi đổi mật khẩu!");
     }
 }
-        // === HỆ THỐNG BẢO MẬT & CHỐNG SOI ĐÁP ÁN KHI LÀM BÀI ===
+        
 (function() {
-    // 1. Chặn chuột phải để không bấm được "Kiểm tra" (Inspect Element)
     document.addEventListener('contextmenu', function(e) {
         const quizBox = document.getElementById('quiz-view');
         const kahootBox = document.getElementById('kahoot-view');
@@ -2358,7 +2301,6 @@ async function submitChangePassword() {
         }
     });
 
-    // 2. Chặn các phím tắt mở công cụ lập trình viên (F12, Ctrl+Shift+I, Ctrl+U)
     document.addEventListener('keydown', function(e) {
         const quizBox = document.getElementById('quiz-view');
         const kahootBox = document.getElementById('kahoot-view');
@@ -2366,17 +2308,14 @@ async function submitChangePassword() {
                              (kahootBox && kahootBox.style.display !== 'none');
 
         if (isExamActive) {
-            // Chặn F12
             if (e.key === 'F12' || e.keyCode === 123) {
                 e.preventDefault();
                 return false;
             }
-            // Chặn Ctrl + Shift + I (Inspect) hoặc Ctrl + Shift + J (Console)
             if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
                 e.preventDefault();
                 return false;
             }
-            // Chặn Ctrl + U (Xem nguồn trang web)
             if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
                 e.preventDefault();
                 return false;
@@ -2384,40 +2323,60 @@ async function submitChangePassword() {
         }
     });
 })();
+
         // === HÀM ĐIỀU KHIỂN ẨN/HIỆN KHI CHUYỂN CHẾ ĐỘ ===
 function toggleExamPasswordField() {
     var mode = document.getElementById("new-exam-mode").value;
     var passwordRow = document.getElementById("exam-password-row");
     var lectureFields = document.getElementById("lecture-fields"); 
     
-    // Tìm ô nhập "Thời Gian (Phút)" để ẩn đi khi là bài giảng
-    // (Ô thời gian nằm ngay cạnh ô chọn chế độ)
     var timeLimitInput = document.getElementById("new-exam-time");
     var timeLimitRow = timeLimitInput ? timeLimitInput.closest('.form-row') : null;
 
-    // Ẩn hiện khung mật khẩu nếu là Kiểm tra
     if (mode === "KIEMTRA") {
         if (passwordRow) passwordRow.style.display = "block";
     } else {
         if (passwordRow) passwordRow.style.display = "none";
     }
 
-    // Nếu là Bài Giảng: hiện khung YouTube/PDF, ẩn ô đếm ngược thời gian
     if (mode === "BAIGIANG") {
         if (lectureFields) lectureFields.style.display = "block";
-        if (timeLimitRow) timeLimitRow.style.display = "none"; // Ẩn ô thời gian vì học sinh tự do xem bài
+        if (timeLimitRow) timeLimitRow.style.display = "none"; 
     } else {
         if (lectureFields) lectureFields.style.display = "none";
-        if (timeLimitRow) timeLimitRow.style.display = "block"; // Hiện lại khi là Luyện tập hoặc Kiểm tra
+        if (timeLimitRow) timeLimitRow.style.display = "block"; 
     }
 }
-     // === HÀM MỞ GIAO DIỆN BÀI GIẢNG CHO HỌC SINH ===
+
+// === TỰ ĐỘNG KHỞI TẠO VÀ ĐỌC FILE PDF TỪ MÁY KHI TRANG TẢI XONG ===
+document.addEventListener('DOMContentLoaded', function() {
+    const pdfFileInput = document.getElementById('lecture-pdf-file');
+    if (pdfFileInput) {
+        pdfFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(uploadEvent) {
+                    lecturePdfBase64 = uploadEvent.target.result; 
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    // Kích hoạt đồng bộ trạng thái ban đầu ngay khi mở màn hình soạn đề
+    toggleExamPasswordField();
+});
+
+// === HÀM MỞ GIAO DIỆN BÀI GIẢNG CHO HỌC SINH ===
 function startLectureMode() {
     document.getElementById('portal-view').style.display = 'none';
     document.getElementById('lecture-view').style.display = 'block';
-    document.getElementById('lecture-title').innerText = activeExam.title;
+    document.getElementById('lecture-title').innerText = activeExam.title || "Bài Giảng";
 
-    let ytUrl = activeExam.youtubeUrl || "";
+    const ytUrl = activeExam.youtubeUrl || activeExam.youtubeurl || activeExam.YOUTUBEURL || "";
+    const pdfContent = activeExam.pdfData || activeExam.pdfdata || activeExam.PDFDATA || "";
+
     let embedUrl = "";
     if (ytUrl.includes("youtu.be/")) {
         let videoId = ytUrl.split("youtu.be/")[1].split("?")[0];
@@ -2430,39 +2389,48 @@ function startLectureMode() {
     }
     
     const iframe = document.getElementById('lecture-iframe');
-    if (embedUrl) {
+    const videoContainer = document.getElementById('lecture-video-container');
+    if (embedUrl && iframe && videoContainer) {
         iframe.src = embedUrl;
-        iframe.parentNode.style.display = 'block';
-    } else {
-        iframe.parentNode.style.display = 'none';
+        videoContainer.style.display = 'block';
+    } else if (videoContainer) {
+        videoContainer.style.display = 'none';
     }
 
     const pdfBox = document.getElementById('lecture-pdf-box');
     const pdfLink = document.getElementById('lecture-pdf-link');
-    if (activeExam.pdfData) {
-        pdfLink.href = activeExam.pdfData;
+    if (pdfContent && pdfContent.trim() !== "" && pdfLink && pdfBox) {
+        pdfLink.href = pdfContent;
         pdfBox.style.display = 'flex';
-    } else {
+    } else if (pdfBox) {
         pdfBox.style.display = 'none';
     }
 
     const qContainer = document.getElementById('lecture-questions-content');
+    const qHeader = document.getElementById('lecture-quiz-header');
+    const qForm = document.getElementById('lecture-quiz-form');
     const qList = activeExam.questions || [];
-    if (qList.length > 0) {
-        qContainer.innerHTML = qList.map((q, idx) => {
-            let opts = '';
-            if (q.type === 'MCQ' && q.options) {
-                ['A', 'B', 'C', 'D'].forEach((ch, i) => {
-                    opts += `<label class="mcq-option"><input type="radio" name="l_q_${idx}" value="${ch}"><span><strong>${ch}.</strong> ${q.options[i]}</span></label>`;
-                });
-            }
-            return `<div class="q-card"><div class="q-title">Câu ${idx + 1}: ${q.q}</div>${opts}</div>`;
-        }).join('');
-        if (typeof renderMath === 'function') renderMath(qContainer);
-        document.getElementById('lecture-quiz-form').style.display = 'block';
-    } else {
-        qContainer.innerHTML = `<p style="color: #64748b; font-style: italic;">Bài giảng này không có câu hỏi tương tác đi kèm.</p>`;
+    
+    if (qContainer && qHeader && qForm) {
+        if (qList.length > 0) {
+            qContainer.innerHTML = qList.map((q, idx) => {
+                let opts = '';
+                if (q.type === 'MCQ' && q.options) {
+                    ['A', 'B', 'C', 'D'].forEach((ch, i) => {
+                        opts += `<label class="mcq-option"><input type="radio" name="l_q_${idx}" value="${ch}"><span><strong>${ch}.</strong> ${q.options[i]}</span></label>`;
+                    });
+                }
+                return `<div class="q-card"><div class="q-title">Câu ${idx + 1}: ${q.q}</div>${opts}</div>`;
+            }).join('');
+            if (typeof renderMath === 'function') renderMath(qContainer);
+            qHeader.style.display = 'block';
+            qForm.style.display = 'block';
+        } else {
+            qHeader.style.display = 'none';
+            qForm.style.display = 'none';
+        }
     }
+    
     document.getElementById('lecture-result').style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -2480,20 +2448,6 @@ function submitLectureQuiz() {
     resDiv.style.display = 'block';
     resDiv.innerHTML = `🎉 Bạn đã trả lời đúng <strong>${correctCount} / ${qList.length}</strong> câu hỏi tương tác!`;
 }
-        // Tự động ẩn hiện các khung khi thay đổi chế độ tạo đề
-document.getElementById('new-exam-mode')?.addEventListener('change', function() {
-    const mode = this.value;
-    const timeLimitGroup = document.getElementById('new-exam-time')?.closest('.form-row') || document.getElementById('new-exam-time')?.parentElement;
-    const lectureInputsGroup = document.getElementById('lecture-inputs-group'); // Khung chứa ô nhập YouTube & PDF của cô
-
-    if (mode === 'BAIGIANG') {
-        if (timeLimitGroup) timeLimitGroup.style.display = 'none';
-        if (lectureInputsGroup) lectureInputsGroup.style.display = 'block';
-    } else {
-        if (timeLimitGroup) timeLimitGroup.style.display = 'block';
-        if (lectureInputsGroup) lectureInputsGroup.style.display = 'none';
-    }
-});
     </script>
 </body>
 </html>

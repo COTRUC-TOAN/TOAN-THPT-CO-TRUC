@@ -1819,6 +1819,7 @@ updateSelectedItemsDisplay();
                     }).filter(q => q.id && q.id !== "");
                     
                     filterQuestionBankList(); 
+                    renderMatrixTable();
                 }
             } catch (e) {
                 console.error("Lỗi tải ngân hàng:", e);

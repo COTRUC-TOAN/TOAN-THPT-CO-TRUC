@@ -1922,15 +1922,15 @@ function clearSelectedQuestions() {
     filterQuestionBankList();
     updateSelectedItemsDisplay();
 }
- function getQuestionCount(topicName, type, levelText) {
-    if (typeof questionList === 'undefined' || !Array.isArray(questionList) || questionList.length === 0) return 0;
+function getQuestionCount(topicName, type, levelText) {
+    if (typeof questionBank === 'undefined' || !Array.isArray(questionBank) || questionBank.length === 0) return 0;
     
-    return questionList.filter(q => {
-        let chudeQ = String(q.ChuDe || '').trim();
-        let dangQ = String(q.Dang || q.DangCauHoi || '').trim();
-        let mucdoQ = String(q['Mức độ'] || q.MucDo || '').trim();
+    return questionBank.filter(q => {
+        let chudeQ = String(q.topic || q.ChuDe || '').trim();
+        let dangQ = String(q.type || q.Dang || q.DangCauHoi || '').trim();
+        let mucdoQ = String(q.level || q.MucDo || q['Mức độ'] || '').trim();
 
-        let matchTopic = chudeQ === String(topicName).trim();
+        let matchTopic = (chudeQ === String(topicName).trim() || topicName.includes(chudeQ) || chudeQ.includes(topicName));
         let matchType = dangQ.toUpperCase() === String(type).toUpperCase();
         let matchLevel = mucdoQ.toUpperCase() === String(levelText).toUpperCase();
 

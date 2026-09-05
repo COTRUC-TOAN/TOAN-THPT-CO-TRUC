@@ -542,12 +542,40 @@
         }
         function stopKahootMusicLoop() { clearInterval(loopTimer); }
 
+// --- MỤC LỤC & CHUYÊN MỤC ĐỘNG TỪ GOOGLE SHEETS ---
 let topicsConfig = {
-    general: [],
-    g12: [],
-    g11: [],
-    g10: []
+     general: [],
+     g12: [],
+     g11: [],
+     g10: []
 };
+
+// Hàm phân loại dữ liệu mục lục tải về từ Google Sheets vào từng khối tương ứng
+function processTopicsData(rawTopics) {
+    topicsConfig = { general: [], g12: [], g11: [], g10: [] };
+    if (!rawTopics || !Array.isArray(rawTopics)) return;
+
+    rawTopics.forEach(item => {
+        let khoiStr = String(item.khoi || "").trim();
+        let topicObj = {};
+        
+        if (item.type === 'header') {
+            topicObj = { type: 'header', title: item.name };
+        } else {
+            topicObj = { id: item.id, name: item.name, icon: item.icon || 'fa-book' };
+        }
+
+        if (khoiStr === '12') {
+            topicsConfig.g12.push(topicObj);
+        } else if (khoiStr === '11') {
+            topicsConfig.g11.push(topicObj);
+        } else if (khoiStr === '10') {
+            topicsConfig.g10.push(topicObj);
+        } else {
+            topicsConfig.general.push(topicObj);
+        }
+    });
+}
         function renderSidebarTopics() {
             const container = document.getElementById('topic-container');
             if (!container) return;

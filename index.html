@@ -1922,6 +1922,10 @@ function clearSelectedQuestions() {
     filterQuestionBankList();
     updateSelectedItemsDisplay();
 }
+        function getQuestionCount(topicName, type, level) {
+    if (typeof questionList === 'undefined') return 0; 
+    return questionList.filter(q => q.ChuDe === topicName && q.DangCauHoi === type && parseInt(q.MucDo) === level).length;
+}
        function renderMatrixTable() {
             const grade = document.getElementById('new-exam-grade').value;
             const topics = getTopicsForGrade(grade);
@@ -1942,10 +1946,10 @@ function clearSelectedQuestions() {
                             <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:8px 10px; display:grid; grid-template-columns: 180px 1fr; gap:10px; align-items:center;">
                                 <span style="font-size:0.95rem; font-weight:bold; color:#334155;">${t.label}</span>
                                 <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:6px;">
-                                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">NB</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="NB" value="0" min="0" style="padding:4px 6px; height:32px;"></div>
-                                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">TH</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="TH" value="0" min="0" style="padding:4px 6px; height:32px;"></div>
-                                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VD</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="VD" value="0" min="0" style="padding:4px 6px; height:32px;"></div>
-                                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VDC</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="VDC" value="0" min="0" style="padding:4px 6px; height:32px;"></div>
+                                   <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">NB (${getQuestionCount(top.name, t.type, 1)})</label><input type="number" class="form-input matrix-input" data-topic="${top.name}" data-type="${t.type}" data-level="1" min="0" placeholder="0"></div>
+                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">TH (${getQuestionCount(top.name, t.type, 2)})</label><input type="number" class="form-input matrix-input" data-topic="${top.name}" data-type="${t.type}" data-level="2" min="0" placeholder="0"></div>
+                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VD (${getQuestionCount(top.name, t.type, 3)})</label><input type="number" class="form-input matrix-input" data-topic="${top.name}" data-type="${t.type}" data-level="3" min="0" placeholder="0"></div>
+                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VDC (${getQuestionCount(top.name, t.type, 4)})</label><input type="number" class="form-input matrix-input" data-topic="${top.name}" data-type="${t.type}" data-level="4" min="0" placeholder="0"></div>
                                 </div>
                             </div>
                         `).join('')}

@@ -1922,10 +1922,9 @@ function clearSelectedQuestions() {
     filterQuestionBankList();
     updateSelectedItemsDisplay();
 }
-    function getQuestionCount(topicName, type, levelNum) {
+  function getQuestionCount(topicName, type, levelNum) {
     if (typeof questionList === 'undefined' || !Array.isArray(questionList) || questionList.length === 0) return 0;
     
-    // Quy đổi mức độ từ số (1,2,3,4) sang chữ cái tương ứng trong bảng Sheets (NB, TH, VD, VDC)
     const levelMap = { 1: 'NB', 2: 'TH', 3: 'VD', 4: 'VDC' };
     let targetLevel = levelMap[levelNum] || '';
 
@@ -1934,8 +1933,7 @@ function clearSelectedQuestions() {
         let dangQ = String(q.DangCauHoi || q.dang || q.Dạng || '').trim();
         let mucdoQ = String(q.MucDo || q.mucdo || '').trim();
 
-        // So khớp chính xác Chủ đề, Dạng (MCQ/TF/SA) và Mức độ (NB/TH/VD/VDC)
-        let matchTopic = chudeQ === String(topicName).trim();
+        let matchTopic = chudeQ === String(topicName).trim() || topicName.includes(chudeQ) || chudeQ.includes(topicName);
         let matchType = dangQ.toUpperCase() === String(type).toUpperCase();
         let matchLevel = mucdoQ.toUpperCase() === targetLevel.toUpperCase();
 

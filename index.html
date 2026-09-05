@@ -408,24 +408,37 @@
         <h3 id="lecture-title" style="color: #0f172a; font-size: 1.25rem;"></h3>
     </div>
     
-    <!-- Khung phát Video YouTube -->
-    <div id="lecture-video-container" style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 20px; background: #000; border-radius: 8px; overflow: hidden; display: none;">
-        <iframe id="lecture-iframe" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen></iframe>
+    <!-- KHUNG ĐIỂM DANH HỌC SINH -->
+    <div id="lecture-student-login" style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h4 style="color: #1e40af; margin-bottom: 10px; font-size: 1.05rem;"><i class="fa-solid fa-user-check"></i> Đăng ký điểm danh xem bài giảng</h4>
+        <div class="student-box" style="margin-bottom: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <input type="text" id="lec-std-name" placeholder="Họ và tên *" class="form-input" required>
+            <input type="text" id="lec-std-class" placeholder="Lớp (VD: 12A1) *" class="form-input" required>
+        </div>
+        <button class="btn-start" style="width: 100%; margin-top: 10px; background: #2563eb;" onclick="confirmLectureAttendance()"><i class="fa-solid fa-play"></i> Xác Nhận & Bắt Đầu Học</button>
     </div>
 
-    <!-- Nút mở tài liệu PDF đính kèm -->
-    <div id="lecture-pdf-box" style="margin-bottom: 25px; display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 8px; align-items: center; justify-content: space-between;">
-        <span style="font-weight: bold; color: #166534;"><i class="fa-solid fa-file-pdf"></i> Tài liệu học tập đính kèm (PDF)</span>
-        <a id="lecture-pdf-link" href="#" target="_blank" class="btn-start" style="background: #16a34a; padding: 6px 14px; font-size: 0.95rem; text-decoration: none; display: inline-flex; width: auto;"><i class="fa-solid fa-download"></i> Mở / Tải Tài Liệu</a>
-    </div>
+    <!-- BAO BỌC PHẦN NỘI DUNG CHÍNH (BAN ĐẦU SẼ BỊ GIẤU ĐI) -->
+    <div id="lecture-main-content" style="display: none;">
+        <!-- Khung phát Video YouTube -->
+        <div id="lecture-video-container" style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 20px; background: #000; border-radius: 8px; overflow: hidden; display: none;">
+            <iframe id="lecture-iframe" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen></iframe>
+        </div>
 
-    <!-- Phần câu hỏi tương tác củng cố -->
-    <div class="section-header" id="lecture-quiz-header" style="display: none;">📝 CÂU HỎI TƯƠNG TÁC CỦNG CỐ KIẾN THỨC</div>
-    <form id="lecture-quiz-form" style="display: none;">
-        <div id="lecture-questions-content"></div>
-        <button type="button" class="btn-submit" onclick="submitLectureQuiz()"><i class="fa-solid fa-paper-plane"></i> Nộp Bài Tương Tác</button>
-    </form>
-    <div id="lecture-result" style="display: none; margin-top: 20px; padding: 22px; border-radius: var(--radius-md); text-align: center; font-size: 1.25rem; font-weight: bold; background: #dcfce7; color: #166534;"></div>
+        <!-- Nút mở tài liệu PDF đính kèm -->
+        <div id="lecture-pdf-box" style="margin-bottom: 25px; display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 8px; align-items: center; justify-content: space-between;">
+            <span style="font-weight: bold; color: #166534;"><i class="fa-solid fa-file-pdf"></i> Tài liệu học tập đính kèm (PDF)</span>
+            <a id="lecture-pdf-link" href="#" target="_blank" class="btn-start" style="background: #16a34a; padding: 6px 14px; font-size: 0.95rem; text-decoration: none; display: inline-flex; width: auto;"><i class="fa-solid fa-download"></i> Mở / Tải Tài Liệu</a>
+        </div>
+
+        <!-- Phần câu hỏi tương tác củng cố -->
+        <div class="section-header" id="lecture-quiz-header" style="display: none;">📝 CÂU HỎI TƯƠNG TÁC CỦNG CỐ KIẾN THỨC</div>
+        <form id="lecture-quiz-form" style="display: none;">
+            <div id="lecture-questions-content"></div>
+            <button type="button" class="btn-submit" onclick="submitLectureQuiz()"><i class="fa-solid fa-paper-plane"></i> Nộp Bài Tương Tác</button>
+        </form>
+        <div id="lecture-result" style="display: none; margin-top: 20px; padding: 22px; border-radius: var(--radius-md); text-align: center; font-size: 1.25rem; font-weight: bold; background: #dcfce7; color: #166534;"></div>
+    </div>
 </div>
 
         <div id="kahoot-view">

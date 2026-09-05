@@ -1922,9 +1922,16 @@ function clearSelectedQuestions() {
     filterQuestionBankList();
     updateSelectedItemsDisplay();
 }
-        function getQuestionCount(topicName, type, level) {
-    if (typeof questionList === 'undefined') return 0; 
-    return questionList.filter(q => q.ChuDe === topicName && q.DangCauHoi === type && parseInt(q.MucDo) === level).length;
+      function getQuestionCount(topicName, type, level) {
+    if (typeof questionList === 'undefined' || !Array.isArray(questionList) || questionList.length === 0) return 0;
+    
+    return questionList.filter(q => {
+        // Hỗ trợ nhiều cách gọi tên thuộc tính khác nhau để tránh bị lệch dữ liệu
+        let matchTopic = String(q.ChuDe || q.topic || q.chude || '').trim() === String(topicName || '').trim();
+        let matchType = String(q.DangCauHoi || q.type || q.dang || '').trim() === String(type || '').trim();
+        let matchLevel = parseInt(q.MucDo || q.level || q.mucdo || 0) === parseInt(level);
+        return matchTopic && matchType && matchLevel;
+    }).length;
 }
        function renderMatrixTable() {
             const grade = document.getElementById('new-exam-grade').value;

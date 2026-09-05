@@ -1923,9 +1923,13 @@ function clearSelectedQuestions() {
     filterQuestionBankList();
     updateSelectedItemsDisplay();
 }
-function getQuestionCount(topicName, type, levelText) {
+function getQuestionCount(topicName, type, levelNum) {
     if (typeof questionBank === 'undefined' || !Array.isArray(questionBank) || questionBank.length === 0) return 0;
     
+    // Quy đổi từ số (1, 2, 3, 4) sang chữ tương ứng trong bảng Sheets (NB, TH, VD, VDC)
+    const levelMap = { 1: 'NB', 2: 'TH', 3: 'VD', 4: 'VDC' };
+    let targetLevel = levelMap[levelNum] || '';
+
     return questionBank.filter(q => {
         let chudeQ = String(q.topic || q.ChuDe || '').trim();
         let dangQ = String(q.type || q.Dang || q.DangCauHoi || '').trim();
@@ -1933,7 +1937,7 @@ function getQuestionCount(topicName, type, levelText) {
 
         let matchTopic = (chudeQ === String(topicName).trim() || topicName.includes(chudeQ) || chudeQ.includes(topicName));
         let matchType = dangQ.toUpperCase() === String(type).toUpperCase();
-        let matchLevel = mucdoQ.toUpperCase() === String(levelText).toUpperCase();
+        let matchLevel = mucdoQ.toUpperCase() === targetLevel.toUpperCase();
 
         return matchTopic && matchType && matchLevel;
     }).length;

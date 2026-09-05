@@ -2405,6 +2405,12 @@ function startLectureMode() {
     document.getElementById('portal-view').style.display = 'none';
     document.getElementById('lecture-view').style.display = 'block';
     document.getElementById('lecture-title').innerText = activeExam.title || "Bài Giảng";
+    
+    // Bắt buộc hiển thị lại khung điểm danh và giấu nội dung chính khi mở bài mới
+    document.getElementById('lecture-student-login').style.display = 'block';
+    document.getElementById('lecture-main-content').style.display = 'none';
+    document.getElementById('lec-std-name').value = '';
+    document.getElementById('lec-std-class').value = '';
 
     const ytUrl = activeExam.youtubeUrl || activeExam.youtubeurl || activeExam.YOUTUBEURL || "";
     const pdfContent = activeExam.pdfData || activeExam.pdfdata || activeExam.PDFDATA || "";
@@ -2429,15 +2435,14 @@ function startLectureMode() {
         videoContainer.style.display = 'none';
     }
 
-  const pdfBox = document.getElementById('lecture-pdf-box');
+    const pdfBox = document.getElementById('lecture-pdf-box');
     const pdfLink = document.getElementById('lecture-pdf-link');
     if (pdfContent && pdfContent.trim() !== "" && pdfLink && pdfBox) {
-        pdfLink.removeAttribute("target"); // Xóa mặc định mở tab của thẻ HTML
-        pdfLink.href = "javascript:void(0);"; // Ngăn trình duyệt tự mở link thô
+        pdfLink.removeAttribute("target");
+        pdfLink.href = "javascript:void(0);";
         pdfLink.onclick = function(e) {
             e.preventDefault();
             try {
-                // Chuyển đổi chuỗi chữ Base64 thành file PDF thật trong bộ nhớ máy tính
                 let base64String = pdfContent.includes(',') ? pdfContent.split(',')[1] : pdfContent;
                 let byteCharacters = atob(base64String);
                 let byteNumbers = new Array(byteCharacters.length);
@@ -2446,12 +2451,10 @@ function startLectureMode() {
                 }
                 let byteArray = new Uint8Array(byteNumbers);
                 let blob = new Blob([byteArray], {type: 'application/pdf'});
-                
-                // Mở file PDF an toàn sang một tab mới
                 let blobUrl = URL.createObjectURL(blob);
                 window.open(blobUrl, '_blank');
             } catch (err) {
-                alert("Lỗi khi mở file PDF. Dữ liệu có thể bị hỏng hoặc quá lớn.");
+                alert("Lỗi khi mở file PDF.");
             }
         };
         pdfBox.style.display = 'flex';

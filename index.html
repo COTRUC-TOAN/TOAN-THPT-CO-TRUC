@@ -1922,20 +1922,18 @@ function clearSelectedQuestions() {
     filterQuestionBankList();
     updateSelectedItemsDisplay();
 }
-  function getQuestionCount(topicName, type, levelNum) {
+ function getQuestionCount(topicName, type, levelText) {
     if (typeof questionList === 'undefined' || !Array.isArray(questionList) || questionList.length === 0) return 0;
     
-    const levelMap = { 1: 'NB', 2: 'TH', 3: 'VD', 4: 'VDC' };
-    let targetLevel = levelMap[levelNum] || '';
-
     return questionList.filter(q => {
         let chudeQ = String(q.ChuDe || q.chude || '').trim();
         let dangQ = String(q.DangCauHoi || q.dang || q.Dạng || '').trim();
         let mucdoQ = String(q.MucDo || q.mucdo || '').trim();
 
-        let matchTopic = chudeQ === String(topicName).trim() || topicName.includes(chudeQ) || chudeQ.includes(topicName);
+        let matchTopic = chudeQ === String(topicName).trim();
         let matchType = dangQ.toUpperCase() === String(type).toUpperCase();
-        let matchLevel = mucdoQ.toUpperCase() === targetLevel.toUpperCase();
+        // So sánh trực tiếp mức độ (ví dụ: 'TH' === 'TH')
+        let matchLevel = mucdoQ.toUpperCase() === String(levelText).toUpperCase();
 
         return matchTopic && matchType && matchLevel;
     }).length;

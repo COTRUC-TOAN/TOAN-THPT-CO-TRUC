@@ -2100,14 +2100,19 @@ function updateNewExamTopicDropdown() {
             });
         }
 
-        function showPortalView() {
-            document.getElementById('kahoot-view').style.display = 'none';
-            document.getElementById('quiz-view').style.display = 'none';
-            document.getElementById('teacher-view').style.display = 'none';
-            document.getElementById('portal-view').style.display = 'block';
-            document.querySelector('.navbar').style.display = 'flex';
-            window.history.pushState({}, document.title, window.location.pathname);
-        }
+       function showPortalView() {
+    document.getElementById('kahoot-view').style.display = 'none';
+    document.getElementById('quiz-view').style.display = 'none';
+    document.getElementById('teacher-view').style.display = 'none';
+    
+    // Thêm 2 dòng này để giấu dứt điểm màn hình khóa và bài giảng:
+    document.getElementById('password-lock-screen').style.display = 'none';
+    document.getElementById('lecture-view').style.display = 'none';
+
+    document.getElementById('portal-view').style.display = 'block';
+    document.querySelector('.navbar').style.display = 'flex';
+    window.history.pushState({}, document.title, window.location.pathname);
+}
 
         function startHostMode() {
             document.getElementById('portal-view').style.display = 'none';

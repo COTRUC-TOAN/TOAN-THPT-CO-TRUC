@@ -1943,36 +1943,37 @@ function getQuestionCount(topicName, type, levelNum) {
     }).length;
 }
        function renderMatrixTable() {
-            const grade = document.getElementById('new-exam-grade').value;
-            const topics = getTopicsForGrade(grade);
-            const container = document.getElementById('matrix-topics-container');
-            if (!container) return;
+    const grade = document.getElementById('new-exam-grade').value;
+    const topics = getTopicsForGrade(grade);
+    const container = document.getElementById('matrix-topics-container');
+    if (!container) return;
 
-            const typeLabels = [
-                { type: 'MCQ', label: '1. Trắc nghiệm (MCQ)' },
-                { type: 'TF',  label: '2. Đúng / Sai (TF)' },
-                { type: 'SA',  label: '3. Trả lời ngắn (SA)' }
-            ];
+    const typeLabels = [
+        { type: 'MCQ', label: '1. Trắc nghiệm (MCQ)' },
+        { type: 'TF',  label: '2. Đúng / Sai (TF)' },
+        { type: 'SA',  label: '3. Trả lời ngắn (SA)' }
+    ];
 
-            container.innerHTML = topics.map(top => `
-                <div class="matrix-topic-row" style="background:#fff; border:1px solid var(--border-color); border-radius:10px; padding:12px; margin-bottom:14px;">
-                    <h5 style="color:#1e40af; margin-bottom:10px; font-size:1.05rem;"><i class="fa-solid fa-book-bookmark"></i> ${top.name}</h5>
-                    <div style="display:flex; flex-direction:column; gap:8px;">
-                        ${typeLabels.map(t => `
-                            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:8px 10px; display:grid; grid-template-columns: 180px 1fr; gap:10px; align-items:center;">
-                                <span style="font-size:0.95rem; font-weight:bold; color:#334155;">${t.label}</span>
-                                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:6px;">
-                                   <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">NB (${getQuestionCount(top.name, t.type, 1)})</label><input type="number" class="form-input matrix-input" data-topic="${top.name}" data-type="${t.type}" data-level="1" min="0" placeholder="0"></div>
-                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">TH (${getQuestionCount(top.name, t.type, 2)})</label><input type="number" class="form-input matrix-input" data-topic="${top.name}" data-type="${t.type}" data-level="2" min="0" placeholder="0"></div>
-                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VD (${getQuestionCount(top.name, t.type, 3)})</label><input type="number" class="form-input matrix-input" data-topic="${top.name}" data-type="${t.type}" data-level="3" min="0" placeholder="0"></div>
-                    <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VDC (${getQuestionCount(top.name, t.type, 4)})</label><input type="number" class="form-input matrix-input" data-topic="${top.name}" data-type="${t.type}" data-level="4" min="0" placeholder="0"></div>
-                                </div>
-                            </div>
-                        `).join('')}
+    container.innerHTML = topics.map(top => `
+        <div class="matrix-topic-row" style="background:#fff; border:1px solid var(--border-color); border-radius:10px; padding:12px; margin-bottom:14px;">
+            <h5 style="color:#1e40af; margin-bottom:10px; font-size:1.05rem;"><i class="fa-solid fa-book-bookmark"></i> ${top.name}</h5>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                ${typeLabels.map(t => `
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:8px 10px; display:grid; grid-template-columns: 180px 1fr; gap:10px; align-items:center;">
+                        <span style="font-size:0.95rem; font-weight:bold; color:#334155;">${t.label}</span>
+                        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:6px;">
+                            <!-- ĐÃ SỬA top.name THÀNH top.id Ở TẤT CẢ CÁC Ô BÊN DƯỚI -->
+                            <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">NB (${getQuestionCount(top.id, t.type, 'NB')})</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="NB" min="0" placeholder="0"></div>
+                            <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">TH (${getQuestionCount(top.id, t.type, 'TH')})</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="TH" min="0" placeholder="0"></div>
+                            <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VD (${getQuestionCount(top.id, t.type, 'VD')})</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="VD" min="0" placeholder="0"></div>
+                            <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VDC (${getQuestionCount(top.id, t.type, 'VDC')})</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="VDC" min="0" placeholder="0"></div>
+                        </div>
                     </div>
-                </div>
-            `).join('');
-        }
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+}
 
        function generateMatrixExam() {
             const inputs = document.querySelectorAll('.matrix-input');

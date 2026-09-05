@@ -1926,13 +1926,12 @@ function clearSelectedQuestions() {
     if (typeof questionList === 'undefined' || !Array.isArray(questionList) || questionList.length === 0) return 0;
     
     return questionList.filter(q => {
-        let chudeQ = String(q.ChuDe || q.chude || '').trim();
-        let dangQ = String(q.DangCauHoi || q.dang || q.Dạng || '').trim();
-        let mucdoQ = String(q.MucDo || q.mucdo || '').trim();
+        let chudeQ = String(q.ChuDe || '').trim();
+        let dangQ = String(q.Dang || q.DangCauHoi || '').trim();
+        let mucdoQ = String(q['Mức độ'] || q.MucDo || '').trim();
 
         let matchTopic = chudeQ === String(topicName).trim();
         let matchType = dangQ.toUpperCase() === String(type).toUpperCase();
-        // So sánh trực tiếp mức độ (ví dụ: 'TH' === 'TH')
         let matchLevel = mucdoQ.toUpperCase() === String(levelText).toUpperCase();
 
         return matchTopic && matchType && matchLevel;

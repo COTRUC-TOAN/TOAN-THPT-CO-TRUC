@@ -625,8 +625,7 @@ function processTopicsData(rawTopics) {
             }
         }
 
-     async function fetchData() {
-            renderSidebarTopics();
+   async function fetchData() {
             const grid = document.getElementById('exam-grid');
             try {
                 const controller = new AbortController();
@@ -636,6 +635,13 @@ function processTopicsData(rawTopics) {
                 clearTimeout(timeoutId);
                 
                 const data = await res.json();
+                
+                // === BỔ SUNG GỌI HÀM XỬ LÝ MỤC LỤC ĐỘNG TỪ GOOGLE SHEETS ===
+                if (data.topics) {
+                    processTopicsData(data.topics);
+                }
+                renderSidebarTopics();
+                // ==========================================================
                 
                 let rawExams = data.exams || [];
                 examBank = rawExams.map(ex => {
@@ -674,7 +680,6 @@ function processTopicsData(rawTopics) {
                 }
             }
         }
-
         async function checkUrlParams() {
             const params = new URLSearchParams(window.location.search);
             const examId = params.get('exam');

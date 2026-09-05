@@ -1926,24 +1926,28 @@ function clearSelectedQuestions() {
 function getQuestionCount(top, type, levelNum) {
     if (typeof questionBank === 'undefined' || !Array.isArray(questionBank) || questionBank.length === 0) return 0;
     
-    // Đổi số sang chữ cho khớp với Google Sheets
-    const levelMap = { 1: 'NB', 2: 'TH', 3: 'VD', 4: 'VDC' };
-    let targetLevel = levelMap[levelNum] || '';
-
     return questionBank.filter(q => {
         let chudeQ = String(q.topic || q.ChuDe || q['Chủ đề'] || '').trim().toLowerCase();
-        let dangQ = String(q.type || q.Dang || q.DangCauHoi || q['Dạng'] || '').trim().toUpperCase();
-        let mucdoQ = String(q.level || q.MucDo || q['Mức độ'] || '').trim().toUpperCase();
+        let dangQ = String(q.type || q.Dang || q.DangCauHoi || q['Dạng'] || '').trim().toLowerCase();
+        let mucdoQ = String(q.level || q.MucDo || q['Mức độ'] || '').trim().toLowerCase();
 
-        // Khớp thông minh: Tìm theo cả mã hệ thống (id) lẫn tên hiển thị (name)
-        let tId = String(top.id || '').trim().toLowerCase();
+        // 1. So sánh Chủ đề (Hỗ trợ tìm theo tên tiếng Việt)
         let tName = String(top.name || '').replace('⭐', '').trim().toLowerCase();
+        let tId = String(top.id || '').trim().toLowerCase();
+        let matchTopic = chudeQ.includes(tName) || tName.includes(chudeQ) || chudeQ.includes(tId) || tId.includes(chudeQ);
 
-        let matchTopic = (chudeQ === tId || chudeQ.includes(tId) || tId.includes(chudeQ) || 
-                          chudeQ === tName || chudeQ.includes(tName) || tName.includes(chudeQ));
-        
-        let matchType = (dangQ === String(type).toUpperCase());
-        let matchLevel = (mucdoQ === targetLevel);
+        // 2. So sánh Dạng (Tự động hiểu tiếng Việt và tiếng Anh)
+        let matchType = false;
+        if (type === 'MCQ' && (dangQ.includes('mcq') || dangQ.includes('trắc nghiệm') || dangQ === 'tn')) matchType = true;
+        if (type === 'TF' && (dangQ.includes('tf') || dangQ.includes('đúng sai') || dangQ.includes('đúng/sai'))) matchType = true;
+        if (type === 'SA' && (dangQ.includes('sa') || dangQ.includes('trả lời ngắn') || dangQ.includes('ngắn') || dangQ.includes('tự luận'))) matchType = true;
+
+        // 3. So sánh Mức độ (Tự động hiểu số 1,2,3,4 hoặc NB,TH,VD,VDC hoặc chữ Nhận biết...)
+        let matchLevel = false;
+        if (levelNum === 1 && (mucdoQ === '1' || mucdoQ === 'nb' || mucdoQ.includes('nhận biết'))) matchLevel = true;
+        if (levelNum === 2 && (mucdoQ === '2' || mucdoQ === 'th' || mucdoQ.includes('thông hiểu'))) matchLevel = true;
+        if (levelNum === 3 && (mucdoQ === '3' || mucdoQ === 'vd' || mucdoQ.includes('vận dụng'))) matchLevel = true;
+        if (levelNum === 4 && (mucdoQ === '4' || mucdoQ === 'vdc' || mucdoQ.includes('cao'))) matchLevel = true;
 
         return matchTopic && matchType && matchLevel;
     }).length;
@@ -1981,86 +1985,69 @@ function renderMatrixTable() {
     `).join('');
 }
 
-       function generateMatrixExam() {
-            const inputs = document.querySelectorAll('.matrix-input');
-            selectedQuestions = [];
+function generateMatrixExam() {
+    const inputs = document.querySelectorAll('.matrix-input');
+    selectedQuestions = [];
 
-            inputs.forEach(input => {
-                const count = parseInt(input.value) || 0;
-                if (count <= 0) return;
+    inputs.forEach(input => {
+        const count = parseInt(input.value) || 0;
+        if (count <= 0) return;
 
-                const topicId = input.getAttribute('data-topic');
-                const qType = input.getAttribute('data-type');
-                const qLvl = input.getAttribute('data-lvl');
+        const topicId = input.getAttribute('data-topic');
+        const qType = input.getAttribute('data-type');
+        const qLvl = input.getAttribute('data-lvl');
 
-                let matched = questionBank.filter(q => {
-                    const matchTopic = (q.topic === topicId || String(q.id).includes(topicId));
-                    const matchType = (String(q.type).trim().toUpperCase() === qType);
-                    const matchLvl = (String(q.level).trim().toUpperCase() === qLvl);
-                    return matchTopic && matchType && matchLvl;
-                });
+        // Tìm tên bài học thực tế để khớp với dữ liệu Google Sheets
+        let topName = "";
+        let allTopics = [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10];
+        let foundTop = allTopics.find(t => t.id === topicId);
+        if (foundTop) topName = String(foundTop.name).replace('⭐', '').trim().toLowerCase();
 
-                shuffleArray(matched);
-                selectedQuestions.push(...matched.slice(0, count));
-            });
+        let matched = questionBank.filter(q => {
+            let chudeQ = String(q.topic || q.ChuDe || q['Chủ đề'] || '').trim().toLowerCase();
+            let dangQ = String(q.type || q.Dang || q.DangCauHoi || q['Dạng'] || '').trim().toLowerCase();
+            let mucdoQ = String(q.level || q.MucDo || q['Mức độ'] || '').trim().toLowerCase();
 
-            if (selectedQuestions.length === 0) {
-                alert("⚠️ Vui lòng nhập số lượng câu hỏi hoặc kiểm tra xem Ngân hàng đã có câu hỏi thỏa mãn cả Dạng và Mức độ đó chưa!");
-                return;
-            }
+            let matchTopic = (topName !== "" && (chudeQ.includes(topName) || topName.includes(chudeQ))) || chudeQ.includes(topicId.toLowerCase());
+            
+            let matchType = false;
+            if (qType === 'MCQ' && (dangQ.includes('mcq') || dangQ.includes('trắc nghiệm') || dangQ === 'tn')) matchType = true;
+            if (qType === 'TF' && (dangQ.includes('tf') || dangQ.includes('đúng sai') || dangQ.includes('đúng/sai'))) matchType = true;
+            if (qType === 'SA' && (dangQ.includes('sa') || dangQ.includes('trả lời ngắn') || dangQ.includes('ngắn') || dangQ.includes('tự luận'))) matchType = true;
 
-            selectedQuestions.sort((a, b) => {
-                const order = { 'MCQ': 1, 'TF': 2, 'SA': 3 };
-                return (order[a.type] || 99) - (order[b.type] || 99);
-            });
+            let matchLevel = false;
+            if (qLvl === 'NB' && (mucdoQ === '1' || mucdoQ === 'nb' || mucdoQ.includes('nhận biết'))) matchLevel = true;
+            if (qLvl === 'TH' && (mucdoQ === '2' || mucdoQ === 'th' || mucdoQ.includes('thông hiểu'))) matchLevel = true;
+            if (qLvl === 'VD' && (mucdoQ === '3' || mucdoQ === 'vd' || mucdoQ.includes('vận dụng'))) matchLevel = true;
+            if (qLvl === 'VDC' && (mucdoQ === '4' || mucdoQ === 'vdc' || mucdoQ.includes('cao'))) matchLevel = true;
 
-            document.getElementById('selected-q-count').innerText = selectedQuestions.length;
-            document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `
-                <div style="font-size:0.9rem; margin-bottom:4px;">
-                    <strong>${idx + 1}.</strong> [${sq.type}] [${sq.level}] ${sq.id}
-                </div>
-            `).join('');
+            return matchTopic && matchType && matchLevel;
+        });
 
-            alert(`🎉 Đã chọn thành công ${selectedQuestions.length} câu theo chuẩn ma trận!`);
-            switchAddMethod('bank');
-        }
+        shuffleArray(matched);
+        selectedQuestions.push(...matched.slice(0, count));
+    });
 
-        async function saveExamFinal() {
-            const method = document.getElementById('add-method-paste').style.display !== 'none' ? 'paste' : 'bank';
-            const examId = document.getElementById('new-exam-id').value.trim();
-            const examTitle = document.getElementById('new-exam-title').value.trim();
-            let finalQuestions = (method === 'paste') ? directParsedQuestions : selectedQuestions;
-
-            const youtubeUrl = document.getElementById('lecture-youtube-url')?.value.trim() || "";
-            const pdfData = lecturePdfBase64 || "";
-
-            if (!examId || !examTitle || (finalQuestions.length === 0 && !youtubeUrl && !pdfData)) { 
-                alert("Vui lòng điền đủ Mã đề, Tên đề và có ít nhất Câu hỏi, Link YouTube hoặc File PDF!"); 
-                return; 
-            }
-
-            const payload = {
-                action: 'save_exam', password: teacherPassAuth, examId: examId, examTitle: examTitle,
-                grade: document.getElementById('new-exam-grade').value, topic: document.getElementById('new-exam-topic').value,
-                mode: document.getElementById('new-exam-mode').value, timeLimit: parseInt(document.getElementById('new-exam-time').value) || 45,
-                examPass: document.getElementById('new-exam-pass').value.trim(), startTime: document.getElementById('new-exam-start-time').value, deadline: document.getElementById('new-exam-deadline').value,
-                questions: finalQuestions,
-                youtubeUrl: youtubeUrl,
-                pdfData: pdfData
-            };
-            try {
-                const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-                const data = await res.json();
-                if (data.status === "success") { alert("🎉 Đã lưu và xuất bản đề!"); fetchData(); showPortalView(); }
-                else { alert("Lỗi: " + data.message); }
-            } catch (e) { alert("Lỗi kết nối!"); }
-        }
-
-      function populateSelect(selectId, items) {
-        const select = document.getElementById(selectId);
-        if (!select) return;
-        select.innerHTML = '<option value="all">-- Bài / Chương --</option>' + items.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
+    if (selectedQuestions.length === 0) {
+        alert("⚠️ Không đủ số lượng câu hỏi trong Ngân hàng cho Ma trận vừa nhập!");
+        return;
     }
+
+    selectedQuestions.sort((a, b) => {
+        const order = { 'MCQ': 1, 'TF': 2, 'SA': 3 };
+        return (order[a.type] || 99) - (order[b.type] || 99);
+    });
+
+    document.getElementById('selected-q-count').innerText = selectedQuestions.length;
+    document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `
+        <div style="font-size:0.9rem; margin-bottom:4px;">
+            <strong>${idx + 1}.</strong> [${sq.type}] [${sq.level}] ${sq.q ? sq.q.substring(0, 50) + '...' : sq.id}
+        </div>
+    `).join('');
+
+    alert(`🎉 Đã trộn thành công ${selectedQuestions.length} câu theo chuẩn ma trận!`);
+    switchAddMethod('bank');
+}
 function updateNewExamTopicDropdown() {
         const gradeSelect = document.getElementById('new-exam-grade');
         const grade = gradeSelect ? gradeSelect.value : '12';

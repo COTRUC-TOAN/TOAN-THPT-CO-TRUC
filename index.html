@@ -1806,18 +1806,18 @@ function getQuestionCount(top, type, levelNum) {
         let dangQ = String(q.type || q.Dang || q.DangCauHoi || q['Dạng'] || '').trim().toLowerCase();
         let mucdoQ = String(q.level || q.MucDo || q['Mức độ'] || '').trim().toLowerCase();
 
-        // 1. So sánh Chủ đề (Hỗ trợ tìm theo tên tiếng Việt)
         let tName = String(top.name || '').replace('⭐', '').trim().toLowerCase();
         let tId = String(top.id || '').trim().toLowerCase();
-        let matchTopic = chudeQ.includes(tName) || tName.includes(chudeQ) || chudeQ.includes(tId) || tId.includes(chudeQ);
+        
+        let matchTopic = false;
+        if (tId && (chudeQ === tId || chudeQ.includes(tId) || tId.includes(chudeQ))) matchTopic = true;
+        if (tName && (chudeQ === tName || chudeQ.includes(tName) || tName.includes(chudeQ))) matchTopic = true;
 
-        // 2. So sánh Dạng (Tự động hiểu tiếng Việt và tiếng Anh)
         let matchType = false;
         if (type === 'MCQ' && (dangQ.includes('mcq') || dangQ.includes('trắc nghiệm') || dangQ === 'tn')) matchType = true;
         if (type === 'TF' && (dangQ.includes('tf') || dangQ.includes('đúng sai') || dangQ.includes('đúng/sai'))) matchType = true;
         if (type === 'SA' && (dangQ.includes('sa') || dangQ.includes('trả lời ngắn') || dangQ.includes('ngắn') || dangQ.includes('tự luận'))) matchType = true;
 
-        // 3. So sánh Mức độ (Tự động hiểu số 1,2,3,4 hoặc NB,TH,VD,VDC hoặc chữ Nhận biết...)
         let matchLevel = false;
         if (levelNum === 1 && (mucdoQ === '1' || mucdoQ === 'nb' || mucdoQ.includes('nhận biết'))) matchLevel = true;
         if (levelNum === 2 && (mucdoQ === '2' || mucdoQ === 'th' || mucdoQ.includes('thông hiểu'))) matchLevel = true;
@@ -1828,6 +1828,19 @@ function getQuestionCount(top, type, levelNum) {
     }).length;
 }
 
+function updateBankFilterTopics() {
+    const gradeSelect = document.getElementById('bank-filter-grade');
+    const grade = gradeSelect ? gradeSelect.value : 'all';
+    const select = document.getElementById('bank-filter-topic');
+    if (!select) return;
+    select.innerHTML = '<option value="all">-- Tất cả Bài / Chương --</option>';
+    let list = (grade === 'all') ? [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10] : (topicsConfig['g' + grade] || []);
+    list.forEach(t => {
+        if (t.type !== 'header' && t.id) {
+            select.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+        }
+    });
+}
 function renderMatrixTable() {
     const grade = document.getElementById('new-exam-grade').value;
     const topics = getTopicsForGrade(grade);

@@ -1833,11 +1833,22 @@ function updateBankFilterTopics() {
     const grade = gradeSelect ? gradeSelect.value : 'all';
     const select = document.getElementById('bank-filter-topic');
     if (!select) return;
-    select.innerHTML = '<option value="all">-- Tất cả Bài / Chương --</option>';
-    let list = (grade === 'all') ? [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10] : (topicsConfig['g' + grade] || []);
+    
+    select.innerHTML = '<option value="all">-- Bài / Chương --</option>';
+    
+    let list = [];
+    if (typeof getTopicsForGrade === 'function' && grade !== 'all') {
+        list = getTopicsForGrade(grade);
+    } else {
+        list = [...(topicsConfig.g12 || []), ...(topicsConfig.g11 || []), ...(topicsConfig.g10 || [])];
+    }
+    
     list.forEach(t => {
-        if (t.type !== 'header' && t.id) {
-            select.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+        if (t && t.type !== 'header' && t.id) {
+            const opt = document.createElement('option');
+            opt.value = t.id;
+            opt.textContent = t.name;
+            select.appendChild(opt);
         }
     });
 }

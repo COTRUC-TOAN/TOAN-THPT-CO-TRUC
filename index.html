@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Khảo Thí & Học Tập Toán THPT - Cô Trúc</title>
+    <title>Cổng Khảo Thí & Học Tập Toán THPT - LONG THỚI </title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -176,7 +177,47 @@
     </style>
 </head>
 <body>
+<!-- MÀN HÌNH CHỌN VÀ LIÊN KẾT GIÁO VIÊN BAN ĐẦU -->
+    <div id="teacher-portal-gate" style="position: fixed; inset: 0; background: #0f172a; z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #ffffff; border-radius: 16px; padding: 32px 28px; width: 100%; max-width: 460px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: center;">
+            <div style="width: 65px; height: 65px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #1d4ed8; font-size: 1.8rem;">
+                <i class="fa-solid fa-chalkboard-user"></i>
+            </div>
+            <h2 style="font-size: 1.35rem; color: #0f172a; margin-bottom: 6px; font-weight: bold;">CỔNG DẠY HỌC THPT</h2>
+            <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 22px;">Vui lòng chọn tài khoản giáo viên để làm việc</p>
 
+            <div style="text-align: left; margin-bottom: 14px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.95rem; color: #334155;">Chọn Giáo Viên:</label>
+                <select id="gate-select-teacher" class="form-input" style="font-weight: 600; padding: 10px;" onchange="handleTeacherSelectChange()">
+                    <option value="">-- Chọn danh sách giáo viên --</option>
+                    <option value="trucnt">1. Nguyễn Thanh Trúc (Tổ Toán)</option>
+                    <option value="vanntkt">2. Nguyễn Thị Kiều Tuyết Vân (Tổ Toán)</option>
+                    <option value="hoantt">3. Nguyễn Thị Thu Hoa (Tổ Toán)</option>
+                    <option value="nhuntq">4. Nguyễn Thị Quỳnh Như (Tổ Toán)</option>
+                    <option value="trunght">5. Hồ Thanh Trung (Tổ Toán)</option>
+                    <option value="nampn">6. Phạm Nhật Nam (Tổ Toán)</option>
+                    <option value="chauttm">7. Trần Thị Minh Châu (Tổ Toán)</option>
+                    <option value="thanhvv">8. Vũ Văn Thanh (Tổ GDQP)</option>
+                </select>
+            </div>
+
+            <!-- Khung nhập link Apps Script cá nhân (Tự hiện khi chưa có link lưu trữ) -->
+            <div id="gate-script-url-row" style="text-align: left; margin-bottom: 14px; display: none;">
+                <label style="display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.95rem; color: #dc2626;">Liên kết Google Apps Script của Thầy/Cô:</label>
+                <input type="text" id="gate-script-url-input" class="form-input" placeholder="Dán link https://script.google.com/.../exec vào đây" style="font-size: 0.9rem;">
+                <small style="color: #64748b; font-size: 0.8rem; display: block; margin-top: 4px;">* Link sẽ tự động lưu lại trên máy này cho các lần truy cập sau.</small>
+            </div>
+
+            <div style="text-align: left; margin-bottom: 22px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.95rem; color: #334155;">Mật khẩu quản trị (của Sheets cá nhân):</label>
+                <input type="password" id="gate-password-input" class="form-input" placeholder="Nhập mật khẩu quản trị..." style="padding: 10px;">
+            </div>
+
+            <button type="button" class="btn-start" style="width: 100%; padding: 12px; font-size: 1.1rem; justify-content: center; background: #1d4ed8;" onclick="submitTeacherGateLogin()">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Đăng Nhập Vào Cổng
+            </button>
+        </div>
+    </div>
     <div class="wrapper">
         <nav class="navbar">
             <div class="brand">
@@ -490,7 +531,105 @@
     <div class="toast-msg" id="toast">Đã sao chép link giao đề!</div>
 
     <script>
-       const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzmV_0WaIHlMNdL1Ygj6Y3khwMAVqoOVAhf5D9WWuwavOoYoMR5ChGC67Gxc5fQ-KIEiw/exec";
+// DANH MỤC GIÁO VIÊN HỆ THỐNG
+        const TEACHERS_DIRECTORY = {
+            'trucnt':  { name: 'Cô Nguyễn Thanh Trúc', subject: 'Toán', defaultUrl: 'https://script.google.com/macros/s/AKfycbzis37_BfronfYS2csvtAfqZJOcQBHzmbZtymoNPFtLdGgI3ghiNUXCHuVq4i6Gsetw/exec' },
+            'vanntkt': { name: 'Cô Nguyễn Thị Kiều Tuyết Vân', subject: 'Toán', defaultUrl: '' },
+            'hoantt':  { name: 'Cô Nguyễn Thị Thu Hoa', subject: 'Toán', defaultUrl: '' },
+            'nhuntq':  { name: 'Cô Nguyễn Thị Quỳnh Như', subject: 'Toán', defaultUrl: '' },
+            'trunght': { name: 'Thầy Hồ Thanh Trung', subject: 'Toán', defaultUrl: '' },
+            'nampn':   { name: 'Thầy Phạm Nhật Nam', subject: 'Toán', defaultUrl: '' },
+            'chauttm': { name: 'Cô Trần Thị Minh Châu', subject: 'Toán', defaultUrl: '' },
+            'thanhvv': { name: 'Thầy Vũ Văn Thanh', subject: 'GD Quốc Phòng', defaultUrl: '' }
+        };
+
+        let currentTeacherId = localStorage.getItem('current_teacher_id') || '';
+        let SCRIPT_URL = '';
+
+        function getTeacherScriptUrl(tId) {
+            let savedUrl = localStorage.getItem('teacher_script_url_' + tId);
+            if (savedUrl && savedUrl.trim() !== '') return savedUrl.trim();
+            if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].defaultUrl) {
+                return TEACHERS_DIRECTORY[tId].defaultUrl;
+            }
+            return '';
+        }
+
+        function handleTeacherSelectChange() {
+            const tId = document.getElementById('gate-select-teacher').value;
+            const urlRow = document.getElementById('gate-script-url-row');
+            const urlInput = document.getElementById('gate-script-url-input');
+            if (!tId) {
+                urlRow.style.display = 'none';
+                return;
+            }
+            const existingUrl = getTeacherScriptUrl(tId);
+            if (!existingUrl) {
+                urlRow.style.display = 'block';
+                urlInput.value = '';
+            } else {
+                urlRow.style.display = 'none';
+                urlInput.value = existingUrl;
+            }
+        }
+
+        async function submitTeacherGateLogin() {
+            const tId = document.getElementById('gate-select-teacher').value;
+            const pass = document.getElementById('gate-password-input').value.trim();
+            const urlInput = document.getElementById('gate-script-url-input').value.trim();
+
+            if (!tId) {
+                alert("Vui lòng chọn một Giáo viên!");
+                return;
+            }
+            if (!pass) {
+                alert("Vui lòng nhập Mật khẩu quản trị của file Sheets!");
+                return;
+            }
+
+            let targetUrl = getTeacherScriptUrl(tId);
+            if (!targetUrl) {
+                if (!urlInput || !urlInput.startsWith('https://script.google.com/')) {
+                    alert("Vui lòng dán chính xác đường link Google Apps Script (.exec) của bạn!");
+                    return;
+                }
+                targetUrl = urlInput;
+                localStorage.setItem('teacher_script_url_' + tId, targetUrl);
+            }
+
+            document.body.style.cursor = 'wait';
+            try {
+                const res = await fetch(`${targetUrl}?action=checkPassword&password=${encodeURIComponent(pass)}`);
+                const data = await res.json();
+                document.body.style.cursor = 'default';
+
+                if (data.status === 'success') {
+                    currentTeacherId = tId;
+                    SCRIPT_URL = targetUrl;
+                    teacherPassAuth = pass;
+                    localStorage.setItem('current_teacher_id', tId);
+
+                    document.getElementById('teacher-portal-gate').style.display = 'none';
+                    const brandEl = document.querySelector('.navbar .brand');
+                    if (brandEl && TEACHERS_DIRECTORY[tId]) {
+                        brandEl.innerHTML = `<i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> ${TEACHERS_DIRECTORY[tId].name.toUpperCase()} - ${TEACHERS_DIRECTORY[tId].subject.toUpperCase()}`;
+                    }
+
+                    fetchData();
+                } else {
+                    alert("❌ Mật khẩu quản trị không chính xác với Google Sheets của bạn!");
+                }
+            } catch (err) {
+                document.body.style.cursor = 'default';
+                alert("Không thể kết nối đến Google Sheets này! Vui lòng kiểm tra lại đường link hoặc quyền triển khai (Anyone).");
+            }
+        }
+
+        function switchActiveTeacher() {
+            if (!confirm("Bạn muốn đổi sang Giáo viên khác làm việc?")) return;
+            localStorage.removeItem('current_teacher_id');
+            location.reload();
+        }
 
         let examBank = []; let questionBank = [];
         let selectedQuestions = []; let directParsedQuestions = []; 
@@ -1232,6 +1371,7 @@ function renderTeacherExamList() {
             });
             document.getElementById('bank-selected-box').style.display = (method === 'bank' || method === 'matrix') ? 'block' : 'none';
             if (method === 'matrix') renderMatrixTable();
+            if (method === 'bank') updateBankFilterTopics();
         }
 
         // --- QUẢN LÝ DANH SÁCH LỚP ĐỘNG ---
@@ -1798,37 +1938,7 @@ function clearSelectedQuestions() {
     filterQuestionBankList();
     updateSelectedItemsDisplay();
 }
-function getQuestionCount(top, type, levelNum) {
-    if (typeof questionBank === 'undefined' || !Array.isArray(questionBank) || questionBank.length === 0) return 0;
-    
-    return questionBank.filter(q => {
-        let chudeQ = String(q.topic || q.ChuDe || q['Chủ đề'] || '').trim().toLowerCase();
-        let dangQ = String(q.type || q.Dang || q.DangCauHoi || q['Dạng'] || '').trim().toLowerCase();
-        let mucdoQ = String(q.level || q.MucDo || q['Mức độ'] || '').trim().toLowerCase();
-
-        let tName = String(top.name || '').replace('⭐', '').trim().toLowerCase();
-        let tId = String(top.id || '').trim().toLowerCase();
-        
-        let matchTopic = false;
-        if (tId && (chudeQ === tId || chudeQ.includes(tId) || tId.includes(chudeQ))) matchTopic = true;
-        if (tName && (chudeQ === tName || chudeQ.includes(tName) || tName.includes(chudeQ))) matchTopic = true;
-
-        let matchType = false;
-        if (type === 'MCQ' && (dangQ.includes('mcq') || dangQ.includes('trắc nghiệm') || dangQ === 'tn')) matchType = true;
-        if (type === 'TF' && (dangQ.includes('tf') || dangQ.includes('đúng sai') || dangQ.includes('đúng/sai'))) matchType = true;
-        if (type === 'SA' && (dangQ.includes('sa') || dangQ.includes('trả lời ngắn') || dangQ.includes('ngắn') || dangQ.includes('tự luận'))) matchType = true;
-
-        let matchLevel = false;
-        if (levelNum === 1 && (mucdoQ === '1' || mucdoQ === 'nb' || mucdoQ.includes('nhận biết'))) matchLevel = true;
-        if (levelNum === 2 && (mucdoQ === '2' || mucdoQ === 'th' || mucdoQ.includes('thông hiểu'))) matchLevel = true;
-        if (levelNum === 3 && (mucdoQ === '3' || mucdoQ === 'vd' || mucdoQ.includes('vận dụng'))) matchLevel = true;
-        if (levelNum === 4 && (mucdoQ === '4' || mucdoQ === 'vdc' || mucdoQ.includes('cao'))) matchLevel = true;
-
-        return matchTopic && matchType && matchLevel;
-    }).length;
-}
-
-function updateBankFilterTopics() {
+        function updateBankFilterTopics() {
     const gradeSelect = document.getElementById('bank-filter-grade');
     const grade = gradeSelect ? gradeSelect.value : 'all';
     const select = document.getElementById('bank-filter-topic');
@@ -1852,6 +1962,36 @@ function updateBankFilterTopics() {
         }
     });
 }
+function getQuestionCount(top, type, levelNum) {
+    if (typeof questionBank === 'undefined' || !Array.isArray(questionBank) || questionBank.length === 0) return 0;
+    
+    return questionBank.filter(q => {
+        let chudeQ = String(q.topic || q.ChuDe || q['Chủ đề'] || '').trim().toLowerCase();
+        let dangQ = String(q.type || q.Dang || q.DangCauHoi || q['Dạng'] || '').trim().toLowerCase();
+        let mucdoQ = String(q.level || q.MucDo || q['Mức độ'] || '').trim().toLowerCase();
+
+        // 1. So sánh Chủ đề (Hỗ trợ tìm theo tên tiếng Việt)
+        let tName = String(top.name || '').replace('⭐', '').trim().toLowerCase();
+        let tId = String(top.id || '').trim().toLowerCase();
+        let matchTopic = chudeQ.includes(tName) || tName.includes(chudeQ) || chudeQ.includes(tId) || tId.includes(chudeQ);
+
+        // 2. So sánh Dạng (Tự động hiểu tiếng Việt và tiếng Anh)
+        let matchType = false;
+        if (type === 'MCQ' && (dangQ.includes('mcq') || dangQ.includes('trắc nghiệm') || dangQ === 'tn')) matchType = true;
+        if (type === 'TF' && (dangQ.includes('tf') || dangQ.includes('đúng sai') || dangQ.includes('đúng/sai'))) matchType = true;
+        if (type === 'SA' && (dangQ.includes('sa') || dangQ.includes('trả lời ngắn') || dangQ.includes('ngắn') || dangQ.includes('tự luận'))) matchType = true;
+
+        // 3. So sánh Mức độ (Tự động hiểu số 1,2,3,4 hoặc NB,TH,VD,VDC hoặc chữ Nhận biết...)
+        let matchLevel = false;
+        if (levelNum === 1 && (mucdoQ === '1' || mucdoQ === 'nb' || mucdoQ.includes('nhận biết'))) matchLevel = true;
+        if (levelNum === 2 && (mucdoQ === '2' || mucdoQ === 'th' || mucdoQ.includes('thông hiểu'))) matchLevel = true;
+        if (levelNum === 3 && (mucdoQ === '3' || mucdoQ === 'vd' || mucdoQ.includes('vận dụng'))) matchLevel = true;
+        if (levelNum === 4 && (mucdoQ === '4' || mucdoQ === 'vdc' || mucdoQ.includes('cao'))) matchLevel = true;
+
+        return matchTopic && matchType && matchLevel;
+    }).length;
+}
+
 function renderMatrixTable() {
     const grade = document.getElementById('new-exam-grade').value;
     const topics = getTopicsForGrade(grade);
@@ -2159,7 +2299,19 @@ function joinKahootArena() {
             setTimeout(() => { kahootCurrentIndex++; loadKahootQuestion(); }, 2000);
         }
 
-        fetchData();
+       if (currentTeacherId && TEACHERS_DIRECTORY[currentTeacherId] && getTeacherScriptUrl(currentTeacherId)) {
+            SCRIPT_URL = getTeacherScriptUrl(currentTeacherId);
+            const gate = document.getElementById('teacher-portal-gate');
+            if (gate) gate.style.display = 'none';
+            const brandEl = document.querySelector('.navbar .brand');
+            if (brandEl) {
+                brandEl.innerHTML = `<i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> ${TEACHERS_DIRECTORY[currentTeacherId].name.toUpperCase()} - ${TEACHERS_DIRECTORY[currentTeacherId].subject.toUpperCase()}`;
+            }
+            fetchData();
+        } else {
+            const gate = document.getElementById('teacher-portal-gate');
+            if (gate) gate.style.display = 'flex';
+        }
         
         function openChangePassModal() {
     const modal = document.getElementById('change-pass-modal');

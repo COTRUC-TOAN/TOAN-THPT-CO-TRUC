@@ -1766,7 +1766,8 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             qLines = lines;
         }
 
-      let qContent = qLines.join('<br>').replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_]+/i, '').trim();
+let qContent = qLines.join('<br>').replace(/^(?:C[âa]u|B[àa]i|C)\s*[\r\n\s]*\d+\s*[:.]\s*/i, '').trim();
+    
 
         const safeTopicId = topic.replace(/[^a-zA-Z0-9-_]/g, '_');
         const qId = `CH${grade}_${safeTopicId}_${Date.now().toString().slice(-4)}_${idx + 1}`;

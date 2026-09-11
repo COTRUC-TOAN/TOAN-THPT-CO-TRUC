@@ -112,9 +112,14 @@
         .form-row { margin-bottom: 12px; }
         .form-row label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 1.05rem; color: #334155; }
         .form-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; outline: none; background: #fff; font-family: 'Times New Roman', Times, serif; }
-        .rich-textarea { width: 100%; height: 160px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.15rem; outline: none; background: #fff; overflow-y: auto; font-family: 'Times New Roman', Times, serif; line-height: 1.6; }
-        
-        .preview-box { background: #fff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 12px; margin-top: 12px; min-height: 80px; font-size: 1.05rem; line-height: 1.5; color: #1e293b; }
+   .rich-textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.15rem; outline: none; background: #fff; overflow-y: auto; overflow-x: auto; font-family: 'Times New Roman', Times, serif; line-height: 1.6; }
+.rich-textarea * { max-width: 100% !important; word-wrap: break-word !important; overflow-wrap: break-word !important; }
+/* Xóa bỏ lùi lề âm của Word gây lẹm chữ bên trái */
+.rich-textarea p, .rich-textarea div, .rich-textarea span { margin-left: 0 !important; text-indent: 0 !important; padding-left: 0 !important; white-space: normal !important; }
+/* Ép bảng biểu (table) của Word phải vừa khít khung 100% */
+.rich-textarea table { width: 100% !important; table-layout: fixed !important; margin: 10px 0 !important; border-collapse: collapse !important; }
+.rich-textarea td, .rich-textarea th { white-space: normal !important; border: 1px solid #cbd5e1 !important; padding: 6px !important; }
+.preview-box { background: #fff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 12px; margin-top: 12px; min-height: 80px; font-size: 1.05rem; line-height: 1.5; color: #1e293b; overflow-y: auto; }
         .parsed-q-preview-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 10px; line-height: 1.5; }
         .parsed-q-preview-card strong { color: #1e40af; }
         .parsed-q-preview-card p { margin: 0; padding: 0; }
@@ -375,13 +380,13 @@
                         <!-- TẠO ĐỀ NHANH ALL-IN-ONE THÔNG MINH -->
                         <div id="add-method-paste">
                             <p style="font-size: 0.95rem; color: #1e40af; font-weight: bold; margin-bottom: 10px;">✨ Chế độ Tự Động: Dán hỗn hợp mọi dạng câu hỏi (Trắc nghiệm, Đúng/Sai, Ngắn), hệ thống tự bóc tách chuẩn 100% không cần chọn dạng!</p>
-                            <div class="form-row"><label>Nội dung Đề (Ctrl+V dán ảnh):</label><div class="rich-textarea" id="direct-raw-text" contenteditable="true" style="height: 180px;" placeholder="Dán văn bản đề thi..."></div></div>
+                  <div class="rich-textarea" id="direct-raw-text" contenteditable="true" style="height: 60vh; max-height: 60vh;" placeholder="Dán văn bản đề thi..."></div>
                             <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tự Động Phân Tích</button>
                             <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
                                 <strong style="color: #334155;">Xem Trước Gọn Gàng (<span id="direct-parsed-count">0</span> câu)</strong>
                                 <button class="btn-start" id="btn-save-parsed-bank" style="background: #059669; padding: 4px 10px; font-size: 0.9rem; display: none;" onclick="saveBankBulkToSheets()">Lưu Ngân Hàng</button>
                             </div>
-                            <div class="preview-box" id="direct-preview-box" style="max-height: 250px; overflow-y: auto;"><em>Chưa bóc tách.</em></div>
+                       <div class="preview-box" id="direct-preview-box" style="height: 40vh; max-height: 40vh; overflow-y: auto;"><em>Chưa bóc tách.</em></div>
                         </div>
 
                         <div id="add-method-bank" style="display: none;">
@@ -533,7 +538,7 @@
     <script>
 // DANH MỤC GIÁO VIÊN HỆ THỐNG
         const TEACHERS_DIRECTORY = {
-            'trucnt':  { name: 'Cô Nguyễn Thanh Trúc', subject: 'Toán', defaultUrl: 'https://script.google.com/macros/s/AKfycbzmV_0WaIHlMNdL1Ygj6Y3khwMAVqoOVAhf5D9WWuwavOoYoMR5ChGC67Gxc5fQ-KIEiw/exec' },
+            'trucnt':  { name: 'Cô Nguyễn Thanh Trúc', subject: 'Toán', defaultUrl: 'https://script.google.com/macros/s/AKfycbzis37_BfronfYS2csvtAfqZJOcQBHzmbZtymoNPFtLdGgI3ghiNUXCHuVq4i6Gsetw/exec' },
             'vanntkt': { name: 'Cô Nguyễn Thị Kiều Tuyết Vân', subject: 'Toán', defaultUrl: '' },
             'hoantt':  { name: 'Cô Nguyễn Thị Thu Hoa', subject: 'Toán', defaultUrl: '' },
             'nhuntq':  { name: 'Cô Nguyễn Thị Quỳnh Như', subject: 'Toán', defaultUrl: '' },
@@ -1284,15 +1289,24 @@ function processTopicsData(rawTopics) {
                 }
             }
 
-            const expBox = document.getElementById(`exp_q_${idx + 1}`);
-            if (expBox) {
-                let ansText = q.ans;
-                if (qType === 'TF' && q.ansOptions) {
-                    ansText = `a) ${q.ansOptions[0] == 'D' ? 'Đúng' : 'Sai'}, b) ${q.ansOptions[1] == 'D' ? 'Đúng' : 'Sai'}, c) ${q.ansOptions[2] == 'D' ? 'Đúng' : 'Sai'}, d) ${q.ansOptions[3] == 'D' ? 'Đúng' : 'Sai'}`;
-                }
-                expBox.innerHTML = `<strong>Đáp án:</strong> <span style="color: #16a34a; font-weight: bold;">${ansText}</span>${q.explanation ? '<br><strong>Hướng dẫn:</strong> ' + q.explanation : ''}`;
-                expBox.style.display = 'block';
-            }
+           const expBox = document.getElementById(`exp_q_${idx + 1}`);
+if (expBox) {
+    let ansText = q.ans;
+    if (qType === 'TF' && q.ansOptions) {
+        ansText = `a) ${q.ansOptions[0] == 'D' ? 'Đúng' : 'Sai'}, b) ${q.ansOptions[1] == 'D' ? 'Đúng' : 'Sai'}, c) ${q.ansOptions[2] == 'D' ? 'Đúng' : 'Sai'}, d) ${q.ansOptions[3] == 'D' ? 'Đúng' : 'Sai'}`;
+    }
+    
+    // In rõ ràng đáp án kèm theo lời giải chi tiết (explanation)
+    let explanationHtml = q.explanation ? `<br><div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #cbd5e1; color: #1e293b;"><strong>Lời giải chi tiết:</strong> ${q.explanation}</div>` : '';
+    
+    expBox.innerHTML = `<strong>Đáp án đúng:</strong> <span style="color: #16a34a; font-weight: bold;">${ansText}</span>${explanationHtml}`;
+    expBox.style.display = 'block';
+    
+    // Cập nhật lại định dạng toán học MathJax cho phần lời giải nếu có công thức LaTeX
+    if (window.renderMath) {
+        renderMath(expBox);
+    }
+}
         });
 
         if (window.renderMath) {
@@ -1661,9 +1675,9 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         .replace(/\r\n/g, '\n')
         .replace(/\r/g, '\n');
 
-    let blocks = textContent.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.\-_])/i)
+  let blocks = textContent.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.])/i)
         .map(b => b.trim())
-        .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+/i.test(b));
+        .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]/i.test(b));
 
     blocks.forEach((block, idx) => {
         let lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
@@ -1675,7 +1689,14 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         let options = ['', '', '', ''];
         let ans = '';
         let ansOptions = [];
+        let explanation = '';
         let qLines = [];
+
+        let expIdx = lines.findIndex(l => /^(?:L[ờo]i\s*gi[ảa]i|H[ưướ]ng\s*dẫ?n|Lời\s*giải\s*chi\s*tiết)\s*[:\-]?/i.test(l));
+        if (expIdx !== -1) {
+            explanation = lines[expIdx].replace(/^(?:L[ờo]i\s*gi[ảa]i|H[ưướ]ng\s*dẫ?n|Lời\s*giải\s*chi\s*tiết)\s*[:\-]?\s*/i, '').trim();
+            lines.splice(expIdx, 1);
+        }
 
         let ansIdx = lines.findIndex(l => /^(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?/i.test(l));
         if (ansIdx !== -1) {
@@ -1758,7 +1779,8 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             q: qContent,
             options: options,
             ans: ans,
-            ansOptions: ansOptions
+            ansOptions: ansOptions,
+            explanation: explanation
         });
     });
 
@@ -1775,32 +1797,36 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             
             document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
             
-            let previewHtml = directParsedQuestions.map((q, i) => {
-                let optsHtml = '';
-                if (q.type === 'TF') {
-                    optsHtml = q.options.map((op, idx) => op ? `<div>${['a','b','c','d'][idx]}) ${op}</div>` : '').join('');
-                } else if (q.type === 'MCQ') {
-                    optsHtml = `<div style="display:grid; grid-template-columns:1fr 1fr;">` + q.options.map((op, idx) => op ? `<div>${['A','B','C','D'][idx]}. ${op}</div>` : '').join('') + `</div>`;
-                }
-                return `<div class="parsed-q-preview-card" style="border: 1px solid #cbd5e1; padding: 12px; margin-bottom: 10px; border-radius: 8px; background: #fff;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <strong>C${i+1} [${q.type}]</strong>
-                                <div>
-                                    <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Mức độ:</label>
-                                    <select class="form-input" style="padding: 2px 6px; font-size: 0.9rem; display: inline-block; width: auto;" onchange="directParsedQuestions[${i}].level = this.value">
-                                        <option value="NB" ${q.level === 'NB' ? 'selected' : ''}>NB</option>
-                                        <option value="TH" ${q.level === 'TH' ? 'selected' : ''}>TH</option>
-                                        <option value="VD" ${q.level === 'VD' ? 'selected' : ''}>VD</option>
-                                        <option value="VDC" ${q.level === 'VDC' ? 'selected' : ''}>VDC</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div style="margin-bottom: 6px;">${q.q}</div>
-                            <div style="color: #475569; margin: 4px 0;">${optsHtml}</div>
-                            <div style="color:#16a34a; font-weight:bold;">Đ/A: ${q.ans}</div>
-                        </div>`;
-            }).join('');
-            
+       let previewHtml = directParsedQuestions.map((q, i) => {
+    let optsHtml = '';
+    if (q.type === 'TF') {
+        optsHtml = q.options.map((op, idx) => op ? `<div>${['a','b','c','d'][idx]}) ${op}</div>` : '').join('');
+    } else if (q.type === 'MCQ') {
+        optsHtml = `<div style="display:grid; grid-template-columns:1fr 1fr;">` + q.options.map((op, idx) => op ? `<div>${['A','B','C','D'][idx]}. ${op}</div>` : '').join('') + `</div>`;
+    }
+    
+    // Thêm đoạn hiển thị lời giải vào đây
+    let expPreviewHtml = q.explanation ? `<div style="margin-top: 6px; padding: 6px; background: #f0fdf4; border-left: 3px solid #16a34a; font-size: 0.95rem; color: #166534;"><strong>Lời giải:</strong> ${q.explanation}</div>` : '';
+
+    return `<div class="parsed-q-preview-card" style="border: 1px solid #cbd5e1; padding: 12px; margin-bottom: 10px; border-radius: 8px; background: #fff;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong>C${i+1} [${q.type}]</strong>
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Mức độ:</label>
+                        <select class="form-input" style="padding: 2px 6px; font-size: 0.9rem; display: inline-block; width: auto;" onchange="directParsedQuestions[${i}].level = this.value">
+                            <option value="NB" ${q.level === 'NB' ? 'selected' : ''}>NB</option>
+                            <option value="TH" ${q.level === 'TH' ? 'selected' : ''}>TH</option>
+                            <option value="VD" ${q.level === 'VD' ? 'selected' : ''}>VD</option>
+                            <option value="VDC" ${q.level === 'VDC' ? 'selected' : ''}>VDC</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-bottom: 6px;">${q.q}</div>
+                <div style="color: #475569; margin: 4px 0;">${optsHtml}</div>
+                <div style="color:#16a34a; font-weight:bold; margin-top: 4px;">Đ/A: ${q.ans}</div>
+                ${expPreviewHtml}
+            </div>`;
+}).join('');            
             document.getElementById('direct-preview-box').innerHTML = previewHtml;
             document.getElementById('btn-save-parsed-bank').style.display = 'inline-block';
             renderMath(document.getElementById('direct-preview-box'));
@@ -1889,7 +1915,7 @@ updateSelectedItemsDisplay();
             renderMath(container);
         }
 
-    function updateSelectedItemsDisplay() {
+ function updateSelectedItemsDisplay() {
     const container = document.getElementById('selected-items-container');
     if (!container) return;
     document.getElementById('selected-q-count').innerText = selectedQuestions.length;
@@ -1899,28 +1925,37 @@ updateSelectedItemsDisplay();
         return;
     }
 
+    // Kiểm tra xem chế độ hiện tại có phải là KAHOOT không
+    const currentMode = document.getElementById('new-exam-mode') ? document.getElementById('new-exam-mode').value : '';
+    const isKahootMode = (currentMode === 'KAHOOT');
+
     container.innerHTML = selectedQuestions.map((sq, idx) => {
         const currentTime = sq.timeLimit || 30;
+        
+        // Chỉ hiện ô chọn giây nếu đúng là chế độ KAHOOT, các chế độ khác sẽ ẩn đi hoàn toàn
+        const timeSelectorHtml = isKahootMode ? `
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="color: #64748b; font-size: 0.8rem;"><i class="fa-solid fa-stopwatch"></i></span>
+                <select onchange="changeQTimeLimit('${sq.id}', this.value)" style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; font-size: 0.85rem; font-weight: bold; color: #7c3aed; background: white; cursor: pointer;">
+                    <option value="15" ${currentTime == 15 ? 'selected' : ''}>15s</option>
+                    <option value="20" ${currentTime == 20 ? 'selected' : ''}>20s</option>
+                    <option value="30" ${currentTime == 30 ? 'selected' : ''}>30s</option>
+                    <option value="45" ${currentTime == 45 ? 'selected' : ''}>45s</option>
+                    <option value="60" ${currentTime == 60 ? 'selected' : ''}>60s</option>
+                    <option value="90" ${currentTime == 90 ? 'selected' : ''}>90s</option>
+                    <option value="120" ${currentTime == 120 ? 'selected' : ''}>120s</option>
+                </select>
+            </div>
+        ` : '';
+
         return `
             <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; margin-bottom: 6px; font-size: 0.9rem;">
-                <span style="font-weight: 600; color: #1e293b;">${idx + 1}. ${sq.id}</span>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <span style="color: #64748b; font-size: 0.8rem;"><i class="fa-solid fa-stopwatch"></i></span>
-                    <select onchange="changeQTimeLimit('${sq.id}', this.value)" style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; font-size: 0.85rem; font-weight: bold; color: #7c3aed; background: white; cursor: pointer;">
-                        <option value="15" ${currentTime == 15 ? 'selected' : ''}>15s</option>
-                        <option value="20" ${currentTime == 20 ? 'selected' : ''}>20s</option>
-                        <option value="30" ${currentTime == 30 ? 'selected' : ''}>30s</option>
-                        <option value="45" ${currentTime == 45 ? 'selected' : ''}>45s</option>
-                        <option value="60" ${currentTime == 60 ? 'selected' : ''}>60s</option>
-                        <option value="90" ${currentTime == 90 ? 'selected' : ''}>90s</option>
-                        <option value="120" ${currentTime == 120 ? 'selected' : ''}>120s</option>
-                    </select>
-                </div>
+                <span style="font-weight: 600; color: #1e293b;">${idx + 1}. ${sq.id} [${sq.type}]</span>
+                ${timeSelectorHtml}
             </div>
         `;
     }).join('');
 }
-
 function changeQTimeLimit(id, seconds) {
     const q = selectedQuestions.find(item => item.id === id);
     if (q) {

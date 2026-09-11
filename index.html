@@ -1666,7 +1666,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     let parsedArr = [];
     let tempDiv = document.createElement('div');
     tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
-
+   
     let textContent = tempDiv.innerHTML
         .replace(/<br\s*[\/]?>/gi, '\n')
         .replace(/<\/?(div|p|h[1-6]|ul|ol|li|tr)[^>]*>/gi, '\n')
@@ -1674,12 +1674,13 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         .replace(/&nbsp;/gi, ' ')
         .replace(/\r\n/g, '\n')
         .replace(/\r/g, '\n');
-
+// Dồn chữ "Câu" và số nếu lỡ bị ngắt dòng ở giữa
+    textContent = textContent.replace(/(?:C[âa]u|B[àa]i|C)\s*\n+\s*(\d+)/gi, 'Câu $1');
   let blocks = textContent.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.])/i)
         .map(b => b.trim())
         .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]/i.test(b));
-
-    blocks.forEach((block, idx) => {
+   
+      blocks.forEach((block, idx) => {
         let lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
         
         let hasMCQ = lines.some(l => /^[A-D][\.\)]\s*/.test(l));

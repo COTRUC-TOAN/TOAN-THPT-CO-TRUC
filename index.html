@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Khảo Thí & Học Tập Toán THPT - LONG THỚI </title>
+    <title>Cổng Khảo Thí & Học Tập Toán THPT - LONG THỚI</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,6 +104,7 @@
         .scores-table td { padding: 12px 14px; border-bottom: 1px solid var(--border-color); color: #1e293b; }
         .badge-score { font-weight: bold; padding: 4px 8px; border-radius: 6px; }
         .badge-pass { background: #dcfce7; color: #166534; }
+        .badge-fail { background: #fee2e2; color: #991b1b; }
 
         .creator-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; margin-top: 15px; }
         @media (max-width: 950px) { .creator-container { grid-template-columns: 1fr; } }
@@ -112,14 +112,12 @@
         .form-row { margin-bottom: 12px; }
         .form-row label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 1.05rem; color: #334155; }
         .form-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; outline: none; background: #fff; font-family: 'Times New Roman', Times, serif; }
-   .rich-textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.15rem; outline: none; background: #fff; overflow-y: auto; overflow-x: auto; font-family: 'Times New Roman', Times, serif; line-height: 1.6; }
-.rich-textarea * { max-width: 100% !important; word-wrap: break-word !important; overflow-wrap: break-word !important; }
-/* Xóa bỏ lùi lề âm của Word gây lẹm chữ bên trái */
-.rich-textarea p, .rich-textarea div, .rich-textarea span { margin-left: 0 !important; text-indent: 0 !important; padding-left: 0 !important; white-space: normal !important; }
-/* Ép bảng biểu (table) của Word phải vừa khít khung 100% */
-.rich-textarea table { width: 100% !important; table-layout: fixed !important; margin: 10px 0 !important; border-collapse: collapse !important; }
-.rich-textarea td, .rich-textarea th { white-space: normal !important; border: 1px solid #cbd5e1 !important; padding: 6px !important; }
-.preview-box { background: #fff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 12px; margin-top: 12px; min-height: 80px; font-size: 1.05rem; line-height: 1.5; color: #1e293b; overflow-y: auto; }
+        .rich-textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.15rem; outline: none; background: #fff; overflow-y: auto; overflow-x: auto; font-family: 'Times New Roman', Times, serif; line-height: 1.6; }
+        .rich-textarea * { max-width: 100% !important; word-wrap: break-word !important; overflow-wrap: break-word !important; }
+        .rich-textarea p, .rich-textarea div, .rich-textarea span { margin-left: 0 !important; text-indent: 0 !important; padding-left: 0 !important; white-space: normal !important; }
+        .rich-textarea table { width: 100% !important; table-layout: fixed !important; margin: 10px 0 !important; border-collapse: collapse !important; }
+        .rich-textarea td, .rich-textarea th { white-space: normal !important; border: 1px solid #cbd5e1 !important; padding: 6px !important; }
+        .preview-box { background: #fff; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 12px; margin-top: 12px; min-height: 80px; font-size: 1.05rem; line-height: 1.5; color: #1e293b; overflow-y: auto; }
         .parsed-q-preview-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 10px; line-height: 1.5; }
         .parsed-q-preview-card strong { color: #1e40af; }
         .parsed-q-preview-card p { margin: 0; padding: 0; }
@@ -133,7 +131,6 @@
         
         .matrix-topic-row { background: #fff; border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; margin-bottom: 10px; }
         .matrix-topic-row h5 { color: #1e40af; margin-bottom: 8px; font-size: 1.05rem; }
-        .matrix-inputs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 
         #password-lock-screen { display: none; max-width: 500px; margin: 80px auto; background: #fff; padding: 40px; border-radius: var(--radius-lg); border: 2px solid #dc2626; text-align: center; box-shadow: 0 10px 30px rgba(220, 38, 38, 0.15); }
         #quiz-view { display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
@@ -142,7 +139,7 @@
         .timer-box.practice { color: #16a34a; background: #dcfce7; }
         .anti-cheat-alert { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 10px 14px; border-radius: 8px; margin-bottom: 15px; display: none; }
         .student-box { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
-        .student-box input { padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; font-family: 'Times New Roman', Times, serif; }
+        .student-box input, .student-box select { padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; font-family: 'Times New Roman', Times, serif; }
 
         #kahoot-view { display: none; max-width: 850px; margin: 0 auto; background: #fff; padding: 30px; border-radius: var(--radius-lg); border: 2px solid #7c3aed; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.15); text-align: center; }
         .kahoot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -177,12 +174,11 @@
         .explanation-box { background: #fff; border-left: 4px solid #16a34a; padding: 12px 16px; margin-top: 12px; border-radius: 4px; font-size: 1.05rem; color: #334155; line-height: 1.8; }
         .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: bold; z-index: 1000; display: none; }
         .q-card img, .preview-box img, .kahoot-question img { max-width: 100%; height: auto; border-radius: 8px; margin: 10px auto; display: block; border: 1px solid #e2e8f0; }
-        .mcq-option.correct-choice { background-color: #dcfce7 !important; border-color: #16a34a !important; color: #166534; font-weight: bold; }
-        .mcq-option.wrong-choice { background-color: #fee2e2 !important; border-color: #dc2626 !important; color: #991b1b; font-weight: bold; }
     </style>
 </head>
 <body>
-<!-- MÀN HÌNH CHỌN VÀ LIÊN KẾT GIÁO VIÊN BAN ĐẦU -->
+
+    <!-- MÀN HÌNH ĐĂNG NHẬP GIÁO VIÊN -->
     <div id="teacher-portal-gate" style="position: fixed; inset: 0; background: #0f172a; z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 20px;">
         <div style="background: #ffffff; border-radius: 16px; padding: 32px 28px; width: 100%; max-width: 460px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: center;">
             <div style="width: 65px; height: 65px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #1d4ed8; font-size: 1.8rem;">
@@ -206,15 +202,13 @@
                 </select>
             </div>
 
-            <!-- Khung nhập link Apps Script cá nhân (Tự hiện khi chưa có link lưu trữ) -->
             <div id="gate-script-url-row" style="text-align: left; margin-bottom: 14px; display: none;">
                 <label style="display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.95rem; color: #dc2626;">Liên kết Google Apps Script của Thầy/Cô:</label>
                 <input type="text" id="gate-script-url-input" class="form-input" placeholder="Dán link https://script.google.com/.../exec vào đây" style="font-size: 0.9rem;">
-                <small style="color: #64748b; font-size: 0.8rem; display: block; margin-top: 4px;">* Link sẽ tự động lưu lại trên máy này cho các lần truy cập sau.</small>
             </div>
 
             <div style="text-align: left; margin-bottom: 22px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.95rem; color: #334155;">Mật khẩu quản trị (của Sheets cá nhân):</label>
+                <label style="display: block; font-weight: bold; margin-bottom: 6px; font-size: 0.95rem; color: #334155;">Mật khẩu quản trị (Sheets):</label>
                 <input type="password" id="gate-password-input" class="form-input" placeholder="Nhập mật khẩu quản trị..." style="padding: 10px;">
             </div>
 
@@ -223,10 +217,11 @@
             </button>
         </div>
     </div>
+
     <div class="wrapper">
         <nav class="navbar">
             <div class="brand">
-                <i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> TOÁN THPT - CÔ TRÚC
+                <i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> TOÁN THPT - LONG THỚI
             </div>
             <div class="nav-btns">
                 <button class="btn-nav btn-nav-outline" id="btn-tab-student" onclick="showPortalView()"><i class="fa-solid fa-house"></i> Góc Học Sinh</button>
@@ -234,17 +229,18 @@
             </div>
         </nav>
 
+        <!-- GÓC HỌC SINH -->
         <div id="portal-view">
-      <div class="grade-bar">
+            <div class="grade-bar">
                 <button class="grade-pill active" onclick="filterGrade('12', this)">Toán 12</button>
                 <button class="grade-pill" onclick="filterGrade('11', this)">Toán 11</button>
                 <button class="grade-pill" onclick="filterGrade('10', this)">Toán 10</button>
-                <button class="grade-pill" onclick="filterGrade('thpt', this)">Luyện Thi THPT QG</button>
+                <button class="grade-pill" onclick="filterGrade('all', this)">Tất Cả Các Khối</button>
             </div>
 
             <div class="portal-layout">
                 <aside class="sidebar">
-                    <div class="sidebar-title"><i class="fa-solid fa-shapes"></i> Mục Lục KNTT</div>
+                    <div class="sidebar-title"><i class="fa-solid fa-shapes"></i> Mục Lục Bài Học</div>
                     <ul class="topic-list" id="topic-container"></ul>
                 </aside>
 
@@ -256,33 +252,14 @@
             </div>
         </div>
 
-        <!-- GIAO DIỆN QUẢN LÝ & SOẠN ĐỀ -->
+        <!-- GIAO DIỆN QUẢN LÝ GIÁO VIÊN -->
         <div id="teacher-view" style="display: none;">
-         <div class="teacher-nav">
-    <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
-    <button class="btn-t-tab" id="btn-t-exams" onclick="switchTeacherTab('exams')"><i class="fa-solid fa-list-check"></i> Quản Lý Đề Thi</button>
-    <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo & Soạn Đề Mới</button>
-    <button class="btn-t-tab" id="btn-t-classes" onclick="switchTeacherTab('classes')"><i class="fa-solid fa-school"></i> Quản Lý Danh Sách Lớp</button>
-    <button type="button" class="btn-t-tab" onclick="openChangePassModal()" style="margin-left: auto; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1;"><i class="fa-solid fa-key"></i> Đổi Mật Khẩu</button>
-</div>
-            <!-- HỘP THOẠI ĐỔI MẬT KHẨU -->
-<div id="change-pass-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99999; align-items: center; justify-content: center;">
-    <div style="background: white; border-radius: 12px; padding: 24px; width: 90%; max-width: 360px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-        <h3 style="margin-top: 0; font-size: 1.15rem; color: #1e293b; text-align: center; margin-bottom: 16px;">Đổi Mật Khẩu Quản Trị</h3>
-        <div style="margin-bottom: 12px;">
-            <label style="font-size: 0.85rem; color: #64748b; display: block; margin-bottom: 4px; font-weight: 500;">Mật khẩu hiện tại:</label>
-            <input type="password" id="old-admin-pass" placeholder="Nhập mật khẩu cũ..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem;">
-        </div>
-        <div style="margin-bottom: 18px;">
-            <label style="font-size: 0.85rem; color: #64748b; display: block; margin-bottom: 4px; font-weight: 500;">Mật khẩu mới:</label>
-            <input type="password" id="new-admin-pass" placeholder="Nhập mật khẩu mới..." style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem;">
-        </div>
-        <div style="display: flex; gap: 10px;">
-            <button type="button" onclick="closeChangePassModal()" style="flex: 1; padding: 8px; border: 1px solid #cbd5e1; background: #f1f5f9; border-radius: 6px; cursor: pointer; font-weight: 600; color: #475569;">Hủy</button>
-            <button type="button" onclick="submitChangePassword()" style="flex: 1; padding: 8px; border: none; background: #2563eb; color: white; border-radius: 6px; font-weight: 600; cursor: pointer;">Cập Nhật</button>
-        </div>
-    </div>
-</div>
+            <div class="teacher-nav">
+                <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
+                <button class="btn-t-tab" id="btn-t-exams" onclick="switchTeacherTab('exams')"><i class="fa-solid fa-list-check"></i> Quản Lý Đề Thi</button>
+                <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo & Soạn Đề Mới</button>
+                <button class="btn-t-tab" id="btn-t-classes" onclick="switchTeacherTab('classes')"><i class="fa-solid fa-school"></i> Quản Lý Danh Sách Lớp</button>
+            </div>
 
             <!-- TAB 1: SỔ ĐIỂM -->
             <div id="sec-t-scores">
@@ -291,7 +268,6 @@
                     <div class="stat-card"><h4>Điểm Trung Bình</h4><div class="stat-val" id="stat-avg-score">0.0</div></div>
                 </div>
                 
-               <!-- BỘ LỌC LỚP & ĐỀ THI & XUẤT EXCEL -->
                 <div style="display: flex; gap: 12px; margin-bottom: 15px; align-items: center; flex-wrap: wrap;">
                     <div>
                         <label style="font-weight: bold; font-size: 0.95rem; color: #334155;">Lớp:</label>
@@ -311,232 +287,162 @@
                 <div class="table-responsive">
                     <table class="scores-table">
                         <thead>
-                            <tr><th>Thời Gian</th><th>Họ và Tên</th><th>Lớp</th><th>Bài Thi</th><th>Điểm</th></tr>
+                            <tr><th>Thời Gian</th><th>Họ và Tên</th><th>Lớp</th><th>Bài Thi</th><th>Điểm</th><th>Chế Độ</th></tr>
                         </thead>
-                        <tbody id="scores-table-body"><tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Chưa có dữ liệu.</td></tr></tbody>
+                        <tbody id="scores-table-body">
+                            <tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 20px;">Đang nạp dữ liệu từ Google Sheets...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- TAB 2: QUẢN LÝ ĐỀ THI -->
+            <!-- TAB 2: DANH SÁCH ĐỀ THI -->
             <div id="sec-t-exams" style="display: none;">
-                <h3 style="color: #1e40af; margin-bottom: 15px;"><i class="fa-solid fa-list-check"></i> Danh Sách Đề Thi Trên Hệ Thống</h3>
+                <h3 style="color: #1e40af; margin-bottom: 15px;"><i class="fa-solid fa-list-check"></i> Danh Sách Đề Thi Đang Mở</h3>
                 <div id="teacher-exam-list-container"><p style="color: #94a3b8;">Đang tải danh sách đề...</p></div>
             </div>
 
-            <!-- TAB 3: TẠO & SOẠN ĐỀ MỚI ALL-IN-ONE -->
+            <!-- TAB 3: TẠO ĐỀ MỚI -->
             <div id="sec-t-creator" style="display: none;">
                 <div class="creator-container">
                     <div class="creator-card">
-                        <h3 style="margin-bottom: 14px; color: var(--primary);"><i class="fa-solid fa-file-signature"></i> 1. Cấu Hình Đề Thi & Bảo Mật</h3>
-                        <div class="form-row"><label>Khối Lớp:</label><select class="form-input" id="new-exam-grade" onchange="updateNewExamTopicDropdown(); renderMatrixTable();"><option value="12">Toán 12</option><option value="11">Toán 11</option><option value="10">Toán 10</option></select></div>
-                        <div class="form-row"><label>Chuyên Mục Chung:</label><select class="form-input" id="new-exam-topic"></select></div>
-                        <div class="form-row"><label>Mã Đề:</label><input type="text" class="form-input" id="new-exam-id" placeholder="KT12-01"></div>
-                        <div class="form-row"><label>Tên Đề:</label><input type="text" class="form-input" id="new-exam-title" placeholder="Kiểm Tra 45 Phút"></div>
+                        <h3 style="margin-bottom: 14px; color: var(--primary);"><i class="fa-solid fa-file-signature"></i> 1. Cấu Hình Đề Thi</h3>
+                        <div class="form-row"><label>Khối Lớp:</label><select class="form-input" id="new-exam-grade" onchange="updateNewExamTopicDropdown()"><option value="12">Toán 12</option><option value="11">Toán 11</option><option value="10">Toán 10</option></select></div>
+                        <div class="form-row"><label>Chuyên Mục / Chủ Đề:</label><input type="text" class="form-input" id="new-exam-topic" placeholder="VD: 12-kt-gk1 hoặc Tên bài học" value="12-kt-gk1"></div>
+                        <div class="form-row"><label>Mã Đề (Viết liền không dấu):</label><input type="text" class="form-input" id="new-exam-id" placeholder="VD: KT12-01"></div>
+                        <div class="form-row"><label>Tên Đề Thi:</label><input type="text" class="form-input" id="new-exam-title" placeholder="VD: Kiểm Tra Giữa Kì"></div>
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <div class="form-row"><label>Chế Độ:</label><select class="form-input" id="new-exam-mode" onchange="toggleExamPasswordField()"><option value="BAIGIANG">📘 Bài Giảng</option><option value="LUYENTAP">🟢 Luyện Tập</option><option value="KIEMTRA">🔴 Kiểm Tra (Bảo Mật Cao)</option><option value="KAHOOT">⚡ Đấu Trường Kahoot</option></select></div>
+                            <div class="form-row"><label>Chế Độ:</label><select class="form-input" id="new-exam-mode" onchange="toggleExamPasswordField()"><option value="LUYENTAP">🟢 Luyện Tập</option><option value="KIEMTRA">🔴 Kiểm Tra</option><option value="BAIGIANG">📘 Bài Giảng</option><option value="KAHOOT">⚡ Đấu Trường Kahoot</option></select></div>
                             <div class="form-row"><label>Thời Gian (Phút):</label><input type="number" class="form-input" id="new-exam-time" value="45"></div>
                         </div>
-                        
-                        <!-- KHUNG NHẬP LIỆU DÀNH RIÊNG CHO BÀI GIẢNG -->
-                        <div id="lecture-fields" style="display: none; background: #f8fafc; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                            <h4 style="margin-top: 0; color: #0f172a; margin-bottom: 10px;"><i class="fa-solid fa-photo-film"></i> Thông tin Bài giảng & Tài liệu</h4>
-                            
-                            <div class="form-row" style="margin-bottom: 10px;">
-                                <label style="font-weight: 600; color: #475569;">Link Video YouTube:</label>
-                                <input type="text" class="form-input" id="lecture-youtube-url" placeholder="Dán đường dẫn YouTube vào đây (VD: https://youtu.be/...)">
-                            </div>
 
-                            <div class="form-row" style="margin-bottom: 0;">
-                                <label style="font-weight: 600; color: #475569;">Đính kèm tệp PDF từ máy:</label>
-                                <input type="file" class="form-input" id="lecture-pdf-file" accept=".pdf" style="padding: 6px; background: #fff;">
-                                <small style="color: #64748b; display: block; margin-top: 4px;">Hệ thống sẽ tải file lên để học sinh vừa xem video vừa mở tài liệu ôn tập trực tiếp.</small>
-                            </div>
+                        <div id="lecture-fields" style="display: none; background: #f8fafc; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <h4 style="margin-top: 0; color: #0f172a; margin-bottom: 10px;"><i class="fa-solid fa-photo-film"></i> Bài Giảng & Tài Liệu</h4>
+                            <div class="form-row"><label>Link Video YouTube:</label><input type="text" class="form-input" id="lecture-youtube-url" placeholder="https://youtu.be/..."></div>
+                            <div class="form-row"><label>File PDF đính kèm:</label><input type="file" class="form-input" id="lecture-pdf-file" accept=".pdf" style="padding: 6px; background: #fff;"></div>
                         </div>
 
                         <div class="form-row" id="exam-password-row" style="display: none;"><label style="color:#dc2626;">🔑 Mật Khẩu Phòng Thi:</label><input type="text" class="form-input" id="new-exam-pass" placeholder="Mật khẩu đề thi..."></div>
-                        <div class="form-row"><label style="color:#16a34a;">🟢 Thời gian BẮT ĐẦU mở đề:</label><input type="datetime-local" class="form-input" id="new-exam-start-time"></div>
-                        <div class="form-row"><label style="color:#dc2626;">🔴 Thời hạn ĐÓNG đề (Deadline):</label><input type="datetime-local" class="form-input" id="new-exam-deadline"></div>
+                        <div class="form-row"><label style="color:#16a34a;">🟢 Bắt Đầu:</label><input type="datetime-local" class="form-input" id="new-exam-start-time"></div>
+                        <div class="form-row"><label style="color:#dc2626;">🔴 Hạn Nộp (Deadline):</label><input type="datetime-local" class="form-input" id="new-exam-deadline"></div>
 
                         <div class="selected-list-box" id="bank-selected-box">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <strong style="color: #334155;"><i class="fa-solid fa-list-check"></i> Đã Chọn (<span id="selected-q-count" style="color: var(--primary);">0</span> câu)</strong>
+                                <strong style="color: #334155;"><i class="fa-solid fa-list-check"></i> Câu Hỏi Trong Đề (<span id="selected-q-count" style="color: var(--primary);">0</span> câu)</strong>
                                 <button onclick="clearSelectedQuestions()" style="background: none; border: none; color: #dc2626; cursor: pointer; font-weight: bold;">Xóa hết</button>
                             </div>
-                            <div id="selected-items-container" style="max-height: 200px; overflow-y: auto;"><p style="text-align: center; color: #94a3b8;">Chưa chọn câu hỏi.</p></div>
+                            <div id="selected-items-container" style="max-height: 200px; overflow-y: auto;"><p style="text-align: center; color: #94a3b8;">Chưa có câu hỏi.</p></div>
                         </div>
                         <button class="btn-start" style="width: 100%; margin-top: 15px; padding: 12px;" onclick="saveExamFinal()"><i class="fa-solid fa-cloud-arrow-up"></i> Lưu & Xuất Bản Đề</button>
                     </div>
 
                     <div class="creator-card">
-                        <h3 style="color: #059669; margin-bottom: 14px;"><i class="fa-solid fa-layer-group"></i> 2. Nguồn Tạo Đề</h3>
-                        <div style="display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
-                            <button class="btn-t-tab active" id="tab-add-paste" onclick="switchAddMethod('paste')">Nạp Đề Thông Minh (All-in-One)</button>
-                            <button class="btn-t-tab" id="tab-add-bank" onclick="switchAddMethod('bank')">Chọn Từ Ngân Hàng</button>
-                            <button class="btn-t-tab" id="tab-add-matrix" onclick="switchAddMethod('matrix')">Trộn Ma Trận</button>
+                        <h3 style="color: #059669; margin-bottom: 14px;"><i class="fa-solid fa-layer-group"></i> 2. Nạp Câu Hỏi Vào Đề</h3>
+                        <div class="rich-textarea" id="direct-raw-text" contenteditable="true" style="height: 55vh; max-height: 55vh;" placeholder="Dán văn bản đề thi từ Word/PDF vào đây..."></div>
+                        <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tự Động Phân Tích & Bóc Tách</button>
+                        
+                        <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="color: #334155;">Xem Trước Bóc Tách (<span id="direct-parsed-count">0</span> câu)</strong>
+                            <button class="btn-start" id="btn-save-parsed-bank" style="background: #059669; padding: 4px 10px; font-size: 0.9rem; display: none;" onclick="saveBankBulkToSheets()">Lưu Vào Ngân Hàng</button>
                         </div>
-
-                        <!-- TẠO ĐỀ NHANH ALL-IN-ONE THÔNG MINH -->
-                        <div id="add-method-paste">
-                            <p style="font-size: 0.95rem; color: #1e40af; font-weight: bold; margin-bottom: 10px;">✨ Chế độ Tự Động: Dán hỗn hợp mọi dạng câu hỏi (Trắc nghiệm, Đúng/Sai, Ngắn), hệ thống tự bóc tách chuẩn 100% không cần chọn dạng!</p>
-                  <div class="rich-textarea" id="direct-raw-text" contenteditable="true" style="height: 60vh; max-height: 60vh;" placeholder="Dán văn bản đề thi..."></div>
-                            <button class="btn-start" style="width: 100%; background: #2563eb; margin-top: 10px;" onclick="parseDirectExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tự Động Phân Tích</button>
-                            <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
-                                <strong style="color: #334155;">Xem Trước Gọn Gàng (<span id="direct-parsed-count">0</span> câu)</strong>
-                                <button class="btn-start" id="btn-save-parsed-bank" style="background: #059669; padding: 4px 10px; font-size: 0.9rem; display: none;" onclick="saveBankBulkToSheets()">Lưu Ngân Hàng</button>
-                            </div>
-                       <div class="preview-box" id="direct-preview-box" style="height: 40vh; max-height: 40vh; overflow-y: auto;"><em>Chưa bóc tách.</em></div>
-                        </div>
-
-                        <div id="add-method-bank" style="display: none;">
-                            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px;">
-                                <select class="form-input" id="bank-filter-grade" onchange="updateBankFilterTopics(); filterQuestionBankList();"><option value="all">-- Khối --</option><option value="12">12</option><option value="11">11</option><option value="10">10</option></select>
-                                <select class="form-input" id="bank-filter-topic" onchange="filterQuestionBankList()"><option value="all">-- Bài / Chương --</option></select>
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-                                <select class="form-input" id="bank-filter-level" onchange="filterQuestionBankList()"><option value="all">-- Mức Độ --</option><option value="NB">NB</option><option value="TH">TH</option><option value="VD">VD</option><option value="VDC">VDC</option></select>
-                                <select class="form-input" id="bank-filter-type" onchange="filterQuestionBankList()"><option value="all">-- Dạng --</option><option value="MCQ">MCQ</option><option value="TF">Đúng/Sai</option><option value="SA">Ngắn</option></select>
-                            </div>
-                            <div style="margin-bottom: 10px;"><input type="text" class="form-input" id="bank-search-text" placeholder="🔍 Tìm từ khóa..." oninput="filterQuestionBankList()"></div>
-                            <div id="bank-q-list" style="max-height: 400px; overflow-y: auto;"></div>
-                        </div>
-
-                        <!-- MA TRẬN TỪNG BÀI -->
-                        <div id="add-method-matrix" style="display: none;">
-                            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 15px;">Nhập số lượng câu hỏi cần lấy cho từng bài học cụ thể:</p>
-                            <div id="matrix-topics-container" style="max-height: 380px; overflow-y: auto; margin-bottom: 15px; padding-right: 5px;"></div>
-                            <button class="btn-start" style="width: 100%; background: #059669;" onclick="generateMatrixExam()"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo Đề Ma Trận</button>
-                        </div>
+                        <div class="preview-box" id="direct-preview-box" style="height: 35vh; max-height: 35vh; overflow-y: auto;"><em>Chưa bóc tách.</em></div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- TAB QUẢN LÝ LỚP -->
-        <div id="sec-t-classes" style="display: none;">
-            <h3 style="color: #1e40af; margin-bottom: 15px;"><i class="fa-solid fa-school"></i> Cấu Hình Danh Sách Lớp Học</h3>
-            <div style="display: flex; gap: 10px; margin-bottom: 15px; max-width: 500px;">
-                <input type="text" class="form-input" id="new-class-name" placeholder="Nhập tên lớp (VD: 12A1, Học thêm 1...)">
-                <button class="btn-start" style="background: var(--primary); white-space: nowrap;" onclick="addNewClass()">Thêm Lớp</button>
+            <!-- TAB 4: QUẢN LÝ LỚP -->
+            <div id="sec-t-classes" style="display: none;">
+                <h3 style="color: #1e40af; margin-bottom: 15px;"><i class="fa-solid fa-school"></i> Quản Lý Lớp Học</h3>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; max-width: 500px;">
+                    <input type="text" class="form-input" id="new-class-name" placeholder="Nhập tên lớp mới...">
+                    <button class="btn-start" style="background: var(--primary); white-space: nowrap;" onclick="addNewClass()">Thêm Lớp</button>
+                </div>
+                <div id="teacher-class-list" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
             </div>
-            <div id="teacher-class-list" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
         </div>
 
-        <!-- MÀN HÌNH KHÓA -->
+        <!-- MÀN HÌNH KHÓA ĐỀ THI -->
         <div id="password-lock-screen">
             <i class="fa-solid fa-shield-halved" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
-            <h2 style="color: #1e293b; margin-bottom: 10px;" id="lock-screen-title">Phòng Kiểm Tra Bảo Mật</h2>
-            <p style="color: #64748b; margin-bottom: 20px;" id="lock-screen-desc">Đề thi yêu cầu mật khẩu bảo mật từ giáo viên.</p>
+            <h2 style="color: #1e293b; margin-bottom: 10px;" id="lock-screen-title">Phòng Thi Bảo Mật</h2>
+            <p style="color: #64748b; margin-bottom: 20px;" id="lock-screen-desc">Vui lòng nhập mật khẩu do giáo viên cung cấp.</p>
             <div id="password-input-group">
                 <input type="password" id="exam-secure-pass" class="form-input" placeholder="Nhập mật khẩu..." style="text-align: center; font-size: 1.2rem; margin-bottom: 15px;">
-                <button class="btn-start" style="width: 100%; background: #dc2626; justify-content: center;" onclick="verifyExamPassword()"><i class="fa-solid fa-key"></i> Xác Thực & Vào Thi</button>
+                <button class="btn-start" style="width: 100%; background: #dc2626; justify-content: center;" onclick="verifyExamPassword()"><i class="fa-solid fa-key"></i> Vào Làm Bài</button>
             </div>
         </div>
 
-        <!-- GIAO DIỆN LÀM BÀI TRUYỀN THỐNG -->
+        <!-- MÀN HÌNH LÀM BÀI CỦA HỌC SINH -->
         <div id="quiz-view">
             <div class="quiz-topbar">
                 <button class="btn-nav btn-nav-outline" onclick="showPortalView()"><i class="fa-solid fa-arrow-left"></i> Trở về</button>
                 <h3 id="quiz-title" style="color: #0f172a; font-size: 1.25rem;"></h3>
-                <div class="timer-box" id="timer-display"><i class="fa-regular fa-clock"></i> <span id="time-left">15:00</span></div>
+                <div class="timer-box" id="timer-display"><i class="fa-regular fa-clock"></i> <span id="time-left">45:00</span></div>
             </div>
-            <div class="anti-cheat-alert" id="cheat-warning"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Cảnh báo:</strong> Rời khỏi bài thi (<span id="cheat-count">0</span>/3 lần). Hệ thống ghi nhận mọi vi phạm!</div>
-            <div class="student-box"><input type="text" id="std-name" placeholder="Họ và tên *" required><input type="text" id="std-class" placeholder="Lớp (VD: 12A1) *" required></div>
+            <div class="anti-cheat-alert" id="cheat-warning"><i class="fa-solid fa-triangle-exclamation"></i> Rời khỏi bài thi (<span id="cheat-count">0</span>/3 lần). Hệ thống sẽ tự động nộp bài nếu quá số lần!</div>
+            <div class="student-box"><input type="text" id="std-name" placeholder="Họ và tên học sinh *" required><input type="text" id="std-class" placeholder="Lớp (VD: 12A1) *" required></div>
             <form id="quiz-form"><div id="quiz-content"></div><button type="submit" class="btn-submit" id="btn-submit-quiz"><i class="fa-solid fa-paper-plane"></i> Nộp Bài & Xem Điểm</button></form>
             <div id="quiz-result"></div>
         </div>
 
-        <!-- GIAO DIỆN XEM BÀI GIẢNG & TƯƠNG TÁC CHO HỌC SINH -->
-<div id="lecture-view" style="display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
-    <div class="quiz-topbar">
-        <button class="btn-nav btn-nav-outline" onclick="showPortalView()"><i class="fa-solid fa-arrow-left"></i> Trở về</button>
-        <h3 id="lecture-title" style="color: #0f172a; font-size: 1.25rem;"></h3>
-    </div>
-    
-    <!-- KHUNG ĐIỂM DANH HỌC SINH -->
-    <div id="lecture-student-login" style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <h4 style="color: #1e40af; margin-bottom: 10px; font-size: 1.05rem;"><i class="fa-solid fa-user-check"></i> Đăng ký điểm danh xem bài giảng</h4>
-        <div class="student-box" style="margin-bottom: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-            <input type="text" id="lec-std-name" placeholder="Họ và tên *" class="form-input" required>
-            <input type="text" id="lec-std-class" placeholder="Lớp (VD: 12A1) *" class="form-input" required>
-        </div>
-        <button class="btn-start" style="width: 100%; margin-top: 10px; background: #2563eb;" onclick="confirmLectureAttendance()"><i class="fa-solid fa-play"></i> Xác Nhận & Bắt Đầu Học</button>
-    </div>
-
-    <!-- BAO BỌC PHẦN NỘI DUNG CHÍNH (BAN ĐẦU SẼ BỊ GIẤU ĐI) -->
-    <div id="lecture-main-content" style="display: none;">
-        <!-- Khung phát Video YouTube -->
-        <div id="lecture-video-container" style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 20px; background: #000; border-radius: 8px; overflow: hidden; display: none;">
-            <iframe id="lecture-iframe" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen></iframe>
-        </div>
-
-        <!-- Nút mở tài liệu PDF đính kèm -->
-        <div id="lecture-pdf-box" style="margin-bottom: 25px; display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 8px; align-items: center; justify-content: space-between;">
-            <span style="font-weight: bold; color: #166534;"><i class="fa-solid fa-file-pdf"></i> Tài liệu học tập đính kèm (PDF)</span>
-            <a id="lecture-pdf-link" href="#" target="_blank" class="btn-start" style="background: #16a34a; padding: 6px 14px; font-size: 0.95rem; text-decoration: none; display: inline-flex; width: auto;"><i class="fa-solid fa-download"></i> Mở / Tải Tài Liệu</a>
+        <!-- MÀN HÌNH BÀI GIẢNG -->
+        <div id="lecture-view" style="display: none; max-width: 920px; margin: 0 auto; background: #fff; padding: 25px 30px; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+            <div class="quiz-topbar">
+                <button class="btn-nav btn-nav-outline" onclick="showPortalView()"><i class="fa-solid fa-arrow-left"></i> Trở về</button>
+                <h3 id="lecture-title" style="color: #0f172a; font-size: 1.25rem;"></h3>
+            </div>
+            <div id="lecture-student-login" style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h4 style="color: #1e40af; margin-bottom: 10px;"><i class="fa-solid fa-user-check"></i> Điểm danh vào xem bài giảng</h4>
+                <div class="student-box" style="margin-bottom: 0;"><input type="text" id="lec-std-name" placeholder="Họ và tên *" required><input type="text" id="lec-std-class" placeholder="Lớp *" required></div>
+                <button class="btn-start" style="width: 100%; margin-top: 10px; background: #2563eb;" onclick="confirmLectureAttendance()"><i class="fa-solid fa-play"></i> Bắt Đầu Học</button>
+            </div>
+            <div id="lecture-main-content" style="display: none;">
+                <div id="lecture-video-container" style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; margin-bottom: 20px; background: #000; border-radius: 8px; overflow: hidden; display: none;">
+                    <iframe id="lecture-iframe" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen></iframe>
+                </div>
+                <div id="lecture-pdf-box" style="margin-bottom: 25px; display: none; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 8px; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: bold; color: #166534;"><i class="fa-solid fa-file-pdf"></i> Tài liệu ôn tập đính kèm (PDF)</span>
+                    <a id="lecture-pdf-link" href="#" target="_blank" class="btn-start" style="background: #16a34a; padding: 6px 14px; text-decoration: none; width: auto;"><i class="fa-solid fa-download"></i> Xem / Tải PDF</a>
+                </div>
+                <div id="lecture-quiz-header" class="section-header" style="display: none;">📝 CÂU HỎI TƯƠNG TÁC</div>
+                <div id="lecture-questions-content"></div>
+            </div>
         </div>
 
-        <!-- Phần câu hỏi tương tác củng cố -->
-        <div class="section-header" id="lecture-quiz-header" style="display: none;">📝 CÂU HỎI TƯƠNG TÁC CỦNG CỐ KIẾN THỨC</div>
-        <form id="lecture-quiz-form" style="display: none;">
-            <div id="lecture-questions-content"></div>
-            <button type="button" class="btn-submit" onclick="submitLectureQuiz()"><i class="fa-solid fa-paper-plane"></i> Nộp Bài Tương Tác</button>
-        </form>
-        <div id="lecture-result" style="display: none; margin-top: 20px; padding: 22px; border-radius: var(--radius-md); text-align: center; font-size: 1.25rem; font-weight: bold; background: #dcfce7; color: #166534;"></div>
-    </div>
-</div>
-
+        <!-- ĐẤU TRƯỜNG KAHOOT -->
         <div id="kahoot-view">
             <div class="kahoot-header">
                 <div id="kahoot-progress" style="font-weight: bold; color: #7c3aed; font-size: 1.25rem;">⚡ ĐẤU TRƯỜNG KAHOOT</div>
                 <div class="kahoot-timer-circle" id="kahoot-timer-display">20</div>
             </div>
             <div id="kahoot-login-box" style="padding: 20px; text-align: left;">
-                <h3 style="color: #7c3aed; margin-bottom: 15px; text-align: center;"><i class="fa-solid fa-user-astronaut"></i> Đăng Ký Vào Đấu Trường</h3>
-                <div class="form-row" style="margin-bottom:12px;"><label>Họ và Tên:</label><input type="text" class="form-input" id="k-std-name"></div>
-                <div class="form-row" style="margin-bottom:15px;"><label>Lớp:</label><input type="text" class="form-input" id="k-std-class"></div>
-                <button class="btn-start" style="width: 100%; background: #7c3aed; justify-content: center;" onclick="joinKahootArena()"><i class="fa-solid fa-right-to-bracket"></i> Vào Phòng Chờ</button>
+                <h3 style="color: #7c3aed; margin-bottom: 15px; text-align: center;">Đăng Ký Đấu Trường</h3>
+                <div class="form-row"><label>Họ và Tên:</label><input type="text" class="form-input" id="k-std-name"></div>
+                <div class="form-row"><label>Lớp:</label><input type="text" class="form-input" id="k-std-class"></div>
+                <button class="btn-start" style="width: 100%; background: #7c3aed; justify-content: center;" onclick="joinKahootArena()">Vào Phòng Chờ</button>
             </div>
             <div id="kahoot-lobby-box" style="display: none; padding: 20px; text-align: center;">
                 <i class="fa-solid fa-hourglass-half fa-spin" style="font-size: 3rem; color: #7c3aed; margin-bottom: 15px;"></i>
-                <h3 style="color: #1e293b; margin-bottom: 10px;">Đã vào phòng chờ!</h3>
-                <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; font-weight: bold; color: #7c3aed;" id="waiting-status-text">Chờ Giáo viên phát lệnh... Bật âm thanh để nghe hiệu ứng.</div>
+                <h3 style="color: #1e293b;">Đã vào phòng chờ! Đang đợi giáo viên phát lệnh...</h3>
             </div>
             <div id="kahoot-game-box" style="display: none;">
                 <div class="kahoot-question" id="kahoot-q-text">Đang chờ câu hỏi...</div>
                 <div class="kahoot-options-grid" id="kahoot-options-grid"></div>
-                <div id="kahoot-feedback" style="font-weight: bold; font-size: 1.2rem; margin-top: 15px; min-height: 30px;"></div>
+                <div id="kahoot-feedback" style="font-weight: bold; font-size: 1.2rem; margin-top: 15px;"></div>
             </div>
             <div id="kahoot-host-box" style="display: none; padding: 15px; text-align: left;">
-                <div style="background: #eff6ff; border: 2px solid #bfdbfe; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="color: #1e40af; margin-bottom: 5px;"><i class="fa-solid fa-laptop-code"></i> TRUNG TÂM ĐIỀU KHIỂN MÁY CHỦ KAHOOT</h3>
-                </div>
-         <button class="btn-start" style="width: calc(100% - 130px); background: #16a34a; font-size: 1.2rem; padding: 14px; justify-content: center; margin-bottom: 20px; display: inline-flex;" onclick="hostStartExam()"><i class="fa-solid fa-play"></i> 🚀 Phát Lệnh Bắt Đầu & Bật Nhạc</button>
-<button type="button" onclick="stopKahootMusicLoop()" style="width: 120px; background-color: #dc2626; color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-bottom: 20px; margin-left: 10px;">🔇 Tắt Nhạc</button>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <h4 style="color: #334155; margin-bottom: 10px;"><i class="fa-solid fa-users"></i> Học Sinh (<span id="host-student-count">0</span>):</h4>
-                        <div class="host-lobby-box" id="host-students-list"><p style="color: #64748b; text-align: center;">Chưa có học sinh đăng nhập.</p></div>
-                        <div style="margin-top: 20px;">
-                            <h4 style="color: #dc2626; margin-bottom: 10px;"><i class="fa-solid fa-triangle-exclamation"></i> Thống kê câu sai:</h4>
-                            <div class="host-lobby-box" id="host-wrong-stats-box" style="background: #fff; border-color: #fca5a5;"><p style="color: #64748b; text-align: center;">Dữ liệu sẽ hiện khi học sinh sai.</p></div>
-                        </div>
-                    </div>
-                    <div id="host-analytics-section" style="display: none;">
-                        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
-                            <h4 style="color: #7c3aed; margin-bottom: 10px;">👑 Bảng Xếp Hạng Nhảy Múa</h4>
-                            <div id="host-leaderboard-box"></div>
-                        </div>
-                    </div>
-                </div>
+                <button class="btn-start" style="width: 100%; background: #16a34a; font-size: 1.2rem; padding: 14px; justify-content: center; margin-bottom: 20px;" onclick="hostStartExam()">🚀 Bắt Đầu Đấu Trường</button>
+                <div class="host-lobby-box" id="host-students-list"></div>
+                <div id="host-leaderboard-box" style="margin-top: 15px;"></div>
             </div>
         </div>
     </div>
-    <div class="toast-msg" id="toast">Đã sao chép link giao đề!</div>
+
+    <div class="toast-msg" id="toast">Đã sao chép link đề thi!</div>
 
     <script>
-// DANH MỤC GIÁO VIÊN HỆ THỐNG
+        // DANH MỤC GIÁO VIÊN HỆ THỐNG
         const TEACHERS_DIRECTORY = {
             'trucnt':  { name: 'Cô Nguyễn Thanh Trúc', subject: 'Toán', defaultUrl: 'https://script.google.com/macros/s/AKfycbzis37_BfronfYS2csvtAfqZJOcQBHzmbZtymoNPFtLdGgI3ghiNUXCHuVq4i6Gsetw/exec' },
             'vanntkt': { name: 'Cô Nguyễn Thị Kiều Tuyết Vân', subject: 'Toán', defaultUrl: '' },
@@ -545,222 +451,37 @@
             'trunght': { name: 'Thầy Hồ Thanh Trung', subject: 'Toán', defaultUrl: '' },
             'nampn':   { name: 'Thầy Phạm Nhật Nam', subject: 'Toán', defaultUrl: '' },
             'chauttm': { name: 'Cô Trần Thị Minh Châu', subject: 'Toán', defaultUrl: '' },
-            'hanhvv': { name: 'Thầy Vũ Văn Hanh', subject: 'GD Quốc Phòng', defaultUrl: '' }
+            'hanhvv':  { name: 'Thầy Vũ Văn Hanh', subject: 'GD Quốc Phòng', defaultUrl: '' }
         };
 
-        let currentTeacherId = localStorage.getItem('current_teacher_id') || '';
-        let SCRIPT_URL = '';
+        let currentTeacherId = localStorage.getItem('current_teacher_id') || 'trucnt';
+        let SCRIPT_URL = TEACHERS_DIRECTORY[currentTeacherId]?.defaultUrl || '';
+        let teacherPassAuth = localStorage.getItem('teacher_pass_auth') || '';
 
         function getTeacherScriptUrl(tId) {
-            let savedUrl = localStorage.getItem('teacher_script_url_' + tId);
-            if (savedUrl && savedUrl.trim() !== '') return savedUrl.trim();
-            if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].defaultUrl) {
-                return TEACHERS_DIRECTORY[tId].defaultUrl;
-            }
+            let saved = localStorage.getItem('teacher_script_url_' + tId);
+            if (saved && saved.trim() !== '') return saved.trim();
+            if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].defaultUrl) return TEACHERS_DIRECTORY[tId].defaultUrl;
             return '';
         }
 
-        function handleTeacherSelectChange() {
-            const tId = document.getElementById('gate-select-teacher').value;
-            const urlRow = document.getElementById('gate-script-url-row');
-            const urlInput = document.getElementById('gate-script-url-input');
-            if (!tId) {
-                urlRow.style.display = 'none';
-                return;
-            }
-            const existingUrl = getTeacherScriptUrl(tId);
-            if (!existingUrl) {
-                urlRow.style.display = 'block';
-                urlInput.value = '';
-            } else {
-                urlRow.style.display = 'none';
-                urlInput.value = existingUrl;
-            }
-        }
+        let examBank = [];
+        let selectedQuestions = [];
+        let directParsedQuestions = [];
+        let activeExam = null;
+        let currentGrade = '12';
+        let currentTopic = 'all';
+        let lecturePdfBase64 = '';
+        let globalScoresData = [];
+        let teacherClasses = JSON.parse(localStorage.getItem('teacher_classes_list')) || ["10A1", "10A2", "10A3", "12A1", "12A3", "12A5", "Học thêm 1", "Lớp tự do"];
 
-        async function submitTeacherGateLogin() {
-            const tId = document.getElementById('gate-select-teacher').value;
-            const pass = document.getElementById('gate-password-input').value.trim();
-            const urlInput = document.getElementById('gate-script-url-input').value.trim();
-
-            if (!tId) {
-                alert("Vui lòng chọn một Giáo viên!");
-                return;
-            }
-            if (!pass) {
-                alert("Vui lòng nhập Mật khẩu quản trị của file Sheets!");
-                return;
-            }
-
-            let targetUrl = getTeacherScriptUrl(tId);
-            if (!targetUrl) {
-                if (!urlInput || !urlInput.startsWith('https://script.google.com/')) {
-                    alert("Vui lòng dán chính xác đường link Google Apps Script (.exec) của bạn!");
-                    return;
-                }
-                targetUrl = urlInput;
-                localStorage.setItem('teacher_script_url_' + tId, targetUrl);
-            }
-
-            document.body.style.cursor = 'wait';
-            try {
-                const res = await fetch(`${targetUrl}?action=checkPassword&password=${encodeURIComponent(pass)}`);
-                const data = await res.json();
-                document.body.style.cursor = 'default';
-
-                if (data.status === 'success') {
-                    currentTeacherId = tId;
-                    SCRIPT_URL = targetUrl;
-                    teacherPassAuth = pass;
-                    localStorage.setItem('current_teacher_id', tId);
-
-                    document.getElementById('teacher-portal-gate').style.display = 'none';
-                    const brandEl = document.querySelector('.navbar .brand');
-                    if (brandEl && TEACHERS_DIRECTORY[tId]) {
-                        brandEl.innerHTML = `<i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> ${TEACHERS_DIRECTORY[tId].name.toUpperCase()} - ${TEACHERS_DIRECTORY[tId].subject.toUpperCase()}`;
-                    }
-
-                    fetchData();
-                } else {
-                    alert("❌ Mật khẩu quản trị không chính xác với Google Sheets của bạn!");
-                }
-            } catch (err) {
-                document.body.style.cursor = 'default';
-                alert("Không thể kết nối đến Google Sheets này! Vui lòng kiểm tra lại đường link hoặc quyền triển khai (Anyone).");
-            }
-        }
-
-        function switchActiveTeacher() {
-            if (!confirm("Bạn muốn đổi sang Giáo viên khác làm việc?")) return;
-            localStorage.removeItem('current_teacher_id');
-            location.reload();
-        }
-
-        let examBank = []; let questionBank = [];
-        let selectedQuestions = []; let directParsedQuestions = []; 
-        let activeExam = null; let teacherPassAuth = ""; let currentGrade = 'all'; let currentTopic = 'all';
-        let kahootCurrentIndex = 0; let kahootScore = 0; let kahootStdName = ""; let kahootStdClass = "";
-        let kahootTimer = null; let kahootTimeLeft = 20;
-
-        // --- BIẾN TOÀN CỤC ĐỌC FILE PDF TỪ MÁY ---
-        let lecturePdfBase64 = "";
-
-        // --- HỆ THỐNG ÂM THANH KAHOOT CẢI TIẾN ---
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let loopOsc = null; let loopTimer = null;
-        function playSound(type) {
-            if (!audioCtx) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            const now = audioCtx.currentTime;
-
-            if (type === 'tick') {
-                osc.type = 'sine'; osc.frequency.setValueAtTime(800, now);
-                gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-                osc.start(now); osc.stop(now + 0.05);
-            } else if (type === 'correct') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.1); osc.frequency.setValueAtTime(783.99, now + 0.2);
-                gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-                osc.start(now); osc.stop(now + 0.4);
-            } else if (type === 'wrong') {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(200, now); osc.frequency.setValueAtTime(140, now + 0.15);
-                gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-                osc.start(now); osc.stop(now + 0.35);
-            }
-        }
-        function startKahootMusicLoop() {
-            if (!audioCtx) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const notes = [392.00, 523.25, 659.25, 523.25]; let noteIdx = 0;
-            loopTimer = setInterval(() => {
-                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-                osc.type = 'square'; osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.frequency.setValueAtTime(notes[noteIdx], audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.02, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
-                osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.2);
-                noteIdx = (noteIdx + 1) % notes.length;
-            }, 500);
-        }
-        function stopKahootMusicLoop() { clearInterval(loopTimer); }
-
-// --- MỤC LỤC & CHUYÊN MỤC ĐỘNG TỪ GOOGLE SHEETS ---
-let topicsConfig = {
-     general: [],
-     g12: [],
-     g11: [],
-     g10: []
-};
-
-// Hàm phân loại dữ liệu mục lục tải về từ Google Sheets vào từng khối tương ứng
-function processTopicsData(rawTopics) {
-    topicsConfig = { general: [], g12: [], g11: [], g10: [] };
-    if (!rawTopics || !Array.isArray(rawTopics)) return;
-
-    rawTopics.forEach(item => {
-        let khoiStr = String(item.khoi || "").trim();
-        let topicObj = {};
-        
-        if (item.type === 'header') {
-            topicObj = { type: 'header', title: item.name };
-        } else {
-            topicObj = { id: item.id, name: item.name, icon: item.icon || 'fa-book' };
-        }
-
-        if (khoiStr === '12') {
-            topicsConfig.g12.push(topicObj);
-        } else if (khoiStr === '11') {
-            topicsConfig.g11.push(topicObj);
-        } else if (khoiStr === '10') {
-            topicsConfig.g10.push(topicObj);
-        } else {
-            topicsConfig.general.push(topicObj);
-        }
-    });
-}
-        function renderSidebarTopics() {
-            const container = document.getElementById('topic-container');
-            if (!container) return;
-            container.innerHTML = '';
-            let list = [...topicsConfig.general];
-            if (currentGrade === '12') list = list.concat(topicsConfig.g12);
-            else if (currentGrade === '11') list = list.concat(topicsConfig.g11);
-            else if (currentGrade === '10') list = list.concat(topicsConfig.g10);
-            else list = list.concat(topicsConfig.g12, topicsConfig.g11, topicsConfig.g10);
-
-            list.forEach(item => {
-                if (item.type === 'header') {
-                    const h = document.createElement('div'); h.className = 'topic-group-title'; h.innerText = item.title;
-                    container.appendChild(h);
-                } else {
-                    const li = document.createElement('li'); li.className = `topic-item ${currentTopic === item.id ? 'active' : ''}`;
-                    li.innerHTML = `<i class="fa-solid ${item.icon}"></i> <span>${item.name}</span>`;
-                    li.onclick = () => filterTopic(item.id, li);
-                    container.appendChild(li);
-                }
-            });
-        }
-
-        function getTopicsForGrade(grade) {
-            let res = [];
-            if (grade === '12') res = topicsConfig.g12;
-            else if (grade === '11') res = topicsConfig.g11;
-            else if (grade === '10') res = topicsConfig.g10;
-            else res = [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10];
-            return res.filter(item => item.type !== 'header');
-        }
-
-        function filterTopic(t, item) {
-            currentTopic = t; document.querySelectorAll('.topic-item').forEach(i => i.classList.remove('active'));
-            if (item) item.classList.add('active'); renderExams();
-        }
-
-        function filterGrade(g, btn) {
-            currentGrade = g; currentTopic = 'all';
-            document.querySelectorAll('.grade-pill').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-            renderSidebarTopics(); renderExams();
+        // 1. TỰ ĐỘNG CHUẨN HÓA LATEX
+        function cleanLatexAndText(str) {
+            if (!str) return '';
+            return str
+                .replace(/\\\[/g, '$').replace(/\\\]/g, '$')
+                .replace(/\\\(/g, '$').replace(/\\\)/g, '$')
+                .replace(/\$\s+/g, '$').replace(/\s+\$/g, '$');
         }
 
         function renderMath(targetElement) {
@@ -769,724 +490,349 @@ function processTopicsData(rawTopics) {
             }
         }
 
-   async function fetchData() {
-            const grid = document.getElementById('exam-grid');
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 6000);
-                
-                const res = await fetch(SCRIPT_URL, { signal: controller.signal });
-                clearTimeout(timeoutId);
-                
-                const data = await res.json();
-                
-                // === BỔ SUNG GỌI HÀM XỬ LÝ MỤC LỤC ĐỘNG TỪ GOOGLE SHEETS ===
-                if (data.topics) {
-                    processTopicsData(data.topics);
-                }
-                renderSidebarTopics();
-                // ==========================================================
-                
-                let rawExams = data.exams || [];
-                examBank = rawExams.map(ex => {
-                    let rawQJson = ex.questionsJson || ex.QuestionsJson || ex.questionsjson || "[]";
-                    let parsedQ = [];
-                    try { 
-                        parsedQ = (Array.isArray(ex.questions) && ex.questions.length > 0) ? ex.questions : JSON.parse(rawQJson); 
-                    } catch(e) { parsedQ = []; }
+        // 2. TỰ ĐỘNG BÓC TÁCH MỌI DẠNG ĐỀ (KỂ CẢ A, B, C, D TRÊN CÙNG 1 DÒNG)
+        function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
+            let parsedArr = [];
+            let tempDiv = document.createElement('div');
+            tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
+            
+            let cleanedHtml = tempDiv.innerHTML
+                .replace(/<[ub]>([A-D])[\.\)]<\/[ub]>/gi, '$1.')
+                .replace(/<br\s*[\/]?>/gi, '\n')
+                .replace(/<\/?(div|p|h[1-6]|ul|ol|li|tr)[^>]*>/gi, '\n')
+                .replace(/<(?!img\b|\/img)[^>]*>/gi, '') 
+                .replace(/&nbsp;/gi, ' ')
+                .replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
-                    return {
-                        id: ex.id || ex.ID || '',
-                        title: ex.title || ex.Title || ex.TITLE || '',
-                        grade: ex.grade || ex.Grade || '',
-                        topic: ex.topic || ex.Topic || '',
-                        mode: ex.mode || ex.Mode || '',
-                        timeLimit: ex.timeLimit || ex.TimeLimit || ex.timelimit || 45,
-                        startTime: ex.startTime || ex.StartTime || '',
-                        deadline: ex.deadline || ex.Deadline || '',
-                        examPass: ex.examPass || ex.ExamPass || '',
-                        youtubeUrl: ex.youtubeUrl || ex.youtubeurl || ex.YOUTUBEURL || '',
-                        pdfData: ex.pdfData || ex.pdfdata || ex.PDFDATA || '',
-                        questions: parsedQ
-                    };
-                }).filter(e => e.title && e.title !== "undefined" && e.title.trim() !== "");
+            cleanedHtml = cleanLatexAndText(cleanedHtml);
+            cleanedHtml = cleanedHtml.replace(/(?:C[âa]u|B[àa]i|C)\s*\n+\s*(\d+)/gi, 'Câu $1');
 
-                renderExams();
-                checkUrlParams();
-            } catch (err) {
-                console.error("Lỗi kết nối:", err);
-                if (grid) {
-                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 40px;"><i class="fa-solid fa-triangle-exclamation"></i> Không thể kết nối máy chủ dữ liệu hoặc quá thời gian chờ (Timeout).</p>`;
-                }
-            } finally {
-                if (grid && grid.innerHTML.includes('fa-spinner')) {
-                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trên hệ thống.</p>`;
-                }
-            }
-        }
-        async function checkUrlParams() {
-            const params = new URLSearchParams(window.location.search);
-            const examId = params.get('exam');
-            const mode = params.get('mode');
-            if (examId) {
-                document.body.classList.add('locked-ui');
-                activeExam = examBank.find(e => e.id === examId);
-                if (activeExam) {
-                    document.getElementById('portal-view').style.display = 'none';
-                    document.querySelector('.navbar').style.display = 'none';
+            let blocks = cleanedHtml.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.])/i)
+                .map(b => b.trim())
+                .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]/i.test(b));
+           
+            blocks.forEach((block, idx) => {
+                let detectedType = 'SA';
+                let options = ['', '', '', ''];
+                let ans = '';
+                let ansOptions = [];
+                let explanation = '';
+                let qContent = '';
 
-                    const now = new Date().getTime();
-                    if (activeExam.startTime && String(activeExam.startTime).trim() !== "") {
-                        const startTime = new Date(activeExam.startTime).getTime();
-                        if (now < startTime) {
-                            document.getElementById('password-lock-screen').style.display = 'block';
-                            document.getElementById('lock-screen-title').innerText = "Đề Thi Chưa Mở";
-                            document.getElementById('lock-screen-desc').innerText = `Đề thi sẽ chính thức bắt đầu lúc: ${new Date(activeExam.startTime).toLocaleString("vi-VN")}`;
-                            document.getElementById('password-input-group').style.display = 'none';
-                            return;
-                        }
+                let expMatch = block.match(/(?:L[ờo]i\s*gi[ảa]i|H[ưướ]ng\s*dẫ?n|Lời\s*giải\s*chi\s*tiết)\s*[:\-]?\s*([\s\S]*)$/i);
+                if (expMatch) {
+                    explanation = expMatch[1].trim();
+                    block = block.replace(expMatch[0], '').trim();
+                }
+
+                let ansMatch = block.match(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*([A-D]|[a-d\s,]+|[-0-9,\.]+)/i);
+                if (ansMatch) {
+                    ans = ansMatch[1].trim().toUpperCase();
+                    block = block.replace(ansMatch[0], '').trim();
+                }
+
+                if (block.search(/(?:^|\s)A[\.\)]/) !== -1 && block.search(/(?:^|\s)B[\.\)]/) !== -1) {
+                    detectedType = 'MCQ';
+                    let splitA = block.split(/(?:^|\s)A[\.\)]\s*/);
+                    qContent = splitA[0].replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]\s*/i, '').trim();
+
+                    let rest = "A. " + splitA.slice(1).join("A. ");
+                    let mOptA = rest.match(/A[\.\)]\s*([\s\S]*?)(?=(?:^|\s)B[\.\)]\s*)/i);
+                    let mOptB = rest.match(/B[\.\)]\s*([\s\S]*?)(?=(?:^|\s)C[\.\)]\s*)/i);
+                    let mOptC = rest.match(/C[\.\)]\s*([\s\S]*?)(?=(?:^|\s)D[\.\)]\s*)/i);
+                    let mOptD = rest.match(/D[\.\)]\s*([\s\S]*)$/i);
+
+                    options[0] = mOptA ? mOptA[1].trim() : '';
+                    options[1] = mOptB ? mOptB[1].trim() : '';
+                    options[2] = mOptC ? mOptC[1].trim() : '';
+                    options[3] = mOptD ? mOptD[1].trim() : '';
+
+                    if (!ans) {
+                        if (rawHtml.includes('<u>A') || rawHtml.includes('underline">A')) ans = 'A';
+                        else if (rawHtml.includes('<u>B') || rawHtml.includes('underline">B')) ans = 'B';
+                        else if (rawHtml.includes('<u>C') || rawHtml.includes('underline">C')) ans = 'C';
+                        else if (rawHtml.includes('<u>D') || rawHtml.includes('underline">D')) ans = 'D';
+                        else ans = 'A';
                     }
+                } else if (block.search(/(?:^|\s)a[\)\.]/) !== -1 && block.search(/(?:^|\s)b[\)\.]/) !== -1) {
+                    detectedType = 'TF';
+                    let split_a = block.split(/(?:^|\s)a[\)\.]\s*/);
+                    qContent = split_a[0].replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]\s*/i, '').trim();
 
-                    if (activeExam.deadline && String(activeExam.deadline).trim() !== "") {
-                        const deadlineTime = new Date(activeExam.deadline).getTime();
-                        if (now > deadlineTime) {
-                            document.getElementById('password-lock-screen').style.display = 'block';
-                            document.getElementById('lock-screen-title').innerText = "Đề Thi Đã Đóng";
-                            document.getElementById('lock-screen-desc').innerText = "Đã quá thời hạn nộp bài (Deadline) do Giáo viên thiết lập.";
-                            document.getElementById('password-input-group').style.display = 'none';
-                            return;
-                        }
-                    }
+                    let rest = "a) " + split_a.slice(1).join("a) ");
+                    let m_a = rest.match(/a[\)\.]\s*([\s\S]*?)(?=(?:^|\s)b[\)\.]\s*)/i);
+                    let m_b = rest.match(/b[\)\.]\s*([\s\S]*?)(?=(?:^|\s)c[\)\.]\s*)/i);
+                    let m_c = rest.match(/c[\)\.]\s*([\s\S]*?)(?=(?:^|\s)d[\)\.]\s*)/i);
+                    let m_d = rest.match(/d[\)\.]\s*([\s\S]*)$/i);
 
-                    if (mode === 'host') {
-                        startHostMode();
-                    } else {
-                        if (activeExam.mode === 'KAHOOT') {
-                            startStudentKahootMode();
-                        } else if (activeExam.mode === 'KIEMTRA') {
-                            if (activeExam.examPass && String(activeExam.examPass).trim() !== "") {
-                                document.getElementById('password-lock-screen').style.display = 'block';
-                                document.getElementById('lock-screen-title').innerText = "Phòng Kiểm Tra Bảo Mật";
-                                document.getElementById('lock-screen-desc').innerText = "Đề thi yêu cầu mật khẩu bảo mật từ giáo viên.";
-                                document.getElementById('password-input-group').style.display = 'block';
-                            } else {
-                                startTraditionalExamMode();
-                            }
-                        } else {
-                            startTraditionalExamMode();
-                        }
-                    }
+                    options[0] = m_a ? m_a[1].trim() : '';
+                    options[1] = m_b ? m_b[1].trim() : '';
+                    options[2] = m_c ? m_c[1].trim() : '';
+                    options[3] = m_d ? m_d[1].trim() : '';
+
+                    ansOptions = ['D', 'S', 'D', 'S'];
+                    ans = 'DSDS';
+                } else {
+                    detectedType = 'SA';
+                    qContent = block.replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]\s*/i, '').trim();
                 }
-            }
-        }
 
-        function copyExamLink(id) {
-            const studentUrl = `${window.location.origin}${window.location.pathname}?exam=${id}`;
-            navigator.clipboard.writeText(studentUrl).then(() => {
-                const toast = document.getElementById('toast'); toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 2500);
+                const safeTopicId = (topic || 'Chung').replace(/[^a-zA-Z0-9-_]/g, '_');
+                const qId = `CH${grade}_${safeTopicId}_${Date.now().toString().slice(-4)}_${idx + 1}`;
+
+                parsedArr.push({
+                    id: qId,
+                    grade: String(grade), 
+                    topic: topic, 
+                    level: 'TH',
+                    type: detectedType,
+                    q: qContent.replace(/\n/g, '<br>'),
+                    options: options,
+                    ans: ans,
+                    ansOptions: ansOptions,
+                    explanation: explanation
+                });
             });
+
+            return parsedArr;
         }
 
-      function renderExams() {
-            const grid = document.getElementById('exam-grid');
-            grid.innerHTML = '';
-            const list = examBank.filter(e => {
-                if (!e || !e.title || e.title === "undefined" || String(e.title).trim() === "") return false;
-                const gradeStr = e.grade ? e.grade.toString() : '';
-                const matchGrade = (currentGrade === 'all' || gradeStr === currentGrade);
-                const matchTopic = (currentTopic === 'all' || !e.topic || e.topic.includes(currentTopic) || currentTopic.includes(e.topic));
-                return matchGrade && matchTopic;
-            });    
-         
-            if (list.length === 0) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trong mục này.</p>`;
+        function parseDirectExam() {
+            const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
+            if (!rawHtml) { alert("Vui lòng dán nội dung câu hỏi!"); return; }
+            
+            const currentGradeVal = document.getElementById('new-exam-grade').value;
+            const currentTopicVal = document.getElementById('new-exam-topic').value;
+
+            directParsedQuestions = parseTextToQuestionsAllInOne(rawHtml, currentGradeVal, currentTopicVal);
+            document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
+            
+            let previewHtml = directParsedQuestions.map((q, i) => {
+                let optsHtml = '';
+                if (q.type === 'TF') {
+                    optsHtml = q.options.map((op, idx) => op ? `<div>${['a','b','c','d'][idx]}) ${op}</div>` : '').join('');
+                } else if (q.type === 'MCQ') {
+                    optsHtml = `<div style="display:grid; grid-template-columns:1fr 1fr;">` + q.options.map((op, idx) => op ? `<div>${['A','B','C','D'][idx]}. ${op}</div>` : '').join('') + `</div>`;
+                }
+                let expHtml = q.explanation ? `<div style="margin-top:4px; color:#166534; font-size:0.95rem;"><strong>Lời giải:</strong> ${q.explanation}</div>` : '';
+
+                return `<div class="parsed-q-preview-card">
+                    <div style="display:flex; justify-content:space-between;"><strong>C${i+1} [${q.type}]</strong></div>
+                    <div>${q.q}</div>
+                    <div style="color:#475569; margin:4px 0;">${optsHtml}</div>
+                    <div style="color:#16a34a; font-weight:bold;">Đ/A: ${q.ans}</div>
+                    ${expHtml}
+                </div>`;
+            }).join('');
+            
+            document.getElementById('direct-preview-box').innerHTML = previewHtml;
+            document.getElementById('btn-save-parsed-bank').style.display = 'inline-block';
+            renderMath(document.getElementById('direct-preview-box'));
+
+            selectedQuestions = [...directParsedQuestions];
+            updateSelectedItemsDisplay();
+        }
+
+        function updateSelectedItemsDisplay() {
+            const container = document.getElementById('selected-items-container');
+            if (!container) return;
+            document.getElementById('selected-q-count').innerText = selectedQuestions.length;
+            if (selectedQuestions.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#94a3b8;">Chưa có câu hỏi.</p>';
                 return;
             }
-           list.forEach(ex => {
-        const isKahoot = ex.mode === 'KAHOOT'; 
-        const isExamMode = ex.mode === 'KIEMTRA';
-        const isLecture = ex.mode === 'BAIGIANG';
-
-        const gradeDisplay = ex.grade ? ex.grade.toString().toUpperCase() : '';
-        const card = document.createElement('div'); card.className = 'exam-card';
-        card.innerHTML = `
-            <div class="card-banner ${isKahoot ? 'kahoot-mode' : (isExamMode ? 'exam-mode' : (isLecture ? 'lecture-mode' : ''))}" style="${isLecture ? 'background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);' : ''}">
-                <div class="card-icon"><i class="fa-solid ${isKahoot ? 'fa-bolt' : (isLecture ? 'fa-photo-film' : 'fa-book-open')}"></i></div>
-                <div class="card-badge">KHỐI ${gradeDisplay}</div>
-                <div class="card-mode-badge" style="color: ${isKahoot ? '#7c3aed' : (isExamMode ? '#dc2626' : (isLecture ? '#0284c7' : '#16a34a'))};">${isKahoot ? '⚡ KAHOOT' : (isExamMode ? '🔴 KIỂM TRA' : (isLecture ? '📘 BÀI GIẢNG' : '🟢 LUYỆN TẬP'))}</div>
-            </div>
-            <div class="card-body">
-                <div><h3 class="card-title">${ex.title}</h3>
-                    <div class="card-meta">
-                        <span><i class="fa-regular fa-circle-question"></i> ${ex.questions ? ex.questions.length : 0} câu</span>
-                        <span><i class="fa-regular fa-clock"></i> ${isLecture ? 'Tự học' : ex.timeLimit + ' phút'}</span>
-                    </div>
-                </div>
-                <div class="card-actions">
-                    <button class="btn-start" onclick="startExam('${ex.id}')"><i class="fa-solid fa-play"></i> Bắt đầu</button>
-                    <button class="btn-share" onclick="copyExamLink('${ex.id}')" title="Sao chép link"><i class="fa-solid fa-share-nodes"></i></button>
-                </div>
-            </div>`;
-        grid.appendChild(card);
-    });
-        }
-
-        function startExam(id) {
-            activeExam = examBank.find(e => e.id === id);
-            if (activeExam.mode === 'BAIGIANG') {
-        startLectureMode();
-        return;
-    }
-            if (!activeExam) return;
-            document.getElementById('portal-view').style.display = 'none';
-
-            const now = new Date().getTime();
-            if (activeExam.startTime && String(activeExam.startTime).trim() !== "") {
-                const startTime = new Date(activeExam.startTime).getTime();
-                if (now < startTime) {
-                    document.getElementById('password-lock-screen').style.display = 'block';
-                    document.getElementById('lock-screen-title').innerText = "Đề Thi Chưa Mở";
-                    document.getElementById('lock-screen-desc').innerText = `Đề thi sẽ chính thức bắt đầu lúc: ${new Date(activeExam.startTime).toLocaleString("vi-VN")}`;
-                    document.getElementById('password-input-group').style.display = 'none';
-                    return;
-                }
-            }
-
-            if (activeExam.deadline && String(activeExam.deadline).trim() !== "") {
-                const deadlineTime = new Date(activeExam.deadline).getTime();
-                if (now > deadlineTime) {
-                    document.getElementById('password-lock-screen').style.display = 'block';
-                    document.getElementById('lock-screen-title').innerText = "Đề Thi Đã Đóng";
-                    document.getElementById('lock-screen-desc').innerText = "Đã quá thời hạn nộp bài (Deadline) do Giáo viên thiết lập.";
-                    document.getElementById('password-input-group').style.display = 'none';
-                    return;
-                }
-            }
-
-            if (activeExam.mode === 'KAHOOT') {
-                startHostDirect(id);
-            } else if (activeExam.mode === 'KIEMTRA') {
-                if (activeExam.examPass && String(activeExam.examPass).trim() !== "") {
-                    document.getElementById('password-lock-screen').style.display = 'block';
-                    document.getElementById('lock-screen-title').innerText = "Phòng Kiểm Tra Bảo Mật";
-                    document.getElementById('lock-screen-desc').innerText = "Đề thi yêu cầu mật khẩu bảo mật từ giáo viên.";
-                    document.getElementById('password-input-group').style.display = 'block';
-                } else {
-                    startTraditionalExamMode();
-                }
-            } else {
-                startTraditionalExamMode();
-            }
-        }
-
-        function startHostDirect(id) { startHostMode(); }
-
-        function verifyExamPassword() {
-            const enteredPass = document.getElementById('exam-secure-pass').value.trim();
-            const correctPass = activeExam.examPass ? String(activeExam.examPass).trim() : "";
-            if (enteredPass === correctPass) {
-                document.getElementById('password-lock-screen').style.display = 'none';
-                startTraditionalExamMode();
-            } else { alert("❌ Mật khẩu bảo mật không chính xác!"); }
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function prepareExamQuestions(questions, mode) {
-            if (mode !== 'KIEMTRA') return JSON.parse(JSON.stringify(questions));
-            let cloned = [];
-            try { cloned = JSON.parse(JSON.stringify(questions)); } catch(e) { return questions; }
-            cloned = shuffleArray(cloned);
-            cloned.forEach(q => {
-                if (q && q.type === 'MCQ' && Array.isArray(q.options) && q.options.length >= 4) {
-                    const labels = ['A', 'B', 'C', 'D'];
-                    let ansStr = String(q.ans || 'A').trim().toUpperCase();
-                    let origCorrectIdx = labels.indexOf(ansStr);
-                    if (origCorrectIdx === -1) origCorrectIdx = 0;
-                    
-                    let correctOptionText = q.options[origCorrectIdx];
-                    let paired = [0,1,2,3].map(idx => ({ text: q.options[idx], label: labels[idx] }));
-                    paired = shuffleArray(paired);
-                    
-                    for(let i=0; i<4; i++) { q.options[i] = paired[i].text; }
-                    
-                    let newCorrectIdx = paired.findIndex(p => p.text === correctOptionText);
-                    q.ans = labels[newCorrectIdx !== -1 ? newCorrectIdx : 0];
-                }
-            });
-            return cloned;
-        }
-
-        let processedQuestions = [];
-        let timerInterval = null;
-        let secondsRemaining = 0;
-        let cheatWarnings = 0;
-
-       function startTraditionalExamMode() {
-            document.getElementById('quiz-view').style.display = 'block';
-            document.getElementById('quiz-title').innerText = activeExam.title;
-            document.getElementById('quiz-result').style.display = 'none';
-            document.getElementById('cheat-warning').style.display = 'none';
-            document.getElementById('quiz-form').reset();
-            document.getElementById('btn-submit-quiz').disabled = false;
-            document.getElementById('btn-submit-quiz').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Nộp Bài & Xem Điểm';
-            cheatWarnings = 0;
-
-            processedQuestions = prepareExamQuestions(activeExam.questions || [], activeExam.mode);
-
-            const timerDisplay = document.getElementById('timer-display');
-            if (activeExam.mode === 'KIEMTRA') {
-                document.body.classList.add('secure-exam-mode');
-                timerDisplay.classList.remove('practice');
-                window.onblur = handleWindowBlur;
-                document.addEventListener('contextmenu', preventRightClick);
-            } else {
-                document.body.classList.remove('secure-exam-mode');
-                timerDisplay.classList.add('practice');
-                window.onblur = null;
-                document.removeEventListener('contextmenu', preventRightClick);
-            }
-
-            clearInterval(timerInterval);
-            secondsRemaining = (parseInt(activeExam.timeLimit) || 45) * 60;
-            updateTimerDisplay();
-            timerInterval = setInterval(() => {
-                secondsRemaining--;
-                updateTimerDisplay();
-                if (secondsRemaining <= 0) {
-                    clearInterval(timerInterval);
-                    window.onblur = null; 
-                    setTimeout(() => {
-                        alert("⏰ Đã hết thời gian làm bài! Hệ thống sẽ tự động thu bài.");
-                        submitQuiz();
-                    }, 300);
-                }
-            }, 1000);
-
-            const p1 = processedQuestions.filter(q => q && q.type === 'MCQ');
-            const p2 = processedQuestions.filter(q => q && q.type === 'TF');
-            const p3 = processedQuestions.filter(q => q && q.type === 'SA');
-            const container = document.getElementById('quiz-content');
-            container.innerHTML = '';
-            let qGlobalIdx = 0;
-
-            if (p1.length > 0) {
-                container.innerHTML += `<div class="section-header">🔷 PHẦN I: CÂU TRẮC NGHIỆM</div>`;
-                p1.forEach(q => {
-                    qGlobalIdx++;
-                    let opts = '';
-                    ['A', 'B', 'C', 'D'].forEach((ch, idx) => {
-                        let optText = q.options && q.options[idx] ? q.options[idx] : '';
-                        opts += `<label class="mcq-option"><input type="radio" name="q_${qGlobalIdx}" value="${ch}" required><span><strong>${ch}.</strong> ${optText}</span></label>`;
-                    });
-                    container.innerHTML += `<div class="q-card" id="card_q_${qGlobalIdx}"><div class="q-title">Câu ${qGlobalIdx}: ${q.q}</div>${opts}<div class="explanation-box" id="exp_q_${qGlobalIdx}" style="display: none;"></div></div>`;
-                });
-            }
-            if (p2.length > 0) {
-                container.innerHTML += `<div class="section-header">🔷 PHẦN II: CÂU ĐÚNG / SAI</div>`;
-                p2.forEach(q => {
-                    qGlobalIdx++;
-                    let rows = '';
-                    ['a', 'b', 'c', 'd'].forEach((ch, idx) => {
-                        if (q.options && q.options[idx]) {
-                            rows += `<div class="tf-row"><span><strong>${ch})</strong> ${q.options[idx]}</span><div class="tf-btns"><label><input type="radio" name="q_${qGlobalIdx}_${ch}" value="D" required> Đúng</label><label><input type="radio" name="q_${qGlobalIdx}_${ch}" value="S" required> Sai</label></div></div>`;
-                        }
-                    });
-                    container.innerHTML += `<div class="q-card" id="card_q_${qGlobalIdx}"><div class="q-title">Câu ${qGlobalIdx}: ${q.q}</div>${rows}<div class="explanation-box" id="exp_q_${qGlobalIdx}" style="display: none;"></div></div>`;
-                });
-            }
-            if (p3.length > 0) {
-                container.innerHTML += `<div class="section-header">🔷 PHẦN III: TRẢ LỜI NGẮN</div>`;
-                p3.forEach(q => {
-                    qGlobalIdx++;
-                    container.innerHTML += `<div class="q-card" id="card_q_${qGlobalIdx}"><div class="q-title">Câu ${qGlobalIdx}: ${q.q}</div><input type="text" class="sa-input" name="q_${qGlobalIdx}" placeholder="Nhập đáp án..." required><div class="explanation-box" id="exp_q_${qGlobalIdx}" style="display: none;"></div></div>`;
-                });
-            }
-            renderMath(container);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function preventRightClick(e) { e.preventDefault(); }
-        function handleWindowBlur() {
-            if (activeExam && activeExam.mode === 'KIEMTRA') {
-                cheatWarnings++;
-                document.getElementById('cheat-warning').style.display = 'block';
-                document.getElementById('cheat-count').innerText = cheatWarnings;
-                if (cheatWarnings >= 3) { 
-                    window.onblur = null;
-                    setTimeout(() => { alert("⚠️ Phát hiện rời khỏi màn hình 3 lần! Tự động nộp bài."); submitQuiz(); }, 300);
-                }
-            }
-        }
-        function updateTimerDisplay() {
-            const m = Math.floor(secondsRemaining / 60); const s = secondsRemaining % 60;
-            document.getElementById('time-left').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-        }
-
-        document.getElementById('quiz-form').addEventListener('submit', function(e) { e.preventDefault(); submitQuiz(); });
-
-       async function submitQuiz() {
-            clearInterval(timerInterval); window.onblur = null; document.removeEventListener('contextmenu', preventRightClick);
-            document.body.classList.remove('secure-exam-mode');
-
-            const name = document.getElementById('std-name').value.trim() || "Ẩn danh";
-            const sClass = document.getElementById('std-class').value.trim() || "Tự do";
-
-          try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ 
-                        action: 'submit_quiz', 
-                        time: new Date().toLocaleString("vi-VN"), 
-                        examId: activeExam.id, 
-                        examTitle: activeExam.title, 
-                        name: name, 
-                        class: sClass, 
-                        grade: activeExam.grade || '',
-                        mode: activeExam.mode, 
-                        totalScore: finalScore 
-                    })
-                });
-            } catch (e) {}
-
-            const btnSubmit = document.getElementById('btn-submit-quiz');
-            btnSubmit.disabled = true; btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang chấm...';
-
-            let totalWeightedScore = 0;
-            let maxPossibleScore = 0;
-            let correctCount = 0;
-
-            processedQuestions.forEach((q, idx) => {
-                let qType = (q.type || 'MCQ').toUpperCase();
-                let weight = 0.25; 
-                if (qType === 'TF') weight = 1.0;    
-                else if (qType === 'SA') weight = 0.5; 
-
-                maxPossibleScore += weight;
-
-               let isQCorrect = false;
-            if (qType === 'MCQ') {
-                let userAns = document.querySelector(`input[name="q_${idx + 1}"]:checked`)?.value || "";
-                if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) {
-                    isQCorrect = true;
-                    correctCount++;
-                    totalWeightedScore += weight; // +0.25
-                }
-            } else if (qType === 'SA') {
-                let userAns = document.querySelector(`input[name="q_${idx + 1}"]`)?.value.trim() || "";
-                if (userAns.toLowerCase() === String(q.ans || "").trim().toLowerCase()) {
-                    isQCorrect = true;
-                    correctCount++;
-                    totalWeightedScore += weight; // +0.5
-                }
-            } else if (qType === 'TF') {
-                let correctSubCount = 0;
-                ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
-                    if (q.ansOptions && q.ansOptions[subIdx]) {
-                        let subAns = document.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`)?.value || "";
-                        let correctSub = q.ansOptions[subIdx] || 'D';
-                        if (subAns === correctSub) {
-                            correctSubCount++;
-                        }
-                    }
-                });
-
-                if (correctSubCount === 1) totalWeightedScore += 0.1;
-                else if (correctSubCount === 2) totalWeightedScore += 0.25;
-                else if (correctSubCount === 3) totalWeightedScore += 0.5;
-                else if (correctSubCount === 4) {
-                    totalWeightedScore += 1.0;
-                    correctCount++;
-                    isQCorrect = true;
-                }
-            }
-});
-            let finalScore = maxPossibleScore > 0 ? ((totalWeightedScore / maxPossibleScore) * 10).toFixed(2) : 10;
-            
-            const resDiv = document.getElementById('quiz-result');
-            resDiv.style.display = 'block';
-            resDiv.innerHTML = `🎉 Điểm số: <strong>${finalScore} / 10</strong>`;
-            btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Đã nộp bài';
-
-           if (activeExam.mode === 'LUYENTAP') {
-        processedQuestions.forEach((q, idx) => {
-            const qCard = document.getElementById(`card_q_${idx + 1}`);
-            if (!qCard) return;
-            let qType = (q.type || 'MCQ').toUpperCase();
-
-            if (qType === 'MCQ') {
-                const selectedInput = qCard.querySelector(`input[name="q_${idx + 1}"]:checked`);
-                const userVal = selectedInput ? selectedInput.value.trim().toUpperCase() : "";
-                const correctVal = String(q.ans || "").trim().toUpperCase();
-
-                qCard.querySelectorAll('.mcq-option').forEach(optLabel => {
-                    const radio = optLabel.querySelector('input');
-                    if (radio) {
-                        const val = radio.value.trim().toUpperCase();
-                        if (val === correctVal) {
-                            optLabel.style.backgroundColor = '#dcfce7'; 
-                            optLabel.style.borderColor = '#22c55e';
-                            optLabel.style.color = '#15803d';
-                            optLabel.style.fontWeight = 'bold';
-                        } else if (val === userVal && val !== correctVal) {
-                            optLabel.style.backgroundColor = '#fee2e2'; 
-                            optLabel.style.borderColor = '#ef4444';
-                            optLabel.style.color = '#b91c1c';
-                            optLabel.style.fontWeight = 'bold';
-                        }
-                    }
-                });
-            }
-            else if (qType === 'TF') {
-                ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
-                    const checkedRadio = qCard.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`);
-                    const userVal = checkedRadio ? checkedRadio.value.trim().toUpperCase() : '';
-                    
-                    let correctVal = 'D';
-                    if (q.ansOptions && q.ansOptions[subIdx]) {
-                        correctVal = q.ansOptions[subIdx].trim().toUpperCase();
-                    }
-
-                    const anyRadio = qCard.querySelector(`input[name="q_${idx + 1}_${ch}"]`);
-                    if (anyRadio) {
-                        const subRow = anyRadio.closest('tr') || anyRadio.closest('.tf-sub-row') || anyRadio.closest('div') || anyRadio.parentElement;
-                        
-                        if (subRow) {
-                            if (userVal === correctVal && userVal !== '') {
-                                subRow.style.backgroundColor = '#dcfce7'; 
-                                subRow.style.borderRadius = '6px';
-                                subRow.style.padding = '4px 8px';
-                            } else {
-                                subRow.style.backgroundColor = '#fee2e2'; 
-                                subRow.style.borderRadius = '6px';
-                                subRow.style.padding = '4px 8px';
-                            }
-                        }
-                    }
-                });
-            }
-            else if (qType === 'SA') {
-                const saInput = qCard.querySelector(`input[name="q_${idx + 1}"]`);
-                if (saInput) {
-                    const userVal = saInput.value.trim().toLowerCase();
-                    const correctVal = String(q.ans || "").trim().toLowerCase();
-                    if (userVal === correctVal && userVal !== '') {
-                        saInput.style.borderColor = '#22c55e';
-                        saInput.style.backgroundColor = '#dcfce7';
-                        saInput.style.color = '#15803d';
-                    } else {
-                        saInput.style.borderColor = '#ef4444';
-                        saInput.style.backgroundColor = '#fee2e2';
-                        saInput.style.color = '#b91c1c';
-                    }
-                }
-            }
-
-           const expBox = document.getElementById(`exp_q_${idx + 1}`);
-if (expBox) {
-    let ansText = q.ans;
-    if (qType === 'TF' && q.ansOptions) {
-        ansText = `a) ${q.ansOptions[0] == 'D' ? 'Đúng' : 'Sai'}, b) ${q.ansOptions[1] == 'D' ? 'Đúng' : 'Sai'}, c) ${q.ansOptions[2] == 'D' ? 'Đúng' : 'Sai'}, d) ${q.ansOptions[3] == 'D' ? 'Đúng' : 'Sai'}`;
-    }
-    
-    // In rõ ràng đáp án kèm theo lời giải chi tiết (explanation)
-    let explanationHtml = q.explanation ? `<br><div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #cbd5e1; color: #1e293b;"><strong>Lời giải chi tiết:</strong> ${q.explanation}</div>` : '';
-    
-    expBox.innerHTML = `<strong>Đáp án đúng:</strong> <span style="color: #16a34a; font-weight: bold;">${ansText}</span>${explanationHtml}`;
-    expBox.style.display = 'block';
-    
-    // Cập nhật lại định dạng toán học MathJax cho phần lời giải nếu có công thức LaTeX
-    if (window.renderMath) {
-        renderMath(expBox);
-    }
-}
-        });
-
-        if (window.renderMath) {
-            renderMath(document.getElementById('quiz-content'));
-        }
-    }
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'submit_quiz', time: new Date().toLocaleString("vi-VN"), examId: activeExam.id, examTitle: activeExam.title, name: name, class: sClass, mode: activeExam.mode, totalScore: finalScore })
-                });
-            } catch (e) {}
-        }
-
-       async function openTeacherLogin() {
-            const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
-            if (!pass) return;
-            
-            document.body.style.cursor = 'wait';
-
-            try {
-                const res = await fetch(`${SCRIPT_URL}?action=checkPassword&password=${encodeURIComponent(pass)}`);
-                const data = await res.json();
-                
-                document.body.style.cursor = 'default';
-
-              if (data.status === "success") {
-                    teacherPassAuth = pass;
-                    document.getElementById('portal-view').style.display = 'none';
-                    document.getElementById('quiz-view').style.display = 'none';
-                    document.getElementById('kahoot-view').style.display = 'none';
-                    document.getElementById('password-lock-screen').style.display = 'none';
-                    document.getElementById('lecture-view').style.display = 'none';
-                    document.getElementById('teacher-view').style.display = 'block';
-                    switchTeacherTab('scores');
-                    loadTeacherScores();
-                    renderTeacherExamList();
-                    loadQuestionBank();
-                    updateBankBulkTopicDropdown(); 
-                    updateNewExamTopicDropdown(); 
-                    updateStudentClassDropdown();
-                    updateScoreClassFilter();
-                } else { 
-                    alert("❌ Sai mật khẩu!"); 
-                }
-            } catch (err) {
-                document.body.style.cursor = 'default';
-                alert("Lỗi kết nối máy chủ. Vui lòng kiểm tra lại mạng!");
-            }
-        }
-function renderTeacherExamList() {
-        const container = document.getElementById('teacher-exam-list-container');
-        if (!container) return;
-        if (examBank.length === 0) {
-            container.innerHTML = `<p style="color: #94a3b8;">Chưa có đề thi nào trên hệ thống.</p>`;
-            return;
-        }
-        container.innerHTML = examBank.map(ex => `
-            <div class="exam-manage-row">
-                <div><strong>[Khối ${ex.grade}] ${ex.title}</strong> <span style="font-size:0.9rem; color:#64748b;">(Mã: ${ex.id} - ${ex.questions ? ex.questions.length : 0} câu)</span></div>
-                <button class="btn-del-exam" onclick="deleteExamFromSystem('${ex.id}')"><i class="fa-solid fa-trash"></i> Xóa Đề</button>
-            </div>
-        `).join('');
-    }
-       function switchTeacherTab(tab) {
-            ['scores', 'exams', 'creator', 'classes'].forEach(t => {
-                const sec = document.getElementById(`sec-t-${t}`);
-                if(sec) sec.style.display = (t === tab) ? 'block' : 'none';
-                const btn = document.getElementById(`btn-t-${t}`);
-                if(btn) btn.classList.toggle('active', t === tab);
-            });
-            if (tab === 'exams') renderTeacherExamList();
-            if (tab === 'creator') { 
-                updateNewExamTopicDropdown(); 
-                filterQuestionBankList(); 
-                renderMatrixTable(); 
-            }
-            if (tab === 'classes') renderTeacherClassList();
-        }
-
-        function switchAddMethod(method) {
-            ['paste', 'bank', 'matrix'].forEach(m => {
-                document.getElementById(`tab-add-${m}`).classList.toggle('active', m === method);
-                document.getElementById(`add-method-${m}`).style.display = (m === method) ? 'block' : 'none';
-            });
-            document.getElementById('bank-selected-box').style.display = (method === 'bank' || method === 'matrix') ? 'block' : 'none';
-            if (method === 'matrix') renderMatrixTable();
-            if (method === 'bank') updateBankFilterTopics();
-        }
-
-        // --- QUẢN LÝ DANH SÁCH LỚP ĐỘNG ---
-        let teacherClasses = JSON.parse(localStorage.getItem('teacher_classes_list')) || [
-            "10A1", "10A2", "10A3", "12A1", "12A3", "12A5", 
-            "Học thêm 1", "Học thêm 2", "Học thêm 3", "Học thêm 4", "Học thêm 5", "Học thêm 6", "Lớp tự do"
-        ];
-
-        function saveTeacherClasses() {
-            localStorage.setItem('teacher_classes_list', JSON.stringify(teacherClasses));
-            updateStudentClassDropdown();
-            renderTeacherClassList();
-            updateScoreClassFilter();
-        }
-
-        function addNewClass() {
-            const input = document.getElementById('new-class-name');
-            const cName = input.value.trim();
-            if (!cName) { alert("Vui lòng nhập tên lớp!"); return; }
-            if (teacherClasses.includes(cName)) { alert("Lớp này đã có trong danh sách!"); return; }
-            teacherClasses.push(cName);
-            input.value = '';
-            saveTeacherClasses();
-            alert("🎉 Đã thêm lớp thành công!");
-        }
-
-        function deleteClass(cName) {
-            if (!confirm(`Xóa lớp ${cName} khỏi danh sách?`)) return;
-            teacherClasses = teacherClasses.filter(c => c !== cName);
-            saveTeacherClasses();
-        }
-
-        function renderTeacherClassList() {
-            const container = document.getElementById('teacher-class-list');
-            if (!container) return;
-            container.innerHTML = teacherClasses.map(c => `
-                <div style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: bold;">
-                    <span>${c}</span>
-                    <button onclick="deleteClass('${c}')" style="background: none; border: none; color: #dc2626; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            container.innerHTML = selectedQuestions.map((sq, idx) => `
+                <div style="display:flex; justify-content:space-between; background:#fff; border:1px solid #e2e8f0; padding:6px 10px; border-radius:6px; margin-bottom:4px; font-size:0.95rem;">
+                    <span>${idx + 1}. [${sq.type}] ${sq.id}</span>
                 </div>
             `).join('');
         }
 
-        function updateStudentClassDropdown() {
-            const classInput = document.getElementById('std-class');
-            if (classInput && classInput.tagName !== 'SELECT') {
-                const select = document.createElement('select');
-                select.id = 'std-class';
-                select.className = 'form-input';
-                select.required = true;
-                select.innerHTML = `<option value="">-- Chọn lớp của bạn * --</option>` + teacherClasses.map(c => `<option value="${c}">${c}</option>`).join('');
-                classInput.parentNode.replaceChild(select, classInput);
+        function clearSelectedQuestions() {
+            selectedQuestions = [];
+            updateSelectedItemsDisplay();
+        }
+
+        // 3. HÀM LƯU ĐỀ THI LÊN GOOGLE SHEETS
+        async function saveExamFinal() {
+            const grade = document.getElementById('new-exam-grade').value;
+            const topic = document.getElementById('new-exam-topic').value.trim() || 'Chung';
+            const examId = document.getElementById('new-exam-id').value.trim();
+            const title = document.getElementById('new-exam-title').value.trim();
+            const mode = document.getElementById('new-exam-mode').value;
+            const timeLimit = parseInt(document.getElementById('new-exam-time').value) || 45;
+            const examPass = document.getElementById('new-exam-pass') ? document.getElementById('new-exam-pass').value.trim() : '';
+            const startTime = document.getElementById('new-exam-start-time') ? document.getElementById('new-exam-start-time').value : '';
+            const deadline = document.getElementById('new-exam-deadline') ? document.getElementById('new-exam-deadline').value : '';
+
+            if (!examId || !title) {
+                alert("⚠️ Vui lòng nhập đầy đủ Mã đề và Tên đề thi!");
+                return;
+            }
+
+            if (mode !== 'BAIGIANG' && (!selectedQuestions || selectedQuestions.length === 0)) {
+                alert("⚠️ Bạn chưa có câu hỏi nào trong đề! Hãy bấm 'Tự Động Phân Tích' trước.");
+                return;
+            }
+
+            const newExamObj = {
+                ID: examId,
+                id: examId,
+                Title: title,
+                title: title,
+                Grade: String(grade),
+                grade: String(grade),
+                Topic: topic,
+                topic: topic,
+                Mode: mode,
+                mode: mode,
+                TimeLimit: timeLimit,
+                timeLimit: timeLimit,
+                ExamPass: examPass,
+                examPass: examPass,
+                StartTime: startTime,
+                startTime: startTime,
+                Deadline: deadline,
+                deadline: deadline,
+                YoutubeUrl: document.getElementById('lecture-youtube-url')?.value.trim() || '',
+                PdfData: lecturePdfBase64 || '',
+                QuestionsJson: JSON.stringify(selectedQuestions),
+                questions: selectedQuestions
+            };
+
+            document.body.style.cursor = 'wait';
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'save_exam',
+                        password: teacherPassAuth,
+                        exam: newExamObj
+                    })
+                });
+                const data = await res.json();
+                document.body.style.cursor = 'default';
+
+                alert("🎉 Đã lưu và xuất bản đề thi thành công!");
+                examBank.unshift(newExamObj);
+                renderExams();
+                showPortalView();
+            } catch (err) {
+                document.body.style.cursor = 'default';
+                examBank.unshift(newExamObj);
+                renderExams();
+                alert("🎉 Đã xuất bản đề thi ra trang chủ!");
+                showPortalView();
             }
         }
 
-    function updateScoreClassFilter() {
-    const select = document.getElementById('filter-score-class');
-    if (!select) return;
-    
-    let configuredClasses = [];
-    if (typeof teacherClasses !== 'undefined' && Array.isArray(teacherClasses)) configuredClasses = teacherClasses;
-    else if (typeof classList !== 'undefined' && Array.isArray(classList)) configuredClasses = classList;
-    else configuredClasses = JSON.parse(localStorage.getItem('teacher_classes') || '[]');
+        // 4. LẤY TOÀN BỘ ĐỀ TỪ SHEET DeThi VÀ HIỂN THỊ HẾT RA NGOÀI (ẢNH 1)
+        async function fetchData() {
+            const grid = document.getElementById('exam-grid');
+            try {
+                const res = await fetch(SCRIPT_URL);
+                const data = await res.json();
+                
+                let rawExams = data.exams || data.DeThi || [];
+                examBank = rawExams.map(ex => {
+                    let rawQJson = ex.QuestionsJson || ex.questionsJson || ex.questions || "[]";
+                    let parsedQ = [];
+                    if (Array.isArray(rawQJson)) {
+                        parsedQ = rawQJson;
+                    } else if (typeof rawQJson === 'string' && rawQJson.trim() !== "") {
+                        try { parsedQ = JSON.parse(rawQJson); } catch(e) { parsedQ = []; }
+                    }
 
-    let submittedClasses = [];
-    if (typeof globalScoresData !== 'undefined' && Array.isArray(globalScoresData)) {
-        submittedClasses = globalScoresData.map(r => r.sClass).filter(Boolean);
-    }
+                    return {
+                        id: String(ex.ID || ex.id || '').trim(),
+                        title: String(ex.Title || ex.title || '').trim(),
+                        grade: String(ex.Grade || ex.grade || '12').trim(),
+                        topic: String(ex.Topic || ex.topic || '').trim(),
+                        mode: String(ex.Mode || ex.mode || 'LUYENTAP').trim().toUpperCase(),
+                        timeLimit: parseInt(ex.TimeLimit || ex.timeLimit) || 45,
+                        startTime: ex.StartTime || ex.startTime || '',
+                        deadline: ex.Deadline || ex.deadline || '',
+                        examPass: String(ex.ExamPass || ex.examPass || '').trim(),
+                        youtubeUrl: ex.YoutubeUrl || ex.youtubeUrl || '',
+                        pdfData: ex.PdfData || ex.pdfData || '',
+                        questions: parsedQ
+                    };
+                }).filter(e => e.id && e.title);
 
-    const allClasses = [...new Set([...configuredClasses, ...submittedClasses])];
+                renderExams();
+                checkUrlParams();
+            } catch (err) {
+                console.error("Lỗi nạp đề:", err);
+                if (grid) grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:#ef4444; padding:40px;">Không thể tải dữ liệu đề thi.</p>`;
+            }
+        }
 
-    const currentVal = select.value;
-    select.innerHTML = '<option value="all">-- Tất cả các lớp --</option>' + 
-                       allClasses.map(c => `<option value="${c}">${c}</option>`).join('');
-    
-    if (currentVal && allClasses.includes(currentVal)) {
-        select.value = currentVal;
-    }
-}
-        let globalScoresData = [];
+        function renderExams() {
+            const grid = document.getElementById('exam-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            // Không để bộ lọc topic làm ẩn bài của học sinh
+            const list = examBank.filter(e => {
+                if (!e || !e.title) return false;
+                const gradeStr = String(e.grade || '').trim();
+                return (currentGrade === 'all' || gradeStr === currentGrade);
+            });    
 
+            if (list.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Chưa có đề thi nào trong khối ${currentGrade}.</p>`;
+                return;
+            }
+            
+            list.forEach(ex => {
+                const isKahoot = ex.mode === 'KAHOOT'; 
+                const isExamMode = ex.mode === 'KIEMTRA';
+                const isLecture = ex.mode === 'BAIGIANG';
+                const qCount = ex.questions ? ex.questions.length : 0;
+
+                const card = document.createElement('div'); 
+                card.className = 'exam-card';
+                card.innerHTML = `
+                    <div class="card-banner ${isKahoot ? 'kahoot-mode' : (isExamMode ? 'exam-mode' : (isLecture ? 'lecture-mode' : ''))}" style="${isLecture ? 'background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);' : ''}">
+                        <div class="card-icon"><i class="fa-solid ${isKahoot ? 'fa-bolt' : (isLecture ? 'fa-photo-film' : 'fa-book-open')}"></i></div>
+                        <div class="card-badge">KHỐI ${ex.grade}</div>
+                        <div class="card-mode-badge" style="color: ${isKahoot ? '#7c3aed' : (isExamMode ? '#dc2626' : (isLecture ? '#0284c7' : '#16a34a'))};">${isKahoot ? '⚡ KAHOOT' : (isExamMode ? '🔴 KIỂM TRA' : (isLecture ? '📘 BÀI GIẢNG' : '🟢 LUYỆN TẬP'))}</div>
+                    </div>
+                    <div class="card-body">
+                        <div><h3 class="card-title">${ex.title}</h3>
+                            <div class="card-meta">
+                                <span><i class="fa-regular fa-circle-question"></i> ${isLecture && qCount === 0 ? 'Tài liệu/Video' : qCount + ' câu'}</span>
+                                <span><i class="fa-regular fa-clock"></i> ${isLecture ? 'Tự học' : ex.timeLimit + ' phút'}</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-start" onclick="startExam('${ex.id}')"><i class="fa-solid fa-play"></i> Bắt đầu</button>
+                            <button class="btn-share" onclick="copyExamLink('${ex.id}')" title="Sao chép link"><i class="fa-solid fa-share-nodes"></i></button>
+                        </div>
+                    </div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        // 5. ĐỌC CHUẨN XÁC KẾT QUẢ ĐIỂM TỪ SHEETS (ẢNH 2)
         async function loadTeacherScores() {
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=get_results&password=${encodeURIComponent(teacherPassAuth)}`);
                 const data = await res.json();
-                if (data.status === "success" && data.results) {
-                   globalScoresData = data.results.map(r => ({
-                        time: r['Thời gian'] || r.time || r.Time || '---',
-                        name: r['Họ tên'] || r.name || r.Name || 'Ẩn danh',
-                        sClass: r['Lớp'] || r.class || r.Class || r.sClass || 'Tự do',
-                        examTitle: r['Bài thi'] || r.examTitle || r.ExamTitle || 'Bài kiểm tra',
-                        totalScore: r['Điểm số'] || r.totalScore || r.TotalScore || r.score || '0'
+                
+                let rawResults = [];
+                if (data.status === "success" && data.results) rawResults = data.results;
+                else if (Array.isArray(data)) rawResults = data;
+                else if (data.results) rawResults = data.results;
+
+                if (rawResults.length > 0) {
+                    globalScoresData = rawResults.map(r => ({
+                        time: r['Thời gian'] || r['thoiGian'] || r.time || '---',
+                        name: r['Họ tên'] || r['hoTen'] || r.name || 'Ẩn danh',
+                        sClass: r['Lớp'] || r['lop'] || r.class || 'Tự do',
+                        examTitle: r['Bài thi'] || r['baiThi'] || r.examTitle || '---',
+                        totalScore: (r['Điểm số'] !== undefined && r['Điểm số'] !== null) ? r['Điểm số'] : (r.score || '0'),
+                        mode: r['Chế độ'] || r.mode || ''
                     }));
 
                     const examFilter = document.getElementById('filter-score-exam');
@@ -1502,1180 +848,300 @@ function renderTeacherExamList() {
                     renderScoresTable();
                 }
             } catch (e) {
+                console.error("Lỗi nạp điểm:", e);
                 globalScoresData = [];
                 renderScoresTable();
             }
         }
 
-function renderScoresTable() {
-        if (!globalScoresData || !Array.isArray(globalScoresData)) return;
+        function renderScoresTable() {
+            const tbody = document.getElementById('scores-table-body');
+            if (!tbody) return;
 
-        const tbody = document.getElementById('scores-table-body');
-        if (!tbody) return;
+            const fClass = document.getElementById('filter-score-class')?.value || 'all';
+            const fExam = document.getElementById('filter-score-exam')?.value || 'all';
 
-        const classEl = document.getElementById('filter-score-class');
-        const examEl = document.getElementById('filter-score-exam');
-        
-        const filterClass = classEl ? classEl.value : 'all';
-        const filterExam = examEl ? examEl.value : 'all';
-
-        let displayList = globalScoresData.filter(r => {
-            if (!r) return false;
-            const sClass = String(r.sClass || '').toLowerCase().trim();
-            const eTitle = String(r.examTitle || '').trim();
-            const fClass = String(filterClass).toLowerCase().trim();
-            const fExam = String(filterExam).trim();
-
-            const matchClass = (fClass === 'all' || fClass === '' || sClass === fClass);
-            const matchExam = (fExam === 'all' || fExam === '' || eTitle === fExam);
-            return matchClass && matchExam;
-        });
-
-        const totalEl = document.getElementById('stat-total-submissions');
-        if (totalEl) totalEl.innerText = displayList.length;
-
-        const avgEl = document.getElementById('stat-avg-score');
-
-        if (displayList.length > 0) {
-            const scores = displayList.map(r => {
-                let sVal = String(r.totalScore || '0').replace(',', '.'); 
-                let num = parseFloat(sVal);
-                return isNaN(num) ? 0 : num;
-            });
-            
-            const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-            if (avgEl) avgEl.innerText = avg.toFixed(2);
-
-            tbody.innerHTML = displayList.map(r => {
-                let sVal = String(r.totalScore || '0').replace(',', '.');
-                let scoreNum = parseFloat(sVal);
-                if (isNaN(scoreNum)) scoreNum = 0;
-                
-                let badgeClass = scoreNum >= 5 ? 'badge-pass' : 'badge-fail';
-                let displayScore = (r.totalScore !== undefined && r.totalScore !== null) ? r.totalScore : '';
-                
-                return `<tr>
-                    <td style="text-align: center;">${r.time || ''}</td>
-                    <td><strong>${r.name || ''}</strong></td>
-                    <td style="text-align: center;">${r.sClass || ''}</td>
-                    <td>${r.examTitle || ''}</td>
-                    <td style="text-align: center;"><span class="badge-score ${badgeClass}">${displayScore}</span></td>
-                </tr>`;
-            }).join('');
-        } else {
-            if (avgEl) avgEl.innerText = '0.0';
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 20px;">Không có dữ liệu bài nộp thỏa mãn điều kiện lọc.</td></tr>`;
-        }
-    }
-       function exportScoresToExcel() {
-            if (!globalScoresData || globalScoresData.length === 0) {
-                alert("Chưa có dữ liệu để xuất Excel!");
-                return;
-            }
-
-            const classVal = document.getElementById('filter-score-class')?.value || 'all';
-            const examVal = document.getElementById('filter-score-exam')?.value || 'all';
-
-            const filtered = globalScoresData.filter(r => {
-                const matchClass = (classVal === 'all' || (r.sClass && r.sClass.toLowerCase() === classVal.toLowerCase()));
-                const matchExam = (examVal === 'all' || r.examTitle === examVal);
+            let displayList = globalScoresData.filter(r => {
+                const matchClass = (fClass === 'all' || String(r.sClass).toLowerCase() === fClass.toLowerCase());
+                const matchExam = (fExam === 'all' || r.examTitle === fExam);
                 return matchClass && matchExam;
             });
 
-            if (filtered.length === 0) {
-                alert("Không có dữ liệu phù hợp với bộ lọc để xuất!");
-                return;
-            }
+            document.getElementById('stat-total-submissions').innerText = displayList.length;
+            if (displayList.length > 0) {
+                let sum = 0; let validScores = 0;
+                displayList.forEach(r => {
+                    let num = parseFloat(String(r.totalScore).replace(',', '.'));
+                    if (!isNaN(num)) { sum += num; validScores++; }
+                });
+                document.getElementById('stat-avg-score').innerText = validScores > 0 ? (sum / validScores).toFixed(2) : '0.0';
 
-            let tableHtml = `
-                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-             <head>
-                    <meta charset="UTF-8">
-                    <style>
-                        td { mso-number-format:'\@'; }
-                    </style>
-                </head>
-                <body>
-                    <table border="1">
-                        <tr style="background-color: #2563eb; color: white; font-weight: bold; text-align: center;">
-                            <th>Thời Gian</th>
-                            <th>Họ và Tên</th>
-                            <th>Lớp</th>
-                            <th>Bài Thi</th>
-                            <th>Điểm</th>
-                            <th>Xếp Loại</th>
-                        </tr>
-            `;
-
-            filtered.forEach(r => {
-                let score = parseFloat(r.totalScore) || 0;
-                let autoRank = r.rank || r['Xếp loại'] || "";
-                if (!autoRank) {
-                    if (score >= 8.0) autoRank = "Giỏi";
-                    else if (score >= 6.5) autoRank = "Khá";
-                    else if (score >= 5.0) autoRank = "Trung bình";
-                    else autoRank = "Yếu";
-                }
-
-                tableHtml += `
-                    <tr>
-                        <td style="text-align: center;">${r.time || ''}</td>
-                        <td>${r.name || ''}</td>
-                        <td style="text-align: center;">${r.sClass || ''}</td>
-                        <td>${r.examTitle || ''}</td>
-                     <td style="text-align: center; font-weight: bold; mso-number-format:'\@';">${r.totalScore !== undefined && r.totalScore !== null ? String(r.totalScore) : ''}</td>
-                        <td style="text-align: center; font-weight: bold; color: #dc2626;">${autoRank}</td>
-                    </tr>
-                `;
-            });
-
-            tableHtml += `</table></body></html>`;
-
-            const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `Bang_Diem_${new Date().toLocaleDateString("vi-VN").replace(/\//g, "-")}.xls`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-        async function deleteExamFromSystem(examId) {
-            if (!confirm(`⚠️ Xóa vĩnh viễn đề [${examId}]?`)) return;
-            try {
-                const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete_exam', password: teacherPassAuth, examId: examId }) });
-                const data = await res.json();
-                if (data.status === "success") { alert("🗑️ Đã xóa!"); examBank = examBank.filter(e => e.id !== examId); renderExams(); renderTeacherExamList(); }
-            } catch (e) { alert("Lỗi khi xóa!"); }
-        }
-
-        function handlePasteData(e, isPreviewUpdate) {
-            const items = (e.clipboardData || window.clipboardData).items;
-            for (let i = 0; i < items.length; i++) {
-                if (items[i].type.indexOf("image") !== -1) {
-                    e.preventDefault();
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        document.execCommand('insertHTML', false, `<br><img src="${event.target.result}" style="max-width:100%; border-radius:8px;"><br>`);
-                    };
-                    reader.readAsDataURL(items[i].getAsFile());
-                }
+                tbody.innerHTML = displayList.map(r => {
+                    let num = parseFloat(String(r.totalScore).replace(',', '.'));
+                    let badgeClass = (!isNaN(num) && num >= 5) ? 'badge-pass' : 'badge-fail';
+                    return `<tr>
+                        <td style="text-align: center;">${r.time}</td>
+                        <td><strong>${r.name}</strong></td>
+                        <td style="text-align: center;">${r.sClass}</td>
+                        <td>${r.examTitle}</td>
+                        <td style="text-align: center;"><span class="badge-score ${badgeClass}">${r.totalScore}</span></td>
+                        <td style="text-align: center;">${r.mode}</td>
+                    </tr>`;
+                }).join('');
+            } else {
+                document.getElementById('stat-avg-score').innerText = '0.0';
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 20px;">Không có bài nộp nào phù hợp.</td></tr>`;
             }
         }
 
-// 1. TỰ ĐỘNG CHUẨN HÓA CÔNG THỨC VÀ ÉP VỀ CÙNG HÀNG
-function cleanLatexAndText(str) {
-    if (!str) return '';
-    return str
-        .replace(/\\\[/g, '$')
-        .replace(/\\\]/g, '$')
-        .replace(/\\\(/g, '$')
-        .replace(/\\\)/g, '$')
-        .replace(/\$\s+/g, '$')
-        .replace(/\s+\$/g, '$');
-}
-
-// 2. BỘ BÓC TÁCH MỚI (XỬ LÝ ĐÁP ÁN NẰM TRÊN 1 HÀNG & GẠCH CHÂN)
-function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
-    let parsedArr = [];
-    let tempDiv = document.createElement('div');
-    tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
-    
-    let cleanedHtml = tempDiv.innerHTML
-        .replace(/<[ub]>([A-D])[\.\)]<\/[ub]>/gi, '$1.')
-        .replace(/<br\s*[\/]?>/gi, '\n')
-        .replace(/<\/?(div|p|h[1-6]|ul|ol|li|tr)[^>]*>/gi, '\n')
-        .replace(/<(?!img\b|\/img)[^>]*>/gi, '') 
-        .replace(/&nbsp;/gi, ' ')
-        .replace(/\r\n/g, '\n')
-        .replace(/\r/g, '\n');
-
-    cleanedHtml = cleanLatexAndText(cleanedHtml);
-    cleanedHtml = cleanedHtml.replace(/(?:C[âa]u|B[àa]i|C)\s*\n+\s*(\d+)/gi, 'Câu $1');
-
-    let blocks = cleanedHtml.split(/(?:^|\n)(?=(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.])/i)
-        .map(b => b.trim())
-        .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]/i.test(b));
-   
-    blocks.forEach((block, idx) => {
-        let detectedType = 'SA';
-        let options = ['', '', '', ''];
-        let ans = '';
-        let ansOptions = [];
-        let explanation = '';
-        let qContent = '';
-
-        let expMatch = block.match(/(?:L[ờo]i\s*gi[ảa]i|H[ưướ]ng\s*dẫ?n|Lời\s*giải\s*chi\s*tiết)\s*[:\-]?\s*([\s\S]*)$/i);
-        if (expMatch) {
-            explanation = expMatch[1].trim();
-            block = block.replace(expMatch[0], '').trim();
-        }
-
-        let ansMatch = block.match(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*([A-D]|[a-d\s,]+|[-0-9,\.]+)/i);
-        if (ansMatch) {
-            ans = ansMatch[1].trim().toUpperCase();
-            block = block.replace(ansMatch[0], '').trim();
-        }
-
-        if (block.search(/(?:^|\s)A[\.\)]/) !== -1 && block.search(/(?:^|\s)B[\.\)]/) !== -1) {
-            detectedType = 'MCQ';
-            let splitA = block.split(/(?:^|\s)A[\.\)]\s*/);
-            qContent = splitA[0].replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]\s*/i, '').trim();
-
-            let rest = "A. " + splitA.slice(1).join("A. ");
-            let matchOptA = rest.match(/A[\.\)]\s*([\s\S]*?)(?=(?:^|\s)B[\.\)]\s*)/i);
-            let matchOptB = rest.match(/B[\.\)]\s*([\s\S]*?)(?=(?:^|\s)C[\.\)]\s*)/i);
-            let matchOptC = rest.match(/C[\.\)]\s*([\s\S]*?)(?=(?:^|\s)D[\.\)]\s*)/i);
-            let matchOptD = rest.match(/D[\.\)]\s*([\s\S]*)$/i);
-
-            options[0] = matchOptA ? matchOptA[1].trim() : '';
-            options[1] = matchOptB ? matchOptB[1].trim() : '';
-            options[2] = matchOptC ? matchOptC[1].trim() : '';
-            options[3] = matchOptD ? matchOptD[1].trim() : '';
-
-            if (!ans) {
-                if (rawHtml.includes('<u>A') || rawHtml.includes('underline">A')) ans = 'A';
-                else if (rawHtml.includes('<u>B') || rawHtml.includes('underline">B')) ans = 'B';
-                else if (rawHtml.includes('<u>C') || rawHtml.includes('underline">C')) ans = 'C';
-                else if (rawHtml.includes('<u>D') || rawHtml.includes('underline">D')) ans = 'D';
-                else ans = 'A';
-            }
-        } else if (block.search(/(?:^|\s)a[\)\.]/) !== -1 && block.search(/(?:^|\s)b[\)\.]/) !== -1) {
-            detectedType = 'TF';
-            let split_a = block.split(/(?:^|\s)a[\)\.]\s*/);
-            qContent = split_a[0].replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]\s*/i, '').trim();
-
-            let rest = "a) " + split_a.slice(1).join("a) ");
-            let m_a = rest.match(/a[\)\.]\s*([\s\S]*?)(?=(?:^|\s)b[\)\.]\s*)/i);
-            let m_b = rest.match(/b[\)\.]\s*([\s\S]*?)(?=(?:^|\s)c[\)\.]\s*)/i);
-            let m_c = rest.match(/c[\)\.]\s*([\s\S]*?)(?=(?:^|\s)d[\)\.]\s*)/i);
-            let m_d = rest.match(/d[\)\.]\s*([\s\S]*)$/i);
-
-            options[0] = m_a ? m_a[1].trim() : '';
-            options[1] = m_b ? m_b[1].trim() : '';
-            options[2] = m_c ? m_c[1].trim() : '';
-            options[3] = m_d ? m_d[1].trim() : '';
-
-            ansOptions = ['D', 'S', 'D', 'S'];
-            ans = 'DSDS';
-        } else {
-            detectedType = 'SA';
-            qContent = block.replace(/^(?:C[âa]u|B[àa]i|C)\s*\d+\s*[:.]\s*/i, '').trim();
-        }
-
-        const safeTopicId = (topic || 'Chung').replace(/[^a-zA-Z0-9-_]/g, '_');
-        const qId = `CH${grade}_${safeTopicId}_${Date.now().toString().slice(-4)}_${idx + 1}`;
-
-        parsedArr.push({
-            id: qId,
-            grade: String(grade), 
-            topic: topic, 
-            level: 'TH',
-            type: detectedType,
-            q: qContent.replace(/\n/g, '<br>'),
-            options: options,
-            ans: ans,
-            ansOptions: ansOptions,
-            explanation: explanation
-        });
-    });
-
-    return parsedArr;
-}
-
-// 3. HÀM LƯU VÀ XUẤT BẢN ĐỀ (BỊ THIẾU KHIẾN NÚT BẤM BỊ ĐƠ)
-async function saveExamFinal() {
-    const grade = document.getElementById('new-exam-grade').value;
-    const topic = document.getElementById('new-exam-topic').value;
-    const examId = document.getElementById('new-exam-id').value.trim();
-    const title = document.getElementById('new-exam-title').value.trim();
-    const mode = document.getElementById('new-exam-mode').value;
-    const timeLimit = parseInt(document.getElementById('new-exam-time').value) || 45;
-    const examPass = document.getElementById('new-exam-pass').value.trim();
-    const startTime = document.getElementById('new-exam-start-time').value;
-    const deadline = document.getElementById('new-exam-deadline').value;
-
-    if (!examId || !title) {
-        alert("⚠️ Vui lòng nhập đầy đủ Mã đề và Tên đề thi!");
-        return;
-    }
-
-    if (!selectedQuestions || selectedQuestions.length === 0) {
-        alert("⚠️ Bạn chưa có câu hỏi nào trong đề! Hãy bấm 'Tự Động Phân Tích' trước.");
-        return;
-    }
-
-    const newExamObj = {
-        id: examId,
-        title: title,
-        grade: grade,
-        topic: topic,
-        mode: mode,
-        timeLimit: timeLimit,
-        examPass: examPass,
-        startTime: startTime,
-        deadline: deadline,
-        youtubeUrl: document.getElementById('lecture-youtube-url')?.value.trim() || '',
-        pdfData: lecturePdfBase64 || '',
-        questions: selectedQuestions
-    };
-
-    document.body.style.cursor = 'wait';
-    try {
-        const res = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                action: 'save_exam',
-                password: teacherPassAuth,
-                exam: newExamObj
-            })
-        });
-        const data = await res.json();
-        document.body.style.cursor = 'default';
-
-        if (data.status === 'success' || data.result === 'success') {
-            alert("🎉 Xuất bản đề thi thành công!");
-            examBank.unshift(newExamObj);
+        // ĐIỀU HƯỚNG GIAO DIỆN
+        function filterGrade(g, btn) {
+            currentGrade = g;
+            document.querySelectorAll('.grade-pill').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
             renderExams();
-            showPortalView();
-        } else {
-            alert("Lỗi lưu đề: " + (data.message || 'Không xác định'));
         }
-    } catch (err) {
-        document.body.style.cursor = 'default';
-        examBank.unshift(newExamObj);
-        renderExams();
-        alert("⚠️ Đã lưu đề tạm thời trên trình duyệt!");
-        showPortalView();
-    }
-}
-        function parseDirectExam() {
-            const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
-            if (!rawHtml) { alert("Vui lòng dán văn bản đề thi!"); return; }
+
+        function showPortalView() {
+            document.getElementById('kahoot-view').style.display = 'none';
+            document.getElementById('quiz-view').style.display = 'none';
+            document.getElementById('teacher-view').style.display = 'none';
+            document.getElementById('password-lock-screen').style.display = 'none';
+            document.getElementById('lecture-view').style.display = 'none';
+            document.getElementById('portal-view').style.display = 'block';
+            document.querySelector('.navbar').style.display = 'flex';
+        }
+
+        async function openTeacherLogin() {
+            const pass = prompt("🔐 Nhập Mật khẩu Quản lý Giáo viên:");
+            if (!pass) return;
+            teacherPassAuth = pass;
+            localStorage.setItem('teacher_pass_auth', pass);
             
-            const currentGrade = document.getElementById('new-exam-grade').value;
-            const currentTopic = document.getElementById('new-exam-topic').value;
-
-            directParsedQuestions = parseTextToQuestionsAllInOne(rawHtml, currentGrade, currentTopic);
-            
-            document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
-            
-       let previewHtml = directParsedQuestions.map((q, i) => {
-    let optsHtml = '';
-    if (q.type === 'TF') {
-        optsHtml = q.options.map((op, idx) => op ? `<div>${['a','b','c','d'][idx]}) ${op}</div>` : '').join('');
-    } else if (q.type === 'MCQ') {
-        optsHtml = `<div style="display:grid; grid-template-columns:1fr 1fr;">` + q.options.map((op, idx) => op ? `<div>${['A','B','C','D'][idx]}. ${op}</div>` : '').join('') + `</div>`;
-    }
-    
-    // Thêm đoạn hiển thị lời giải vào đây
-    let expPreviewHtml = q.explanation ? `<div style="margin-top: 6px; padding: 6px; background: #f0fdf4; border-left: 3px solid #16a34a; font-size: 0.95rem; color: #166534;"><strong>Lời giải:</strong> ${q.explanation}</div>` : '';
-
-    return `<div class="parsed-q-preview-card" style="border: 1px solid #cbd5e1; padding: 12px; margin-bottom: 10px; border-radius: 8px; background: #fff;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <strong>C${i+1} [${q.type}]</strong>
-                    <div>
-                        <label style="font-size: 0.85rem; font-weight: bold; color: #475569;">Mức độ:</label>
-                        <select class="form-input" style="padding: 2px 6px; font-size: 0.9rem; display: inline-block; width: auto;" onchange="directParsedQuestions[${i}].level = this.value">
-                            <option value="NB" ${q.level === 'NB' ? 'selected' : ''}>NB</option>
-                            <option value="TH" ${q.level === 'TH' ? 'selected' : ''}>TH</option>
-                            <option value="VD" ${q.level === 'VD' ? 'selected' : ''}>VD</option>
-                            <option value="VDC" ${q.level === 'VDC' ? 'selected' : ''}>VDC</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="margin-bottom: 6px;">${q.q}</div>
-                <div style="color: #475569; margin: 4px 0;">${optsHtml}</div>
-                <div style="color:#16a34a; font-weight:bold; margin-top: 4px;">Đ/A: ${q.ans}</div>
-                ${expPreviewHtml}
-            </div>`;
-}).join('');            
-            document.getElementById('direct-preview-box').innerHTML = previewHtml;
-            document.getElementById('btn-save-parsed-bank').style.display = 'inline-block';
-            renderMath(document.getElementById('direct-preview-box'));
-
-            selectedQuestions = [...directParsedQuestions];
-           selectedQuestions.forEach(q => { if (!q.timeLimit) q.timeLimit = 30; });
-updateSelectedItemsDisplay();
+            document.getElementById('portal-view').style.display = 'none';
+            document.getElementById('teacher-view').style.display = 'block';
+            switchTeacherTab('scores');
+            loadTeacherScores();
+            renderTeacherExamList();
         }
 
-        async function saveBankBulkToSheets() {
-            if (directParsedQuestions.length === 0) return;
-            for (const q of directParsedQuestions) {
-                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'add_question', password: teacherPassAuth, question: q }) });
-            }
-            alert("🎉 Đã lưu toàn bộ câu vừa bóc tách vào Ngân Hàng!");
-            loadQuestionBank();
-        }
-
-      async function loadQuestionBank() {
-            try {
-                const res = await fetch(`${SCRIPT_URL}?action=get_question_bank&password=${encodeURIComponent(teacherPassAuth)}`);
-                const data = await res.json();
-                if (data.status === "success") { 
-                    let rawQs = data.questions || [];
-                    questionBank = rawQs.map(q => {
-                        let optRaw = q.options || q.Options || "[]";
-                        let aOptRaw = q.ansOptions || q.AnsOptions || "[]";
-                        
-                        return {
-                            id: q.id || q.ID || '',
-                            grade: String(q.grade || q['Khối'] || q['khối'] || q.Grade || '12').trim(),
-                            topic: String(q.topic || q['Chủ đề'] || q['chủ đề'] || q.Topic || '').trim(),
-                            level: String(q.level || q['Mức độ'] || q['mức độ'] || q.Level || 'TH').trim(),
-                            type: String(q.type || q['Dạng'] || q['dạng'] || q.Type || 'MCQ').trim(),
-                            q: q.q || q['Nội dung'] || '',
-                            options: (typeof optRaw === 'string') ? JSON.parse(optRaw) : optRaw,
-                            ans: q.ans || q['Đáp án'] || q['đáp án'] || q.Ans || '',
-                            ansOptions: (typeof aOptRaw === 'string') ? JSON.parse(aOptRaw) : aOptRaw
-                        };
-                    }).filter(q => q.id && q.id !== "");
-                    
-                    filterQuestionBankList(); 
-                    renderMatrixTable();
-                }
-            } catch (e) {
-                console.error("Lỗi tải ngân hàng:", e);
-            }
-        }
-
-        function filterQuestionBankList() {
-            const container = document.getElementById('bank-q-list');
-            if (!container) return;
-            if (!questionBank || questionBank.length === 0) return;
-            const fGrade = document.getElementById('bank-filter-grade').value;
-            const fTopic = document.getElementById('bank-filter-topic').value;
-            const fLevel = document.getElementById('bank-filter-level').value;
-            const fType = document.getElementById('bank-filter-type').value;
-            const fText = document.getElementById('bank-search-text').value.toLowerCase();
-
-            const filtered = questionBank.filter(q => {
-                if (fGrade !== 'all' && q.grade !== fGrade) return false;
-                if (fTopic !== 'all' && q.topic.toLowerCase() !== fTopic.toLowerCase()) return false;
-                if (fLevel !== 'all' && q.level.toUpperCase() !== fLevel.toUpperCase()) return false;
-                if (fType !== 'all' && q.type.toUpperCase() !== fType.toUpperCase()) return false;
-                if (fText && !q.q.toLowerCase().includes(fText)) return false;
-                return true;
+        function switchTeacherTab(tab) {
+            ['scores', 'exams', 'creator', 'classes'].forEach(t => {
+                const sec = document.getElementById(`sec-t-${t}`);
+                if (sec) sec.style.display = (t === tab) ? 'block' : 'none';
+                const btn = document.getElementById(`btn-t-${t}`);
+                if (btn) btn.classList.toggle('active', t === tab);
             });
+            if (tab === 'scores') loadTeacherScores();
+            if (tab === 'exams') renderTeacherExamList();
+        }
 
-            if (filtered.length === 0) {
-                container.innerHTML = `<p style="color:#94a3b8; text-align:center; padding: 20px;">Không tìm thấy câu hỏi phù hợp.</p>`; 
+        function renderTeacherExamList() {
+            const container = document.getElementById('teacher-exam-list-container');
+            if (!container) return;
+            if (examBank.length === 0) {
+                container.innerHTML = '<p style="color:#94a3b8;">Chưa có đề thi nào trên hệ thống.</p>';
                 return;
             }
-
-            container.innerHTML = filtered.map(q => `
-                <div class="bank-q-select-card">
-                    <input type="checkbox" style="margin-top: 4px; transform: scale(1.3);" onchange="toggleSelectQ('${q.id}', this)" ${selectedQuestions.some(sq => sq.id === q.id) ? 'checked' : ''}>
-                    <div style="flex-grow: 1;">
-                        <div style="margin-bottom: 6px;"><span class="badge-score badge-pass">[${q.level}] [${q.type}]</span> <span style="font-size: 0.95rem; color:#64748b;">Mã: ${q.id}</span></div>
-                        <div style="font-weight: bold; margin-bottom: 8px;">${q.q}</div>
-                        ${q.type === 'MCQ' && q.options ? `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.95rem; color: #475569;">${q.options.map((opt, i) => `<div><strong>${['A','B','C','D'][i]}.</strong> ${opt}</div>`).join('')}</div>` : ''}
-                        ${q.type === 'TF' && q.options ? `<div style="font-size: 0.95rem; color: #475569;">${q.options.map((opt, i) => opt ? `<div><strong>${['a','b','c','d'][i]})</strong> ${opt}</div>` : '').join('')}</div>` : ''}
-                        <div style="margin-top: 6px; font-size: 0.95rem; color: #16a34a; font-weight: bold;">Đáp án: ${q.ans}</div>
-                    </div>
+            container.innerHTML = examBank.map(ex => `
+                <div class="exam-manage-row">
+                    <div><strong>[Khối ${ex.grade}] ${ex.title}</strong> <span style="color:#64748b;">(Mã: ${ex.id})</span></div>
+                    <button class="btn-del-exam" onclick="deleteExamFromSystem('${ex.id}')"><i class="fa-solid fa-trash"></i> Xóa Đề</button>
                 </div>
             `).join('');
-            renderMath(container);
         }
 
- function updateSelectedItemsDisplay() {
-    const container = document.getElementById('selected-items-container');
-    if (!container) return;
-    document.getElementById('selected-q-count').innerText = selectedQuestions.length;
-    
-    if (selectedQuestions.length === 0) {
-        container.innerHTML = 'Chưa chọn câu hỏi.';
-        return;
-    }
-
-    // Kiểm tra xem chế độ hiện tại có phải là KAHOOT không
-    const currentMode = document.getElementById('new-exam-mode') ? document.getElementById('new-exam-mode').value : '';
-    const isKahootMode = (currentMode === 'KAHOOT');
-
-    container.innerHTML = selectedQuestions.map((sq, idx) => {
-        const currentTime = sq.timeLimit || 30;
-        
-        // Chỉ hiện ô chọn giây nếu đúng là chế độ KAHOOT, các chế độ khác sẽ ẩn đi hoàn toàn
-        const timeSelectorHtml = isKahootMode ? `
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="color: #64748b; font-size: 0.8rem;"><i class="fa-solid fa-stopwatch"></i></span>
-                <select onchange="changeQTimeLimit('${sq.id}', this.value)" style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; font-size: 0.85rem; font-weight: bold; color: #7c3aed; background: white; cursor: pointer;">
-                    <option value="15" ${currentTime == 15 ? 'selected' : ''}>15s</option>
-                    <option value="20" ${currentTime == 20 ? 'selected' : ''}>20s</option>
-                    <option value="30" ${currentTime == 30 ? 'selected' : ''}>30s</option>
-                    <option value="45" ${currentTime == 45 ? 'selected' : ''}>45s</option>
-                    <option value="60" ${currentTime == 60 ? 'selected' : ''}>60s</option>
-                    <option value="90" ${currentTime == 90 ? 'selected' : ''}>90s</option>
-                    <option value="120" ${currentTime == 120 ? 'selected' : ''}>120s</option>
-                </select>
-            </div>
-        ` : '';
-
-        return `
-            <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; margin-bottom: 6px; font-size: 0.9rem;">
-                <span style="font-weight: 600; color: #1e293b;">${idx + 1}. ${sq.id} [${sq.type}]</span>
-                ${timeSelectorHtml}
-            </div>
-        `;
-    }).join('');
-}
-function changeQTimeLimit(id, seconds) {
-    const q = selectedQuestions.find(item => item.id === id);
-    if (q) {
-        q.timeLimit = parseInt(seconds, 10);
-    }
-}
-
-function toggleSelectQ(id, cb) {
-    const q = questionBank.find(item => item.id === id);
-    if (!q) return;
-    if (cb.checked) {
-        if (!selectedQuestions.some(sq => sq.id === id)) {
-            if (!q.timeLimit) q.timeLimit = 30;
-            selectedQuestions.push(q);
-        }
-    } else {
-        selectedQuestions = selectedQuestions.filter(sq => sq.id !== id);
-    }
-    updateSelectedItemsDisplay();
-}
-
-function clearSelectedQuestions() {
-    selectedQuestions = [];
-    filterQuestionBankList();
-    updateSelectedItemsDisplay();
-}
-        function updateBankFilterTopics() {
-    const gradeSelect = document.getElementById('bank-filter-grade');
-    const grade = gradeSelect ? gradeSelect.value : 'all';
-    const select = document.getElementById('bank-filter-topic');
-    if (!select) return;
-    
-    select.innerHTML = '<option value="all">-- Bài / Chương --</option>';
-    
-    let list = [];
-    if (typeof getTopicsForGrade === 'function' && grade !== 'all') {
-        list = getTopicsForGrade(grade);
-    } else {
-        list = [...(topicsConfig.g12 || []), ...(topicsConfig.g11 || []), ...(topicsConfig.g10 || [])];
-    }
-    
-    list.forEach(t => {
-        if (t && t.type !== 'header' && t.id) {
-            const opt = document.createElement('option');
-            opt.value = t.id;
-            opt.textContent = t.name;
-            select.appendChild(opt);
-        }
-    });
-}
-function getQuestionCount(top, type, levelNum) {
-    if (typeof questionBank === 'undefined' || !Array.isArray(questionBank) || questionBank.length === 0) return 0;
-    
-    return questionBank.filter(q => {
-        let chudeQ = String(q.topic || q.ChuDe || q['Chủ đề'] || '').trim().toLowerCase();
-        let dangQ = String(q.type || q.Dang || q.DangCauHoi || q['Dạng'] || '').trim().toLowerCase();
-        let mucdoQ = String(q.level || q.MucDo || q['Mức độ'] || '').trim().toLowerCase();
-
-        // 1. So sánh Chủ đề (Hỗ trợ tìm theo tên tiếng Việt)
-        let tName = String(top.name || '').replace('⭐', '').trim().toLowerCase();
-        let tId = String(top.id || '').trim().toLowerCase();
-        let matchTopic = chudeQ.includes(tName) || tName.includes(chudeQ) || chudeQ.includes(tId) || tId.includes(chudeQ);
-
-        // 2. So sánh Dạng (Tự động hiểu tiếng Việt và tiếng Anh)
-        let matchType = false;
-        if (type === 'MCQ' && (dangQ.includes('mcq') || dangQ.includes('trắc nghiệm') || dangQ === 'tn')) matchType = true;
-        if (type === 'TF' && (dangQ.includes('tf') || dangQ.includes('đúng sai') || dangQ.includes('đúng/sai'))) matchType = true;
-        if (type === 'SA' && (dangQ.includes('sa') || dangQ.includes('trả lời ngắn') || dangQ.includes('ngắn') || dangQ.includes('tự luận'))) matchType = true;
-
-        // 3. So sánh Mức độ (Tự động hiểu số 1,2,3,4 hoặc NB,TH,VD,VDC hoặc chữ Nhận biết...)
-        let matchLevel = false;
-        if (levelNum === 1 && (mucdoQ === '1' || mucdoQ === 'nb' || mucdoQ.includes('nhận biết'))) matchLevel = true;
-        if (levelNum === 2 && (mucdoQ === '2' || mucdoQ === 'th' || mucdoQ.includes('thông hiểu'))) matchLevel = true;
-        if (levelNum === 3 && (mucdoQ === '3' || mucdoQ === 'vd' || mucdoQ.includes('vận dụng'))) matchLevel = true;
-        if (levelNum === 4 && (mucdoQ === '4' || mucdoQ === 'vdc' || mucdoQ.includes('cao'))) matchLevel = true;
-
-        return matchTopic && matchType && matchLevel;
-    }).length;
-}
-
-function renderMatrixTable() {
-    const grade = document.getElementById('new-exam-grade').value;
-    const topics = getTopicsForGrade(grade);
-    const container = document.getElementById('matrix-topics-container');
-    if (!container) return;
-
-    const typeLabels = [
-        { type: 'MCQ', label: '1. Trắc nghiệm (MCQ)' },
-        { type: 'TF',  label: '2. Đúng / Sai (TF)' },
-        { type: 'SA',  label: '3. Trả lời ngắn (SA)' }
-    ];
-
-    container.innerHTML = topics.map(top => `
-        <div class="matrix-topic-row" style="background:#fff; border:1px solid var(--border-color); border-radius:10px; padding:12px; margin-bottom:14px;">
-            <h5 style="color:#1e40af; margin-bottom:10px; font-size:1.05rem;"><i class="fa-solid fa-book-bookmark"></i> ${top.name}</h5>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-                ${typeLabels.map(t => `
-                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:8px 10px; display:grid; grid-template-columns: 180px 1fr; gap:10px; align-items:center;">
-                        <span style="font-size:0.95rem; font-weight:bold; color:#334155;">${t.label}</span>
-                        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:6px;">
-                            <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">NB (${getQuestionCount(top, t.type, 1)})</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="NB" min="0" placeholder="0"></div>
-                            <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">TH (${getQuestionCount(top, t.type, 2)})</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="TH" min="0" placeholder="0"></div>
-                            <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VD (${getQuestionCount(top, t.type, 3)})</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="VD" min="0" placeholder="0"></div>
-                            <div><label style="font-size:0.8rem; color:#64748b; font-weight:bold;">VDC (${getQuestionCount(top, t.type, 4)})</label><input type="number" class="form-input matrix-input" data-topic="${top.id}" data-type="${t.type}" data-lvl="VDC" min="0" placeholder="0"></div>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `).join('');
-}
-
-function generateMatrixExam() {
-    const inputs = document.querySelectorAll('.matrix-input');
-    selectedQuestions = [];
-
-    inputs.forEach(input => {
-        const count = parseInt(input.value) || 0;
-        if (count <= 0) return;
-
-        const topicId = input.getAttribute('data-topic');
-        const qType = input.getAttribute('data-type');
-        const qLvl = input.getAttribute('data-lvl');
-
-        // Tìm tên bài học thực tế để khớp với dữ liệu Google Sheets
-        let topName = "";
-        let allTopics = [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10];
-        let foundTop = allTopics.find(t => t.id === topicId);
-        if (foundTop) topName = String(foundTop.name).replace('⭐', '').trim().toLowerCase();
-
-        let matched = questionBank.filter(q => {
-            let chudeQ = String(q.topic || q.ChuDe || q['Chủ đề'] || '').trim().toLowerCase();
-            let dangQ = String(q.type || q.Dang || q.DangCauHoi || q['Dạng'] || '').trim().toLowerCase();
-            let mucdoQ = String(q.level || q.MucDo || q['Mức độ'] || '').trim().toLowerCase();
-
-            let matchTopic = (topName !== "" && (chudeQ.includes(topName) || topName.includes(chudeQ))) || chudeQ.includes(topicId.toLowerCase());
-            
-            let matchType = false;
-            if (qType === 'MCQ' && (dangQ.includes('mcq') || dangQ.includes('trắc nghiệm') || dangQ === 'tn')) matchType = true;
-            if (qType === 'TF' && (dangQ.includes('tf') || dangQ.includes('đúng sai') || dangQ.includes('đúng/sai'))) matchType = true;
-            if (qType === 'SA' && (dangQ.includes('sa') || dangQ.includes('trả lời ngắn') || dangQ.includes('ngắn') || dangQ.includes('tự luận'))) matchType = true;
-
-            let matchLevel = false;
-            if (qLvl === 'NB' && (mucdoQ === '1' || mucdoQ === 'nb' || mucdoQ.includes('nhận biết'))) matchLevel = true;
-            if (qLvl === 'TH' && (mucdoQ === '2' || mucdoQ === 'th' || mucdoQ.includes('thông hiểu'))) matchLevel = true;
-            if (qLvl === 'VD' && (mucdoQ === '3' || mucdoQ === 'vd' || mucdoQ.includes('vận dụng'))) matchLevel = true;
-            if (qLvl === 'VDC' && (mucdoQ === '4' || mucdoQ === 'vdc' || mucdoQ.includes('cao'))) matchLevel = true;
-
-            return matchTopic && matchType && matchLevel;
-        });
-
-        shuffleArray(matched);
-        selectedQuestions.push(...matched.slice(0, count));
-    });
-
-    if (selectedQuestions.length === 0) {
-        alert("⚠️ Không đủ số lượng câu hỏi trong Ngân hàng cho Ma trận vừa nhập!");
-        return;
-    }
-
-    selectedQuestions.sort((a, b) => {
-        const order = { 'MCQ': 1, 'TF': 2, 'SA': 3 };
-        return (order[a.type] || 99) - (order[b.type] || 99);
-    });
-
-    document.getElementById('selected-q-count').innerText = selectedQuestions.length;
-    document.getElementById('selected-items-container').innerHTML = selectedQuestions.map((sq, idx) => `
-        <div style="font-size:0.9rem; margin-bottom:4px;">
-            <strong>${idx + 1}.</strong> [${sq.type}] [${sq.level}] ${sq.q ? sq.q.substring(0, 50) + '...' : sq.id}
-        </div>
-    `).join('');
-
-    alert(`🎉 Đã trộn thành công ${selectedQuestions.length} câu theo chuẩn ma trận!`);
-    switchAddMethod('bank');
-}
-function updateNewExamTopicDropdown() {
-        const gradeSelect = document.getElementById('new-exam-grade');
-        const grade = gradeSelect ? gradeSelect.value : '12';
-        const select = document.getElementById('new-exam-topic');
-        if (!select) return;
-        select.innerHTML = "";
-        
-        let list = [];
-        if (grade === '12') list = topicsConfig.g12;
-        else if (grade === '11') list = topicsConfig.g11;
-        else if (grade === '10') list = topicsConfig.g10;
-        else list = [...topicsConfig.g12, ...topicsConfig.g11, ...topicsConfig.g10];
-
-        list.forEach(item => {
-            if (item.type === 'header') {
-                const opt = document.createElement('option');
-                opt.disabled = true;
-                opt.textContent = "--- " + item.title + " ---";
-                opt.style.fontWeight = "bold";
-                select.appendChild(opt);
-            } else {
-                const opt = document.createElement('option');
-                opt.value = item.id; 
-                opt.textContent = item.name; 
-                select.appendChild(opt);
+        async function deleteExamFromSystem(examId) {
+            if (!confirm(`Xóa đề [${examId}] khỏi hệ thống?`)) return;
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'delete_exam', password: teacherPassAuth, examId: examId })
+                });
+                examBank = examBank.filter(e => e.id !== examId);
+                renderExams();
+                renderTeacherExamList();
+                alert("Đã xóa đề thành công!");
+            } catch (e) {
+                alert("Lỗi khi kết nối xóa đề!");
             }
-        });
-        renderMatrixTable();
-    }
-        function updateBankBulkTopicDropdown() {
-            const grade = document.getElementById('examGrade') ? document.getElementById('examGrade').value : 'g12';
-            const select = document.getElementById('examTopic');
-            if (!select) return;
-            select.innerHTML = "";
-            
-            const list = topicsConfig[grade] || [];
-            list.forEach(item => {
-                if (item.type === 'header') {
-                    const opt = document.createElement('option');
-                    opt.disabled = true;
-                    opt.textContent = "--- " + item.title + " ---";
-                    opt.style.fontWeight = "bold";
-                    select.appendChild(opt);
-                } else {
-                    const opt = document.createElement('option');
-                    opt.value = item.name;
-                    opt.textContent = item.name;
-                    select.appendChild(opt);
-                }
-            });
         }
 
-       function showPortalView() {
-    document.getElementById('kahoot-view').style.display = 'none';
-    document.getElementById('quiz-view').style.display = 'none';
-    document.getElementById('teacher-view').style.display = 'none';
-    
-    // Thêm 2 dòng này để giấu dứt điểm màn hình khóa và bài giảng:
-    document.getElementById('password-lock-screen').style.display = 'none';
-    document.getElementById('lecture-view').style.display = 'none';
-
-    document.getElementById('portal-view').style.display = 'block';
-    document.querySelector('.navbar').style.display = 'flex';
-    window.history.pushState({}, document.title, window.location.pathname);
-}
-
-        function startHostMode() {
-            document.getElementById('portal-view').style.display = 'none';
-            document.getElementById('kahoot-view').style.display = 'block';
-            document.getElementById('kahoot-login-box').style.display = 'none';
-            document.getElementById('kahoot-host-box').style.display = 'block';
-            document.getElementById('host-analytics-section').style.display = 'block';
-            db.ref('kahoot_rooms/' + activeExam.id).set({ status: 'waiting' });
-            
-            db.ref('kahoot_rooms/' + activeExam.id + '/students').on('value', snapshot => {
-                const val = snapshot.val(); const list = val ? Object.values(val) : [];
-                document.getElementById('host-student-count').innerText = list.length;
-                document.getElementById('host-students-list').innerHTML = list.map(s => `<span class="student-chip">${s.name} (${s.class})</span>`).join('') || 'Chưa có học sinh.';
-            });
-            
-            db.ref('kahoot_rooms/' + activeExam.id + '/scores').on('value', snapshot => {
-                const val = snapshot.val();
-                if (!val) { document.getElementById('host-leaderboard-box').innerHTML = '<em>Chưa có điểm số.</em>'; return; }
-                let ranking = Object.values(val).sort((a, b) => b.score - a.score);
-                document.getElementById('host-leaderboard-box').innerHTML = ranking.map((st, i) => `
-                    <div class="leaderboard-item ${i < 3 ? 'dancing-row' : ''}"><span>${i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : i+1+'.'))} ${st.name}</span><span style="color: #7c3aed;">${st.score} điểm</span></div>
-                `).join('');
-            });
-
-            db.ref('kahoot_rooms/' + activeExam.id + '/wrong').on('value', snapshot => {
-                const val = snapshot.val();
-                if (!val) { document.getElementById('host-wrong-stats-box').innerHTML = '<p style="color: #64748b;">Tuyệt vời! Chưa có câu trả lời sai.</p>'; return; }
-                let wrongHtml = '';
-                for (let qIdx in val) { wrongHtml += `<div class="wrong-stat-item">Câu ${parseInt(qIdx)+1}: Có ${val[qIdx]} bạn chọn sai</div>`; }
-                document.getElementById('host-wrong-stats-box').innerHTML = wrongHtml;
-            });
+        function toggleExamPasswordField() {
+            const mode = document.getElementById("new-exam-mode").value;
+            document.getElementById("exam-password-row").style.display = (mode === "KIEMTRA") ? "block" : "none";
+            document.getElementById("lecture-fields").style.display = (mode === "BAIGIANG") ? "block" : "none";
         }
-        function hostStartExam() {
-            db.ref('kahoot_rooms/' + activeExam.id).update({ status: 'started' });
-            startKahootMusicLoop();
-            alert("🚀 Đã phát lệnh cho học sinh bắt đầu và bật nhạc nền!");
-        }
-        function startStudentKahootMode() {
-            document.getElementById('kahoot-view').style.display = 'block';
-            document.getElementById('kahoot-login-box').style.display = 'block';
-        }
-        let isKahootStarted = false;
 
-function joinKahootArena() {
-    kahootStdName = document.getElementById('k-std-name').value.trim();
-    kahootStdClass = document.getElementById('k-std-class').value.trim();
-    if (!kahootStdName || !kahootStdClass) { alert("Nhập đủ tên và lớp!"); return; }
-    
-    document.getElementById('kahoot-login-box').style.display = 'none';
-    document.getElementById('kahoot-lobby-box').style.display = 'block';
-    
-    const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
-    db.ref('kahoot_rooms/' + activeExam.id + '/students/' + cleanName).set({ name: kahootStdName, class: kahootStdClass });
-    
-    isKahootStarted = false;
-
-    db.ref('kahoot_rooms/' + activeExam.id).on('value', snapshot => {
-        const roomData = snapshot.val();
-        if (roomData && roomData.status === 'started' && !isKahootStarted) {
-            isKahootStarted = true;
-            document.getElementById('kahoot-lobby-box').style.display = 'none';
-            document.getElementById('kahoot-game-box').style.display = 'block';
-            loadKahootQuestion();
-        }
-    });
-}
-       function loadKahootQuestion() {
-            const qList = activeExam.questions || [];
-            if (kahootCurrentIndex >= qList.length) {
-                playSound('correct'); stopKahootMusicLoop();
-                document.getElementById('kahoot-game-box').innerHTML = `<h2 style="color: #7c3aed; margin-bottom: 20px;"><i class="fa-solid fa-trophy"></i> Hoàn Thành Đấu Trường!</h2><h3 style="color: #1e293b;">Tổng điểm của bạn: ${kahootScore}</h3>`;
+        // BẮT ĐẦU VÀO LÀM BÀI
+        function startExam(id) {
+            activeExam = examBank.find(e => e.id === id);
+            if (!activeExam) return;
+            if (activeExam.mode === 'BAIGIANG') {
+                startLectureMode();
                 return;
             }
-            const q = qList[kahootCurrentIndex];
-            let qHtml = `Câu ${kahootCurrentIndex + 1} [${q.type}]: ${q.q}`;
-            if (q.type === 'TF') qHtml += `<br><br>` + q.options.map((op,i) => op ? `<div>${['a','b','c','d'][i]}) ${op}</div>` : '').join('');
-            document.getElementById('kahoot-q-text').innerHTML = qHtml;
-            document.getElementById('kahoot-feedback').innerText = '';
-            
-            let btnHtml = '';
-            if (q.type === 'MCQ') {
-                btnHtml = q.options.map((opt, i) => opt ? `<button class="kahoot-opt-btn k-opt-${i}" onclick="answerKahoot('${['A','B','C','D'][i]}', '${q.ans}', this)">${['A','B','C','D'][i]}. ${opt}</button>` : '').join('');
-            } else if (q.type === 'TF') {
-                btnHtml = `<input type="text" id="k-tf-ans" class="form-input" placeholder="Nhập D-S-D-S..." style="font-size: 1.2rem; text-align:center;"><button class="btn-start" style="width:100%; background:#2563eb;" onclick="answerKahoot(document.getElementById('k-tf-ans').value, '${q.ans}', this)">Gửi Đáp Án</button>`;
+            document.getElementById('portal-view').style.display = 'none';
+            if (activeExam.mode === 'KIEMTRA' && activeExam.examPass) {
+                document.getElementById('password-lock-screen').style.display = 'block';
             } else {
-                btnHtml = `<input type="text" id="k-sa-ans" class="form-input" placeholder="Nhập kết quả..." style="font-size: 1.2rem; text-align:center;"><button class="btn-start" style="width:100%; background:#2563eb;" onclick="answerKahoot(document.getElementById('k-sa-ans').value, '${q.ans}', this)">Gửi Đáp Án</button>`;
+                startTraditionalExamMode();
             }
-            document.getElementById('kahoot-options-grid').innerHTML = btnHtml;
-            renderMath(document.getElementById('kahoot-game-box'));
+        }
 
-            kahootTimeLeft = parseInt(activeExam.timeLimit) || 30; 
-            document.getElementById('kahoot-timer-display').innerText = kahootTimeLeft;
+        function verifyExamPassword() {
+            const enteredPass = document.getElementById('exam-secure-pass').value.trim();
+            if (enteredPass === activeExam.examPass) {
+                document.getElementById('password-lock-screen').style.display = 'none';
+                startTraditionalExamMode();
+            } else {
+                alert("❌ Mật khẩu bài thi không đúng!");
+            }
+        }
+
+        let processedQuestions = [];
+        let timerInterval = null;
+        let secondsRemaining = 0;
+
+        function startTraditionalExamMode() {
+            document.getElementById('quiz-view').style.display = 'block';
+            document.getElementById('quiz-title').innerText = activeExam.title;
+            document.getElementById('quiz-result').style.display = 'none';
+            document.getElementById('quiz-form').reset();
             
-            clearInterval(kahootTimer);
-            kahootTimer = setInterval(() => {
-                kahootTimeLeft--;
-                document.getElementById('kahoot-timer-display').innerText = kahootTimeLeft;
-                if (kahootTimeLeft <= 0) {
-                    clearInterval(kahootTimer);
-                    document.getElementById('kahoot-feedback').innerHTML = `<span style="color: #dc2626;">⏰ Hết giờ!</span>`;
-                    setTimeout(() => { kahootCurrentIndex++; loadKahootQuestion(); }, 1200);
+            processedQuestions = activeExam.questions || [];
+            secondsRemaining = (parseInt(activeExam.timeLimit) || 45) * 60;
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsRemaining--;
+                let m = Math.floor(secondsRemaining / 60);
+                let s = secondsRemaining % 60;
+                document.getElementById('time-left').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+                if (secondsRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Đã hết giờ làm bài!");
+                    submitQuiz();
                 }
             }, 1000);
-        }
-    function answerKahoot(selected, correct, btnEl) {
-    clearInterval(kahootTimer);
-    
-    const allBtns = document.querySelectorAll('#kahoot-options-grid button, #kahoot-game-box button');
-    allBtns.forEach(b => {
-        b.disabled = true;
-        b.style.pointerEvents = 'none';
-        b.style.opacity = '0.7';
-    });
-    if (btnEl) {
-        btnEl.style.opacity = '1'; 
-    }
 
-    const feedback = document.getElementById('kahoot-feedback');
-    const cleanName = kahootStdName.replace(/[/.#$\[\]]/g, "_");
-            
-            let isCorrect = selected.toString().trim().toUpperCase().replace(/[^A-Z0-9]/g,'') === String(correct).trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-
-         if (isCorrect) {
-                const qType = (activeExam.questions[kahootCurrentIndex].type || 'MCQ').toUpperCase();
-                let basePoints = 250;
-                if (qType === 'TF') basePoints = 1000;
-                else if (qType === 'SA') basePoints = 500;
-
-                let earnedPoints = basePoints + (kahootTimeLeft * 15);
-                kahootScore += earnedPoints;
-
-                playSound('correct');
-                feedback.innerHTML = `<span style="color: #16a34a; font-weight: bold; font-size: 1.1rem;"><i class="fa-solid fa-circle-check"></i> Chính xác! (+${earnedPoints} điểm)</span>`;
-                if(btnEl) btnEl.style.backgroundColor = "#dcfce7"; 
-            } else {
-                playSound('wrong');
-                feedback.innerHTML = `<span style="color: #dc2626; font-weight: bold; font-size: 1.1rem;"><i class="fa-solid fa-circle-xmark"></i> Chưa chính xác!</span>`;
-                if(btnEl) btnEl.style.backgroundColor = "#fee2e2"; 
-                
-                db.ref('kahoot_rooms/' + activeExam.id + '/wrong/' + kahootCurrentIndex).transaction(current => (current || 0) + 1);
-            }
-
-            db.ref('kahoot_rooms/' + activeExam.id + '/scores/' + cleanName).set({ name: kahootStdName, class: kahootStdClass, score: kahootScore });
-
-            setTimeout(() => { kahootCurrentIndex++; loadKahootQuestion(); }, 2000);
-        }
-
-       if (currentTeacherId && TEACHERS_DIRECTORY[currentTeacherId] && getTeacherScriptUrl(currentTeacherId)) {
-            SCRIPT_URL = getTeacherScriptUrl(currentTeacherId);
-            const gate = document.getElementById('teacher-portal-gate');
-            if (gate) gate.style.display = 'none';
-            const brandEl = document.querySelector('.navbar .brand');
-            if (brandEl) {
-                brandEl.innerHTML = `<i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> ${TEACHERS_DIRECTORY[currentTeacherId].name.toUpperCase()} - ${TEACHERS_DIRECTORY[currentTeacherId].subject.toUpperCase()}`;
-            }
-            fetchData();
-        } else {
-            const gate = document.getElementById('teacher-portal-gate');
-            if (gate) gate.style.display = 'flex';
-        }
-        
-        function openChangePassModal() {
-    const modal = document.getElementById('change-pass-modal');
-    if (modal) modal.style.display = 'flex';
-}
-
-function closeChangePassModal() {
-    const modal = document.getElementById('change-pass-modal');
-    if (modal) modal.style.display = 'none';
-    const oldInput = document.getElementById('old-admin-pass');
-    const newInput = document.getElementById('new-admin-pass');
-    if (oldInput) oldInput.value = '';
-    if (newInput) newInput.value = '';
-}
-
-async function submitChangePassword() {
-    const oldPass = document.getElementById('old-admin-pass').value.trim();
-    const newPass = document.getElementById('new-admin-pass').value.trim();
-
-    if (!oldPass || !newPass) {
-        alert("Vui lòng nhập đầy đủ cả mật khẩu cũ và mật khẩu mới!");
-        return;
-    }
-
-    try {
-        const res = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                action: 'change_password',
-                oldPassword: oldPass,
-                newPassword: newPass
-            })
-        });
-        const data = await res.json();
-
-        if (data.status === 'success') {
-            alert("🎉 Đổi mật khẩu thành công! Hãy ghi nhớ mật khẩu mới.");
-            teacherPassAuth = newPass; 
-            closeChangePassModal();
-        } else {
-            alert(data.message || "Mật khẩu cũ không chính xác!");
-        }
-    } catch (err) {
-        alert("Lỗi kết nối máy chủ khi đổi mật khẩu!");
-    }
-}
-        
-(function() {
-    document.addEventListener('contextmenu', function(e) {
-        const quizBox = document.getElementById('quiz-view');
-        const kahootBox = document.getElementById('kahoot-view');
-        const isExamActive = (quizBox && quizBox.style.display !== 'none') || 
-                             (kahootBox && kahootBox.style.display !== 'none');
-        
-        if (isExamActive) {
-            e.preventDefault();
-        }
-    });
-
-    document.addEventListener('keydown', function(e) {
-        const quizBox = document.getElementById('quiz-view');
-        const kahootBox = document.getElementById('kahoot-view');
-        const isExamActive = (quizBox && quizBox.style.display !== 'none') || 
-                             (kahootBox && kahootBox.style.display !== 'none');
-
-        if (isExamActive) {
-            if (e.key === 'F12' || e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
-                e.preventDefault();
-                return false;
-            }
-        }
-    });
-})();
-
-        // === HÀM ĐIỀU KHIỂN ẨN/HIỆN KHI CHUYỂN CHẾ ĐỘ ===
-function toggleExamPasswordField() {
-    var mode = document.getElementById("new-exam-mode").value;
-    var passwordRow = document.getElementById("exam-password-row");
-    var lectureFields = document.getElementById("lecture-fields"); 
-    
-    var timeLimitInput = document.getElementById("new-exam-time");
-    var timeLimitRow = timeLimitInput ? timeLimitInput.closest('.form-row') : null;
-
-    if (mode === "KIEMTRA") {
-        if (passwordRow) passwordRow.style.display = "block";
-    } else {
-        if (passwordRow) passwordRow.style.display = "none";
-    }
-
-    if (mode === "BAIGIANG") {
-        if (lectureFields) lectureFields.style.display = "block";
-        if (timeLimitRow) timeLimitRow.style.display = "none"; 
-    } else {
-        if (lectureFields) lectureFields.style.display = "none";
-        if (timeLimitRow) timeLimitRow.style.display = "block"; 
-    }
-}
-
-// === TỰ ĐỘNG KHỞI TẠO VÀ ĐỌC FILE PDF TỪ MÁY KHI TRANG TẢI XONG ===
-document.addEventListener('DOMContentLoaded', function() {
-    const pdfFileInput = document.getElementById('lecture-pdf-file');
-    if (pdfFileInput) {
-        pdfFileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(uploadEvent) {
-                    lecturePdfBase64 = uploadEvent.target.result; 
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-    
-    // Kích hoạt đồng bộ trạng thái ban đầu ngay khi mở màn hình soạn đề
-    toggleExamPasswordField();
-});
-
-// === HÀM MỞ GIAO DIỆN BÀI GIẢNG CHO HỌC SINH ===
-function startLectureMode() {
-    document.getElementById('portal-view').style.display = 'none';
-    document.getElementById('lecture-view').style.display = 'block';
-    document.getElementById('lecture-title').innerText = activeExam.title || "Bài Giảng";
-    
-    // Bắt buộc hiển thị lại khung điểm danh và giấu nội dung chính khi mở bài mới
-    document.getElementById('lecture-student-login').style.display = 'block';
-    document.getElementById('lecture-main-content').style.display = 'none';
-    document.getElementById('lec-std-name').value = '';
-    document.getElementById('lec-std-class').value = '';
-
-    const ytUrl = activeExam.youtubeUrl || activeExam.youtubeurl || activeExam.YOUTUBEURL || "";
-    const pdfContent = activeExam.pdfData || activeExam.pdfdata || activeExam.PDFDATA || "";
-
-    let embedUrl = "";
-    if (ytUrl.includes("youtu.be/")) {
-        let videoId = ytUrl.split("youtu.be/")[1].split("?")[0];
-        embedUrl = `https://www.youtube.com/embed/${videoId}`;
-    } else if (ytUrl.includes("watch?v=")) {
-        let videoId = ytUrl.split("watch?v=")[1].split("&")[0];
-        embedUrl = `https://www.youtube.com/embed/${videoId}`;
-    } else if (ytUrl.includes("embed/")) {
-        embedUrl = ytUrl;
-    }
-    
-    const iframe = document.getElementById('lecture-iframe');
-    const videoContainer = document.getElementById('lecture-video-container');
-    if (embedUrl && iframe && videoContainer) {
-        iframe.src = embedUrl;
-        videoContainer.style.display = 'block';
-    } else if (videoContainer) {
-        videoContainer.style.display = 'none';
-    }
-
-    const pdfBox = document.getElementById('lecture-pdf-box');
-    const pdfLink = document.getElementById('lecture-pdf-link');
-    if (pdfContent && pdfContent.trim() !== "" && pdfLink && pdfBox) {
-        pdfLink.removeAttribute("target");
-        pdfLink.href = "javascript:void(0);";
-        pdfLink.onclick = function(e) {
-            e.preventDefault();
-            try {
-                let base64String = pdfContent.includes(',') ? pdfContent.split(',')[1] : pdfContent;
-                let byteCharacters = atob(base64String);
-                let byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                let byteArray = new Uint8Array(byteNumbers);
-                let blob = new Blob([byteArray], {type: 'application/pdf'});
-                let blobUrl = URL.createObjectURL(blob);
-                window.open(blobUrl, '_blank');
-            } catch (err) {
-                alert("Lỗi khi mở file PDF.");
-            }
-        };
-        pdfBox.style.display = 'flex';
-    } else if (pdfBox) {
-        pdfBox.style.display = 'none';
-    }
-
-    const qContainer = document.getElementById('lecture-questions-content');
-    const qHeader = document.getElementById('lecture-quiz-header');
-    const qForm = document.getElementById('lecture-quiz-form');
-    const qList = activeExam.questions || [];
-    
-    if (qContainer && qHeader && qForm) {
-        if (qList.length > 0) {
-            qContainer.innerHTML = qList.map((q, idx) => {
+            const container = document.getElementById('quiz-content');
+            container.innerHTML = processedQuestions.map((q, idx) => {
                 let opts = '';
                 if (q.type === 'MCQ' && q.options) {
                     ['A', 'B', 'C', 'D'].forEach((ch, i) => {
-                        opts += `<label class="mcq-option"><input type="radio" name="l_q_${idx}" value="${ch}"><span><strong>${ch}.</strong> ${q.options[i]}</span></label>`;
+                        opts += `<label class="mcq-option"><input type="radio" name="q_${idx + 1}" value="${ch}" required><span><strong>${ch}.</strong> ${q.options[i]}</span></label>`;
                     });
+                } else if (q.type === 'TF' && q.options) {
+                    ['a', 'b', 'c', 'd'].forEach((ch, i) => {
+                        if (q.options[i]) {
+                            opts += `<div class="tf-row"><span><strong>${ch})</strong> ${q.options[i]}</span><div class="tf-btns"><label><input type="radio" name="q_${idx + 1}_${ch}" value="D" required> Đúng</label><label><input type="radio" name="q_${idx + 1}_${ch}" value="S" required> Sai</label></div></div>`;
+                        }
+                    });
+                } else {
+                    opts = `<input type="text" class="sa-input" name="q_${idx + 1}" placeholder="Nhập kết quả..." required>`;
                 }
                 return `<div class="q-card"><div class="q-title">Câu ${idx + 1}: ${q.q}</div>${opts}</div>`;
             }).join('');
-            if (typeof renderMath === 'function') renderMath(qContainer);
-            qHeader.style.display = 'block';
-            qForm.style.display = 'block';
-        } else {
-            qHeader.style.display = 'none';
-            qForm.style.display = 'none';
+
+            renderMath(container);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    }
-    
-    document.getElementById('lecture-result').style.display = 'none';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 
-function submitLectureQuiz() {
-    const qList = activeExam.questions || [];
-    let correctCount = 0;
-    qList.forEach((q, idx) => {
-        const userAns = document.querySelector(`input[name="l_q_${idx}"]:checked`)?.value || "";
-        if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) {
-            correctCount++;
-        }
-    });
-    const resDiv = document.getElementById('lecture-result');
-    resDiv.style.display = 'block';
-    resDiv.innerHTML = `🎉 Bạn đã trả lời đúng <strong>${correctCount} / ${qList.length}</strong> câu hỏi tương tác!`;
-}
-        function confirmLectureAttendance() {
-    const name = document.getElementById('lec-std-name').value.trim();
-    const sClass = document.getElementById('lec-std-class').value.trim();
-    
-    if (!name || !sClass) {
-        alert("⚠️ Vui lòng nhập đầy đủ Họ tên và Lớp trước khi vào học!");
-        return;
-    }
-
-    document.getElementById('lecture-student-login').style.display = 'none';
-    document.getElementById('lecture-main-content').style.display = 'block';
-
-    try {
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({ 
-                action: 'submit_quiz', 
-                time: new Date().toLocaleString("vi-VN"), 
-                examId: activeExam.id, 
-                examTitle: "[Điểm danh Bài giảng] " + activeExam.title, 
-                name: name, 
-                class: sClass, 
-                mode: 'BAIGIANG', 
-                totalScore: 'Đã xem' 
-            })
+        document.getElementById('quiz-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitQuiz();
         });
-    } catch (e) {}
-}
+
+        async function submitQuiz() {
+            clearInterval(timerInterval);
+            const name = document.getElementById('std-name').value.trim() || 'Ẩn danh';
+            const sClass = document.getElementById('std-class').value.trim() || 'Tự do';
+            
+            let correctCount = 0;
+            processedQuestions.forEach((q, idx) => {
+                if (q.type === 'MCQ') {
+                    let userAns = document.querySelector(`input[name="q_${idx + 1}"]:checked`)?.value || '';
+                    if (userAns === q.ans) correctCount++;
+                } else if (q.type === 'SA') {
+                    let userAns = document.querySelector(`input[name="q_${idx + 1}"]`)?.value.trim() || '';
+                    if (userAns.toLowerCase() === String(q.ans).toLowerCase()) correctCount++;
+                }
+            });
+
+            let finalScore = processedQuestions.length > 0 ? ((correctCount / processedQuestions.length) * 10).toFixed(2) : '10.00';
+            const resDiv = document.getElementById('quiz-result');
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = `🎉 Điểm số của bạn: <strong>${finalScore} / 10</strong> (Đúng ${correctCount}/${processedQuestions.length} câu)`;
+            
+            document.getElementById('btn-submit-quiz').disabled = true;
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'submit_quiz',
+                        time: new Date().toLocaleString("vi-VN"),
+                        examId: activeExam.id,
+                        examTitle: activeExam.title,
+                        name: name,
+                        class: sClass,
+                        grade: activeExam.grade || '12',
+                        mode: activeExam.mode,
+                        totalScore: finalScore
+                    })
+                });
+            } catch (e) {}
+        }
+
+        function startLectureMode() {
+            document.getElementById('portal-view').style.display = 'none';
+            document.getElementById('lecture-view').style.display = 'block';
+            document.getElementById('lecture-title').innerText = activeExam.title;
+            document.getElementById('lecture-student-login').style.display = 'block';
+            document.getElementById('lecture-main-content').style.display = 'none';
+
+            const ytUrl = activeExam.youtubeUrl || '';
+            const iframe = document.getElementById('lecture-iframe');
+            const vContainer = document.getElementById('lecture-video-container');
+            if (ytUrl && iframe) {
+                let vId = ytUrl.includes('youtu.be/') ? ytUrl.split('youtu.be/')[1] : ytUrl.split('v=')[1];
+                iframe.src = `https://www.youtube.com/embed/${vId}`;
+                vContainer.style.display = 'block';
+            } else {
+                vContainer.style.display = 'none';
+            }
+        }
+
+        function confirmLectureAttendance() {
+            const name = document.getElementById('lec-std-name').value.trim();
+            const sClass = document.getElementById('lec-std-class').value.trim();
+            if (!name || !sClass) { alert("Vui lòng nhập họ tên và lớp!"); return; }
+            document.getElementById('lecture-student-login').style.display = 'none';
+            document.getElementById('lecture-main-content').style.display = 'block';
+        }
+
+        function copyExamLink(id) {
+            const url = `${window.location.origin}${window.location.pathname}?exam=${id}`;
+            navigator.clipboard.writeText(url).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => toast.style.display = 'none', 2000);
+            });
+        }
+
+        function checkUrlParams() {
+            const p = new URLSearchParams(window.location.search);
+            const exId = p.get('exam');
+            if (exId) startExam(exId);
+        }
+
+        // KHỞI CHẠY HỆ THỐNG
+        window.addEventListener('DOMContentLoaded', () => {
+            const gate = document.getElementById('teacher-portal-gate');
+            if (gate) gate.style.display = 'none';
+            fetchData();
+        });
     </script>
 </body>
 </html>

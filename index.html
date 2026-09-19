@@ -132,14 +132,14 @@ body.locked-ui .btn-nav-outline {
         .badge-pass { background: #dcfce7; color: #166534; }
         .badge-fail { background: #fee2e2; color: #991b1b; }
         
-        .creator-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; margin-top: 15px; }
+    .creator-container { display: grid; grid-template-columns: 1fr; gap: 25px; margin-top: 15px; }
         @media (max-width: 950px) { .creator-container { grid-template-columns: 1fr; } }
         .creator-card { background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; }
         .form-row { margin-bottom: 12px; }
         .form-row label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 1.05rem; color: #334155; }
         .form-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.05rem; outline: none; background: #fff; font-family: 'Times New Roman', Times, serif; }
         .rich-textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1.15rem; outline: none; background: #fff; overflow-y: auto; overflow-x: auto; font-family: 'Times New Roman', Times, serif; line-height: 1.6; }
-        .rich-textarea * { max-width: 100% !important; word-wrap: break-word !important; overflow-wrap: break-word !important; }
+     .rich-textarea * { max-width: 100% !important; word-wrap: break-word !important; overflow-wrap: break-word !important; white-space: normal !important; overflow-x: hidden !important; }
         .rich-textarea p, .rich-textarea div, .rich-textarea span { margin-left: 0 !important; text-indent: 0 !important; padding-left: 0 !important; white-space: normal !important; }
         .rich-textarea table { width: 100% !important; table-layout: fixed !important; margin: 10px 0 !important; border-collapse: collapse !important; }
         .rich-textarea td, .rich-textarea th { white-space: normal !important; border: 1px solid #cbd5e1 !important; padding: 6px !important; }

@@ -2053,7 +2053,11 @@ renderMath(document.getElementById('quiz-content'));
             const resDiv = document.getElementById('quiz-result');
             resDiv.style.display = 'block';
             resDiv.innerHTML = `🎉 Điểm số: <strong>${finalScore} / 10</strong>`;
-
+if (activeExam.mode === 'KIEMTRA') {
+    document.getElementById('quiz-content').style.display = 'none';
+    document.getElementById('btn-submit-quiz').style.display = 'none';
+    resDiv.innerHTML = `🔒 <strong>BÀI THI ĐÃ NỘP THÀNH CÔNG</strong><br>Kết quả của bạn đã được ghi nhận vào hệ thống.<br>Điểm số: <strong style="font-size: 1.5rem; color: #16a34a;">${finalScore} / 10</strong>`;
+}
             try {
                 await fetch(SCRIPT_URL, {
                     method: 'POST',

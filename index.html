@@ -2350,6 +2350,7 @@ function answerKahoot(selected, correct, btnEl) {
 
         // TẢI FILE PDF
         document.addEventListener('DOMContentLoaded', function() {
+            updateStudentClassDropdown();
             const pdfFileInput = document.getElementById('lecture-pdf-file');
             if (pdfFileInput) {
                 pdfFileInput.addEventListener('change', function(e) {

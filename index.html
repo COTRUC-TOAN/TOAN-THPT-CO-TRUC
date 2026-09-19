@@ -1935,6 +1935,15 @@ function toggleExamPasswordField() {
         document.getElementById('std-class').focus();
         return;
     }
+            // KIỂM TRA GIỚI HẠN SỐ LẦN NỘP BÀI
+    const maxAttempts = (activeExam.maxAttempts !== undefined) ? activeExam.maxAttempts : (activeExam.mode === 'KIEMTRA' ? 1 : 0);
+    const cleanKey = `done_${activeExam.id}_${checkName.toLowerCase()}_${checkClass.toLowerCase()}`;
+    const currentAttempts = parseInt(localStorage.getItem(cleanKey) || '0', 10);
+
+    if (maxAttempts > 0 && currentAttempts >= maxAttempts) {
+        alert(`⚠️ Học sinh [${checkName} - ${checkClass}] đã làm bài này ${currentAttempts}/${maxAttempts} lần cho phép.\nHệ thống không chấp nhận nộp thêm bài nữa!`);
+        return;
+    }
             clearInterval(timerInterval);
             const name = document.getElementById('std-name').value.trim() || "Ẩn danh";
             const sClass = document.getElementById('std-class').value.trim() || "Tự do";

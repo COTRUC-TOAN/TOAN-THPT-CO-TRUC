@@ -2046,7 +2046,7 @@ function toggleExamPasswordField() {
                     expEl.innerHTML = `<strong>Đáp án đúng:</strong> <span style="color:#16a34a; font-weight:bold;">${dAns}</span> ${q.explanation ? `<br><strong>Lời giải:</strong> ${q.explanation}` : ''}`;
                 }
             });
-
+renderMath(document.getElementById('quiz-content'));
               let finalScore = maxPossibleScore > 0 ? ((totalWeightedScore / maxPossibleScore) * 10).toFixed(2) : '10.00';
             const resDiv = document.getElementById('quiz-result');
             resDiv.style.display = 'block';

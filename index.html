@@ -1906,6 +1906,18 @@ function toggleExamPasswordField() {
         document.getElementById('quiz-form').addEventListener('submit', function(e) { e.preventDefault(); submitQuiz(); });
 
         async function submitQuiz() {
+            const checkName = document.getElementById('std-name').value.trim();
+    const checkClass = document.getElementById('std-class').value.trim();
+    if (!checkName) {
+        alert("⚠️ Vui lòng nhập đầy đủ Họ và tên trước khi nộp bài!");
+        document.getElementById('std-name').focus();
+        return;
+    }
+    if (!checkClass || checkClass === "") {
+        alert("⚠️ Vui lòng chọn Lớp học của bạn trước khi nộp bài!");
+        document.getElementById('std-class').focus();
+        return;
+    }
             clearInterval(timerInterval);
             const name = document.getElementById('std-name').value.trim() || "Ẩn danh";
             const sClass = document.getElementById('std-class').value.trim() || "Tự do";

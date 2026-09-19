@@ -439,6 +439,7 @@ span.MathJax {
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <div class="form-row"><label>Chế Độ:</label><select class="form-input" id="new-exam-mode" onchange="toggleExamPasswordField()"><option value="LUYENTAP">🟢 Luyện Tập</option><option value="KIEMTRA">🔴 Kiểm Tra (Bảo Mật Cao)</option><option value="BAIGIANG">📘 Bài Giảng</option><option value="KAHOOT">⚡ Đấu Trường Kahoot</option></select></div>
                             <div class="form-row"><label>Thời Gian (Phút):</label><input type="number" class="form-input" id="new-exam-time" value="45"></div>
+                       <div class="form-row"><label>Số lần làm tối đa (0 = Không giới hạn):</label><input type="number" class="form-input" id="new-exam-max-attempts" value="2" min="0" placeholder="VD: 1, 2, 3..."></div>
                         </div>
                         
                         <div id="lecture-fields" style="display: none; background: #f8fafc; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
@@ -888,6 +889,7 @@ span.MathJax {
                         timeLimit: ex.timeLimit || ex.TimeLimit || 45,
                         startTime: ex.startTime || ex.StartTime || '',
                         deadline: ex.deadline || ex.Deadline || '',
+                        maxAttempts: (parsedQ.length > 0 && parsedQ[0].maxAttempts !== undefined) ? parsedQ[0].maxAttempts : (ex.mode === 'KIEMTRA' ? 1 : 0),
                         examPass: ex.examPass || ex.ExamPass || '',
                         youtubeUrl: ex.youtubeUrl || ex.youtubeurl || '',
                         pdfData: ex.pdfData || ex.pdfdata || '',
@@ -1455,6 +1457,10 @@ span.MathJax {
             const examPass = document.getElementById('new-exam-pass') ? document.getElementById('new-exam-pass').value.trim() : '';
             const startTime = document.getElementById('new-exam-start-time').value;
             const deadline = document.getElementById('new-exam-deadline').value;
+            const maxAttemptsVal = parseInt(document.getElementById('new-exam-max-attempts')?.value) || 0;
+if (selectedQuestions.length > 0) {
+    selectedQuestions[0].maxAttempts = maxAttemptsVal;
+}
 
             if (!examId || !title) { alert("⚠️ Vui lòng nhập đầy đủ Mã đề và Tên đề thi!"); return; }
             if (mode !== 'BAIGIANG' && (!selectedQuestions || selectedQuestions.length === 0)) {

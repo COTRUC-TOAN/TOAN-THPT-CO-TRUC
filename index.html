@@ -1670,6 +1670,12 @@ function renderScoresTable() {
                 select.innerHTML = `<option value="">-- Chọn lớp của bạn * --</option>` + teacherClasses.map(c => `<option value="${c}">${c}</option>`).join('');
                 classInput.parentNode.replaceChild(select, classInput);
             }
+            const lecClassInput = document.getElementById('lec-std-class');
+    if (lecClassInput && lecClassInput.tagName !== 'SELECT') {
+        const selectLec = document.createElement('select'); selectLec.id = 'lec-std-class'; selectLec.className = 'form-input'; selectLec.required = true;
+        selectLec.innerHTML = `<option value="">-- Chọn lớp của bạn * --</option>` + teacherClasses.map(c => `<option value="${c}">${c}</option>`).join('');
+        lecClassInput.parentNode.replaceChild(selectLec, lecClassInput);
+    }
         }
         function updateScoreClassFilter() {
             const select = document.getElementById('filter-score-class');

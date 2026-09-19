@@ -1976,6 +1976,7 @@ function toggleExamPasswordField() {
                 }
     
                 // TÔ MÀU TRỰC TIẾP TỪNG DÒNG ĐÁP ÁN (KHÔNG ĐỔI MÀU ĐỀ)
+                if (activeExam.mode !== 'KIEMTRA') {
                 const qNum = idx + 1;
                 const expEl = document.getElementById(`exp_q_${qNum}`);
 

@@ -2463,6 +2463,79 @@ function answerKahoot(selected, correct, btnEl) {
         } else {
             const gate = document.getElementById('teacher-portal-gate');
             if (gate) gate.style.display = 'flex';
-        }    </script>
+        }    
+        // LOGIC THỐNG KÊ KHẢO SÁT REAL-TIME
+        let surveyListenerRef = null;
+        function openSurveyStats(examId) {
+            const ex = examBank.find(e => e.id === examId);
+            if (!ex) return;
+            
+            document.getElementById('survey-modal-title').innerHTML = `<i class="fa-solid fa-chart-column"></i> KẾT QUẢ KHẢO SÁT: ${ex.title}`;
+            document.getElementById('survey-stats-modal').style.display = 'flex';
+            
+            if (surveyListenerRef) surveyListenerRef.off();
+            surveyListenerRef = db.ref(`surveys/${examId}/responses`);
+            
+            surveyListenerRef.on('value', snapshot => {
+                const val = snapshot.val();
+                const responses = val ? Object.values(val) : [];
+                const totalResp = responses.length;
+                document.getElementById('survey-total-respondents').innerText = totalResp;
+                
+                const container = document.getElementById('survey-stats-content');
+                if (totalResp === 0) {
+                    container.innerHTML = `<p style="text-align: center; color: #64748b; padding: 40px; font-size: 1.1rem;"><i class="fa-solid fa-spinner fa-spin"></i> Chưa có phản hồi nào. Mời quý Thầy/Cô tiếp tục bình chọn!</p>`;
+                    return;
+                }
+                
+                const questions = ex.questions || [];
+                container.innerHTML = questions.map((q, idx) => {
+                    const qId = q.id || `Q_${idx+1}`;
+                    const counts = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+                    
+                    responses.forEach(r => {
+                        const ans = r.answers ? r.answers[qId] : '';
+                        if (counts[ans] !== undefined) counts[ans]++;
+                    });
+                    
+                    const maxVal = Math.max(...Object.values(counts));
+                    
+                    const optsHtml = ['A', 'B', 'C', 'D'].map((optKey, i) => {
+                        const optText = q.options ? q.options[i] : '';
+                        if (!optText) return '';
+                        const count = counts[optKey];
+                        const pct = totalResp > 0 ? Math.round((count / totalResp) * 100) : 0;
+                        const isTop = (count === maxVal && maxVal > 0);
+                        
+                        return `
+                            <div style="margin-bottom: 12px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 1.05rem; margin-bottom: 5px;">
+                                    <span><strong>${optKey}.</strong> ${optText} ${isTop ? '<span style="color: #ea580c; font-weight: bold;">⭐ (Nhiều nhất)</span>' : ''}</span>
+                                    <span style="font-weight: bold; color: ${isTop ? '#ea580c' : '#1e40af'};">${pct}% (${count} người)</span>
+                                </div>
+                                <div style="background: #e2e8f0; height: 16px; border-radius: 10px; overflow: hidden;">
+                                    <div style="width: ${pct}%; background: ${isTop ? 'linear-gradient(90deg, #ea580c, #f97316)' : '#3b82f6'}; height: 100%; border-radius: 10px; transition: width 0.6s;"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    return `
+                        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 18px; margin-bottom: 18px;">
+                            <h4 style="color: #0f172a; margin-bottom: 14px; font-size: 1.15rem; line-height: 1.6;">Câu ${idx + 1}: ${q.q}</h4>
+                            ${optsHtml}
+                        </div>
+                    `;
+                }).join('');
+                
+                renderMath(container);
+            });
+        }
+
+        function closeSurveyStats() {
+            if (surveyListenerRef) surveyListenerRef.off();
+            document.getElementById('survey-stats-modal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

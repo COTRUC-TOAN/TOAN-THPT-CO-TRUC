@@ -1951,7 +1951,9 @@ function toggleExamPasswordField() {
             const btnSubmit = document.getElementById('btn-submit-quiz');
             btnSubmit.disabled = true;
 
-            let totalWeightedScore = 0; let maxPossibleScore = 0;
+          let totalWeightedScore = 0; let maxPossibleScore = 0;
+            let surveyResponses = {};
+
             processedQuestions.forEach((q, idx) => {
                 let qType = (q.type || 'MCQ').toUpperCase();
                 let weight = (qType === 'TF') ? 1.0 : ((qType === 'SA') ? 0.5 : 0.25);
@@ -1959,14 +1961,18 @@ function toggleExamPasswordField() {
 
                 if (qType === 'MCQ') {
                     let userAns = document.querySelector(`input[name="q_${idx + 1}"]:checked`)?.value || "";
+                    surveyResponses[q.id || `Q_${idx+1}`] = userAns;
                     if (userAns.trim().toUpperCase() === String(q.ans || "").trim().toUpperCase()) totalWeightedScore += weight;
                 } else if (qType === 'SA') {
                     let userAns = document.querySelector(`input[name="q_${idx + 1}"]`)?.value.trim() || "";
+                    surveyResponses[q.id || `Q_${idx+1}`] = userAns;
                     if (userAns.toLowerCase() === String(q.ans || "").trim().toLowerCase()) totalWeightedScore += weight;
                 } else if (qType === 'TF') {
+                    let subAnsList = ['a', 'b', 'c', 'd'].map(ch => document.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`)?.value || "");
+                    surveyResponses[q.id || `Q_${idx+1}`] = subAnsList.join('');
                     let correctSubCount = 0;
                     ['a', 'b', 'c', 'd'].forEach((ch, subIdx) => {
-                        let subAns = document.querySelector(`input[name="q_${idx + 1}_${ch}"]:checked`)?.value || "";
+                        let subAns = subAnsList[subIdx];
                         let correctSub = q.ansOptions ? q.ansOptions[subIdx] : 'D';
                         if (subAns === correctSub) correctSubCount++;
                     });

@@ -2056,6 +2056,22 @@ function toggleExamPasswordField() {
                 }
             });
 renderMath(document.getElementById('quiz-content'));
+            // XỬ LÝ RIÊNG CHO KHẢO SÁT: LƯU VÀO FIREBASE RỒI THÔNG BÁO CẢM ƠN (KHÔNG CHẤM ĐIỂM)
+            if (activeExam.mode === 'KHAOSAT') {
+                db.ref(`surveys/${activeExam.id}/responses`).push({
+                    name: name,
+                    class: sClass,
+                    time: new Date().toLocaleString("vi-VN"),
+                    answers: surveyResponses
+                });
+                document.getElementById('quiz-content').style.display = 'none';
+                document.getElementById('btn-submit-quiz').style.display = 'none';
+                const resDiv = document.getElementById('quiz-result');
+                resDiv.style.display = 'block';
+                resDiv.innerHTML = `📊 <strong>CẢM ƠN QUÝ THẦY/CÔ ĐÃ GÓP Ý!</strong><br>Ý kiến phản hồi của bạn đã được hệ thống ghi nhận thành công.`;
+                localStorage.setItem(cleanKey, currentAttempts + 1);
+                return; // Dừng hàm tại đây, không lưu điểm thi
+            }
               let finalScore = maxPossibleScore > 0 ? ((totalWeightedScore / maxPossibleScore) * 10).toFixed(2) : '10.00';
             const resDiv = document.getElementById('quiz-result');
             resDiv.style.display = 'block';

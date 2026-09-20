@@ -2539,6 +2539,60 @@ function answerKahoot(selected, correct, btnEl) {
             if (surveyListenerRef) surveyListenerRef.off();
             document.getElementById('survey-stats-modal').style.display = 'none';
         }
+        // XUẤT DỮ LIỆU ĐÓNG GÓI SẴN CHO AI NHẬN XÉT
+        let currentSurveyExObj = null;
+        let currentSurveyResponses = [];
+
+        // Cập nhật lưu vết mỗi khi nạp dữ liệu thống kê
+        const originalOpenSurveyStats = openSurveyStats;
+        openSurveyStats = function(examId) {
+            currentSurveyExObj = examBank.find(e => e.id === examId);
+            originalOpenSurveyStats(examId);
+            db.ref(`surveys/${examId}/responses`).on('value', snap => {
+                const val = snap.val();
+                currentSurveyResponses = val ? Object.values(val) : [];
+            });
+        };
+
+        function copySurveyDataForAI() {
+            if (!currentSurveyExObj || currentSurveyResponses.length === 0) {
+                alert("⚠️ Chưa có đủ dữ liệu phản hồi để xuất báo cáo cho AI!");
+                return;
+            }
+
+            const total = currentSurveyResponses.length;
+            let promptText = `Dưới đây là kết quả khảo sát thực tế từ ${total} giáo viên trong Hội đồng Sư phạm về thực trạng tạo đề và sử dụng hệ thống quản lý học tập:\n\n`;
+
+            const questions = currentSurveyExObj.questions || [];
+            questions.forEach((q, idx) => {
+                const qId = q.id || `Q_${idx+1}`;
+                const counts = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+                currentSurveyResponses.forEach(r => {
+                    const ans = r.answers ? r.answers[qId] : '';
+                    if (counts[ans] !== undefined) counts[ans]++;
+                });
+
+                promptText += `Câu ${idx + 1}: ${q.q.replace(/<[^>]*>/g, '')}\n`;
+                ['A', 'B', 'C', 'D'].forEach((k, i) => {
+                    if (q.options && q.options[i]) {
+                        const cnt = counts[k];
+                        const pct = Math.round((cnt / total) * 100);
+                        promptText += `   - ${k}. ${q.options[i].replace(/<[^>]*>/g, '')}: ${pct}% (${cnt} phiếu)\n`;
+                    }
+                });
+                promptText += `\n`;
+            });
+
+            promptText += `---
+YÊU CẦU DÀNH CHO AI:
+1. Tóm tắt 3 vấn đề nhức nhối nhất mà đại đa số giáo viên đang gặp phải dựa trên các con số % cao nhất ở trên.
+2. Đưa ra lời nhận xét khách quan, mang tính xây dựng về sự cần thiết phải có một công cụ số hóa tinh gọn hỗ trợ giáo viên.
+3. Viết một đoạn văn ngắn gọn (khoảng 150-200 từ) để người báo cáo có thể đọc trực tiếp trước Hội đồng Sư phạm và Ban Giám hiệu làm lời dẫn thuyết phục.`;
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                alert("🎉 Đã sao chép toàn bộ số liệu và mẫu câu lệnh!\nBây giờ cô chỉ cần mở Gemini/ChatGPT lên và nhấn Ctrl + V (Dán) là nhận ngay bài phân tích hoàn chỉnh.");
+            });
+        }
     </script>
 </body>
 </html>

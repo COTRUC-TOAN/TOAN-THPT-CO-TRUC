@@ -1739,7 +1739,10 @@ function renderScoresTable() {
             container.innerHTML = examBank.map(ex => `
                 <div class="exam-manage-row">
                     <div><strong>[Khối ${ex.grade}] ${ex.title}</strong> <span style="font-size:0.9rem; color:#64748b;">(Mã: ${ex.id} - ${ex.questions ? ex.questions.length : 0} câu)</span></div>
-                    <button class="btn-del-exam" onclick="deleteExamFromSystem('${ex.id}')"><i class="fa-solid fa-trash"></i> Xóa Đề</button>
+                <div style="display: flex; gap: 8px;">
+    ${ex.mode === 'KHAOSAT' ? `<button class="btn-start" style="background: #ea580c; padding: 6px 14px; font-size: 0.95rem;" onclick="openSurveyStats('${ex.id}')"><i class="fa-solid fa-chart-pie"></i> Xem Thống Kê</button>` : ''}
+    <button class="btn-del-exam" onclick="deleteExamFromSystem('${ex.id}')"><i class="fa-solid fa-trash"></i> Xóa Đề</button>
+</div>
                 </div>`).join('');
         }
         async function deleteExamFromSystem(examId) {

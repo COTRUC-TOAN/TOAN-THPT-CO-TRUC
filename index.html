@@ -626,6 +626,21 @@ span.MathJax {
             </div>
         </div>
     </div>
+    <!-- HỘP THOẠI THỐNG KÊ KHẢO SÁT REALTIME TRÌNH CHIẾU -->
+    <div id="survey-stats-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 999999; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 950px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden;">
+            <div style="padding: 18px 24px; background: #eff6ff; border-bottom: 2px solid #bfdbfe; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3 id="survey-modal-title" style="margin: 0; color: #1e40af; font-size: 1.3rem;"><i class="fa-solid fa-chart-column"></i> KẾT QUẢ KHẢO SÁT TRỰC TUYẾN</h3>
+                    <span style="font-size: 0.95rem; color: #64748b;">Tổng số người đã phản hồi: <strong id="survey-total-respondents" style="color: #ea580c; font-size: 1.2rem;">0</strong> phiếu</span>
+                </div>
+                <button onclick="closeSurveyStats()" style="background: #fee2e2; border: none; color: #dc2626; font-size: 1.4rem; font-weight: bold; width: 38px; height: 38px; border-radius: 50%; cursor: pointer;">&times;</button>
+            </div>
+            <div id="survey-stats-content" style="padding: 24px; overflow-y: auto; flex-grow: 1;">
+                <p style="text-align: center; color: #64748b;">Đang kết nối dữ liệu...</p>
+            </div>
+        </div>
+    </div>
     <!-- ĐÁNH DẤU BẢN QUYỀN TÁC GIẢ -->
     <div style="text-align: center; padding: 25px 15px 15px 15px; margin-top: 40px; color: #64748b; font-size: 1rem; border-top: 1px solid #e2e8f0; line-height: 1.6; font-family: 'Times New Roman', Times, serif;">
         <strong>© 2026 Hệ thống Khảo thí & Học tập Số hóa</strong><br>

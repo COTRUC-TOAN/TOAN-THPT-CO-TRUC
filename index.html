@@ -743,14 +743,17 @@ span.MathJax {
             if (!tId) { alert("Vui lòng chọn một Giáo viên!"); return; }
             if (!pass) { alert("Vui lòng nhập Mật khẩu quản trị của file Sheets!"); return; }
 
-            let targetUrl = getTeacherScriptUrl(tId);
-            if (!targetUrl) {
-                if (!urlInput || !urlInput.startsWith('https://script.google.com/')) {
-                    alert("Vui lòng dán chính xác đường link Google Apps Script (.exec) của bạn!");
-                    return;
-                }
-                targetUrl = urlInput;
-                localStorage.setItem('teacher_script_url_' + tId, targetUrl);
+        // NẾU CÓ DÁN LINK MỚI TRONG Ô -> ƯU TIÊN LẤY LINK MỚI ĐỂ GHI ĐÈ XÓA LINK CŨ
+            let targetUrl = urlInput || getTeacherScriptUrl(tId);
+
+            if (!targetUrl || !targetUrl.startsWith('https://script.google.com/')) {
+                alert("Vui lòng dán chính xác đường link Google Apps Script (.exec) của Thầy/Cô!");
+                return;
+            }
+
+            // Luôn lưu link mới nhất vào máy để triệt tiêu link cũ
+            if (!TEACHERS_DIRECTORY[tId].defaultUrl && urlInput) {
+                localStorage.setItem('teacher_script_url_' + tId, urlInput);
             }
 
             document.body.style.cursor = 'wait';

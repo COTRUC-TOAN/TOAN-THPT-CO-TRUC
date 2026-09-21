@@ -653,17 +653,56 @@ span.MathJax {
 
     <script>
         // DANH MỤC GIÁO VIÊN HỆ THỐNG
+     // DANH MỤC GIÁO VIÊN HỆ THỐNG
         const TEACHERS_DIRECTORY = {
-            'trucnt':  { name: 'Cô Nguyễn Thanh Trúc', subject: 'Toán', defaultUrl: 'https://script.google.com/macros/s/AKfycbwgqygMftm-_1D5VbRi8X-JFxJv1UHiKmTid5ulPiOHy9Zv5nib3fVDoXb7S92Sj_Z8wA/exec',
-                // CÔ ĐIỀN ĐÚNG CÁC LỚP CỦA CÔ VÀO ĐÂY:
-                classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2","HT10" "Lớp tự do"]},
-            'vanntkt': { name: 'Cô Nguyễn Thị Kiều Tuyết Vân', subject: 'Toán', defaultUrl: '',classes: ["12A6", "12A10", "11A2","11A8","Lớp tự do"] },
-            'hoantt':  { name: 'Cô Nguyễn Thị Thu Hoa', subject: 'Toán', defaultUrl: '',classes: ["12A5", "12A8", "11A4","11A5","Lớp tự do"] },
-            'nhuntq':  { name: 'Cô Nguyễn Thị Quỳnh Như', subject: 'Toán', defaultUrl: '',classes: ["12A2", "12A11", "10A1","10A8","Lớp tự do"]  },
-            'trunght': { name: 'Thầy Hồ Thanh Trung', subject: 'Toán', defaultUrl: '', classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2","HT10" "Lớp tự do"]}, },
-            'nampn':   { name: 'Thầy Phạm Nhật Nam', subject: 'Toán', defaultUrl: '', classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2","HT10" "Lớp tự do"]}, },
-            'chauttm': { name: 'Cô Trần Thị Minh Châu', subject: 'Toán', defaultUrl: '', classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2","HT10" "Lớp tự do"]}, },
-            'hanhvv': { name: 'Thầy Vũ Văn Hanh', subject: 'GD Quốc Phòng', defaultUrl: '',,classes: ["12A1", "12A3", "12A5","12A7","12A9","11A1,"11A3","11A7","10A1","10A3","10A5","Lớp tự do"]  }
+            'trucnt':  { 
+                name: 'Cô Nguyễn Thanh Trúc', 
+                subject: 'Toán', 
+                defaultUrl: 'https://script.google.com/macros/s/AKfycbwgqygMftm-_1D5VbRi8X-JFxJv1UHiKmTid5ulPiOHy9Zv5nib3fVDoXb7S92Sj_Z8wA/exec',
+                classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2", "HT10", "Lớp tự do"]
+            },
+            'vanntkt': { 
+                name: 'Cô Nguyễn Thị Kiều Tuyết Vân', 
+                subject: 'Toán', 
+                defaultUrl: '',
+                classes: ["12A6", "12A10", "11A2", "11A8", "Lớp tự do"] 
+            },
+            'hoantt':  { 
+                name: 'Cô Nguyễn Thị Thu Hoa', 
+                subject: 'Toán', 
+                defaultUrl: '',
+                classes: ["12A5", "12A8", "11A4", "11A5", "Lớp tự do"] 
+            },
+            'nhuntq':  { 
+                name: 'Cô Nguyễn Thị Quỳnh Như', 
+                subject: 'Toán', 
+                defaultUrl: '',
+                classes: ["12A2", "12A11", "10A1", "10A8", "Lớp tự do"]  
+            },
+            'trunght': { 
+                name: 'Thầy Hồ Thanh Trung', 
+                subject: 'Toán', 
+                defaultUrl: '', 
+                classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2", "HT10", "Lớp tự do"]
+            },
+            'nampn':   { 
+                name: 'Thầy Phạm Nhật Nam', 
+                subject: 'Toán', 
+                defaultUrl: '', 
+                classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2", "HT10", "Lớp tự do"]
+            },
+            'chauttm': { 
+                name: 'Cô Trần Thị Minh Châu', 
+                subject: 'Toán', 
+                defaultUrl: '', 
+                classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2", "HT10", "Lớp tự do"]
+            },
+            'hanhvv':  { 
+                name: 'Thầy Vũ Văn Hanh', 
+                subject: 'GD Quốc Phòng', 
+                defaultUrl: '',
+                classes: ["12A1", "12A3", "12A5", "12A7", "12A9", "11A1", "11A3", "11A7", "10A1", "10A3", "10A5", "Lớp tự do"]  
+            }
         };
 
         let currentTeacherId = localStorage.getItem('current_teacher_id') || '';
@@ -1697,19 +1736,37 @@ function renderScoresTable() {
                     <span>${c}</span><button onclick="deleteClass('${c}')" style="background: none; border: none; color: #dc2626; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
                 </div>`).join('');
         }
+     // HÀM LẤY ĐÚNG LỚP CỦA GIÁO VIÊN ĐANG CHỌN
+        function getCurrentTeacherClasses() {
+            const tId = currentTeacherId || 'trucnt';
+            if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].classes && TEACHERS_DIRECTORY[tId].classes.length > 0) {
+                return TEACHERS_DIRECTORY[tId].classes;
+            }
+            return ["10A1", "10A2", "11A1", "11A2", "12A1", "12A2", "Lớp tự do"];
+        }
+
         function updateStudentClassDropdown() {
+            const activeClasses = getCurrentTeacherClasses();
+
             const classInput = document.getElementById('std-class');
-            if (classInput && classInput.tagName !== 'SELECT') {
-                const select = document.createElement('select'); select.id = 'std-class'; select.className = 'form-input'; select.required = true;
-                select.innerHTML = `<option value="">-- Chọn lớp của bạn * --</option>` + teacherClasses.map(c => `<option value="${c}">${c}</option>`).join('');
+            if (classInput) {
+                const select = document.createElement('select'); 
+                select.id = 'std-class'; 
+                select.className = 'form-input'; 
+                select.required = true;
+                select.innerHTML = `<option value="">-- Chọn lớp của bạn * --</option>` + activeClasses.map(c => `<option value="${c}">${c}</option>`).join('');
                 classInput.parentNode.replaceChild(select, classInput);
             }
+            
             const lecClassInput = document.getElementById('lec-std-class');
-    if (lecClassInput && lecClassInput.tagName !== 'SELECT') {
-        const selectLec = document.createElement('select'); selectLec.id = 'lec-std-class'; selectLec.className = 'form-input'; selectLec.required = true;
-        selectLec.innerHTML = `<option value="">-- Chọn lớp của bạn * --</option>` + teacherClasses.map(c => `<option value="${c}">${c}</option>`).join('');
-        lecClassInput.parentNode.replaceChild(selectLec, lecClassInput);
-    }
+            if (lecClassInput) {
+                const selectLec = document.createElement('select'); 
+                selectLec.id = 'lec-std-class'; 
+                selectLec.className = 'form-input'; 
+                selectLec.required = true;
+                selectLec.innerHTML = `<option value="">-- Chọn lớp của bạn * --</option>` + activeClasses.map(c => `<option value="${c}">${c}</option>`).join('');
+                lecClassInput.parentNode.replaceChild(selectLec, lecClassInput);
+            }
         }
         function updateScoreClassFilter() {
             const select = document.getElementById('filter-score-class');
@@ -2394,8 +2451,9 @@ function answerKahoot(selected, correct, btnEl) {
     }, 1500);
 }
 
-        function copyExamLink(id) {
-            const studentUrl = `${window.location.origin}${window.location.pathname}?exam=${id}`;
+       function copyExamLink(id) {
+            const tId = currentTeacherId || 'trucnt';
+            const studentUrl = `${window.location.origin}${window.location.pathname}?exam=${id}&t=${tId}`;
             navigator.clipboard.writeText(studentUrl).then(() => {
                 const toast = document.getElementById('toast'); toast.style.display = 'block';
                 setTimeout(() => { toast.style.display = 'none'; }, 2500);
@@ -2444,17 +2502,20 @@ function answerKahoot(selected, correct, btnEl) {
         const urlParamsCheck = new URLSearchParams(window.location.search);
         const hasExamParam = urlParamsCheck.get('exam');
 
-       // NẾU LÀ ĐƯỜNG LINK HỌC SINH LÀM BÀI: LUÔN ẨN MÀN HÌNH CHẶN VÀ VÀO THI NGAY
+  // NẾU LÀ ĐƯỜNG LINK HỌC SINH LÀM BÀI: LUÔN ẨN MÀN HÌNH CHẶN VÀ VÀO THI NGAY
         if (hasExamParam) {
             const gate = document.getElementById('teacher-portal-gate');
             if (gate) gate.style.display = 'none';
             const portal = document.getElementById('portal-view');
             if (portal) portal.style.display = 'none';
 
-          // Dùng script mặc định nếu chưa chọn giáo viên
-            if (!SCRIPT_URL) {
-                SCRIPT_URL = TEACHERS_DIRECTORY['trucnt'].defaultUrl;
-            }
+            // Tự động nhận diện link này là của Giáo viên nào gửi (dựa vào đuôi &t=...)
+            const tParam = urlParamsCheck.get('t') || 'trucnt';
+            currentTeacherId = tParam;
+            SCRIPT_URL = getTeacherScriptUrl(tParam) || TEACHERS_DIRECTORY['trucnt'].defaultUrl;
+
+            // Đổ ngay danh sách lớp của đúng giáo viên đó vào menu chọn
+            updateStudentClassDropdown();
             fetchData();
         }
         // NẾU VÀO TRANG CHỦ BÌNH THƯỜNG

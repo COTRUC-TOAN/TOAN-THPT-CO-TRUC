@@ -703,6 +703,12 @@ span.MathJax {
                 classes: ["12A1", "12A3", "12A5", "12A7", "12A9", "11A1", "11A3", "11A7", "10A1", "10A3", "10A5", "Lớp tự do"]  
             }
         };
+        // TỰ ĐỘNG XÓA BỘ NHỚ CŨ TRÊN MÁY CÔ VÂN ĐỂ HIỆN BẢNG ĐĂNG NHẬP LẠI TỪ ĐẦU
+        if (!localStorage.getItem('force_reset_session_2026')) {
+            localStorage.removeItem('current_teacher_id');
+            localStorage.removeItem('teacher_script_url_vanntkt');
+            localStorage.setItem('force_reset_session_2026', 'true');
+        }
         let currentTeacherId = localStorage.getItem('current_teacher_id') || '';
         let SCRIPT_URL = '';
 
@@ -743,18 +749,13 @@ span.MathJax {
             if (!tId) { alert("Vui lòng chọn một Giáo viên!"); return; }
             if (!pass) { alert("Vui lòng nhập Mật khẩu quản trị của file Sheets!"); return; }
 
-        // NẾU CÓ DÁN LINK MỚI TRONG Ô -> ƯU TIÊN LẤY LINK MỚI ĐỂ GHI ĐÈ XÓA LINK CŨ
             let targetUrl = urlInput || getTeacherScriptUrl(tId);
-
             if (!targetUrl || !targetUrl.startsWith('https://script.google.com/')) {
                 alert("Vui lòng dán chính xác đường link Google Apps Script (.exec) của Thầy/Cô!");
                 return;
             }
-
-            // Luôn lưu link mới nhất vào máy để triệt tiêu link cũ
-            if (!TEACHERS_DIRECTORY[tId].defaultUrl && urlInput) {
-                localStorage.setItem('teacher_script_url_' + tId, urlInput);
-            }
+            // Luôn lưu link mới vào máy
+            localStorage.setItem('teacher_script_url_' + tId, targetUrl);
 
             document.body.style.cursor = 'wait';
             try {

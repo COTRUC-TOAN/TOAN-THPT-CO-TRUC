@@ -678,7 +678,7 @@ span.MathJax {
             return '';
         }
 
-        function handleTeacherSelectChange() {
+      function handleTeacherSelectChange() {
             const tId = document.getElementById('gate-select-teacher').value;
             const urlRow = document.getElementById('gate-script-url-row');
             const urlInput = document.getElementById('gate-script-url-input');
@@ -686,13 +686,15 @@ span.MathJax {
                 urlRow.style.display = 'none';
                 return;
             }
-            const existingUrl = getTeacherScriptUrl(tId);
-            if (!existingUrl) {
+            // Nếu là giáo viên chưa có link mặc định cứng (như cô Vân), LUÔN HIỆN Ô ĐỂ DÁN/ĐỔI LINK
+            if (!TEACHERS_DIRECTORY[tId].defaultUrl) {
                 urlRow.style.display = 'block';
-                urlInput.value = '';
+                const existingUrl = localStorage.getItem('teacher_script_url_' + tId) || '';
+                urlInput.value = existingUrl;
+                urlInput.placeholder = existingUrl ? "Link hiện tại (Dán link mới vào đây để đổi)" : "Dán link https://script.google.com/.../exec vào đây";
             } else {
                 urlRow.style.display = 'none';
-                urlInput.value = existingUrl;
+                urlInput.value = TEACHERS_DIRECTORY[tId].defaultUrl;
             }
         }
 

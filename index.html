@@ -1004,12 +1004,32 @@ span.MathJax {
             });
         }
 
-  function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
+function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     let parsedArr = [];
     let tempDiv = document.createElement('div');
-    tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
+    let preprocessedHtml = (rawHtml || '').normalize('NFC');
 
-    // 1. CÔ LẬP TOÀN BỘ THẺ ẢNH (Bảo vệ ảnh không bị ảnh hưởng)
+    // 1. TỰ ĐỘNG BÓC TÁCH MÃ CODE HÌNH [HINH: ...] THÀNH ẢNH THẬT
+    preprocessedHtml = preprocessedHtml.replace(/\[(?:H[IÌ]NH\vert{}IMG\vert{}IMAGE)\s*:\s*([^\]]+)\]/gi, function(match, rawContent) {
+        let cleanUrl = rawContent.trim().replace(/^<|>$/g, '');
+        let directImgUrl = cleanUrl;
+
+        // Tự động chuyển link Google Drive thành link xem ảnh trực tiếp
+        if (cleanUrl.includes('drive.google.com')) {
+            let driveIdMatch = cleanUrl.match(/\/d\/([a-zA-Z0-9_-]+)/) || cleanUrl.match(/id=([a-zA-Z0-9_-]+)/);
+            if (driveIdMatch && driveIdMatch[1]) {
+                directImgUrl = `https://lh3.googleusercontent.com/d/${driveIdMatch[1]}`;
+            }
+        } else if (!cleanUrl.startsWith('http') && cleanUrl.length > 20 && !cleanUrl.includes(' ')) {
+            directImgUrl = `https://lh3.googleusercontent.com/d/${cleanUrl}`;
+        }
+
+        return `<div style="text-align: center; margin: 10px 0;"><img src="${directImgUrl}" style="max-width: 95%; max-height: 380px; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #cbd5e1;" loading="lazy" /></div>`;
+    });
+
+    tempDiv.innerHTML = preprocessedHtml;
+
+    // 2. CÔ LẬP TOÀN BỘ THẺ ẢNH (Bảo vệ cả ảnh [HINH: ...] và ảnh dán trực tiếp từ Word)
     let imageMap = [];
     let imgNodes = tempDiv.querySelectorAll('img');
     imgNodes.forEach((img, i) => {
@@ -1018,7 +1038,7 @@ span.MathJax {
         img.outerHTML = placeholder;
     });
 
-    // 2. CHUẨN HÓA VĂN BẢN VÀ DỌN SẠCH RÁC TỪ WORD
+    // 3. CHUẨN HÓA VĂN BẢN VÀ DỌN SẠCH RÁC TỪ WORD
     let textContent = tempDiv.innerHTML
         .replace(/<[ub]>([A-D])[\.\)]<\/[ub]>/gi, '$1.')
         .replace(/<br\s*[\/]?>/gi, '\n')
@@ -1031,13 +1051,13 @@ span.MathJax {
     // Chuẩn hóa dòng Đáp án
     textContent = textContent.replace(/(?:Đ\s*[\/]?\s*A|Đáp\s*án)[:\s]*([A-D])/gi, '\nĐáp án: $1\n');
 
-    // ÉP MỌI TỪ "Câu X" HOẶC "Bài X" LUÔN NẰM Ở ĐẦU DÒNG MỚI ĐỂ CHIA CẮT CHÍNH XÁC
+    // Ép từ "Câu X" hoặc "Bài X" luôn nằm đầu dòng
     textContent = textContent.replace(/([^\n])\s*(C[âa]u|B[àa]i|C)\s*(\d+)[\s:.]/gi, '$1\n\nCâu $3.');
     textContent = textContent.replace(/\n\s*\n+/g, '\n\n');
 
     textContent = cleanLatexAndText(textContent);
 
-    // 3. CHIA TỪNG BLOCK CÂU HỎI THÔNG MINH (Dựa trên từ khóa Câu X hoặc Bài X)
+    // 4. CHIA TỪNG CÂU HỎI
     let blocks = textContent.split(/(?:^|\n)\s*(?=(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.]?)/i)
         .map(b => b.trim())
         .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+/i.test(b));
@@ -1067,7 +1087,7 @@ span.MathJax {
             block = block.replace(expMatch[0], '').trim();
         }
 
-        // KIỂM TRA ĐỊNH DẠNG: ĐÚNG / SAI (TF)
+        // 1. DẠNG ĐÚNG / SAI (TF)
         let hasTfOptions = block.search(/(?:^|\s)a[\)\.]/) !== -1 && block.search(/(?:^|\s)b[\)\.]/) !== -1;
 
         if (hasTfOptions) {
@@ -1097,7 +1117,7 @@ span.MathJax {
             if (!ans || ans.length !== 4) ans = 'DDDS';
             ansOptions = ans.split('');
         } 
-        // KIỂM TRA ĐỊNH DẠNG: TRẮC NGHIỆM (MCQ)
+        // 2. DẠNG TRẮC NGHIỆM (MCQ)
         else if (block.search(/(?:^|\s)A[\.\)]/) !== -1 && block.search(/(?:^|\s)B[\.\)]/) !== -1) {
             detectedType = 'MCQ';
             let ansMatch = block.match(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*([A-D])\b/i);
@@ -1121,15 +1141,9 @@ span.MathJax {
             options[3] = mOptD ? mOptD[1].trim() : '';
             options[3] = options[3].replace(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*[A-D]?\s*$/i, '').trim();
 
-            if (!ans) {
-                if (rawHtml.includes('<u>A') || rawHtml.includes('underline">A')) ans = 'A';
-                else if (rawHtml.includes('<u>B') || rawHtml.includes('underline">B')) ans = 'B';
-                else if (rawHtml.includes('<u>C') || rawHtml.includes('underline">C')) ans = 'C';
-                else if (rawHtml.includes('<u>D') || rawHtml.includes('underline">D')) ans = 'D';
-                else ans = 'A';
-            }
+            if (!ans) ans = 'A';
         } 
-        // CÂU HỎI TRẢ LỜI NGẮN (SA)
+        // 3. DẠNG TRẢ LỜI NGẮN (SA)
         else {
             detectedType = 'SA';
             let ansGeneral = block.match(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*([A-Za-z0-9,\.\-]+)/i);

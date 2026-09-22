@@ -364,7 +364,6 @@ span.MathJax {
                 <button class="btn-t-tab active" id="btn-t-scores" onclick="switchTeacherTab('scores')"><i class="fa-solid fa-chart-pie"></i> Sổ Điểm Điện Tử</button>
                 <button class="btn-t-tab" id="btn-t-exams" onclick="switchTeacherTab('exams')"><i class="fa-solid fa-list-check"></i> Quản Lý Đề Thi</button>
                 <button class="btn-t-tab" id="btn-t-creator" onclick="switchTeacherTab('creator')"><i class="fa-solid fa-wand-magic-sparkles"></i> Tạo & Soạn Đề Mới</button>
-                <button class="btn-t-tab" id="btn-t-classes" onclick="switchTeacherTab('classes')"><i class="fa-solid fa-school"></i> Quản Lý Danh Sách Lớp</button>
                 <button type="button" class="btn-t-tab" onclick="openChangePassModal()" style="margin-left: auto; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1;"><i class="fa-solid fa-key"></i> Đổi Mật Khẩu</button>
             </div>
 
@@ -513,15 +512,7 @@ span.MathJax {
                 </div>
             </div>
 
-            <!-- TAB 4: QUẢN LÝ LỚP -->
-            <div id="sec-t-classes" style="display: none;">
-                <h3 style="color: #1e40af; margin-bottom: 15px;"><i class="fa-solid fa-school"></i> Cấu Hình Danh Sách Lớp Học</h3>
-                <div style="display: flex; gap: 10px; margin-bottom: 15px; max-width: 500px;">
-                    <input type="text" class="form-input" id="new-class-name" placeholder="Nhập tên lớp (VD: 12A1, Học thêm 1...)">
-                    <button class="btn-start" style="background: var(--primary); white-space: nowrap;" onclick="addNewClass()">Thêm Lớp</button>
-                </div>
-                <div id="teacher-class-list" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
-            </div>
+            
         </div>
 
         <!-- MÀN HÌNH KHÓA -->
@@ -710,7 +701,7 @@ span.MathJax {
             localStorage.setItem('force_reset_session_2026', 'true');
         }
         let currentTeacherId = localStorage.getItem('current_teacher_id') || '';
-        let SCRIPT_URL = '';
+               let SCRIPT_URL = '';
 
         function getTeacherScriptUrl(tId) {
             let savedUrl = localStorage.getItem('teacher_script_url_' + tId);

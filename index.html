@@ -704,11 +704,13 @@ span.MathJax {
                let SCRIPT_URL = '';
 
         function getTeacherScriptUrl(tId) {
-            let savedUrl = localStorage.getItem('teacher_script_url_' + tId);
-            if (savedUrl && savedUrl.trim() !== '') return savedUrl.trim();
+            // ƯU TIÊN SỐ 1: Luôn lấy link cố định viết trong code của trang này
             if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].defaultUrl) {
                 return TEACHERS_DIRECTORY[tId].defaultUrl;
             }
+            // Chỉ khi nào trong code bỏ trống mới tìm trong bộ nhớ máy
+            let savedUrl = localStorage.getItem('teacher_script_url_' + tId);
+            if (savedUrl && savedUrl.trim() !== '') return savedUrl.trim();
             return '';
         }
 

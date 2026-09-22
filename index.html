@@ -1563,13 +1563,10 @@ if (selectedQuestions.length > 0) {
                     renderExams();
                     showPortalView();
                 }
-            } catch (err) {
-                document.body.style.cursor = 'default';
-                examBank.unshift(newExamObj);
-                renderExams();
-                alert("🎉 Đã xuất bản đề thi thành công!");
-                showPortalView();
-            }
+         } catch (err) {
+    document.body.style.cursor = 'default';
+    alert("❌ Lỗi kết nối máy chủ! Đề thi CHƯA được lưu vào Google Sheets. Vui lòng kiểm tra lại đường link Apps Script.");
+}
         }
 
         // ĐỔI MẬT KHẨU

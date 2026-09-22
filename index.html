@@ -1030,13 +1030,13 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
     tempDiv.innerHTML = preprocessedHtml;
 
-    // 2. CÔ LẬP TOÀN BỘ THẺ ẢNH ĐỂ BẢO VỆ
+    // 2. CÔ LẬP TOÀN BỘ ẢNH VÀ SVG (Bảo vệ cả ảnh TikZ và ảnh [HINH:...])
     let imageMap = [];
-    let imgNodes = tempDiv.querySelectorAll('img');
-    imgNodes.forEach((img, i) => {
-        let placeholder = `___IMG_HOLDER_${i}___`;
-        imageMap.push({ key: placeholder, html: img.outerHTML });
-        img.outerHTML = placeholder;
+    let imgNodes = tempDiv.querySelectorAll('img, svg');
+    imgNodes.forEach((node, i) => {
+        let placeholder = `___ELEMENT_HOLDER_${i}___`;
+        imageMap.push({ key: placeholder, html: node.outerHTML });
+        node.outerHTML = placeholder;
     });
 
     // 3. CHUẨN HÓA VĂN BẢN VÀ DỌN SẠCH RÁC TỪ WORD
@@ -1110,7 +1110,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             if (!ans || ans.length !== 4) ans = 'DDDS';
             ansOptions = ans.split('');
         } 
-        // 2. DẠNG TRẮC NGHIỆM (MCQ) - CHUẨN GỐC NHẬN DIỆN ĐỦ A, B, C, D
+        // 2. DẠNG TRẮC NGHIỆM (MCQ) - ĐÃ SỬA DÙNG ĐÚNG BIẾN splitA ĐỂ NHẬN ĐỦ A, B, C, D
         else if (block.search(/(?:^|\s)A[\.\)]/) !== -1 && block.search(/(?:^|\s)B[\.\)]/) !== -1) {
             detectedType = 'MCQ';
             let ansMatch = block.match(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*([A-D])\b/i);

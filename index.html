@@ -1176,10 +1176,78 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
     return parsedArr;
 }
-     function parseDirectExam() {
-    const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
+     // ================================================================
+// 1. HÀM GỬI MÃ TIKZ LÊN MÁY CHỦ KROKI ĐỂ VẼ RA ẢNH ĐỒ THỊ SVG
+// ================================================================
+async function convertTikzCodeToSvg(rawHtml) {
+    const fullLatexRegex = /\\documentclass[\s\S]*?\\end\{document\}/gi;
+    const standaloneTikzRegex = /\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/gi;
+
+    let matches = rawHtml.match(fullLatexRegex) || rawHtml.match(standaloneTikzRegex);
+    if (!matches || matches.length === 0) return rawHtml;
+
+    for (let codeBlock of matches) {
+        let cleanCode = codeBlock
+            .replace(/<br\s*[\/]?>/gi, '\n')
+            .replace(/<[^>]+>/g, '')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&')
+            .trim();
+
+        if (!cleanCode.includes('\\documentclass')) {
+            cleanCode = `\\documentclass[border=2pt]{standalone}\n\\usepackage{amsmath,amssymb}\n\\usepackage{tikz}\n\\usepackage{pgfplots}\n\\pgfplotsset{compat=1.18}\n\\begin{document}\n${cleanCode}\n\\end{document}`;
+        }
+
+        try {
+            const res = await fetch("https://kroki.io/tikz/svg", {
+                method: "POST",
+                headers: { "Content-Type": "text/plain; charset=UTF-8" },
+                body: cleanCode
+            });
+
+            if (res.ok) {
+                const svgText = await res.text();
+                const base64Svg = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgText)));
+                const imgTag = `<div style="text-align:center; margin:12px 0;"><img src="${base64Svg}" style="max-width:90%; max-height:360px; height:auto; border:1px solid #cbd5e1; border-radius:8px; padding:6px; background:#fff;" /></div>`;
+                rawHtml = rawHtml.replace(codeBlock, imgTag);
+            }
+        } catch (e) {
+            console.error("Lỗi khi kết nối đến máy chủ biên dịch TikZ:", e);
+        }
+    }
+    return rawHtml;
+}
+
+// ================================================================
+// 2. HÀM TỰ ĐỘNG PHÂN TÍCH (BẬT CHẾ ĐỘ CHỜ VẼ HÌNH XONG MỚI CẮT CÂU)
+// ================================================================
+async function parseDirectExam() {
+    let rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
     if (!rawHtml) { alert("Vui lòng dán văn bản đề thi!"); return; }
     
+    const btn = document.querySelector('button[onclick="parseDirectExam()"]');
+    const oldBtnText = btn ? btn.innerHTML : '';
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang phân tích & vẽ hình...';
+    }
+    document.body.style.cursor = 'wait';
+
+    try {
+        rawHtml = await convertTikzCodeToSvg(rawHtml);
+        document.getElementById('direct-raw-text').innerHTML = rawHtml;
+    } catch (err) {
+        console.error("Lỗi khi chuyển đổi TikZ:", err);
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = oldBtnText;
+        }
+        document.body.style.cursor = 'default';
+    }
+
     const currentGradeVal = document.getElementById('new-exam-grade').value;
     const currentTopicVal = document.getElementById('new-exam-topic').value;
     const currentMode = document.getElementById('new-exam-mode').value;
@@ -1189,7 +1257,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
     
     let previewHtml = directParsedQuestions.map((q, i) => {
-        if (!q.timeLimit) q.timeLimit = 30; // Mặc định 30 giây cho Kahoot
+        if (!q.timeLimit) q.timeLimit = 30;
 
         let optsHtml = '';
         if (q.type === 'TF') {
@@ -1199,7 +1267,6 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         }
         let expPreviewHtml = q.explanation ? `<div style="margin-top: 6px; padding: 6px; background: #f0fdf4; border-left: 3px solid #16a34a; font-size: 0.95rem; color: #166534;"><strong>Lời giải:</strong> ${q.explanation}</div>` : '';
 
-        // CHỈ HIỆN Ô THỜI GIAN KHI LÀ KAHOOT
         let timeSelectHtml = isKahoot ? `
             <div style="display: inline-flex; align-items: center; gap: 4px; margin-left: 8px;">
                 <label style="font-size: 0.85rem; font-weight: bold; color: #7c3aed;"><i class="fa-regular fa-clock"></i> Thời gian:</label>

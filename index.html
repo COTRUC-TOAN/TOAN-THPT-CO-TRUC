@@ -1012,7 +1012,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     let preprocessedHtml = (rawHtml || '').normalize('NFC');
 
     // 1. TỰ ĐỘNG BÓC TÁCH MÃ CODE HÌNH [HINH: ...] THÀNH ẢNH THẬT
-    preprocessedHtml = preprocessedHtml.replace(/\[(?:H[IÌ]NH\vert{}IMG\vert{}IMAGE)\s*:\s*([^\]]+)\]/gi, function(match, rawContent) {
+preprocessedHtml = preprocessedHtml.replace(/\[(?:H[IÌ]NH|IMG|IMAGE)\s*:\s*([^\]]+)\]/gi, function(match, rawContent) {
         let cleanUrl = rawContent.trim().replace(/^<|>$/g, '');
         let directImgUrl = cleanUrl;
 
@@ -1176,8 +1176,8 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
     return parsedArr;
 }
-     // ================================================================
-// 1. HÀM GỬI MÃ TIKZ LÊN MÁY CHỦ KROKI ĐỂ VẼ RA ẢNH ĐỒ THỊ SVG
+   // ================================================================
+// 1. HÀM BIÊN DỊCH TIKZ ĐÃ TỐI ƯU TỐC ĐỘ (CHẠY SONG SONG + TỰ NGẮT TIMEOUT)
 // ================================================================
 async function convertTikzCodeToSvg(rawHtml) {
     const fullLatexRegex = /\\documentclass[\s\S]*?\\end\{document\}/gi;
@@ -1186,7 +1186,10 @@ async function convertTikzCodeToSvg(rawHtml) {
     let matches = rawHtml.match(fullLatexRegex) || rawHtml.match(standaloneTikzRegex);
     if (!matches || matches.length === 0) return rawHtml;
 
-    for (let codeBlock of matches) {
+    matches = [...new Set(matches)]; // Lọc trùng
+
+    // Gửi biên dịch tất cả các hình cùng một lúc để không phải chờ cộng dồn thời gian
+    const renderTasks = matches.map(async (codeBlock) => {
         let cleanCode = codeBlock
             .replace(/<br\s*[\/]?>/gi, '\n')
             .replace(/<[^>]+>/g, '')
@@ -1194,6 +1197,8 @@ async function convertTikzCodeToSvg(rawHtml) {
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>')
             .replace(/&amp;/g, '&')
+            // Lọc bỏ gói vietnam để tránh làm máy chủ TeX quốc tế bị treo lỗi
+            .replace(/\\usepackage(\[[^\]]*\])?\{vietnam\}/gi, '')
             .trim();
 
         if (!cleanCode.includes('\\documentclass')) {
@@ -1201,22 +1206,37 @@ async function convertTikzCodeToSvg(rawHtml) {
         }
 
         try {
+            // Giới hạn tối đa 7 giây, nếu máy chủ quá tải sẽ tự ngắt tránh treo web
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), 7000);
+
             const res = await fetch("https://kroki.io/tikz/svg", {
                 method: "POST",
                 headers: { "Content-Type": "text/plain; charset=UTF-8" },
-                body: cleanCode
+                body: cleanCode,
+                signal: controller.signal
             });
+            clearTimeout(timer);
 
             if (res.ok) {
                 const svgText = await res.text();
                 const base64Svg = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgText)));
                 const imgTag = `<div style="text-align:center; margin:12px 0;"><img src="${base64Svg}" style="max-width:90%; max-height:360px; height:auto; border:1px solid #cbd5e1; border-radius:8px; padding:6px; background:#fff;" /></div>`;
-                rawHtml = rawHtml.replace(codeBlock, imgTag);
+                return { original: codeBlock, replacement: imgTag };
             }
         } catch (e) {
-            console.error("Lỗi khi kết nối đến máy chủ biên dịch TikZ:", e);
+            console.warn("Máy chủ TikZ phản hồi chậm hoặc lỗi cú pháp TeX:", e);
         }
-    }
+        return { original: codeBlock, replacement: codeBlock };
+    });
+
+    const results = await Promise.all(renderTasks);
+    results.forEach(item => {
+        if (item.replacement !== item.original) {
+            rawHtml = rawHtml.replace(item.original, item.replacement);
+        }
+    });
+
     return rawHtml;
 }
 

@@ -1151,28 +1151,25 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
     return parsedArr;
 }
-   // ================================================================
-// 1. HÀM BIÊN DỊCH TIKZ ĐÃ TỐI ƯU TỐC ĐỘ (CHẠY SONG SONG + TỰ NGẮT TIMEOUT)
-// ================================================================
-async function convertTikzCodeToSvg(rawHtml) {
+  async function convertTikzCodeToSvg(rawHtml) {
     const fullLatexRegex = /\\documentclass[\s\S]*?\\end\{document\}/gi;
     const standaloneTikzRegex = /\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/gi;
 
     let matches = rawHtml.match(fullLatexRegex) || rawHtml.match(standaloneTikzRegex);
     if (!matches || matches.length === 0) return rawHtml;
 
-    matches = [...new Set(matches)]; // Lọc trùng
+    matches = [...new Set(matches)];
 
-    // Gửi biên dịch tất cả các hình cùng một lúc để không phải chờ cộng dồn thời gian
     const renderTasks = matches.map(async (codeBlock) => {
+        // Làm sạch mã TeX, loại bỏ các thẻ HTML rác do trình duyệt tự sinh khi dán
         let cleanCode = codeBlock
             .replace(/<br\s*[\/]?>/gi, '\n')
+            .replace(/<\/?(div|p)[^>]*>/gi, '\n')
             .replace(/<[^>]+>/g, '')
             .replace(/&nbsp;/g, ' ')
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>')
             .replace(/&amp;/g, '&')
-            // Lọc bỏ gói vietnam để tránh làm máy chủ TeX quốc tế bị treo lỗi
             .replace(/\\usepackage(\[[^\]]*\])?\{vietnam\}/gi, '')
             .trim();
 
@@ -1181,9 +1178,9 @@ async function convertTikzCodeToSvg(rawHtml) {
         }
 
         try {
-            // Giới hạn tối đa 7 giây, nếu máy chủ quá tải sẽ tự ngắt tránh treo web
+            // Tăng thời gian chờ lên 15 giây để máy chủ TeX kịp biên dịch đồ thị phức tạp
             const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), 7000);
+            const timer = setTimeout(() => controller.abort(), 15000);
 
             const res = await fetch("https://kroki.io/tikz/svg", {
                 method: "POST",
@@ -1195,26 +1192,27 @@ async function convertTikzCodeToSvg(rawHtml) {
 
             if (res.ok) {
                 const svgText = await res.text();
+                // Dùng định dạng Base64 nhúng vào thẻ img để hiển thị sắc nét và ổn định tuyệt đối
                 const base64Svg = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgText)));
                 const imgTag = `<div style="text-align:center; margin:12px 0;"><img src="${base64Svg}" style="max-width:90%; max-height:360px; height:auto; border:1px solid #cbd5e1; border-radius:8px; padding:6px; background:#fff;" /></div>`;
+                
+                // Trả về kết quả khớp sạch sẽ bằng regex theo nội dung bên trong
                 return { original: codeBlock, replacement: imgTag };
             }
         } catch (e) {
-            console.warn("Máy chủ TikZ phản hồi chậm hoặc lỗi cú pháp TeX:", e);
+            console.warn("Lỗi biên dịch TikZ:", e);
         }
         return { original: codeBlock, replacement: codeBlock };
     });
 
     const results = await Promise.all(renderTasks);
     results.forEach(item => {
-        if (item.replacement !== item.original) {
-            rawHtml = rawHtml.replace(item.original, item.replacement);
-        }
+        // Thay thế linh hoạt không phụ thuộc thẻ HTML rác
+        rawHtml = rawHtml.replace(item.original, item.replacement);
     });
 
     return rawHtml;
 }
-
 // ================================================================
 // 2. HÀM TỰ ĐỘNG PHÂN TÍCH (BẬT CHẾ ĐỘ CHỜ VẼ HÌNH XONG MỚI CẮT CÂU)
 // ================================================================

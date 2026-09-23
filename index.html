@@ -700,11 +700,11 @@ span.MathJax {
             localStorage.removeItem('teacher_script_url_vanntkt');
             localStorage.setItem('force_reset_session_2026', 'true');
         }
-        let currentTeacherId = localStorage.getItem('current_teacher_id') || '';
+        let currentTeacherId = localStorage.getItem('test_teacher_id') || '';
                let SCRIPT_URL = '';
 
         function getTeacherScriptUrl(tId) {
-            let savedUrl = localStorage.getItem('teacher_script_url_' + tId);
+            let savedUrl = localStorage.getItem('test_script_url_' + tId);
             if (savedUrl && savedUrl.trim() !== '') return savedUrl.trim();
             if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].defaultUrl) {
                 return TEACHERS_DIRECTORY[tId].defaultUrl;

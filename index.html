@@ -327,7 +327,7 @@ span.MathJax {
     <div class="wrapper">
         <nav class="navbar">
             <div class="brand">
-                <i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> TOÁN THPT - CÔ TRÚC
+                <i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> TRƯỜNG THPT LONG THỚI
             </div>
             <div class="nav-btns">
                 <button class="btn-nav btn-nav-outline" id="btn-tab-student" onclick="showPortalView()"><i class="fa-solid fa-house"></i> Góc Học Sinh</button>
@@ -638,7 +638,7 @@ span.MathJax {
     <!-- ĐÁNH DẤU BẢN QUYỀN TÁC GIẢ -->
     <div style="text-align: center; padding: 25px 15px 15px 15px; margin-top: 40px; color: #64748b; font-size: 1rem; border-top: 1px solid #e2e8f0; line-height: 1.6; font-family: 'Times New Roman', Times, serif;">
         <strong>© 2026 Hệ thống Khảo thí & Học tập Số hóa</strong><br>
-        Nghiên cứu & phát triển bởi <span style="color: #1d4ed8; font-weight: bold;">GV Nguyễn Thanh Trúc</span> – Trường THPT Long Thới
+        Nghiên cứu & phát triển bởi <span style="color: #1d4ed8; font-weight: bold;">GV NTT</span> – Trường THPT Long Thới
     </div>
     <div class="toast-msg" id="toast">Đã sao chép link giao đề!</div>
 
@@ -647,8 +647,8 @@ span.MathJax {
         const TEACHERS_DIRECTORY = {
             'trucnt':  { 
                 name: 'Cô Nguyễn Thanh Trúc', 
-                subject: 'Toán',
-                defaultUrl: 'https://script.google.com/macros/s/AKfycbwgqygMftm-_1D5VbRi8X-JFxJv1UHiKmTid5ulPiOHy9Zv5nib3fVDoXb7S92Sj_Z8wA/exec',
+                subject: 'Toán', 
+                defaultUrl: 'https://script.google.com/macros/s/AKfycbzis37_BfronfYS2csvtAfqZJOcQBHzmbZtymoNPFtLdGgI3ghiNUXCHuVq4i6Gsetw/exec',
                 classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2", "HT10", "Lớp tự do"]
             },
             'vanntkt': { 
@@ -661,13 +661,13 @@ span.MathJax {
                 name: 'Cô Nguyễn Thị Thu Hoa', 
                 subject: 'Toán', 
                 defaultUrl: '',
-                classes: ["12A5", "12A8", "11A4", "11A5", "Lớp tự do"] 
+                classes: ["12A5", "12A8", "11A4", "11A5", "HT1", "HT2", "HT3", "Lớp tự do"] 
             },
             'nhuntq':  { 
                 name: 'Cô Nguyễn Thị Quỳnh Như', 
                 subject: 'Toán', 
-                defaultUrl: '',
-                classes: ["12A2", "12A11", "10A1", "10A8", "Lớp tự do"]  
+                defaultUrl: 'https://script.google.com/macros/s/AKfycby8GPLa4cOk0aNcPHyIfopFVSDHPxezGfMNa_Ku4ca-l2KMvB4pd3K3vxdsJmMwHpio/exec',
+                classes: ["12A5", "12A8", "11A5", "10A4", "Lớp tự do"]  
             },
             'trunght': { 
                 name: 'Thầy Hồ Thanh Trung', 
@@ -704,13 +704,11 @@ span.MathJax {
                let SCRIPT_URL = '';
 
         function getTeacherScriptUrl(tId) {
-            // ƯU TIÊN SỐ 1: Luôn lấy link cố định viết trong code của trang này
+            let savedUrl = localStorage.getItem('teacher_script_url_' + tId);
+            if (savedUrl && savedUrl.trim() !== '') return savedUrl.trim();
             if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].defaultUrl) {
                 return TEACHERS_DIRECTORY[tId].defaultUrl;
             }
-            // Chỉ khi nào trong code bỏ trống mới tìm trong bộ nhớ máy
-            let savedUrl = localStorage.getItem('teacher_script_url_' + tId);
-            if (savedUrl && savedUrl.trim() !== '') return savedUrl.trim();
             return '';
         }
 
@@ -1005,40 +1003,22 @@ span.MathJax {
                 grid.appendChild(card);
             });
         }
-function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
+
+  function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     let parsedArr = [];
     let tempDiv = document.createElement('div');
-    let preprocessedHtml = (rawHtml || '').normalize('NFC');
+    tempDiv.innerHTML = (rawHtml || '').normalize('NFC');
 
-    // 1. TỰ ĐỘNG BÓC TÁCH MÃ CODE HÌNH [HINH: ...] THÀNH ẢNH THẬT
-    preprocessedHtml = preprocessedHtml.replace(/\[(?:H[IÌ]NH\vert{}IMG\vert{}IMAGE)\s*:\s*([^\]]+)\]/gi, function(match, rawContent) {
-        let cleanUrl = rawContent.trim().replace(/^<|>$/g, '');
-        let directImgUrl = cleanUrl;
-
-        if (cleanUrl.includes('drive.google.com')) {
-            let driveIdMatch = cleanUrl.match(/\/d\/([a-zA-Z0-9_-]+)/) || cleanUrl.match(/id=([a-zA-Z0-9_-]+)/);
-            if (driveIdMatch && driveIdMatch[1]) {
-                directImgUrl = `https://lh3.googleusercontent.com/d/${driveIdMatch[1]}`;
-            }
-        } else if (!cleanUrl.startsWith('http') && cleanUrl.length > 20 && !cleanUrl.includes(' ')) {
-            directImgUrl = `https://lh3.googleusercontent.com/d/${cleanUrl}`;
-        }
-
-        return `<div style="text-align: center; margin: 10px 0;"><img src="${directImgUrl}" style="max-width: 95%; max-height: 380px; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #cbd5e1;" loading="lazy" /></div>`;
-    });
-
-    tempDiv.innerHTML = preprocessedHtml;
-
-    // 2. CÔ LẬP TOÀN BỘ HÌNH ẢNH ĐỂ BẢO VỆ TUYỆT ĐỐI (Cả ảnh dán vào và SVG)
+    // 1. CÔ LẬP TOÀN BỘ THẺ ẢNH (Bảo vệ ảnh không bị ảnh hưởng)
     let imageMap = [];
-    let imgNodes = tempDiv.querySelectorAll('img, svg');
-    imgNodes.forEach((node, i) => {
-        let placeholder = `___ELEMENT_HOLDER_${i}___`;
-        imageMap.push({ key: placeholder, html: node.outerHTML });
-        node.outerHTML = placeholder;
+    let imgNodes = tempDiv.querySelectorAll('img');
+    imgNodes.forEach((img, i) => {
+        let placeholder = `___IMG_HOLDER_${i}___`;
+        imageMap.push({ key: placeholder, html: img.outerHTML });
+        img.outerHTML = placeholder;
     });
 
-    // 3. CHUẨN HÓA VĂN BẢN VÀ DỌN SẠCH RÁC TỪ WORD
+    // 2. CHUẨN HÓA VĂN BẢN VÀ DỌN SẠCH RÁC TỪ WORD
     let textContent = tempDiv.innerHTML
         .replace(/<[ub]>([A-D])[\.\)]<\/[ub]>/gi, '$1.')
         .replace(/<br\s*[\/]?>/gi, '\n')
@@ -1048,15 +1028,21 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         .replace(/&nbsp;/gi, ' ')
         .replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
+    // Chuẩn hóa dòng Đáp án
     textContent = textContent.replace(/(?:Đ\s*[\/]?\s*A|Đáp\s*án)[:\s]*([A-D])/gi, '\nĐáp án: $1\n');
+
+    // ÉP MỌI TỪ "Câu X" HOẶC "Bài X" LUÔN NẰM Ở ĐẦU DÒNG MỚI ĐỂ CHIA CẮT CHÍNH XÁC
     textContent = textContent.replace(/([^\n])\s*(C[âa]u|B[àa]i|C)\s*(\d+)[\s:.]/gi, '$1\n\nCâu $3.');
     textContent = textContent.replace(/\n\s*\n+/g, '\n\n');
+
     textContent = cleanLatexAndText(textContent);
 
+    // 3. CHIA TỪNG BLOCK CÂU HỎI THÔNG MINH (Dựa trên từ khóa Câu X hoặc Bài X)
     let blocks = textContent.split(/(?:^|\n)\s*(?=(?:C[âa]u|B[àa]i|C)\s*\d+[\s:.]?)/i)
         .map(b => b.trim())
         .filter(b => b.length > 0 && /(?:C[âa]u|B[àa]i|C)\s*\d+/i.test(b));
 
+    // Hàm trả ảnh về đúng chỗ
     function restoreAllImages(str) {
         if (!str) return '';
         let result = str;
@@ -1074,12 +1060,14 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         let explanation = '';
         let qContent = '';
 
+        // TÁCH LỜI GIẢI CHI TIẾT
         let expMatch = block.match(/(?:L[ờo]i\s*gi[ảa]i|H[ưướ]ng\s*dẫ?n|Lời\s*giải\s*chi\s*tiết)\s*[:\-]?\s*([\s\S]*)$/i);
         if (expMatch) {
             explanation = expMatch[1].trim();
             block = block.replace(expMatch[0], '').trim();
         }
 
+        // KIỂM TRA ĐỊNH DẠNG: ĐÚNG / SAI (TF)
         let hasTfOptions = block.search(/(?:^|\s)a[\)\.]/) !== -1 && block.search(/(?:^|\s)b[\)\.]/) !== -1;
 
         if (hasTfOptions) {
@@ -1109,7 +1097,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             if (!ans || ans.length !== 4) ans = 'DDDS';
             ansOptions = ans.split('');
         } 
-        // 2. DẠNG TRẮC NGHIỆM (MCQ) - NHẬN DIỆN ĐỦ A, B, C, D
+        // KIỂM TRA ĐỊNH DẠNG: TRẮC NGHIỆM (MCQ)
         else if (block.search(/(?:^|\s)A[\.\)]/) !== -1 && block.search(/(?:^|\s)B[\.\)]/) !== -1) {
             detectedType = 'MCQ';
             let ansMatch = block.match(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*([A-D])\b/i);
@@ -1133,9 +1121,15 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             options[3] = mOptD ? mOptD[1].trim() : '';
             options[3] = options[3].replace(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*[A-D]?\s*$/i, '').trim();
 
-            if (!ans) ans = 'A';
+            if (!ans) {
+                if (rawHtml.includes('<u>A') || rawHtml.includes('underline">A')) ans = 'A';
+                else if (rawHtml.includes('<u>B') || rawHtml.includes('underline">B')) ans = 'B';
+                else if (rawHtml.includes('<u>C') || rawHtml.includes('underline">C')) ans = 'C';
+                else if (rawHtml.includes('<u>D') || rawHtml.includes('underline">D')) ans = 'D';
+                else ans = 'A';
+            }
         } 
-        // 3. DẠNG TRẢ LỜI NGẮN (SA)
+        // CÂU HỎI TRẢ LỜI NGẮN (SA)
         else {
             detectedType = 'SA';
             let ansGeneral = block.match(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*([A-Za-z0-9,\.\-]+)/i);
@@ -1166,94 +1160,10 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
     return parsedArr;
 }
-
-// ================================================================
-// 1. HÀM BIÊN DỊCH TIKZ (CHẠY SONG SONG + NHÚNG TRỰC TIẾP SVG)
-// ================================================================
-async function convertTikzCodeToSvg(rawHtml) {
-    const fullLatexRegex = /\\documentclass[\s\S]*?\\end\{document\}/gi;
-    const standaloneTikzRegex = /\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/gi;
-
-    let matches = rawHtml.match(fullLatexRegex) || rawHtml.match(standaloneTikzRegex);
-    if (!matches || matches.length === 0) return rawHtml;
-
-    matches = [...new Set(matches)]; 
-
-    const renderTasks = matches.map(async (codeBlock) => {
-        let cleanCode = codeBlock
-            .replace(/<br\s*[\/]?>/gi, '\n')
-            .replace(/<\/?(div|p)[^>]*>/gi, '\n')
-            .replace(/<[^>]+>/g, '')
-            .replace(/&nbsp;/g, ' ')
-            .replace(/&lt;/g, '<')
-            .replace(/&gt;/g, '>')
-            .replace(/&amp;/g, '&')
-            .replace(/\\usepackage(\[[^\]]*\])?\{vietnam\}/gi, '')
-            .trim();
-
-        if (!cleanCode.includes('\\documentclass')) {
-            cleanCode = `\\documentclass[border=2pt]{standalone}\n\\usepackage{amsmath,amssymb}\n\\usepackage{tikz}\n\\usepackage{pgfplots}\n\\pgfplotsset{compat=1.18}\n\\begin{document}\n${cleanCode}\n\\end{document}`;
-        }
-
-        try {
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), 15000);
-
-            const res = await fetch("https://kroki.io/tikz/svg", {
-                method: "POST",
-                headers: { "Content-Type": "text/plain; charset=UTF-8" },
-                body: cleanCode,
-                signal: controller.signal
-            });
-            clearTimeout(timer);
-
-            if (res.ok) {
-                const svgText = await res.text();
-                // Nhúng trực tiếp ảnh SVG để hiển thị mượt mà
-                const svgTag = `<div style="text-align:center; margin:12px 0; background:#fff; border-radius:8px;">${svgText}</div>`;
-                return { original: codeBlock, replacement: svgTag };
-            }
-        } catch (e) {
-            console.warn("Lỗi biên dịch TikZ:", e);
-        }
-        return { original: codeBlock, replacement: codeBlock };
-    });
-
-    const results = await Promise.all(renderTasks);
-    results.forEach(item => {
-        rawHtml = rawHtml.replace(item.original, item.replacement);
-    });
-
-    return rawHtml;
-}
-// ================================================================
-// 2. HÀM TỰ ĐỘNG PHÂN TÍCH (BẬT CHẾ ĐỘ CHỜ VẼ HÌNH XONG MỚI CẮT CÂU)
-// ================================================================
-async function parseDirectExam() {
-    let rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
+     function parseDirectExam() {
+    const rawHtml = document.getElementById('direct-raw-text').innerHTML.trim();
     if (!rawHtml) { alert("Vui lòng dán văn bản đề thi!"); return; }
     
-    const btn = document.querySelector('button[onclick="parseDirectExam()"]');
-    const oldBtnText = btn ? btn.innerHTML : '';
-    if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang phân tích & vẽ hình...';
-    }
-    document.body.style.cursor = 'wait';
-
-    try {
-        rawHtml = await convertTikzCodeToSvg(rawHtml);
-        document.getElementById('direct-raw-text').innerHTML = rawHtml;
-    } catch (err) {
-        console.error("Lỗi khi chuyển đổi TikZ:", err);
-    } finally {
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = oldBtnText;
-        }
-        document.body.style.cursor = 'default';
-    }
-
     const currentGradeVal = document.getElementById('new-exam-grade').value;
     const currentTopicVal = document.getElementById('new-exam-topic').value;
     const currentMode = document.getElementById('new-exam-mode').value;
@@ -1263,7 +1173,7 @@ async function parseDirectExam() {
     document.getElementById('direct-parsed-count').innerText = directParsedQuestions.length;
     
     let previewHtml = directParsedQuestions.map((q, i) => {
-        if (!q.timeLimit) q.timeLimit = 30;
+        if (!q.timeLimit) q.timeLimit = 30; // Mặc định 30 giây cho Kahoot
 
         let optsHtml = '';
         if (q.type === 'TF') {
@@ -1273,6 +1183,7 @@ async function parseDirectExam() {
         }
         let expPreviewHtml = q.explanation ? `<div style="margin-top: 6px; padding: 6px; background: #f0fdf4; border-left: 3px solid #16a34a; font-size: 0.95rem; color: #166534;"><strong>Lời giải:</strong> ${q.explanation}</div>` : '';
 
+        // CHỈ HIỆN Ô THỜI GIAN KHI LÀ KAHOOT
         let timeSelectHtml = isKahoot ? `
             <div style="display: inline-flex; align-items: center; gap: 4px; margin-left: 8px;">
                 <label style="font-size: 0.85rem; font-weight: bold; color: #7c3aed;"><i class="fa-regular fa-clock"></i> Thời gian:</label>
@@ -1652,10 +1563,13 @@ if (selectedQuestions.length > 0) {
                     renderExams();
                     showPortalView();
                 }
-         } catch (err) {
-    document.body.style.cursor = 'default';
-    alert("❌ Lỗi kết nối máy chủ! Đề thi CHƯA được lưu vào Google Sheets. Vui lòng kiểm tra lại đường link Apps Script.");
-}
+            } catch (err) {
+                document.body.style.cursor = 'default';
+                examBank.unshift(newExamObj);
+                renderExams();
+                alert("🎉 Đã xuất bản đề thi thành công!");
+                showPortalView();
+            }
         }
 
         // ĐỔI MẬT KHẨU

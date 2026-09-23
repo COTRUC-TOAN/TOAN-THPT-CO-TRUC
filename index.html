@@ -1005,7 +1005,6 @@ span.MathJax {
                 grid.appendChild(card);
             });
         }
-
 function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
     let parsedArr = [];
     let tempDiv = document.createElement('div');
@@ -1030,7 +1029,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
     tempDiv.innerHTML = preprocessedHtml;
 
-    // 2. CÔ LẬP TOÀN BỘ ẢNH VÀ SVG (Bảo vệ cả ảnh TikZ và ảnh [HINH:...])
+    // 2. CÔ LẬP TOÀN BỘ HÌNH ẢNH ĐỂ BẢO VỆ TUYỆT ĐỐI (Cả ảnh dán vào và SVG)
     let imageMap = [];
     let imgNodes = tempDiv.querySelectorAll('img, svg');
     imgNodes.forEach((node, i) => {
@@ -1110,7 +1109,7 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
             if (!ans || ans.length !== 4) ans = 'DDDS';
             ansOptions = ans.split('');
         } 
-        // 2. DẠNG TRẮC NGHIỆM (MCQ) - ĐÃ SỬA DÙNG ĐÚNG BIẾN splitA ĐỂ NHẬN ĐỦ A, B, C, D
+        // 2. DẠNG TRẮC NGHIỆM (MCQ) - NHẬN DIỆN ĐỦ A, B, C, D
         else if (block.search(/(?:^|\s)A[\.\)]/) !== -1 && block.search(/(?:^|\s)B[\.\)]/) !== -1) {
             detectedType = 'MCQ';
             let ansMatch = block.match(/(?:Đáp\s*án|Chọn|Đ\/A|Ans)\s*[:\-]?\s*([A-D])\b/i);
@@ -1167,17 +1166,20 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
     return parsedArr;
 }
-  async function convertTikzCodeToSvg(rawHtml) {
+
+// ================================================================
+// 1. HÀM BIÊN DỊCH TIKZ (CHẠY SONG SONG + NHÚNG TRỰC TIẾP SVG)
+// ================================================================
+async function convertTikzCodeToSvg(rawHtml) {
     const fullLatexRegex = /\\documentclass[\s\S]*?\\end\{document\}/gi;
     const standaloneTikzRegex = /\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/gi;
 
     let matches = rawHtml.match(fullLatexRegex) || rawHtml.match(standaloneTikzRegex);
     if (!matches || matches.length === 0) return rawHtml;
 
-    matches = [...new Set(matches)];
+    matches = [...new Set(matches)]; 
 
     const renderTasks = matches.map(async (codeBlock) => {
-        // Làm sạch mã TeX, loại bỏ các thẻ HTML rác do trình duyệt tự sinh khi dán
         let cleanCode = codeBlock
             .replace(/<br\s*[\/]?>/gi, '\n')
             .replace(/<\/?(div|p)[^>]*>/gi, '\n')
@@ -1194,7 +1196,6 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
         }
 
         try {
-            // Tăng thời gian chờ lên 15 giây để máy chủ TeX kịp biên dịch đồ thị phức tạp
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), 15000);
 
@@ -1208,12 +1209,9 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
             if (res.ok) {
                 const svgText = await res.text();
-                // Dùng định dạng Base64 nhúng vào thẻ img để hiển thị sắc nét và ổn định tuyệt đối
-                const base64Svg = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgText)));
-                const imgTag = `<div style="text-align:center; margin:12px 0;"><img src="${base64Svg}" style="max-width:90%; max-height:360px; height:auto; border:1px solid #cbd5e1; border-radius:8px; padding:6px; background:#fff;" /></div>`;
-                
-                // Trả về kết quả khớp sạch sẽ bằng regex theo nội dung bên trong
-                return { original: codeBlock, replacement: imgTag };
+                // Nhúng trực tiếp ảnh SVG để hiển thị mượt mà
+                const svgTag = `<div style="text-align:center; margin:12px 0; background:#fff; border-radius:8px;">${svgText}</div>`;
+                return { original: codeBlock, replacement: svgTag };
             }
         } catch (e) {
             console.warn("Lỗi biên dịch TikZ:", e);
@@ -1223,7 +1221,6 @@ function parseTextToQuestionsAllInOne(rawHtml, grade, topic) {
 
     const results = await Promise.all(renderTasks);
     results.forEach(item => {
-        // Thay thế linh hoạt không phụ thuộc thẻ HTML rác
         rawHtml = rawHtml.replace(item.original, item.replacement);
     });
 

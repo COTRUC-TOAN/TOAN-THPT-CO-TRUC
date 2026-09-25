@@ -648,7 +648,7 @@ span.MathJax {
             'trucnt':  { 
                 name: 'Cô Nguyễn Thanh Trúc', 
                 subject: 'Toán', 
-                defaultUrl: 'https://script.google.com/macros/s/AKfycbwgqygMftm-_1D5VbRi8X-JFxJv1UHiKmTid5ulPiOHy9Zv5nib3fVDoXb7S92Sj_Z8wA/exec',
+                defaultUrl: 'https://script.google.com/macros/s/AKfycbzis37_BfronfYS2csvtAfqZJOcQBHzmbZtymoNPFtLdGgI3ghiNUXCHuVq4i6Gsetw/exec',
                 classes: ["10A4", "10A6", "10A10", "12A3", "12A12", "HT12-1", "HT12-2", "HT11-1", "HT11-2", "HT10", "Lớp tự do"]
             },
             'vanntkt': { 
@@ -660,13 +660,13 @@ span.MathJax {
             'hoantt':  { 
                 name: 'Cô Nguyễn Thị Thu Hoa', 
                 subject: 'Toán', 
-                defaultUrl: '',
+                defaultUrl: 'https://script.google.com/macros/s/AKfycby8GPLa4cOk0aNcPHyIfopFVSDHPxezGfMNa_Ku4ca-l2KMvB4pd3K3vxdsJmMwHpio/exec',
                 classes: ["12A5", "12A8", "11A4", "11A5", "HT1", "HT2", "HT3", "Lớp tự do"] 
             },
             'nhuntq':  { 
                 name: 'Cô Nguyễn Thị Quỳnh Như', 
                 subject: 'Toán', 
-                defaultUrl: 'https://script.google.com/macros/s/AKfycby8GPLa4cOk0aNcPHyIfopFVSDHPxezGfMNa_Ku4ca-l2KMvB4pd3K3vxdsJmMwHpio/exec',
+                defaultUrl: '',
                 classes: ["12A5", "12A8", "11A5", "10A4", "Lớp tự do"]  
             },
             'trunght': { 
@@ -700,11 +700,11 @@ span.MathJax {
             localStorage.removeItem('teacher_script_url_vanntkt');
             localStorage.setItem('force_reset_session_2026', 'true');
         }
-        let currentTeacherId = localStorage.getItem('test_teacher_id') || '';
+        let currentTeacherId = localStorage.getItem('current_teacher_id') || '';
                let SCRIPT_URL = '';
 
         function getTeacherScriptUrl(tId) {
-            let savedUrl = localStorage.getItem('test_script_url_' + tId);
+            let savedUrl = localStorage.getItem('teacher_script_url_' + tId);
             if (savedUrl && savedUrl.trim() !== '') return savedUrl.trim();
             if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].defaultUrl) {
                 return TEACHERS_DIRECTORY[tId].defaultUrl;
@@ -1689,15 +1689,15 @@ function renderScoresTable() {
     }
 }
 
-        function exportScoresToExcel() {
+      function exportScoresToExcel() {
             if (!globalScoresData || globalScoresData.length === 0) { alert("Chưa có dữ liệu để xuất Excel!"); return; }
 
-            // Lấy điều kiện lọc hiện tại đang chọn trên màn hình
+            // Lấy đúng điều kiện lọc trên màn hình
             const fClass = (document.getElementById('filter-score-class')?.value || 'all').trim().toLowerCase();
             const fExam = (document.getElementById('filter-score-exam')?.value || 'all').trim().toLowerCase();
 
-            // Lọc dữ liệu y hệt như đang hiển thị trên bảng
-            let filteredData = globalScoresData.filter(r => {
+            // Chỉ lọc những em thỏa mãn điều kiện
+            let filteredList = globalScoresData.filter(r => {
                 const itemClass = String(r.sClass || '').trim().toLowerCase();
                 const itemExam = String(r.examTitle || '').trim().toLowerCase();
                 const matchClass = (fClass === 'all' || fClass === '' || itemClass === fClass);
@@ -1705,16 +1705,14 @@ function renderScoresTable() {
                 return matchClass && matchExam;
             });
 
-            if (filteredData.length === 0) { alert("Không có dữ liệu nào khớp với điều kiện lọc để xuất!"); return; }
+            if (filteredList.length === 0) { alert("Không có dữ liệu khớp với bộ lọc để xuất!"); return; }
 
             let tableHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><style>td { mso-number-format:'\\@'; }</style></head><body><table border="1"><tr style="background-color:#2563eb; color:white; font-weight:bold;"><th>Thời Gian</th><th>Họ và Tên</th><th>Lớp</th><th>Bài Thi</th><th>Điểm</th></tr>`;
-            
-            // Chỉ xuất ra Excel những học sinh đã được lọc
-            filteredData.forEach(r => {
+            filteredList.forEach(r => {
                 tableHtml += `<tr><td style="text-align:center;">${r.time}</td><td>${r.name}</td><td style="text-align:center;">${r.sClass}</td><td>${r.examTitle}</td><td style="text-align:center; font-weight:bold;">${r.totalScore}</td></tr>`;
             });
             tableHtml += `</table></body></html>`;
-            
+
             const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);

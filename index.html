@@ -1925,7 +1925,24 @@ function toggleExamPasswordField() {
     function startExam(id) {
     activeExam = examBank.find(e => e.id === id);
     if (!activeExam) return;
-
+// KIỂM TRA THỜI GIAN MỞ ĐỀ VÀ HẠN CHÓT (DEADLINE)
+    const now = new Date();
+    if (activeExam.startTime) {
+        const start = new Date(activeExam.startTime);
+        if (now < start) {
+            alert(`⏳ Chưa đến thời gian mở đề thi!\nĐề sẽ bắt đầu lúc: ${start.toLocaleString("vi-VN")}`);
+            showPortalView();
+            return;
+        }
+    }
+    if (activeExam.deadline) {
+        const end = new Date(activeExam.deadline);
+        if (now > end) {
+            alert(`⛔ Đề thi đã đóng do HẾT THỜI HẠN nộp bài!\nHạn chót là: ${end.toLocaleString("vi-VN")}`);
+            showPortalView();
+            return;
+        }
+    }
     if (activeExam.mode === 'BAIGIANG') {
         startLectureMode();
         return;

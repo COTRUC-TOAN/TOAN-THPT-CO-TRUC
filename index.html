@@ -711,12 +711,14 @@ span.MathJax {
         let currentTeacherId = localStorage.getItem('current_teacher_id') || '';
                let SCRIPT_URL = '';
 
-        function getTeacherScriptUrl(tId) {
+     function getTeacherScriptUrl(tId) {
+            // 1. Nếu trong code đã có sẵn link mặc định thì LUÔN ƯU TIÊN lấy link trong code
+            if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].defaultUrl && TEACHERS_DIRECTORY[tId].defaultUrl.trim() !== '') {
+                return TEACHERS_DIRECTORY[tId].defaultUrl.trim();
+            }
+            // 2. Chỉ những giáo viên chưa có link trong code mới lấy link lưu từ bộ nhớ máy
             let savedUrl = localStorage.getItem('teacher_script_url_' + tId);
             if (savedUrl && savedUrl.trim() !== '') return savedUrl.trim();
-            if (TEACHERS_DIRECTORY[tId] && TEACHERS_DIRECTORY[tId].defaultUrl) {
-                return TEACHERS_DIRECTORY[tId].defaultUrl;
-            }
             return '';
         }
 
